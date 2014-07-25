@@ -110,17 +110,32 @@ function createGeometries() {
 	//scene.add( icosahedronMesh );
 
 
+    /// =================
+    ///  NB: Richard - This the model with all the light placements.
+    /// =================
+
+    var lightPlacementMesh;
+    var loader = new THREE.OBJLoader( manager );
+    loader.load( 'obj/scienceworld/Light_Positions.obj', function ( lightPlacementMesh ) {
+        Mesh = lightPlacementMesh;
+        //DomeGroup.add( lightPlacementMesh );
+    } );
+
+
+
+
+
     // Create Left and Right Turn Panels
 	var squareMaterial = new THREE.MeshBasicMaterial({
 		color:0xffffff, shading: THREE.FlatShading
 	});
 
 	squareMesh1 = new THREE.Mesh( new THREE.PlaneGeometry( 100, 100, 4, 4 ), squareMaterial );
-	squareMesh1.position.set( -300, 0, 0 );
+	squareMesh1.position.set( -300, 0, 300 );
 	scene.add( squareMesh1 );	
 
 	squareMesh2 = new THREE.Mesh( new THREE.PlaneGeometry( 100, 100, 4, 4 ), squareMaterial );
-	squareMesh2.position.set( 300, 0, 0 );
+	squareMesh2.position.set( 300, 0, 300 );
 	scene.add( squareMesh2 );
 	
 	
@@ -129,9 +144,6 @@ function createGeometries() {
 	//  New Model code for loading of the Dome Geo
 	//
 	//===============================================================================
-//	DomeGroup = new THREE.Object3D;
-//	scene.add(DomeGroup);
-//
 
     var materialLines = new THREE.MeshBasicMaterial( { wireframe: true } );
 
@@ -156,7 +168,4 @@ function createGeometries() {
         Mesh = object;
         DomeGroup.add( object );
     } );
-	
-	
-	
 }

@@ -394,7 +394,6 @@ function setLightColor(color, index)
     c.set( Math.random(), Math.random(), Math.random() ).normalize();
     lights[index].color.setRGB( c.x, c.y, c.z );
     lightMeshes[index].color.setRGB( c.x, c.y, c.z );
-    //lightMeshes[index].geometry.colorsNeedUpdate = true;
 }
 
 function updateRndLights()

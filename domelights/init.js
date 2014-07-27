@@ -4,14 +4,14 @@ function init() {
 
 	scene = new THREE.Scene();
 
-	camera = new THREE.PerspectiveCamera( 45, window.innerWidth / window.innerHeight, 1, 10000 );
+	camera = new THREE.PerspectiveCamera( 30, window.innerWidth / window.innerHeight, 1, 10000 );
 	camera.position.z = 1000;
 
     //Init 3D Groups
     DomeGroup = new THREE.Object3D;
-    DomeGroup.scale.x = 4;
-    DomeGroup.scale.y = 4;
-    DomeGroup.scale.z = 4;
+    DomeGroup.scale.x = 3;
+    DomeGroup.scale.y = 3;
+    DomeGroup.scale.z = 3;
     //DomeGroup.position.z = 50;
     scene.add(DomeGroup);
 

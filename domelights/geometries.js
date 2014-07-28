@@ -19,18 +19,13 @@ function createGeometries() {
 //    sprite5 = THREE.ImageUtils.loadTexture( "textures/sprites/snowflake5.png" );
 
 
-    // Create Left and Right Turn Panels
-	var squareMaterial = new THREE.MeshBasicMaterial({
+	var rotateMaterial = new THREE.MeshBasicMaterial({
 		color:0xffffff, shading: THREE.FlatShading
 	});
 
-	squareMesh1 = new THREE.Mesh( new THREE.PlaneGeometry( 100, 100, 4, 4 ), squareMaterial );
-	squareMesh1.position.set( -300, 0, 300 );
-	scene.add( squareMesh1 );	
-
-	squareMesh2 = new THREE.Mesh( new THREE.PlaneGeometry( 100, 100, 4, 4 ), squareMaterial );
-	squareMesh2.position.set( 300, 0, 300 );
-	scene.add( squareMesh2 );
+	rotateMesh = new THREE.Mesh( new THREE.PlaneGeometry( 100, 20, 4, 4 ), rotateMaterial );
+	rotateMesh.position.set( 0, -30, 0 );
+	scene.add( rotateMesh );	
 	
 	
 	//===============================================================================

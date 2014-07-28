@@ -5,14 +5,14 @@ function init() {
 	scene = new THREE.Scene();
 
 	camera = new THREE.PerspectiveCamera( 45, Aspect[0] / Aspect[1], 1, 10000 );
-	camera.position.z = 1000;
+	camera.position.z = 250;
 
     //Init 3D Groups
     DomeGroup = new THREE.Object3D;
-    DomeGroup.scale.x = 3;
-    DomeGroup.scale.y = 3;
-    DomeGroup.scale.z = 3;
-    DomeGroup.position.y = 110;
+    DomeGroup.scale.x = .75;
+    DomeGroup.scale.y = .75;
+    DomeGroup.scale.z = .75;
+    DomeGroup.position.y = 30;
     DomeGroup.rotation.x = 0.4; //Rotation appears to be in Radians
     scene.add(DomeGroup);
 
@@ -46,5 +46,8 @@ function init() {
 	//events.js
 	window.addEventListener( 'resize', onWindowResize, false );
 	document.addEventListener( 'mousemove', onDocumentMouseMove, false );
+	document.addEventListener( 'mousedown', onDocumentMouseDown, false );
+	document.addEventListener( 'touchstart', onDocumentTouchStart, false );
+	document.addEventListener( 'touchmove', onDocumentTouchMove, false );		
 
 }

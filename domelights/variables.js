@@ -1,11 +1,18 @@
 			var renderer, scene, camera, stats;
 			var particles, uniforms, attributes;
-			var icosahedronMesh, squareMesh1, squareMesh2;
+			var DomeGroup, rotateMesh;
 			var PARTICLE_SIZE = 100;
 
 			var projector, raycaster, intersects;
+			var windowHalfX = window.innerWidth / 2;
+			var windowHalfY = window.innerHeight / 2;			
 			var mouse = { x: 1, y: 1 }, INTERSECTED;
-			var vector = new THREE.Vector3();
+			var mouseX = 0;
+			var mouseXOnMouseDown = 0;
+			var targetRotation = 0;
+			var targetRotationOnMouseDown = 0;			
+			
+			//var vector = new THREE.Vector3();
             var composer;
             var lights = [];
             var lightMeshes = [];

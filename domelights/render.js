@@ -27,7 +27,7 @@ function turnOnLightOnMouseOver() {
 	raycaster.ray.set( camera.position, vector.sub( camera.position ).normalize() );
 	intersects = raycaster.intersectObject( particles );
 
-	console.log('p ' + intersects.length);
+	//console.log('p ' + intersects.length);
 	if ( intersects.length > 0 ) {
 		//console.log('p ' + intersects.length);
 		if ( INTERSECTED != intersects[ 0 ].index ) {

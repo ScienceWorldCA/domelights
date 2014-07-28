@@ -50,7 +50,7 @@ function onDocumentMouseMove( event ) {
 	mouse.y = - ( event.clientY / renderHeight) * 2 + 1;	
 	
 	if (!isMouseOverBar() && isMouseDown) {
-		targetRotation = targetRotationOnMouseDown + ( mouseX - mouseXOnMouseDown ) * 0.02;
+		targetRotation = targetRotationOnMouseDown + ( mouseX - mouseXOnMouseDown ) * 0.1;
 	}	
 	//console.log('onDocumentMouseMove:' + isMouseOverBar() + ' mouseX:' + mouseX + ' mouseXOnMouseDown:' + mouseXOnMouseDown + ' targetRotation:' + targetRotation+ ' targetRotationOnMouseDown:' + targetRotationOnMouseDown);
 }

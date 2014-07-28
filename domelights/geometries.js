@@ -23,7 +23,7 @@ function createGeometries() {
 		color:0xffffff, shading: THREE.FlatShading
 	});
 
-	rotateMesh = new THREE.Mesh( new THREE.PlaneGeometry( 50, 15, 4, 4 ), rotateMaterial );
+	rotateMesh = new THREE.Mesh( new THREE.PlaneGeometry( 25, 15, 4, 4 ), rotateMaterial );
 	rotateMesh.position.set( 0, -30, 0 );
 	scene.add( rotateMesh );	
 	

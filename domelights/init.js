@@ -4,7 +4,7 @@ function init() {
 
 	scene = new THREE.Scene();
 
-	camera = new THREE.PerspectiveCamera( 30, window.innerWidth / window.innerHeight, 1, 10000 );
+	camera = new THREE.PerspectiveCamera( 45, Aspect[0] / Aspect[1], 1, 10000 );
 	camera.position.z = 1000;
 
     //Init 3D Groups
@@ -12,7 +12,8 @@ function init() {
     DomeGroup.scale.x = 3;
     DomeGroup.scale.y = 3;
     DomeGroup.scale.z = 3;
-    //DomeGroup.position.z = 50;
+    DomeGroup.position.y = 110;
+    DomeGroup.rotation.x = 0.4; //Rotation appears to be in Radians
     scene.add(DomeGroup);
 
     //geometries.js
@@ -22,7 +23,7 @@ function init() {
 	setLighting();
 
     //renderer = new THREE.WebGLRenderer();
-    renderer = new THREE.WebGLDeferredRenderer( { width: window.innerWidth, height: window.innerHeight, scale: 1, antialias: false } );
+    renderer = new THREE.WebGLDeferredRenderer( { width: window.innerWidth, height: ((window.innerWidth/Aspect[0])* Aspect[1] ), scale: 1, antialias: true } );
 
 
     //Setup Render Pass

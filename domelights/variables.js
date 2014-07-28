@@ -11,10 +11,12 @@
             var lightMeshes = [];
             var lightIndex = 0;
 
+            var Aspect = [16, 9];
 
-            var textureFlare0 = THREE.ImageUtils.loadTexture( "textures/lensflare/lensflare0.png" );
-            var textureFlare2 = THREE.ImageUtils.loadTexture( "textures/lensflare/lensflare2.png" );
-            var textureFlare3 = THREE.ImageUtils.loadTexture( "textures/lensflare/lensflare3.png" );
+
+//            var textureFlare0 = THREE.ImageUtils.loadTexture( "textures/lensflare/lensflare0.png" );
+//            var textureFlare2 = THREE.ImageUtils.loadTexture( "textures/lensflare/lensflare2.png" );
+//            var textureFlare3 = THREE.ImageUtils.loadTexture( "textures/lensflare/lensflare3.png" );
 
             var manager = new THREE.LoadingManager();
             manager.onProgress = function ( item, loaded, total ) {

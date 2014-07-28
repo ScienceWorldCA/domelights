@@ -1,32 +1,32 @@
 function setLighting()
 {
-//    attributes = {
-//
-//        size: {	type: 'f', value: [] },
-//        customColor: { type: 'c', value: [] }
-//
-//    };
-//
-//    uniforms = {
-//
-//        amplitude: { type: "f", value: 1.0 },
-//        color:     { type: "c", value: new THREE.Color( 0xffffff ) },
-//        texture:   { type: "t", value: THREE.ImageUtils.loadTexture( "textures/sprites/spark1.png" ) },
-//
-//    };
-//
-//    var shaderMaterial = new THREE.ShaderMaterial( {
-//
-//        uniforms: 		uniforms,
-//        attributes:     attributes,
-//        vertexShader:   document.getElementById( 'vertexshader' ).textContent,
-//        fragmentShader: document.getElementById( 'fragmentshader' ).textContent,
-//
-//        blending: 		THREE.AdditiveBlending,
-//        depthTest: 		false,
-//        transparent:	true
-//
-//    });
+    attributes = {
+
+        size: {	type: 'f', value: [] },
+        customColor: { type: 'c', value: [] }
+
+    };
+
+    uniforms = {
+
+        amplitude: { type: "f", value: 1.0 },
+        color:     { type: "c", value: new THREE.Color( 0xffffff ) },
+        texture:   { type: "t", value: THREE.ImageUtils.loadTexture( "textures/sprites/spark1.png" ) },
+
+    };
+
+    var shaderMaterial = new THREE.ShaderMaterial( {
+
+        uniforms: 		uniforms,
+        attributes:     attributes,
+        vertexShader:   document.getElementById( 'vertexshader' ).textContent,
+        fragmentShader: document.getElementById( 'fragmentshader' ).textContent,
+
+        blending: 		THREE.AdditiveBlending,
+        depthTest: 		false,
+        transparent:	true
+
+    });
 
 
 //    var radius = 200;
@@ -73,12 +73,99 @@ function setLighting()
 
 function addLights()
 {
-	light = new THREE.DirectionalLight( 0x000000 );
+	light = new THREE.DirectionalLight( 0x101010 );
 	light.position.set( .75, .75, .75 );
     scene.add( light );
 
     //Add all lights to the Dome Group
+    addLightPositions();
+}
 
+function addLight( lightColor, x, y, z, localScene ) {
+
+    // Add Light
+    var light = new THREE.PointLight( 0xffffff, 1.0, 40 );
+    var c = new THREE.Vector3();
+    c.set( Math.random(), Math.random(), Math.random() ).normalize();
+    light.color.setRGB( c.x, c.y, c.z );
+    light.position.set( x, y, z );
+    localScene.add( light );
+    lights.push(light);
+
+    // Geo Balls
+    var sphere = new THREE.SphereGeometry( 0.5, 4, 4 );
+    var sphereLight = new THREE.Mesh( sphere, new THREE.MeshBasicMaterial( { color: light.color } ) );
+    sphereLight.position = light.position;
+    //localScene.add( sphereLight );
+    lightMeshes.push(light);
+
+    // Fares
+
+//    var flareColor = new THREE.Color( 0xffffff );
+//    flareColor.setRGB( c.x, c.y, c.z );
+//
+//    var lensFlare = new THREE.LensFlare( textureFlare0, 700, 0.0, THREE.AddOperation, flareColor );
+//
+////     lensFlare.add( textureFlare2, 512, 0.0, THREE.AdditiveBlending );
+////     lensFlare.add( textureFlare2, 512, 0.0, THREE.AdditiveBlending );
+////     lensFlare.add( textureFlare2, 512, 0.0, THREE.AdditiveBlending );
+////
+////     lensFlare.add( textureFlare3, 60, 0.6, THREE.AdditiveBlending );
+////     lensFlare.add( textureFlare3, 70, 0.7, THREE.AdditiveBlending );
+////     lensFlare.add( textureFlare3, 120, 0.9, THREE.AdditiveBlending );
+////     lensFlare.add( textureFlare3, 70, 1.0, THREE.AdditiveBlending );
+//
+//     lensFlare.customUpdateCallback = lensFlareUpdateCallback;
+//     lensFlare.position = light.position;
+//
+//     localScene.add( lensFlare );
+
+}
+
+function setLightColor(color, index)
+{
+    var c = new THREE.Vector3();
+    c.set( Math.random(), Math.random(), Math.random() ).normalize();
+    lights[index].color.setRGB( c.x, c.y, c.z );
+    //lightMeshes[index].color.setRGB( c.x, c.y, c.z );
+}
+
+function updateRndLights()
+{
+    for (i = 0; i < 10; i++) {
+        lightIndex += 53;
+        lightIndex = lightIndex % 260;
+        setLightColor(0x101010, lightIndex);
+    }
+}
+
+function lensFlareUpdateCallback( object ) {
+
+    var f, fl = object.lensFlares.length;
+    var flare;
+    var vecX = -object.positionScreen.x * 2;
+    var vecY = -object.positionScreen.y * 2;
+
+
+    for( f = 0; f < fl; f++ ) {
+
+        flare = object.lensFlares[ f ];
+
+        flare.x = object.positionScreen.x + vecX * flare.distance;
+        flare.y = object.positionScreen.y + vecY * flare.distance;
+
+        flare.rotation = 0;
+
+    }
+
+    //object.lensFlares[ 2 ].y += 0.025;
+    //object.lensFlares[ 3 ].rotation = object.positionScreen.x * 0.5 + THREE.Math.degToRad( 45 );
+
+}
+
+
+function addLightPositions()
+{
     //Light_Positions
     addLight(0xff0040, 8.34539985657, 80.6445007324, 6.06330013275, DomeGroup );
     addLight(0xff0040, 8.34539985657, 80.6445007324, -6.06330013275, DomeGroup );
@@ -340,88 +427,4 @@ function addLights()
     addLight(0xff0040, 8.73839855194, -25.9599533081, 57.2473945618, DomeGroup );
     addLight(0xff0040, 26.538602829, -25.9599533081, 51.4638633728, DomeGroup );
     addLight(0xff0040, 42.3168258667, -25.9542293549, 41.7627487183, DomeGroup );
-}
-
-function addLight( lightColor, x, y, z, localScene ) {
-
-    // Add Light
-    var light = new THREE.PointLight( 0xffffff, 0.9, 60 );
-    var c = new THREE.Vector3();
-    c.set( Math.random(), Math.random(), Math.random() ).normalize();
-    light.color.setRGB( c.x, c.y, c.z );
-    light.position.set( x, y, z );
-    localScene.add( light );
-    lights.push(light);
-
-    // Geo Balls
-    var sphere = new THREE.SphereGeometry( 0.5, 4, 4 );
-    var sphereLight = new THREE.Mesh( sphere, new THREE.MeshBasicMaterial( { color: light.color } ) );
-    sphereLight.position = light.position;
-    //localScene.add( sphereLight );
-    lightMeshes.push(light);
-
-    // Fares
-
-//    var flareColor = new THREE.Color( 0xffffff );
-//    flareColor.setRGB( c.x, c.y, c.z );
-//
-//    var lensFlare = new THREE.LensFlare( textureFlare0, 700, 0.0, THREE.AddOperation, flareColor );
-//
-////     lensFlare.add( textureFlare2, 512, 0.0, THREE.AdditiveBlending );
-////     lensFlare.add( textureFlare2, 512, 0.0, THREE.AdditiveBlending );
-////     lensFlare.add( textureFlare2, 512, 0.0, THREE.AdditiveBlending );
-////
-////     lensFlare.add( textureFlare3, 60, 0.6, THREE.AdditiveBlending );
-////     lensFlare.add( textureFlare3, 70, 0.7, THREE.AdditiveBlending );
-////     lensFlare.add( textureFlare3, 120, 0.9, THREE.AdditiveBlending );
-////     lensFlare.add( textureFlare3, 70, 1.0, THREE.AdditiveBlending );
-//
-//     lensFlare.customUpdateCallback = lensFlareUpdateCallback;
-//     lensFlare.position = light.position;
-//
-//     localScene.add( lensFlare );
-
-}
-
-function setLightColor(color, index)
-{
-    var c = new THREE.Vector3();
-    c.set( Math.random(), Math.random(), Math.random() ).normalize();
-    lights[index].color.setRGB( c.x, c.y, c.z );
-    lightMeshes[index].color.setRGB( c.x, c.y, c.z );
-}
-
-function updateRndLights()
-{
-    for (i = 0; i < 10; i++) {
-        lightIndex += 53;
-        lightIndex = lightIndex % 260;
-        setLightColor(0x101010, lightIndex);
-    }
-}
-
-
-
-function lensFlareUpdateCallback( object ) {
-
-    var f, fl = object.lensFlares.length;
-    var flare;
-    var vecX = -object.positionScreen.x * 2;
-    var vecY = -object.positionScreen.y * 2;
-
-
-    for( f = 0; f < fl; f++ ) {
-
-        flare = object.lensFlares[ f ];
-
-        flare.x = object.positionScreen.x + vecX * flare.distance;
-        flare.y = object.positionScreen.y + vecY * flare.distance;
-
-        flare.rotation = 0;
-
-    }
-
-    //object.lensFlares[ 2 ].y += 0.025;
-    //object.lensFlares[ 3 ].rotation = object.positionScreen.x * 0.5 + THREE.Math.degToRad( 45 );
-
 }

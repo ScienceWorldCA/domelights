@@ -30,6 +30,9 @@ function onDocumentMouseDown( event ) {
 	event.preventDefault();
 
 	//document.addEventListener( 'mousemove', onDocumentMouseMove, false );
+	if (isMouseOverBar()) {
+		isMouseDown = true;
+	}
 	document.addEventListener( 'mouseup', onDocumentMouseUp, false );
 	document.addEventListener( 'mouseout', onDocumentMouseOut, false );
 
@@ -48,7 +51,7 @@ function onDocumentMouseMove( event ) {
 	mouse.x = ( event.clientX / window.innerWidth ) * 2 - 1;
 	mouse.y = - ( event.clientY / renderHeight) * 2 + 1;	
 	
-	if (isMouseOverBar()) {
+	if (isMouseOverBar() && isMouseDown) {
 		targetRotation = targetRotationOnMouseDown + ( mouseX - mouseXOnMouseDown ) * 0.02;
 	}	
 }
@@ -56,6 +59,7 @@ function onDocumentMouseMove( event ) {
 function onDocumentMouseUp( event ) {
 
 	//document.removeEventListener( 'mousemove', onDocumentMouseMove, false );
+	isMouseDown = false;
 	document.removeEventListener( 'mouseup', onDocumentMouseUp, false );
 	document.removeEventListener( 'mouseout', onDocumentMouseOut, false );
 
@@ -64,6 +68,7 @@ function onDocumentMouseUp( event ) {
 function onDocumentMouseOut( event ) {
 
 	//document.removeEventListener( 'mousemove', onDocumentMouseMove, false );
+	isMouseDown = false;
 	document.removeEventListener( 'mouseup', onDocumentMouseUp, false );
 	document.removeEventListener( 'mouseout', onDocumentMouseOut, false );
 

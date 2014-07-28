@@ -9,6 +9,7 @@
 			var mouse = { x: 1, y: 1 }, INTERSECTED;
 			var mouseX = 0;
 			var mouseXOnMouseDown = 0;
+			var isMouseDown = false;
 			var targetRotation = 0;
 			var targetRotationOnMouseDown = 0;			
 			

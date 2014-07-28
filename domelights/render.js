@@ -1,7 +1,15 @@
 function render() {
 
 	turnOnLightOnMouseOver();
-	DomeGroup.rotation.y += ( targetRotation - DomeGroup.rotation.y ) * 0.05; 
+	if (isMouseOverBar() && isMouseDown) {
+		DomeGroup.rotation.y = 0;
+		targetRotation = 0;
+	}
+	else
+	{
+		DomeGroup.rotation.y += ( targetRotation - DomeGroup.rotation.y ) * 0.05; 
+	}
+
     updateRndLights();
 
     //composer.render();

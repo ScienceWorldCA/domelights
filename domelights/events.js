@@ -13,10 +13,11 @@ function onWindowResize() {
 
 function isMouseOverBar() {
 
-	var vector = new THREE.Vector3( mouse.x, mouse.y, 0.5 );
+	var vector = new THREE.Vector3( mouse.x, mouse.y, .5 );
 	projector.unprojectVector( vector, camera );
 	raycaster.ray.set( camera.position, vector.sub( camera.position ).normalize() );
-	intersects = raycaster.intersectObject( rotateMesh );			
+	intersects = raycaster.intersectObject( swipeMesh );
+
 	if ( intersects.length > 0 ) {
 		return true;
 	}
@@ -30,12 +31,16 @@ function onDocumentMouseDown( event ) {
 	event.preventDefault();
 
 	isMouseDown = true;
+	if (isMouseOverBar()) {
+		isMouseDownOverBar = true;
+	}
+	//document.addEventListener( 'mousemove', onDocumentMouseMove, false );
 	document.addEventListener( 'mouseup', onDocumentMouseUp, false );
 	document.addEventListener( 'mouseout', onDocumentMouseOut, false );
 
 	mouseXOnMouseDown = event.clientX - windowHalfX;
 	targetRotationOnMouseDown = targetRotation;
-	//console.log('onDocumentMouseDown:' + isMouseOverBar() + ' mouseX:' + mouseX + ' mouseXOnMouseDown:' + mouseXOnMouseDown + ' targetRotation:' + targetRotation + ' targetRotationOnMouseDown:' + targetRotationOnMouseDown);
+	//console.log('onDocumentMouseDown:' + ' isMouseOverBar:' + isMouseDownOverBar + ' isMouseDown:' + isMouseDown + ' mouseX:' + mouseX + ' mouseXOnMouseDown:' + mouseXOnMouseDown + ' targetRotation:' + targetRotation + ' targetRotationOnMouseDown:' + targetRotationOnMouseDown);
 
 }
 
@@ -49,30 +54,33 @@ function onDocumentMouseMove( event ) {
 	mouse.x = ( event.clientX / window.innerWidth ) * 2 - 1;
 	mouse.y = - ( event.clientY / renderHeight) * 2 + 1;	
 	
-	if (!isMouseOverBar() && isMouseDown) {
-		targetRotation = targetRotationOnMouseDown + ( mouseX - mouseXOnMouseDown ) * 0.1;
+	if (isMouseDownOverBar) {
+		mouseX = event.clientX - windowHalfX;
+		targetRotation = targetRotationOnMouseDown + ( mouseX - mouseXOnMouseDown ) * 0.08;
 	}	
-	//console.log('onDocumentMouseMove:' + isMouseOverBar() + ' mouseX:' + mouseX + ' mouseXOnMouseDown:' + mouseXOnMouseDown + ' targetRotation:' + targetRotation+ ' targetRotationOnMouseDown:' + targetRotationOnMouseDown);
+	//console.log('onDocumentMouseMove: ' + 'isMouseDownOverBar:' + isMouseDownOverBar + ' isMouseDown:' + isMouseDown + ' mouseX:' + mouseX + ' mouseXOnMouseDown:' + mouseXOnMouseDown + ' targetRotation:' + targetRotation+ ' targetRotationOnMouseDown:' + targetRotationOnMouseDown);
 }
 
 function onDocumentMouseUp( event ) {
 
-	isMouseDown = false;
-	
 	if (isMouseOverBar()) {
-		DomeGroup.rotation.y = 0;
-		targetRotation = 0;
+		var rotation = DomeGroup.rotation.y
+		DomeGroup.rotation.y = rotation;
+		targetRotation = rotation;
 	}
-	//console.log('onDocumentMouseUp:' + isMouseOverBar() + ' mouseX:' + mouseX + ' mouseXOnMouseDown:' + mouseXOnMouseDown + ' targetRotation:' + targetRotation+ ' targetRotationOnMouseDown:' + targetRotationOnMouseDown);
+	isMouseDownOverBar = false;
+	isMouseDown = false;
+	//document.removeEventListener( 'mousemove', onDocumentMouseMove, false );
 	document.removeEventListener( 'mouseup', onDocumentMouseUp, false );
 	document.removeEventListener( 'mouseout', onDocumentMouseOut, false );
-
-
+	//console.log('onDocumentMouseUp: ' + 'isMouseDown: ' + isMouseDown + ' mouseX:' + mouseX + ' mouseXOnMouseDown:' + mouseXOnMouseDown + ' targetRotation:' + targetRotation+ ' targetRotationOnMouseDown:' + targetRotationOnMouseDown);
 }
 
 function onDocumentMouseOut( event ) {
 
+	isMouseDownOverBar = false;
 	isMouseDown = false;
+	//document.removeEventListener( 'mousemove', onDocumentMouseMove, false );
 	document.removeEventListener( 'mouseup', onDocumentMouseUp, false );
 	document.removeEventListener( 'mouseout', onDocumentMouseOut, false );
 
@@ -86,9 +94,8 @@ function onDocumentTouchStart( event ) {
 
 		mouseXOnMouseDown = event.touches[ 0 ].pageX - windowHalfX;
 		targetRotationOnMouseDown = targetRotation;
-
+		//console.log('onDocumentTouchStart:' + isMouseOverBar() + ' mouseX:' + mouseX + ' mouseXOnMouseDown:' + mouseXOnMouseDown + ' targetRotation:' + targetRotation+ ' targetRotationOnMouseDown:' + targetRotationOnMouseDown);
 	}
-
 }
 
 function onDocumentTouchMove( event ) {
@@ -98,7 +105,8 @@ function onDocumentTouchMove( event ) {
 		event.preventDefault();
 
 		mouseX = event.touches[ 0 ].pageX - windowHalfX;
-		targetRotation = targetRotationOnMouseDown + ( mouseX - mouseXOnMouseDown ) * 0.05;
+		targetRotation = targetRotationOnMouseDown + ( mouseX - mouseXOnMouseDown ) * 0.08;
+		//console.log('onDocumentTouchMove:' + isMouseOverBar() + ' mouseX:' + mouseX + ' mouseXOnMouseDown:' + mouseXOnMouseDown + ' targetRotation:' + targetRotation+ ' targetRotationOnMouseDown:' + targetRotationOnMouseDown);
 
 	}
 

@@ -1,16 +1,20 @@
 function render() {
 
-	turnOnLightOnMouseOver();
-	if (isMouseOverBar() && isMouseDown) {
-		DomeGroup.rotation.y = 0;
-		targetRotation = 0;
+	if (isMouseDown) {
+		turnOnLightOnMouseOver();
+	}
+	/*if (isMouseOverBar() && isMouseDownOverBar) {
+		var rotation = DomeGroup.rotation.y
+		DomeGroup.rotation.y = rotation;
+		targetRotation = rotation;
 	}
 	else
-	{
-		DomeGroup.rotation.y += ( targetRotation - DomeGroup.rotation.y ) * 0.05; 
-	}
-
-    updateRndLights();
+	{*/
+		DomeGroup.rotation.y += ( targetRotation - DomeGroup.rotation.y ) * 0.02; 
+	//}
+	//console.log('render:' + ' targetRotation:' + targetRotation + ' DomeGroup.rotation.y:' + DomeGroup.rotation.y);
+    //updateRndLights();
+	updateLights();
 
     //composer.render();
 	renderer.render( scene, camera );
@@ -33,22 +37,16 @@ function turnOnLightOnMouseOver() {
 	var vector = new THREE.Vector3( mouse.x, mouse.y, 0.5 );
 	projector.unprojectVector( vector, camera );
 	raycaster.ray.set( camera.position, vector.sub( camera.position ).normalize() );
-	intersects = raycaster.intersectObject( particles );
 
-	//console.log('p ' + intersects.length);
-	if ( intersects.length > 0 ) {
-		//console.log('p ' + intersects.length);
-		if ( INTERSECTED != intersects[ 0 ].index ) {
-
-			//attributes.size.value[ INTERSECTED ] = PARTICLE_SIZE;
-			INTERSECTED = intersects[ 0 ].index;
-			setLightColor(color, INTERSECTED);
-			attributes.size.needsUpdate = true;
+    for (i = 0; i < 260; i++) {
+		intersects = raycaster.intersectObject( lightMeshes[i] );
+		//console.log('i ' + i);
+		if ( intersects.length > 0 ) {
+			//console.log('***i ' + i + ' ' + intersects.length);
+			var c = new THREE.Color();
+			c.setRGB( 1, 1, 1 );
+			setLightColor(c, i);
 		}
+    }	
 
-	} else if ( INTERSECTED !== null ) {
-		//attributes.size.value[ INTERSECTED ] = PARTICLE_SIZE;
-		attributes.size.needsUpdate = true;
-		INTERSECTED = null;
-	}
 }

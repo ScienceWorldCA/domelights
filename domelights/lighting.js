@@ -1,79 +1,11 @@
 function setLighting()
 {
-    attributes = {
-
-        size: {	type: 'f', value: [] },
-        customColor: { type: 'c', value: [] }
-
-    };
-
-    uniforms = {
-
-        amplitude: { type: "f", value: 1.0 },
-        color:     { type: "c", value: new THREE.Color( 0xffffff ) },
-        texture:   { type: "t", value: THREE.ImageUtils.loadTexture( "textures/sprites/spark1.png" ) },
-
-    };
-
-    var shaderMaterial = new THREE.ShaderMaterial( {
-
-        uniforms: 		uniforms,
-        attributes:     attributes,
-        vertexShader:   document.getElementById( 'vertexshader' ).textContent,
-        fragmentShader: document.getElementById( 'fragmentshader' ).textContent,
-
-        blending: 		THREE.AdditiveBlending,
-        depthTest: 		false,
-        transparent:	true
-
-    });
-
-
-//    var radius = 200;
-//    var geometry = new THREE.Geometry();
-//
-//    for ( var i = 0; i < 100000; i++ ) {
-//
-//        var vertex = new THREE.Vector3();
-//        vertex.x = Math.random() * 2 - 1;
-//        vertex.y = Math.random() * 2 - 1;
-//        vertex.z = Math.random() * 2 - 1;
-//        vertex.multiplyScalar( radius );
-//
-//        geometry.vertices.push( vertex );
-//
-//    }
-//
-//    sphere = new THREE.ParticleSystem( geometry, shaderMaterial );
-//
-//    sphere.dynamic = true;
-//    //sphere.sortParticles = true;
-//
-//    var vertices = sphere.geometry.vertices;
-//    var values_size = attributes.size.value;
-//    var values_color = attributes.customColor.value;
-//
-//
-//    for( var v = 0; v < vertices.length; v++ ) {
-//
-//        values_size[ v ] = 10;
-//        values_color[ v ] = new THREE.Color( 0xffaa00 );
-//
-//        if ( vertices[ v ].x < 0 )
-//            values_color[ v ].setHSL( 0.5 + 0.1 * ( v / vertices.length ), 0.7, 0.5 );
-//        else
-//            values_color[ v ].setHSL( 0.0 + 0.1 * ( v / vertices.length ), 0.9, 0.5 );
-//
-//    }
-//
-//    scene.add( sphere );
-
     addLights();
 }
 
 function addLights()
 {
-	light = new THREE.DirectionalLight( 0x101010 );
+	light = new THREE.DirectionalLight( 0x222222 );
 	light.position.set( .75, .75, .75 );
     scene.add( light );
 
@@ -84,20 +16,20 @@ function addLights()
 function addLight( lightColor, x, y, z, localScene ) {
 
     // Add Light
-    var light = new THREE.PointLight( 0xffffff, 1.0, 40 );
-    var c = new THREE.Vector3();
-    c.set( Math.random(), Math.random(), Math.random() ).normalize();
-    light.color.setRGB( c.x, c.y, c.z );
+    var light = new THREE.PointLight( new THREE.Color( 1, 1, 1 ), 2, 10 );
+    //var c = new THREE.Vector3();
+    //c.set( Math.random(), Math.random(), Math.random() ).normalize();
+    //light.color.setRGB( c.x, c.y, c.z );
     light.position.set( x, y, z );
     localScene.add( light );
     lights.push(light);
 
     // Geo Balls
-    var sphere = new THREE.SphereGeometry( 0.5, 4, 4 );
-    var sphereLight = new THREE.Mesh( sphere, new THREE.MeshBasicMaterial( { color: light.color } ) );
+    var sphere = new THREE.SphereGeometry( 8, 4, 4 );
+    var sphereLight = new THREE.Mesh( sphere, new THREE.MeshBasicMaterial( { color: 0x0000ff, opacity: 1, transparent: true } ) );
     sphereLight.position = light.position;
-    //localScene.add( sphereLight );
-    lightMeshes.push(light);
+    localScene.add( sphereLight );
+    lightMeshes.push(sphereLight);
 
     // Fares
 
@@ -124,18 +56,27 @@ function addLight( lightColor, x, y, z, localScene ) {
 
 function setLightColor(color, index)
 {
-    var c = new THREE.Vector3();
-    c.set( Math.random(), Math.random(), Math.random() ).normalize();
-    lights[index].color.setRGB( c.x, c.y, c.z );
+	//console.log('Col: ' + color.r);
+    lights[index].color.setRGB( color.r, color.g, color.b );
     //lightMeshes[index].color.setRGB( c.x, c.y, c.z );
 }
 
-function updateRndLights()
+function updateLights()
 {
-    for (i = 0; i < 10; i++) {
-        lightIndex += 53;
-        lightIndex = lightIndex % 260;
-        setLightColor(0x101010, lightIndex);
+    for (i = 0; i < 260; i++) {
+	
+        var color = new THREE.Color();
+		color = lights[i].color;
+		//var newColor = new THREE.Color();
+		//console.log('Col: ' + color.l);
+		if(color.r > 0)
+		{
+			color.r -= 0.03;
+			color.g -= 0.03;
+			color.b -= 0.03;
+			
+			setLightColor(color, i);
+		}
     }
 }
 

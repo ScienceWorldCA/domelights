@@ -23,8 +23,7 @@ function init() {
 	setLighting();
 
     //renderer = new THREE.WebGLRenderer();
-    renderer = new THREE.WebGLDeferredRenderer( { width: window.innerWidth, height: ((window.innerWidth/Aspect[0])* Aspect[1] ), scale: 1, antialias: true } );
-
+    renderer = new THREE.WebGLDeferredRenderer( { width: window.innerWidth, height: ((window.innerWidth/Aspect[0])* Aspect[1] ), scale: 1, antialias: false } );
 
     //Setup Render Pass
     //renderPassSetup();
@@ -45,8 +44,8 @@ function init() {
 
 	//events.js
 	window.addEventListener( 'resize', onWindowResize, false );
-	document.addEventListener( 'mousemove', onDocumentMouseMove, false );
 	document.addEventListener( 'mousedown', onDocumentMouseDown, false );
+	document.addEventListener( 'mousemove', onDocumentMouseMove, false );
 	document.addEventListener( 'touchstart', onDocumentTouchStart, false );
 	document.addEventListener( 'touchmove', onDocumentTouchMove, false );		
 

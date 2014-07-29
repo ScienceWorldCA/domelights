@@ -13,7 +13,7 @@ function render() {
 		DomeGroup.rotation.y += ( targetRotation - DomeGroup.rotation.y ) * 0.02; 
 	//}
 	//console.log('render:' + ' targetRotation:' + targetRotation + ' DomeGroup.rotation.y:' + DomeGroup.rotation.y);
-    //updateRndLights();
+
 	updateLights();
 
     //composer.render();

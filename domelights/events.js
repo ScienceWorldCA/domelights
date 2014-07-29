@@ -34,7 +34,7 @@ function onDocumentMouseDown( event ) {
 	if (isMouseOverBar()) {
 		isMouseDownOverBar = true;
 	}
-	//document.addEventListener( 'mousemove', onDocumentMouseMove, false );
+
 	document.addEventListener( 'mouseup', onDocumentMouseUp, false );
 	document.addEventListener( 'mouseout', onDocumentMouseOut, false );
 
@@ -70,7 +70,7 @@ function onDocumentMouseUp( event ) {
 	}
 	isMouseDownOverBar = false;
 	isMouseDown = false;
-	//document.removeEventListener( 'mousemove', onDocumentMouseMove, false );
+
 	document.removeEventListener( 'mouseup', onDocumentMouseUp, false );
 	document.removeEventListener( 'mouseout', onDocumentMouseOut, false );
 	//console.log('onDocumentMouseUp: ' + 'isMouseDown: ' + isMouseDown + ' mouseX:' + mouseX + ' mouseXOnMouseDown:' + mouseXOnMouseDown + ' targetRotation:' + targetRotation+ ' targetRotationOnMouseDown:' + targetRotationOnMouseDown);
@@ -80,7 +80,7 @@ function onDocumentMouseOut( event ) {
 
 	isMouseDownOverBar = false;
 	isMouseDown = false;
-	//document.removeEventListener( 'mousemove', onDocumentMouseMove, false );
+
 	document.removeEventListener( 'mouseup', onDocumentMouseUp, false );
 	document.removeEventListener( 'mouseout', onDocumentMouseOut, false );
 

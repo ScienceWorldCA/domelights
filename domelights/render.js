@@ -43,9 +43,9 @@ function turnOnLightOnMouseOver() {
 		//console.log('i ' + i);
 		if ( intersects.length > 0 ) {
 			//console.log('***i ' + i + ' ' + intersects.length);
-			var c = new THREE.Color();
-			c.setRGB( 1, 1, 1 );
-			setLightColor(c, i);
+			//var c = new THREE.Color();
+			//c.setRGB( 1, 0, 1 );
+			setLightColor(brushColor, i);
 		}
     }	
 

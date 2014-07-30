@@ -20,6 +20,10 @@
 
             var Aspect = [16, 9];
 
+            var brushColor = new THREE.Color();
+
+            brushColor.setRGB(1,0,0);
+
 
 //            var textureFlare0 = THREE.ImageUtils.loadTexture( "textures/lensflare/lensflare0.png" );
 //            var textureFlare2 = THREE.ImageUtils.loadTexture( "textures/lensflare/lensflare2.png" );

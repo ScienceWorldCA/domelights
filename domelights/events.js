@@ -13,7 +13,7 @@ function onWindowResize() {
 
 function isMouseOverBar() {
 
-	var vector = new THREE.Vector3( mouse.x, mouse.y, .5 );
+   	var vector = new THREE.Vector3( mouse.x, mouse.y, .5 );
 	projector.unprojectVector( vector, camera );
 	raycaster.ray.set( camera.position, vector.sub( camera.position ).normalize() );
 	intersects = raycaster.intersectObject( swipeMesh );
@@ -27,6 +27,8 @@ function isMouseOverBar() {
 }
 
 function onDocumentMouseDown( event ) {
+
+    brushColor.setRGB(Math.random(), Math.random(), Math.random());
 
 	event.preventDefault();
 
@@ -52,7 +54,7 @@ function onDocumentMouseMove( event ) {
     var renderHeight = (window.innerWidth/Aspect[0]) * Aspect[1];
 
 	mouse.x = ( event.clientX / window.innerWidth ) * 2 - 1;
-	mouse.y = - ( event.clientY / renderHeight) * 2 + 1;	
+	mouse.y = - ( event.clientY / renderHeight) * 2 + 1;
 	
 	if (isMouseDownOverBar) {
 		mouseX = event.clientX - windowHalfX;

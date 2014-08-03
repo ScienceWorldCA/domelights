@@ -14,18 +14,7 @@ function createGeometries() {
 //    sprite4 = THREE.ImageUtils.loadTexture( "textures/sprites/snowflake4.png" );
 //    sprite5 = THREE.ImageUtils.loadTexture( "textures/sprites/snowflake5.png" );
 
-    var map1 = THREE.ImageUtils.loadTexture( 'textures/UI/spin_bar.png' );
-
-	var swipeMaterial = new THREE.MeshBasicMaterial({
-		color:0xffffff, shading: THREE.FlatShading,
-        map: map1
-	});
-
-	swipeMesh = new THREE.Mesh( new THREE.PlaneGeometry( 80, 15, 0, 0 ), swipeMaterial );
-	swipeMesh.position.set( 0, -30, 0 );
-	scene.add( swipeMesh );	
-	
-	var loader = new THREE.OBJLoader( manager );
+    var loader = new THREE.OBJLoader( manager );
     loader.load( 'obj/scienceworld/dome.obj', function ( object ) {
         Mesh = object;
         DomeGroup.add( object );

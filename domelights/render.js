@@ -41,7 +41,7 @@ function turnOnLightOnMouseOver() {
     for (i = 0; i < 260; i++) {
 		intersects = raycaster.intersectObject( lightMeshes[i] );
 		//console.log('i ' + i);
-		if ( intersects.length > 0 ) {
+		if ( intersects.length > 0 && intersects.length < 500 ) {
 			//console.log('***i ' + i + ' ' + intersects.length);
 			//var c = new THREE.Color();
 			//c.setRGB( 1, 0, 1 );

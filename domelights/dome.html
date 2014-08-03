@@ -29,7 +29,8 @@
 
 	<body>
 		<div id="container"></div>
-		<div id="info">Science World - Dome Lights</div>
+        <div id="info" >Science World - Dome Lights</div>
+
 		<script src="includes/three.min.js"></script>
 		<script src="includes/js/loaders/OBJLoader.js"></script>
 		<script src="includes/js/Detector.js"></script>
@@ -92,13 +93,18 @@
 		<script src="init.js"></script>
 		<script src="render.js"></script>
         <script src="renderPassSetup.js"></script>
+        <script src="interface.js"></script>
+
+        <script src="UI.js"></script>
+        <script src="BRUSH.js"></script>
+        <script src="LIGHT.js"></script>
 		<script>
 
 			if ( ! Detector.webgl ) Detector.addGetWebGLMessage();
 
 			//init.js
 			init();
-			
+
 			//render.js
 			animate();
 

@@ -28,8 +28,6 @@ function isMouseOverBar() {
 
 function onDocumentMouseDown( event ) {
 
-    brushColor.setRGB(Math.random(), Math.random(), Math.random());
-
 	event.preventDefault();
 
 	isMouseDown = true;
@@ -43,8 +41,9 @@ function onDocumentMouseDown( event ) {
 	mouseXOnMouseDown = event.clientX - windowHalfX;
 	targetRotationOnMouseDown = targetRotation;
 	//console.log('onDocumentMouseDown:' + ' isMouseOverBar:' + isMouseDownOverBar + ' isMouseDown:' + isMouseDown + ' mouseX:' + mouseX + ' mouseXOnMouseDown:' + mouseXOnMouseDown + ' targetRotation:' + targetRotation + ' targetRotationOnMouseDown:' + targetRotationOnMouseDown);
-
 }
+
+
 
 
 function onDocumentMouseMove( event ) {
@@ -61,6 +60,8 @@ function onDocumentMouseMove( event ) {
 		targetRotation = targetRotationOnMouseDown + ( mouseX - mouseXOnMouseDown ) * 0.08;
 	}	
 	//console.log('onDocumentMouseMove: ' + 'isMouseDownOverBar:' + isMouseDownOverBar + ' isMouseDown:' + isMouseDown + ' mouseX:' + mouseX + ' mouseXOnMouseDown:' + mouseXOnMouseDown + ' targetRotation:' + targetRotation+ ' targetRotationOnMouseDown:' + targetRotationOnMouseDown);
+
+    UIObjectHandler.Update(event);
 }
 
 function onDocumentMouseUp( event ) {
@@ -76,6 +77,7 @@ function onDocumentMouseUp( event ) {
 	document.removeEventListener( 'mouseup', onDocumentMouseUp, false );
 	document.removeEventListener( 'mouseout', onDocumentMouseOut, false );
 	//console.log('onDocumentMouseUp: ' + 'isMouseDown: ' + isMouseDown + ' mouseX:' + mouseX + ' mouseXOnMouseDown:' + mouseXOnMouseDown + ' targetRotation:' + targetRotation+ ' targetRotationOnMouseDown:' + targetRotationOnMouseDown);
+
 }
 
 function onDocumentMouseOut( event ) {

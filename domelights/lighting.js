@@ -13,30 +13,10 @@ function addLights()
     addLightPositions();
 }
 
-function addLight( lightColor, x, y, z, localScene ) {
-
-    // Add Light
-    var light = new THREE.PointLight( new THREE.Color( 1, 1, 1 ), 2, 10 );
-    //var c = new THREE.Vector3();
-    //c.set( Math.random(), Math.random(), Math.random() ).normalize();
-    //light.color.setRGB( c.x, c.y, c.z );
-    light.position.set( x, y, z );
-    localScene.add( light );
-    lights.push(light);
-
-    // Geo Balls
-    var sphere = new THREE.SphereGeometry( 8, 4, 4 );
-    var sphereLight = new THREE.Mesh( sphere, new THREE.MeshBasicMaterial( { color: 0x0000ff, opacity: 1, transparent: true } ) );
-    sphereLight.position = light.position;
-    localScene.add( sphereLight );
-    lightMeshes.push(sphereLight);
-
-}
-
 function setLightColor(color, index)
 {
 	//console.log('Col: ' + color.r);
-    lights[index].color.setRGB( color.r, color.g, color.b );
+    DomeLights[index].color.setRGB( color.r, color.g, color.b );
     //lightMeshes[index].color.setRGB( c.x, c.y, c.z );
 }
 
@@ -45,7 +25,7 @@ function updateLights()
     for (i = 0; i < 260; i++) {
 	
         var color = new THREE.Color();
-		color = lights[i].color;
+		color = DomeLights[i].color;
 		//var newColor = new THREE.Color();
 		//console.log('Col: ' + color.l);
 		if(color.r > 0) {

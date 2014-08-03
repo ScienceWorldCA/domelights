@@ -7,6 +7,10 @@ function init() {
 	camera = new THREE.PerspectiveCamera( 45, Aspect[0] / Aspect[1], 1, 10000 );
 	camera.position.z = 250;
 
+    //Create interaction casters
+    projector = new THREE.Projector();
+    raycaster = new THREE.Raycaster();
+
     //Init 3D Groups
     DomeGroup = new THREE.Object3D;
     DomeGroup.scale.x = .75;
@@ -22,6 +26,12 @@ function init() {
 	//lighting.js
 	setLighting();
 
+    //UI.js // Instantiate new UI Handler
+    UIObjectHandler = new UI(projector, raycaster, camera, mouse); // Create main ui handler
+
+    //interface.js
+    buildInterface();
+
     //renderer = new THREE.WebGLRenderer();
     renderer = new THREE.WebGLDeferredRenderer( { width: window.innerWidth, height: ((window.innerWidth/Aspect[0])* Aspect[1] ), scale: 1, antialias: false } );
 
@@ -30,13 +40,8 @@ function init() {
 
 	container.appendChild( renderer.domElement );
 
-	//
 
-	projector = new THREE.Projector();
-	raycaster = new THREE.Raycaster();
-
-	//
-
+    // Display Statistical information
 	stats = new Stats();
 	stats.domElement.style.position = 'absolute';
 	stats.domElement.style.top = '0px';

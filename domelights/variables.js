@@ -14,11 +14,11 @@
 			
 			//var vector = new THREE.Vector3();
             var composer;
-            var lights = [];
+            var DomeLights = [];
             var lightMeshes = [];
             var lightIndex = 0;
-
-            var Aspect = [16, 9];
+            var UIObjectHandler;
+            var Aspect = [16, 8];
 
             var brushColor = new THREE.Color();
 

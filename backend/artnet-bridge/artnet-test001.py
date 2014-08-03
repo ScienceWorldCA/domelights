@@ -3,7 +3,7 @@ import socket
 
 DEBUG = False
  
-UDP_IP = "2.0.0.61"
+UDP_IP = "172.16.0.63"
 UDP_PORT = 6454
 
 frame = ''

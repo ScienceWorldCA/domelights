@@ -9,11 +9,11 @@ FIXTURES = 260
 
 print "FIXTURES:",FIXTURES
 
-###for i in range(0,1):
-while True:
+sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+sock.connect((HOST, PORT))
+
+for i in range(0,1024):
 	###print "Sending:", r, g, b
-	sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-	sock.connect((HOST, PORT))
 	data = ''
 	for j in range(0,FIXTURES):
 		data = data + chr(random.randint(0,255)) ## Red
@@ -21,8 +21,9 @@ while True:
 		data = data + chr(random.randint(0,255)) ## Blue
 	try:
 		###print "Sending:",len(data)
-		sock.send(data)
+		res = sock.sendall(data)
 	except socket.error as msg:
-		print msg
-		sock.close()
-	time.sleep(0.0625)
+		print "sock.sendall:",res,msg
+	time.sleep(0.020)
+
+sock.close()

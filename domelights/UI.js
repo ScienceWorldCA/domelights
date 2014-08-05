@@ -4,8 +4,10 @@
 
 UI = function(projector, raycaster, camera, mouse)
 {
-    mObjects = [];
-    mCamera = camera
+    var mObjects = [];
+    var mCamera = camera;
+
+    // If this is not a touch interface, we may need to add rollover management
 
     this.__defineGetter__("Objects", function(){
         return mObjects;
@@ -31,35 +33,52 @@ UI = function(projector, raycaster, camera, mouse)
         }
     }
 
-    this.Convert3Dto2D = function(pos, camera)
-    {
-        camera = typeof camera !== 'undefined' ? camera : mCamera;
+    //Helper Functions
 
-    }
-
+    //    this.Convert3DtoUISpace = function(pos, camera)
+    //    {
+    //        camera = typeof camera !== 'undefined' ? camera : mCamera;
+    //    }
+    //    this.getFrustumDimensions = function(camera)
+    //    {
+    //        camera = typeof camera !== 'undefined' ? camera : mCamera;
+    //        // Near Plane dimensions
+    //        var hNear = 2 * Math.tan(camera.fov / 2) * camera.near; // height
+    //        var wNear = hNear * camera.aspect; // width
+    //
+    //        var ntr = new THREE.Vector3( wNear / 2, hNear / 2, -camera.near );
+    //        camera.updateMatrixWorld();
+    //        ntr.applyMatrix4( camera.matrixWorld );
+    //
+    //        console.log(ntr);
+    //    }
 
     this.init = function()
     {
         document.addEventListener( 'mouseup', this.Update, false );
-        document.addEventListener( 'mouseout', this.Update, false );
         document.addEventListener( 'mousedown', this.Update, false );
-        document.addEventListener( 'mouseover', this.Update, false );
+        document.addEventListener( 'mousemove', this.Update, false );
+
+        //We only need to enable these if there is no touch interface
+        //document.addEventListener( 'mouseout', this.Update, false );
+        //document.addEventListener( 'mouseover', this.Update, false );
     }
 
     this.CreateButton = function(texture, mPos, mSize)
     {
-        this.onMouseUp;
-        this.onMouseDown;
-        this.onMouseOver;
-        this.onMouseOut;
-        this.onMouseMove;
-        this.mesh;
-        this.material
-        this.map;
+        this.onMouseUp = null;
+        this.onMouseDown = null;
+        //this.onMouseOver = null;
+        //this.onMouseOut = null;
+        this.onMouseMove = null;
+        this.mesh = null;
+        this.material = null;
+        this.map = null;
 
         this.init = function() {
 
             this.map = THREE.ImageUtils.loadTexture( texture );
+
             this.material = new THREE.MeshBasicMaterial({
                 color:0xffffff, shading: THREE.FlatShading,
                 map:  this.map
@@ -78,34 +97,25 @@ UI = function(projector, raycaster, camera, mouse)
 
             if(event.type == "mousedown")
             {
-                if(this.onMouseDown != null) {
-                    this.onMouseDown(event, index);
-                }
+                if(this.onMouseDown != null) this.onMouseDown(event, index);
             }
             else if(event.type == "mouseup")
             {
-                if(this.onMouseUp != null) {
-                    this.onMouseUp(event, index);
-                }
-            }
-            else if(event.type == "mouseover")
-            {
-                if(this.onMouseOver != null) {
-                    this.onMouseOver(event, index);
-                }
-            }
-            else if(event.type == "mouseout")
-            {
-                if(this.onMouseOut != null) {
-                    this.onMouseOut(event, index);
-                }
+                if(this.onMouseUp != null) this.onMouseUp(event, index);
             }
             else if(event.type == "mousemove")
             {
-                if(this.onMouseMove != null) {
-                    this.onMouseMove(event, index);
-                }
+                if(this.onMouseMove != null) this.onMouseMove(event, index);
             }
+            //else if(event.type == "mouseover")
+            //{
+            //    if(this.onMouseOver != null) this.onMouseOver(event, index);
+            //}
+            //else if(event.type == "mouseout")
+            //{
+            //    if(this.onMouseOut != null) this.onMouseOut(event, index);                }
+            //}
+
         }
 
         this.init();

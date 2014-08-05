@@ -1,22 +1,9 @@
 function createGeometries() {
 
-    var lightPlacementMesh;
-    var loader = new THREE.OBJLoader( manager );
-    loader.load( 'obj/scienceworld/Light_Positions.obj', function ( lightPlacementMesh ) {
-        Mesh = lightPlacementMesh;
-        //DomeGroup.add( lightPlacementMesh );
-    } );
-
-
-    //sprite1 = THREE.ImageUtils.loadTexture( "textures/lensflare/lensflare0.png" );
-//    sprite2 = THREE.ImageUtils.loadTexture( "textures/sprites/snowflake2.png" );
-//    sprite3 = THREE.ImageUtils.loadTexture( "textures/sprites/snowflake3.png" );
-//    sprite4 = THREE.ImageUtils.loadTexture( "textures/sprites/snowflake4.png" );
-//    sprite5 = THREE.ImageUtils.loadTexture( "textures/sprites/snowflake5.png" );
-
     var loader = new THREE.OBJLoader( manager );
     loader.load( 'obj/scienceworld/dome.obj', function ( object ) {
         Mesh = object;
+        object.name = "DomeCollision";
         DomeGroup.add( object );
     } );
 
@@ -31,8 +18,8 @@ function createGeometries() {
 //            }
 //
 //        } );
-
         Mesh = object;
         DomeGroup.add( object );
+
     } );
 }

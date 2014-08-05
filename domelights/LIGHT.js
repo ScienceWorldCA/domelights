@@ -2,35 +2,59 @@
  * Created by Robert Butterworth on 8/2/2014.
  */
 
-var DomeLight = function(lightColor, mPos, localScene){
+var DomeLights = function(localScene)
+{
+    var mScene = localScene;
+    var mLightMeshes= [];
+    var mLights= [];
 
-    this.light
+    this.__defineGetter__("Scene", function(){
+        return mScene;
+    });
+
+    this.__defineGetter__("LightMeshes", function(){
+        return mLightMeshes;
+    });
+    this.__defineSetter__("LightMeshes", function(val){
+        mLightMeshes = val;
+    });
+
+    this.__defineGetter__("Lights", function(){
+        return mLights;
+    });
+    this.__defineSetter__("Lights", function(val){
+        mLights = val;
+    });
 
 
+    this.Light = function(lightColor, mPos){
 
-    this.init = function() {
-        // Add Light
-        this.light = new THREE.PointLight(lightColor, 2, 10);
-        light.position.set(mPos.x, mPos.y, mPos.z);
-        localScene.add(light);
-        DomeLights.push(light);
-    }
+        this.Light;
+        this.LightMesh;
+        this.LightColor = lightColor;
+        this.LightPosition = mPos;
 
-    this.init();
-};
+        this.SetColor = function(color)
+        {
 
-function addLight( lightColor, x, y, z, localScene ) {
+        };
 
-    // Add Light
-    var light = new THREE.PointLight( new THREE.Color( 0, 0, 0 ), 2, 10 );
-    light.position.set( x, y, z );
-    localScene.add( light );
-    DomeLights.push(light);
+        this.init = function() {
+            // Add Light
+            this.Light = new THREE.PointLight( this.LightColor, 0.5, 2 );
+            this.Light.position.set( this.LightPosition.x, this.LightPosition.y, this.LightPosition.z );
+            mScene.add( this.Light );
+            mLights.push(this.Light);
 
-    // Collision Spheres
-    var sphere = new THREE.SphereGeometry( 8, 4, 4 );
-    var sphereLight = new THREE.Mesh( sphere, new THREE.MeshBasicMaterial( { color: 0x0000ff, opacity: 1, transparent: true } ) );
-    sphereLight.position = light.position;
-    localScene.add( sphereLight );
-    lightMeshes.push(sphereLight);
+            // Collision Spheres
+            var sphere = new THREE.SphereGeometry( 8, 4, 4 );
+            this.LightMesh = new THREE.Mesh( sphere, new THREE.MeshBasicMaterial( { color: 0x0000ff, opacity: 0, transparent: true } ) );
+            this.LightMesh.position.set(this.LightPosition.x, this.LightPosition.y, this.LightPosition.z);
+            mScene.add( this.LightMesh );
+            mLightMeshes.push(this.LightMesh);
+        }
+
+        this.init();
+    };
+
 }

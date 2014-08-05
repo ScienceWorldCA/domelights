@@ -68,8 +68,8 @@ function onDocumentMouseUp( event ) {
 
 	if (isMouseOverBar()) {
 		var rotation = DomeGroup.rotation.y
-		DomeGroup.rotation.y = rotation;
-		targetRotation = rotation;
+		//DomeGroup.rotation.y = rotation;
+		//targetRotation = rotation;
 	}
 	isMouseDownOverBar = false;
 	isMouseDown = false;

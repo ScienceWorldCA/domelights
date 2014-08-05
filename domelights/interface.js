@@ -7,7 +7,12 @@ function buildInterface(){
 
 
     //Create Swiper UI
+
+    //videoFile = document.getElementById( 'videoBrush_01' );
+
     var map1 = THREE.ImageUtils.loadTexture( 'textures/UI/spin_bar.png' );
+    //videoTexture = new THREE.Texture( videoFile );
+
     var swipeMaterial = new THREE.MeshBasicMaterial({
         color:0xffffff, shading: THREE.FlatShading,
         map: map1
@@ -25,17 +30,18 @@ function buildInterface(){
     // Add Solid Color Brushes
 
     var button1 = new UIObjectHandler.CreateButton('textures/sprites/snowflake1.png', new THREE.Vector2(180,0), new THREE.Vector2(30,30) );
+    button1.onMouseDown = SelectBrush;
     button1.onMouseUp = SetBrush;
     button1.material.color.setRGB(0,1,0);
 
     var button2 = new UIObjectHandler.CreateButton('textures/sprites/snowflake1.png', new THREE.Vector2(180,30), new THREE.Vector2(30,30) );
     button2.onMouseUp = SetBrush;
-    button2.onMouseOver = SetOver;
-    button2.onMouseOut = SetOut;
+    button2.onMouseDown = SelectBrush;
     button2.material.color.setRGB(1,0,0);
 
     var button3 = new UIObjectHandler.CreateButton('textures/sprites/snowflake1.png', new THREE.Vector2(180,60), new THREE.Vector2(30,30) );
     button3.onMouseUp = SetBrush;
+    button3.onMouseDown = SelectBrush;
     button3.material.color.setRGB(0,0,1);
 
 }
@@ -43,16 +49,10 @@ function buildInterface(){
 function SetBrush(event, index)
 {
     brushColor = UIObjectHandler.Objects[index].material.color;
+    UIObjectHandler.Objects[index].mesh.scale.x = UIObjectHandler.Objects[index].mesh.scale.y = 1;
 }
 
-function SetOver(event, index)
+function SelectBrush(event, index)
 {
-    console.log("SetOver");
-    UIObjectHandler.Objects[index].mesh.scale.x = uiObjects[index].mesh.scale.y = 2;
-}
-
-function SetOut(event, index)
-{
-    console.log("SetOut");
-    UIObjectHandler.Objects[index].mesh.scale.x = uiObjects[index].mesh.scale.y = 1;
+    UIObjectHandler.Objects[index].mesh.scale.x = UIObjectHandler.Objects[index].mesh.scale.y = 1.1;
 }

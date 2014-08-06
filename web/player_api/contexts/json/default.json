@@ -1,0 +1,14 @@
+{
+	"properties":  [],
+	"logic": [],
+	"render": 
+	{
+		"engine": "Render_Simple",
+		"path": "default.php",
+		"properties": 
+		{
+			"page_title": "Example",
+			"place_holder_message": "Welcome to the Colore example page!"
+		}
+	}
+}

@@ -12,7 +12,7 @@ $config['contexts']['GetPlayerState'] = array(
 		'engine' => 'Render_JSON',
 		'path' => '',
 		'properties' => array(
-			'active' => false,
+			'active' => true,
 		),
 	),
 );

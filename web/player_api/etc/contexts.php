@@ -6,13 +6,13 @@ $config['contexts']['GetPlayerState'] = array(
 	'properties' => array(
 	),
 	'logic' => array(
-		// array( 'class' => 'DomePlayer', 'method' => 'GetPlayerState' ),
+		array( 'class' => 'DomePlayer', 'method' => 'GetPlayerState' ),
 	),
 	'render' => array(
 		'engine' => 'Render_JSON',
 		'path' => '',
 		'properties' => array(
-			'active' => true,
+			'active' => false,
 		),
 	),
 );

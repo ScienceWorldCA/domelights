@@ -1,8 +1,10 @@
 import json, requests, time, hashlib
 
+DEBUG = True
+
 MASTER_URL = 'http://localhost/player_api/'
 
-PLAYER_NAME = 'domeplayer01'
+PLAYER_NAME = 'artnet-domeplayer01'
 PLAYER_KEY = 'Qm9nZF0ouU7A'
 
 BRIDGE_IP = '127.0.0.1'
@@ -35,9 +37,16 @@ class DomePlayer:
 		self.active = request_result['active']
 		return self.active
 
+def Debug( message ):
+	if Debug: print message
+
 player = DomePlayer()
 
 print player.isPlaying()
-while player.isPlaying():
-	print "Player is up"
-	time.sleep(1)
+while True:
+	if player.isPlaying():
+		Debug( "Player is up" )
+		time.sleep(1)
+	else:
+		Debug( "Player is not up" )
+		time.sleep(60)

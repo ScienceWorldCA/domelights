@@ -20,7 +20,7 @@ class ColoreDBconnector {
 
 		if( self::$_instance == null ) {
 			try {
-				self::$_instance = new DBconnector();
+				self::$_instance = new ColoreDBconnector();
 			} catch( PDOException $e ) {
 				error_log( sprintf( "%s: Connection failed: %s - %s ", __METHOD__, $e->getMessage(), $config['db']['dsn'] ) );
 				die( "Fatal DB connection error" );

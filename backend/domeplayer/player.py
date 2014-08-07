@@ -26,11 +26,13 @@ class DomePlayer:
 
 		r = requests.post( request_url, data )
 	
-		return json.load( r.json )
+		print r.json
+		return r.json
 
 	def isPlaying(self):
 		data = {}
 		request_result = self.api_call( 'GetPlayerState', data )
+
 		self.active = request_result.active
 		return self.active
 

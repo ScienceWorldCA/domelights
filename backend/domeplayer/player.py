@@ -17,27 +17,27 @@ class DomePlayer:
 		self.active = False
 		self.isPlaying()
 
-	def api_call( self, remote_method, data ):
-		message_hash = PLAYER_NAME+str(time.time())
+	def api_call(self, remote_method, data):
+		message_hash = PLAYER_NAME + str(time.time())
 
 		data['player_name'] = PLAYER_NAME
 		data['timestamp'] = time.time()
 		data['hash'] = hashlib.sha256(message_hash.encode()).hexdigest()
 
-		request_url = MASTER_URL+remote_method
+		request_url = MASTER_URL + remote_method
 
-		r = requests.post( request_url, data )
+		r = requests.post(request_url, data)
 	
 		return r.json()
 
 	def isPlaying(self):
 		data = {}
-		request_result = self.api_call( 'GetPlayerState', data )
+		request_result = self.api_call('GetPlayerState', data)
 
 		self.active = request_result['active']
 		return self.active
 
-def Debug( message ):
+def Debug(message):
 	if Debug: print message
 
 player = DomePlayer()
@@ -45,8 +45,8 @@ player = DomePlayer()
 print player.isPlaying()
 while True:
 	if player.isPlaying():
-		Debug( "Player is up" )
+		Debug("Player is up")
 		time.sleep(1)
 	else:
-		Debug( "Player is not up" )
+		Debug("Player is not up")
 		time.sleep(60)

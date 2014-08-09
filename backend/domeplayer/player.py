@@ -27,8 +27,10 @@ class DomePlayer:
 		request_url = MASTER_URL + remote_method
 
 		r = requests.post(request_url, data)
+		
+		print r.text()
 	
-		return r.json()
+		return r.text()
 
 	def isPlaying(self):
 		data = {}

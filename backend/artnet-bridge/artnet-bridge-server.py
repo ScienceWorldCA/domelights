@@ -55,11 +55,11 @@ emptyframe = []
 	
 f1 = dmx.Frame( emptyframe )
 p1 = packet.DmxPacket( f1 )
-p1.universe = 0
+p1.universe = 0x0000
 
 f2 = dmx.Frame( emptyframe )
 p2 = packet.DmxPacket( f2 )
-p2.universe = 1
+p2.universe = 0x0100
 
 if not sock:
 	print "ERROR: Invalid socket"

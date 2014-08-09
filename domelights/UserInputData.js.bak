@@ -13,9 +13,10 @@
 
 var RenderedData = function(UserInputData,BrushList) {
 	
-	var UserInputArray = jQuery.makeArray( DrawInputData );
-	var BrushListArray = jQuery.makeArray( BrushList );
-
+	var UserInputArray = JSON.parse( DrawInputData );
+	var BrushListArray = JSON.parse( BrushList );
+	
+	
 	
 	
 	

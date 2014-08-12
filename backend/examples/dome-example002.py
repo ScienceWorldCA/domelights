@@ -4,6 +4,8 @@ import time
 import random
 import base64
 
+""" White twinkle star pattern """
+
 HOST, PORT = "localhost", 9999
 FIXTURES = 260
 CHANNELS = (FIXTURES*3)
@@ -18,7 +20,7 @@ for c in range(0,CHANNELS):
 sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 sock.connect((HOST, PORT))
 
-for f in range( 0, (40*900) ):
+while True:
 	for c in range(0,CHANNELS):
 		if canvas[c] > 0:
 			canvas[c] = canvas[c] - 1

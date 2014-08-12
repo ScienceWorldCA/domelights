@@ -4,6 +4,8 @@ import time
 import random
 import base64
 
+""" Fading white chaser pattern """
+
 HOST, PORT = "localhost", 9999
 FIXTURES = 260
 
@@ -36,6 +38,6 @@ while True:
 		except socket.error as msg:
 			print msg
 			break
-		time.sleep(0.005)
+		time.sleep(0.0225)
 
 sock.close()

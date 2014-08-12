@@ -4,6 +4,8 @@ import time
 import random
 import base64
 
+""" FPS test """
+
 HOST, PORT = "localhost", 9999
 FIXTURES = 260
 

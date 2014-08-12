@@ -4,6 +4,8 @@ import time
 import random
 import base64
 
+""" Regular speed random pattern test """
+
 HOST, PORT = "localhost", 9999
 FIXTURES = 260
 
@@ -24,6 +26,6 @@ for i in range(0,1024):
 		res = sock.sendall(data)
 	except socket.error as msg:
 		print "sock.sendall:",res,msg
-	time.sleep(0.020)
+	time.sleep(0.0225)
 
 sock.close()

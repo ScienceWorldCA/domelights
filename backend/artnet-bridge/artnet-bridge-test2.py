@@ -3,6 +3,8 @@ import sys
 import time
 import random
 
+""" High speed random pattern test """
+
 HOST, PORT = "localhost", 9999
 ###HOST, PORT = "172.16.0.91", 9999
 

@@ -6,13 +6,28 @@ $config['contexts']['GetPlayerState'] = array(
 	'properties' => array(
 	),
 	'logic' => array(
+		array( 'class' => 'DomePlayer', 'method' => 'AuthenticatePlayer' ),
 		array( 'class' => 'DomePlayer', 'method' => 'GetPlayerState' ),
 	),
 	'render' => array(
 		'engine' => 'Render_JSON',
 		'path' => '',
 		'properties' => array(
-			'active' => false,
+		),
+	),
+);
+
+$config['contexts']['getNextShow'] = array(
+	'properties' => array(
+	),
+	'logic' => array(
+		array( 'class' => 'DomePlayer', 'method' => 'AuthenticatePlayer' ),
+		array( 'class' => 'DomePlayer', 'method' => 'getNextShow' ),
+	),
+	'render' => array(
+		'engine' => 'Render_JSON',
+		'path' => '',
+		'properties' => array(
 		),
 	),
 );

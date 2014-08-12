@@ -1,6 +1,10 @@
 <?php
 
 class ColoreApachePHPRequestHelper extends ColoreRequest implements ColoreRequestHelper {
+	
+	public function __construct() {
+		session_start();
+	}
 
 	public function getContext() {
 		$baseURL = dirname( $_SERVER['SCRIPT_NAME'] );

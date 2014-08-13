@@ -68,8 +68,6 @@ UI = function(projector, raycaster, camera, mouse)
     {
         this.onMouseUp = null;
         this.onMouseDown = null;
-        //this.onMouseOver = null;
-        //this.onMouseOut = null;
         this.onMouseMove = null;
         this.mesh = null;
         this.material = null;
@@ -107,15 +105,6 @@ UI = function(projector, raycaster, camera, mouse)
             {
                 if(this.onMouseMove != null) this.onMouseMove(event, index);
             }
-            //else if(event.type == "mouseover")
-            //{
-            //    if(this.onMouseOver != null) this.onMouseOver(event, index);
-            //}
-            //else if(event.type == "mouseout")
-            //{
-            //    if(this.onMouseOut != null) this.onMouseOut(event, index);                }
-            //}
-
         }
 
         this.init();

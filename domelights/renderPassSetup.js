@@ -47,8 +47,12 @@ function renderPassSetup()
 
     renderer.autoClear = false;
 
+    //var effectFXAA = new THREE.ShaderPass( THREE.FXAAShader );
+    //effectFXAA.uniforms[ 'resolution' ].value.set( 1 / window.innerWidth, 1 / window.innerHeight );
+    //effectFXAA.renderToScreen = true;
+
     var renderModel = new THREE.RenderPass( scene, camera );
-    var effectBloom = new THREE.BloomPass( 0.3 );
+    var effectBloom = new THREE.BloomPass( 0.8 );
     var effectCopy = new THREE.ShaderPass( THREE.CopyShader );
 
     effectCopy.renderToScreen = true;
@@ -56,7 +60,8 @@ function renderPassSetup()
     composer = new THREE.EffectComposer( renderer );
 
     composer.addPass( renderModel );
-    composer.addPass( effectBloom );
+    //composer.addPass( effectFXAA );
+    //composer.addPass( effectBloom );
     composer.addPass( effectCopy );
 
 }

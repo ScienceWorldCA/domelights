@@ -4,17 +4,17 @@
 
 UI = function(projector, raycaster, camera, mouse)
 {
-    var mObjects = [];
+    var mUIObjects = [];
     var mCamera = camera;
 
     // If this is not a touch interface, we may need to add rollover management
 
     this.__defineGetter__("Objects", function(){
-        return mObjects;
+        return mUIObjects;
     });
 
     this.__defineSetter__("Objects", function(val){
-        mObjects = val;
+        mUIObjects = val;
     });
 
     this.Update = function(event)
@@ -24,11 +24,11 @@ UI = function(projector, raycaster, camera, mouse)
         projector.unprojectVector( vector, mCamera );
         raycaster.ray.set( mCamera.position, vector.sub( mCamera.position ).normalize() );
 
-        for (i = 0; i < mObjects.length; i++) {
-            var intersects = raycaster.intersectObject( mObjects[i].mesh );
+        for (i = 0; i < mUIObjects.length; i++) {
+            var intersects = raycaster.intersectObject( mUIObjects[i].mesh );
 
             if ( intersects.length > 0) {
-                mObjects[i].CallEvent(event, i);
+                mUIObjects[i].CallEvent(event, i);
             }
         }
     }
@@ -66,6 +66,7 @@ UI = function(projector, raycaster, camera, mouse)
 
     this.CreateButton = function(texture, mPos, mSize)
     {
+        this.index = null;
         this.onMouseUp = null;
         this.onMouseDown = null;
         this.onMouseMove = null;
@@ -86,7 +87,7 @@ UI = function(projector, raycaster, camera, mouse)
             this.mesh.position.set(  mPos.x,  mPos.y, 0 );
             scene.add(  this.mesh );
 
-            mObjects.push(this);
+            mUIObjects.push(this);
         };
 
         this.CallEvent = function(event, index)

@@ -1,7 +1,7 @@
 function render() {
 
     if (isMouseDown) {
-        turnOnLightOnMouseOver();
+        checkDomeInteraction();
     }
     /*if (isMouseOverBar() && isMouseDownOverBar) {
      var rotation = DomeGroup.rotation.y
@@ -67,7 +67,7 @@ function animate() {
 
 }
 
-function turnOnLightOnMouseOver() {
+function checkDomeInteraction() {
 
     //console.log('mouse.x ' + mouse.x + ' mouse.y' + mouse.y);
     var vector = new THREE.Vector3( mouse.x, mouse.y, 0.5 );
@@ -79,10 +79,13 @@ function turnOnLightOnMouseOver() {
         if ( intersects.length > 0 ) {
             if(intersects[0].point.z > 0) {
                 //setLightColor(brushColor, i);
-                var newEvent = new EVENT(EventManager.SequenceTime, i,null,null, Brushes[1]);
-                EventManager.AddEvent(newEvent);
+                if(Brushes[ActiveBrushID].PrePaint(i) == true) {
+                    //TODO There is a bug with Clone, so I am using the same instance of the brush atm.
+                    var newEvent = new EVENT(EventManager.SequenceTime, i, null, null, Brushes[ActiveBrushID]);
+                    EventManager.AddEvent(newEvent);
+                    Brushes[ActiveBrushID].PostPaint(i);
+                }
             }
         }
     }
 }
-

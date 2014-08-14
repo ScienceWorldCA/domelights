@@ -23,6 +23,7 @@
     var UIObjectManager;
     var EventManager;
     var Brushes = [];
+    var ActiveBrushID = 0;
 
     var Aspect = [16, 8];
 
@@ -68,6 +69,15 @@
         transparent:    true
 
     } );
+
+    function clone(obj) {
+        if (null == obj || "object" != typeof obj) return obj;
+        var copy = obj.constructor();
+        for (var attr in obj) {
+            if (obj.hasOwnProperty(attr)) copy[attr] = obj[attr];
+        }
+        return copy;
+    }
 
     //This the logical mapping on the lights on the dome. This matrix can be used to look up the light id relative to the matrix.
     //Each light will have a matrix location so that it knows where it is.

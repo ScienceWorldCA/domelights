@@ -6,14 +6,14 @@ function CreateBrushes() {
 
     var WipeBrush = new Brush(); // Index 0
 //----------------------------------------------------------------------
-    WipeBrush.PrePaint = function () {
-        console.log("WipeBrush.PrePaint");
+    WipeBrush.PrePaint = function (index) {
+        return true;
     };
-    WipeBrush.PostPaint = function () {
-        console.log("WipeBrush.PostPaint");
+    WipeBrush.PostPaint = function (index) {
+        return true;
     };
     WipeBrush.Duration = 40;
-    WipeBrush.Render = function (frame, canvas) {
+    WipeBrush.Render = function (frame, canvas, originLight) {
         var col = new THREE.Color();
         col.setRGB(brushColor.r, brushColor.g, brushColor.b);
 
@@ -29,16 +29,18 @@ function CreateBrushes() {
 
     var ColorBrush = new Brush(); // Index 1
 //----------------------------------------------------------------------
-    ColorBrush.PrePaint = function () {
-        console.log("CBRUSH.PrePaint");
+    ColorBrush.Color = new THREE.Color();
+    ColorBrush.PrePaint = function (index) {
+        this.Color.setRGB(brushColor.r, brushColor.g,brushColor.b);
+        return true;
     };
-    ColorBrush.PostPaint = function () {
-        console.log("CBRUSH.PostPaint");
+    ColorBrush.PostPaint = function (index) {
+        return true;
     };
     ColorBrush.Duration = 20;
     ColorBrush.Render = function (frame, canvas, originLight) {
         var col = new THREE.Color();
-        col.setRGB(Math.random(), Math.random(), Math.random());
+        col.setRGB(this.Color.r, this.Color.g, this.Color.b);
         setLightColor(col, originLight);
     };
     Brushes.push(ColorBrush);

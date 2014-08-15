@@ -1,4 +1,6 @@
-var fs = require('fs');
+var http = require( 'http' );
+var fs = require( 'fs' );
+var crypto = require('crypto');
 
 var debug = fs.existsSync('debug');
 
@@ -21,26 +23,7 @@ var server = app.listen(1337, function() {
 	console.log('Listening on port %d', server.address().port);
 });
 
-app.get('/show', function(req, res) {
-	res.render('set', {
-		latest : latest
-	});
-});
-
-app.post('/show', function(req, res) {
-	var url = req.body.url;
-	latest = url;
-	res.redirect("/show");
-});
-
-app.get('/', function(req, res) {
-
-	res.render('display', {
-		latest : latest
-	});
-
-});
-
-app.get('/latest', function(req, res) {
-	res.send(latest);
+app.post('/render', function(req, res) {
+//	res.send()
+	console.log( req.files );
 });

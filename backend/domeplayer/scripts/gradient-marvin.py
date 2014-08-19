@@ -6,8 +6,8 @@ import base64
 
 """ Gradient pattern """
 
-HOST, PORT = "localhost", 9999
-FIXTURES = 260
+HOST, PORT = "172.16.0.91", 9999
+FIXTURES = 8
 
 sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 sock.connect((HOST, PORT))
@@ -88,7 +88,10 @@ while running:
 
 	# Send data
 	try:
+		sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+		sock.connect((HOST, PORT))
 		sock.send(data)
+		sock.close()
 	except socket.error as msg:
 		print msg
 		break

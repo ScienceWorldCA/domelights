@@ -101,7 +101,29 @@ class DomeController {
 	}
 
 	public function GetScheduledAnimationScript( ColoreRequestHelper &$cro ) {
-		$cro->setRenderProperty( 'script_name', "gradient.py" );
+		// Get controller info
+		$controller_info = $cro->getSessionProperty( 'controller_info' );
+		
+		// Make query
+		$script_query = array(
+				'action' => 'select',
+				'table' => 'controllers',
+				'fields' => array(
+						'script_name' => true,
+				),
+				'criteria' => array(
+						'id' => $controller_info['id'],
+				),
+		);
+		
+		$script_result = $this->dbconn->mappedQuery( $script_query );
+		
+		if( is_array( $script_result ) && isset( $script_result['script_name'] ) ) {
+			$cro->setRenderProperty( 'script_name', $script_result['script_name'] );
+		} else {
+			$cro->setRenderProperty( 'script_name', "gradient.py" );
+		}
+		
 	}
 
 	public function GetNextShow( ColoreRequestHelper &$cro ) {

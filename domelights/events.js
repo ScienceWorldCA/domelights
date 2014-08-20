@@ -61,7 +61,7 @@ function onDocumentMouseMove( event ) {
 	}	
 	//console.log('onDocumentMouseMove: ' + 'isMouseDownOverBar:' + isMouseDownOverBar + ' isMouseDown:' + isMouseDown + ' mouseX:' + mouseX + ' mouseXOnMouseDown:' + mouseXOnMouseDown + ' targetRotation:' + targetRotation+ ' targetRotationOnMouseDown:' + targetRotationOnMouseDown);
 
-    UIObjectHandler.Update(event);
+    UIObjectManager.Update(event);
 }
 
 function onDocumentMouseUp( event ) {

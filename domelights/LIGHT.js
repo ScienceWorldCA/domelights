@@ -7,6 +7,7 @@ var DomeLights = function(localScene)
     var mScene = localScene;
     var mLightMeshes= [];
     var mLights= [];
+    var mLightMeta = [];
 
     this.__defineGetter__("Scene", function(){
         return mScene;
@@ -26,32 +27,33 @@ var DomeLights = function(localScene)
         mLights = val;
     });
 
+    this.__defineGetter__("LightMeta", function(){
+        return mLightMeta;
+    });
+    this.__defineSetter__("LightMeta", function(val){
+        mLightMeta = val;
+    });
 
-    this.Light = function(lightColor, mPos){
 
-        this.Light;
-        this.LightMesh;
-        this.LightColor = lightColor;
-        this.LightPosition = mPos;
+    this.Light = function(lightColor, mPos, lightIndex){
 
-        this.SetColor = function(color)
-        {
-
-        };
+        this.LightIndex = lightIndex; // Location on the Lookup matrix
 
         this.init = function() {
             // Add Light
-            this.Light = new THREE.PointLight( this.LightColor, 0.5, 2 );
-            this.Light.position.set( this.LightPosition.x, this.LightPosition.y, this.LightPosition.z );
-            mScene.add( this.Light );
-            mLights.push(this.Light);
+            var Light = new THREE.PointLight( lightColor, 0.5, 2 );
+            Light.position.set( mPos.x, mPos.y, mPos.z );
+            mScene.add( Light );
+            mLights.push(Light);
 
             // Collision Spheres
             var sphere = new THREE.SphereGeometry( 8, 4, 4 );
-            this.LightMesh = new THREE.Mesh( sphere, new THREE.MeshBasicMaterial( { color: 0x0000ff, opacity: 0, transparent: true } ) );
-            this.LightMesh.position.set(this.LightPosition.x, this.LightPosition.y, this.LightPosition.z);
-            mScene.add( this.LightMesh );
-            mLightMeshes.push(this.LightMesh);
+            var LightMesh = new THREE.Mesh( sphere, new THREE.MeshBasicMaterial( { color: 0x0000ff, opacity: 0, transparent: true } ) );
+            LightMesh.position.set(mPos.x, mPos.y, mPos.z);
+            mScene.add( LightMesh );
+            mLightMeshes.push(LightMesh);
+
+            mLightMeta.push(this);
         }
 
         this.init();

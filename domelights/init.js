@@ -23,16 +23,33 @@ function init() {
 
     scene.add(DomeGroup);
 
+    //createBrushes.js
+    CreateBrushes();
+
+    DomeLightManager = new DomeLights(DomeGroup);
+
+    //EVENT.js // Main Event management
+    EventManager = new EVENTMANAGER(DomeLightManager);
+
+
+    //TEMP SEQUENCE
+    EventManager.SequenceLength = 6*FPS;
+    var newEvent1 = new EVENT(5*FPS, 22, DomeLightManager, null, Brushes[1]);
+    EventManager.AddEvent(newEvent1);
+    var newEvent2 = new EVENT(3*FPS, 29, DomeLightManager, null, Brushes[1]);
+    EventManager.AddEvent(newEvent2);
+    var newEvent3 = new EVENT(1*FPS, 35, DomeLightManager, null, Brushes[1]);
+    EventManager.AddEvent(newEvent3);
+
+
     //geometries.js
     createGeometries();
 
-    DomeLightHandler = new DomeLights(DomeGroup);
-
-	//lighting.js
+    //lighting.js
 	setLighting();
 
     //UI.js // Instantiate new UI Handler
-    UIObjectHandler = new UI(projector, raycaster, camera, mouse); // Create main ui handler
+    UIObjectManager = new UI(projector, raycaster, camera, mouse); // Create main ui handler
 
     //interface.js
     buildInterface();

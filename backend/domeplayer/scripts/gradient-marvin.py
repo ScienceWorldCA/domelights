@@ -53,32 +53,40 @@ else:
 
 while running:
 
+	r = r+r_delta
 	if (r+r_delta) == dest_r or r == 0 or r >= 255:
 		dest_r = random.randint(0,255)
 		if dest_r >= r:
 			r_delta = 1
 		else:
 			r_delta = -1
-	r = r+r_delta
+		r = r+r_delta
 
+	g = g+g_delta
 	if (g+g_delta) == dest_g or g == 0 or g >= 255:
 		dest_g = random.randint(0,255)
 		if dest_g > g:
 			g_delta = 1
 		else:
 			g_delta = -1
-	g = g+g_delta
+		g = g+g_delta
 
+	b = b+b_delta
 	if (b+b_delta) == dest_b or b == 0 or b >= 255:
 		dest_b = random.randint(0,255)
 		if dest_b > b:
 			b_delta = 1
 		else:
 			b_delta = -1
-	b = b+b_delta
+		b = b+b_delta
 
 # 	print r,g,b
 
+	sleep = float(random.randint(1,40))
+	print sleep
+	print float( 1/float(sleep) )
+	sleep = 1/sleep
+	
 	# Write data
 	data = ''
 	for fixture in range( 0, FIXTURES ):
@@ -97,7 +105,21 @@ while running:
 		break
 	
 	# Mandatory sleep
-	time.sleep(0.0225)
+# 	time.sleep(0.0225)
+	time.sleep(sleep)
+	
+	try:
+		sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+		sock.connect((HOST, PORT))
+		sock.send(black)
+		sock.close()
+	except socket.error as msg:
+		print msg
+		break
+	
+	# Mandatory sleep
+# 	time.sleep(0.0225)
+	time.sleep(sleep)
 
 	## Check if we can still run
 	fp = open( 'running', 'r' )

@@ -4,3 +4,4 @@ local/*
 .pydevproject
 *.pyc
 *.log
+node_modules/*

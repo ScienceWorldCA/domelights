@@ -1,0 +1,7 @@
+var config = {}
+
+config.player_name = 'artnet-renderd01';
+config.player_key = '4ZzNUTtuK07J';
+config.master_url = 'http://localhost/player_api/';
+
+module.exports = config;

@@ -1,2 +1,6 @@
 local/*
 *.swp
+.project
+.pydevproject
+*.pyc
+*.log

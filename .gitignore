@@ -3,3 +3,8 @@ local/*
 .project
 .pydevproject
 *.pyc
+<<<<<<< HEAD
+=======
+*.log
+node_modules/*
+>>>>>>> refs/heads/development

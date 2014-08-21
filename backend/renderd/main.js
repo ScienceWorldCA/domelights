@@ -1,3 +1,10 @@
+<<<<<<< HEAD
+=======
+/*
+ * Scienceworld Domelights Render Daemon
+ * Version: 0.0.2 
+ */
+>>>>>>> refs/heads/development
 var http = require( 'http' );
 var fs = require( 'fs' );
 var crypto = require('crypto');

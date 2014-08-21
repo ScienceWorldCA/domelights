@@ -52,6 +52,12 @@ class DomeController:
         request_result = self.api_call('GetScheduledAnimationScript', data)
         
         return request_result['script_name']
+        
+    def getDefaultAnimationScript(self):
+        data = {}
+        request_result = self.api_call('GetDefaultAnimationScript', data)
+        
+        return request_result['script_name']
     
     def stopScript(self):
         if not self._subprocess:
@@ -72,7 +78,10 @@ class DomeController:
         data = {}
         request_result = self.api_call('GetScheduledShow', data)
         
-        return request_result['script_name']
+        if not request_result['hasNewShow']:
+            return False
+        else:
+            return request_result['data'] 
     
     def run(self):
         while True:
@@ -95,18 +104,33 @@ class DomeController:
             if controller_state == "0":
                 Debug("Player is set down, sleeping for 60 seconds")
                 sleep = 15
+                
             elif controller_state == "1":
-                if self._subprocess != None and self._subprocess.poll() == None:
-                   Debug("Animation player already running")
-                else:
-                    Debug("Animation player not running")
-                    animation = None
-                    animation = self.getScheduledShow()
-                    Debug("Spawning animation player")
-                    
+                # Fetch next animation
+                animation = self.getScheduledShow()
+                
+                # If we have a valid animation, send a stop signal and start playback
+                if animation != False:
+                    # Send stop
+                    # Start animation
                     self._subprocess = None
                     self._subprocess = subprocess.Popen([ "/usr/bin/python", "scripts/domeplayer.py", "LightData_3Btyes40fps30seconds.dat" ], stdout=PIPE, stdin=PIPE, stderr=PIPE)
                     sleep = 1
+                    
+                elif self._subprocess != None and self._subprocess.poll() == None:
+                   Debug("Animation player already running")
+                else:
+                    Debug("Animation player not running")
+                    Debug("Spawning default script player")
+                    
+                    script_name = self.getDefaultAnimationScript()
+                    
+                    script_file = "scripts/" + script_name
+                    Debug("Spawning scripted animation: " + script_file)
+                    self._subprocess = None
+                    self._subprocess = subprocess.Popen([ "/usr/bin/python", script_file ], stdout=PIPE, stdin=PIPE, stderr=PIPE)
+                    sleep = 1
+                    
             else:
                 # Detect script change
                 script_name = self.getScheduledAnimationScript()

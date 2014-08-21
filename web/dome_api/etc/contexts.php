@@ -32,12 +32,12 @@ $config['contexts']['GetScheduledAnimationScript'] = array(
 	),
 );
 
-$config['contexts']['GetNextShow'] = array(
+$config['contexts']['GetScheduledShow'] = array(
 	'properties' => array(
 	),
 	'logic' => array(
 		array( 'class' => 'DomeController', 'method' => 'AuthenticateController' ),
-		array( 'class' => 'DomeController', 'method' => 'GetNextShow' ),
+		array( 'class' => 'DomeController', 'method' => 'GetScheduledShow' ),
 	),
 	'render' => array(
 		'engine' => 'Render_JSON',

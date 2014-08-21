@@ -82,11 +82,6 @@ while running:
 
 # 	print r,g,b
 
-	sleep = float(random.randint(1,40))
-	print sleep
-	print float( 1/float(sleep) )
-	sleep = 1/sleep
-	
 	# Write data
 	data = ''
 	for fixture in range( 0, FIXTURES ):
@@ -105,21 +100,7 @@ while running:
 		break
 	
 	# Mandatory sleep
-# 	time.sleep(0.0225)
-	time.sleep(sleep)
-	
-	try:
-		sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-		sock.connect((HOST, PORT))
-		sock.send(black)
-		sock.close()
-	except socket.error as msg:
-		print msg
-		break
-	
-	# Mandatory sleep
-# 	time.sleep(0.0225)
-	time.sleep(sleep)
+	time.sleep(0.0225)
 
 	## Check if we can still run
 	fp = open( 'running', 'r' )

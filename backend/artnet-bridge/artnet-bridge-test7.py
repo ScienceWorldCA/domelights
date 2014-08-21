@@ -17,7 +17,7 @@ sock.connect((HOST, PORT))
 switch = 0
 
 for d in range( 1, 9 ):
-	delay = 2 ** d
+	delay = float( 2 ** d )
 	print "Delay:", delay
 
 	for i in range(0,delay):

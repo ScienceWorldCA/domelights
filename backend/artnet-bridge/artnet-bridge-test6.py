@@ -15,7 +15,7 @@ sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 sock.connect((HOST, PORT))
 
 for delay in range( 1, 200 ):
-	print float(1000/delay)
+	print float(float(1000)/delay)
 
 	for k in range(0,(delay*3)):
 

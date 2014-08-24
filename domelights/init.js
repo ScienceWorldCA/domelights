@@ -1,4 +1,4 @@
-function init() {
+function initGraphicMode() {
 
 	container = document.getElementById( 'container' );
 
@@ -14,17 +14,14 @@ function init() {
 
     //Init 3D Groups
     DomeGroup = new THREE.Object3D;
-    DomeGroup.scale.x = .75;
-    DomeGroup.scale.y = .75;
-    DomeGroup.scale.z = .75;
-    DomeGroup.position.y = 30;
+    DomeGroup.scale.x = 1;
+    DomeGroup.scale.y = 1;
+    DomeGroup.scale.z = 1;
+    DomeGroup.position.y = 10;
     //DomeGroup.position.z = -130;
     DomeGroup.rotation.x = 0.4; //Rotation appears to be in Radians
 
     scene.add(DomeGroup);
-
-    //createBrushes.js
-    CreateBrushes();
 
     DomeLightManager = new DomeLights(DomeGroup);
 
@@ -33,13 +30,13 @@ function init() {
 
 
     //TEMP SEQUENCE
-    EventManager.SequenceLength = 6*FPS;
-    var newEvent1 = new EVENT(5*FPS, 22, DomeLightManager, null, Brushes[1]);
-    EventManager.AddEvent(newEvent1);
-    var newEvent2 = new EVENT(3*FPS, 29, DomeLightManager, null, Brushes[1]);
-    EventManager.AddEvent(newEvent2);
-    var newEvent3 = new EVENT(1*FPS, 35, DomeLightManager, null, Brushes[1]);
-    EventManager.AddEvent(newEvent3);
+      EventManager.SequenceLength = 6*FPS;
+//    var newEvent1 = new EVENT(5*FPS, 22, DomeLightManager, null, Brushes[1]);
+//    EventManager.AddEvent(newEvent1);
+//    var newEvent2 = new EVENT(3*FPS, 29, DomeLightManager, null, Brushes[1]);
+//    EventManager.AddEvent(newEvent2);
+//    var newEvent3 = new EVENT(1*FPS, 35, DomeLightManager, null, Brushes[1]);
+//    EventManager.AddEvent(newEvent3);
 
 
     //geometries.js
@@ -50,6 +47,9 @@ function init() {
 
     //UI.js // Instantiate new UI Handler
     UIObjectManager = new UI(projector, raycaster, camera, mouse); // Create main ui handler
+
+    //createBrushes.js
+    CreateBrushes();
 
     //interface.js
     buildInterface();
@@ -75,6 +75,42 @@ function init() {
 	document.addEventListener( 'mousedown', onDocumentMouseDown, false );
 	document.addEventListener( 'mousemove', onDocumentMouseMove, false );
 	document.addEventListener( 'touchstart', onDocumentTouchStart, false );
-	document.addEventListener( 'touchmove', onDocumentTouchMove, false );		
+	document.addEventListener( 'touchmove', onDocumentTouchMove, false );
 
+}
+
+function initRendermode()
+{
+    GraphicMode = false;
+
+    //Init 3D Groups
+    scene = new THREE.Scene();
+    DomeGroup = new THREE.Object3D;
+    DomeLightManager = new DomeLights(DomeGroup);
+
+    //EVENT.js // Main Event management
+    EventManager = new EVENTMANAGER(DomeLightManager);
+
+    //geometries.js
+    createGeometries();
+
+    //lighting.js
+    setLighting();
+
+    //createBrushes.js
+    CreateBrushes();
+
+    //TEMP SEQUENCE
+    {
+        EventManager.SequenceLength = 6 * FPS;
+        var newEvent1 = new EVENT(0, 0, Brushes[2]);
+        EventManager.AddEvent(newEvent1);
+
+        var brushData = [];
+        brushData[0] = new THREE.Color(1, 1, 1);
+        var newEvent2 = new EVENT(20, 100, Brushes[0], brushData);
+        EventManager.AddEvent(newEvent2);
+    }
+
+    console.log("--- Render Mode Initialised ---");
 }

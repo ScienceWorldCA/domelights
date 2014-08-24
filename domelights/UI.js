@@ -17,6 +17,7 @@ UI = function(projector, raycaster, camera, mouse)
         mUIObjects = val;
     });
 
+    //Check all UI for Collision Events
     this.Update = function(event)
     {
         //console.log(event.type);

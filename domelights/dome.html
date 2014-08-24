@@ -32,6 +32,7 @@
         <div id="info" >Science World - Dome Lights</div>
 
 		<script src="includes/three.min.js"></script>
+        <script src="includes/jquery.min.js"></script>
 		<script src="includes/js/loaders/OBJLoader.js"></script>
 		<script src="includes/js/Detector.js"></script>
 		<script src="includes/js/libs/stats.min.js"></script>
@@ -109,10 +110,12 @@
 			if ( ! Detector.webgl ) Detector.addGetWebGLMessage();
 
 			//init.js
-			init();
+			initGraphicMode();
+            //initRendermode();
 
 			//render.js
-			animate();
+            if (GraphicMode == true)
+			    animate();
 
 		</script>
 

@@ -1,5 +1,6 @@
 function createGeometries() {
 
+    //Create ScienceWorld Dome
     var loader = new THREE.OBJLoader( manager );
     loader.load( 'obj/scienceworld/dome.obj', function ( object ) {
         Mesh = object;
@@ -7,6 +8,7 @@ function createGeometries() {
         DomeGroup.add( object );
     } );
 
+    //Create ScienceWorld Light Structure
     var loader = new THREE.OBJLoader( manager );
     loader.load( 'obj/scienceworld/Dome_Structure.obj', function ( object ) {
 //        object.traverse( function ( child ) {
@@ -23,7 +25,7 @@ function createGeometries() {
 
     } );
 
-    //Skybox
+    //TODO Add Skybox ??
     /*
     var path = "textures/cube/SwedishRoyalCastle/";
     var format = '.jpg';

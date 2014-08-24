@@ -49,6 +49,7 @@
         <div id="info" >Science World - Dome Lights</div>
 <div id="top" style="clear: both; width: 100%; height: 50px; bottom: 0px; position: absolute;"><button id="pingResult" onclick="DoPing();">Save</button></div>
 		<script src="includes/three.min.js"></script>
+		<script src="includes/jquery.min.js"></script>
 		<script src="includes/js/loaders/OBJLoader.js"></script>
 		<script src="includes/js/Detector.js"></script>
 		<script src="includes/js/libs/stats.min.js"></script>

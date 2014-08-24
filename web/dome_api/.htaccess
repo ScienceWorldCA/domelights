@@ -1,12 +1,6 @@
-# Turn off register_globals
-php_flag register_globals 0
-
-# Turn off magic_quotes
-php_flag magic_quotes_gpc 0
-
 # Turn on the Apache RewriteEngine and route every request to the framework helper
 RewriteEngine On
-RewriteBase /dome_api/
+RewriteBase /player_api/
 RewriteCond %{REQUEST_FILENAME}	!-f
 RewriteCond %{REQUEST_FILENAME}	!-d
 RewriteRule .* index.php [L]

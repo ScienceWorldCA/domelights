@@ -1,3 +1,5 @@
+    var GraphicMode = true;
+
     var renderer, composer, scene, camera, stats;
     var DomeGroup, swipeMesh;
 
@@ -12,11 +14,9 @@
     var targetRotation = 0;
     var targetRotationOnMouseDown = 0;
 
-    var particles;
+    // These are the sprites used to create the glow effects.
+    var LightGlowSprites;
 
-    //var vector = new THREE.Vector3();
-
-    //var lightIndex = 0;
     var FPS = 40;
 
     var DomeLightManager;
@@ -24,59 +24,49 @@
     var EventManager;
     var Brushes = [];
     var ActiveBrushID = 0;
+    var ActiveBrushData = [];
 
     var Aspect = [16, 8];
 
     var videoTexture, videoFile;
 
-    var brushColor = new THREE.Color();
-
-    brushColor.setRGB(1,1,1);
-
     var timer = 0.0;
 
 
+    //Used for Debug Purposes
     var manager = new THREE.LoadingManager();
     manager.onProgress = function ( item, loaded, total ) {
-
         //console.log( item, loaded, total );
-
     };
 
-    var attributes = {
+    // Parameters used for the Sprite Glows on the lights
+    {
+        var attributes = {
 
-        size:        { type: 'f', value: [] },
-        customColor: { type: 'c', value: [] }
+            size: { type: 'f', value: [] },
+            customColor: { type: 'c', value: [] }
 
-    };
+        };
 
-    var uniforms = {
+        var uniforms = {
 
-        color:   { type: "c", value: new THREE.Color( 0xffffff ) },
-        texture: { type: "t", value: THREE.ImageUtils.loadTexture( "textures/lensflare/lensflare0.png" ) }
+            color: { type: "c", value: new THREE.Color(0xffffff) },
+            texture: { type: "t", value: THREE.ImageUtils.loadTexture("textures/lensflare/lensflare0.png") }
 
-    };
+        };
 
-    var shaderMaterial = new THREE.ShaderMaterial( {
+        var shaderMaterial = new THREE.ShaderMaterial({
 
-        uniforms: uniforms,
-        attributes: attributes,
-        vertexShader: document.getElementById( 'vertexshader' ).textContent,
-        fragmentShader: document.getElementById( 'fragmentshader' ).textContent,
+            uniforms: uniforms,
+            attributes: attributes,
+            vertexShader: document.getElementById('vertexshader').textContent,
+            fragmentShader: document.getElementById('fragmentshader').textContent,
 
-        blending:       THREE.AddOperation,
-        depthTest:      false,
-        transparent:    true
+            blending: THREE.AddOperation,
+            depthTest: false,
+            transparent: true
 
-    } );
-
-    function clone(obj) {
-        if (null == obj || "object" != typeof obj) return obj;
-        var copy = obj.constructor();
-        for (var attr in obj) {
-            if (obj.hasOwnProperty(attr)) copy[attr] = obj[attr];
-        }
-        return copy;
+        });
     }
 
     //This the logical mapping on the lights on the dome. This matrix can be used to look up the light id relative to the matrix.

@@ -17,6 +17,21 @@ $config['contexts']['GetControllerState'] = array(
 	),
 );
 
+$config['contexts']['GetAnimation'] = array(
+	'properties' => array(
+	),
+	'logic' => array(
+		array( 'class' => 'DomeController', 'method' => 'AuthenticateController' ),
+		array( 'class' => 'DomeController', 'method' => 'GetAnimation' ),
+	),
+	'render' => array(
+		'engine' => 'Render_JSON',
+		'path' => '',
+		'properties' => array(
+		),
+	),
+);
+
 $config['contexts']['GetScheduledAnimationScript'] = array(
 	'properties' => array(
 	),

@@ -10,6 +10,11 @@ HOST, PORT = "localhost", 9999
 FIXTURES = 260
 CHANNELS = (FIXTURES*3)
 
+MIN_RANDOM_FIXTURES,MAX_RANDOM_FIXTURES = 3,10
+
+MIN_COUNTER = 10
+MAX_COUNTER = 40
+
 canvas = []
 
 for c in range(0,CHANNELS):
@@ -24,14 +29,21 @@ fp.close()
 
 running = True
 
+counter = random.randint(MIN_COUNTER,MAX_COUNTER)
+
 while running:
 	# Fade out
 	for c in range(0,CHANNELS):
 		if canvas[c] > 0:
-			canvas[c] = canvas[c] - 1
+			canvas[c] = canvas[c] - 4
+		
+		if canvas[c] < 1:
+			canvas[c] = 0
 
-	if random.randint(0,5) == 5:
-		for i in range(0,random.randint(3,7)):
+	counter = counter - 1
+	if counter == 0:
+		counter = random.randint(MIN_COUNTER,MAX_COUNTER)
+		for i in range(0,random.randint(MIN_RANDOM_FIXTURES,MAX_RANDOM_FIXTURES)):
 			random_pixel = random.randint( 1, (FIXTURES-1) )
 		
 			r_pixel = (random_pixel*3)

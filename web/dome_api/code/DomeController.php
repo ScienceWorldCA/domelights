@@ -78,6 +78,7 @@ class DomeController {
 				'table' => 'controllers',
 				'fields' => array(
 						'mode' => true,
+						'script_name' => true,
 				),
 				'criteria' => array(
 						'id' => $controller_info['id'],
@@ -93,17 +94,46 @@ class DomeController {
 			return false;
 		}
 		
-		// Set controller_active variable
-		$controller_active = $controller_state_result['mode'];
-		
 		// Set state for rendering
-		$cro->setRenderProperty( 'mode', $controller_active );
-	}
+		$cro->setRenderProperty( 'mode', $controller_state_result['mode'] );
+		$cro->setRenderProperty( 'script_name', $controller_state_result['script_name'] );
+		
+		if( $controller_state_result['mode'] == 0 )
+			return;
+		
+		// Check for current event
+		$event_data = $this->GetEvent();
+		
+		// If we have valid event data, override the current state
+		if( $event_data && is_array( $event_data ) && isset( $event_data['id'] ) ) {
+			$cro->setRenderProperty( 'mode', $event_data['type'] );
+			$cro->setRenderProperty( 'script_name', $event_data['options'] );
+		}
 
-	public function GetScheduledAnimationScript( ColoreRequestHelper &$cro ) {
+	}
+	
+	public function GetAnimation( ColoreRequestHelper &$cro ) {
 		// Get controller info
 		$controller_info = $cro->getSessionProperty( 'controller_info' );
 		
+		// Check for current event
+		$event_data = $this->GetEvent();
+		
+		// If we have valid event data, return the result
+		if( $event_data && is_array( $event_data ) && isset( $event_data['id'] ) ) {
+			// If we receive a type 0 event, then override the controller state
+			if( $event_data['type'] == 0 ) {
+				
+			}
+			$cro->setRenderProperty( 'script_name', $event_data['options'] );
+			return;
+		}
+		
+		// If there is no event, then check for schedule
+// 		$schedule_data = $this->GetCurrentSchedule();
+		
+		// If there is no schedule, get the current controller's default script
+	
 		// Make query
 		$script_query = array(
 				'action' => 'select',
@@ -115,43 +145,35 @@ class DomeController {
 						'id' => $controller_info['id'],
 				),
 		);
-		
+	
 		$script_result = $this->dbconn->mappedQuery( $script_query );
-		
+	
 		if( is_array( $script_result ) && isset( $script_result['script_name'] ) ) {
 			$cro->setRenderProperty( 'script_name', $script_result['script_name'] );
+			$cro->setRenderProperty( 'id', "" );
+			$cro->setRenderProperty( 'animation', "" );
 		} else {
 			$cro->setRenderProperty( 'script_name', "gradient.py" );
 		}
-		
+	
 	}
-
-	public function GetDefaultAnimationScript( ColoreRequestHelper &$cro ) {
-		// Get controller info
-		$controller_info = $cro->getSessionProperty( 'controller_info' );
+	
+	public function GetEvent() {
+		// Simple query
+		$query = "SELECT id, type, options FROM events WHERE start < now() AND end > now() AND active = 1";
 		
-		// Make query
-		$script_query = array(
-				'action' => 'select',
-				'table' => 'controllers',
-				'fields' => array(
-						'script_name' => true,
-				),
-				'criteria' => array(
-						'id' => $controller_info['id'],
-				),
-		);
+		// Do query
+		$res = $this->dbconn->query( $query );
 		
-		$script_result = $this->dbconn->mappedQuery( $script_query );
-		
-		if( is_array( $script_result ) && isset( $script_result['script_name'] ) ) {
-			$cro->setRenderProperty( 'script_name', $script_result['script_name'] );
+		// If we have a valid result, return it.
+		if( $res && $res->rowCount() == 1 ) {
+			$event_data = $res->fetch();
+			return $event_data;
 		} else {
-			$cro->setRenderProperty( 'script_name', "gradient.py" );
+			return false;
 		}
-		
 	}
-
+	
 	public function GetScheduledShow( ColoreRequestHelper &$cro ) {
 		$cro->setRenderProperty( 'hasNewShow', false );
 	}

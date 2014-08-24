@@ -1,4 +1,4 @@
-import json, requests, time, hmac, hashlib, math, socket, os
+import json, requests, time, hmac, hashlib, math, socket, os, datetime
 from subprocess import Popen, PIPE
 import subprocess
 import socket
@@ -24,6 +24,12 @@ class DomeController:
         self._runningFile = None
         self._subprocess = None
         self._script_name = None
+
+        Debug("Sending STOP signal to residual processes")
+        self._runningFile = open('running', 'w')
+        self._runningFile.write("STOP")
+        self._runningFile.close()
+        time.sleep(3)
         
     def api_call(self, remote_method, data):
         message_hash = self._controller_name + str(int(time.time())) + self._controller_key
@@ -35,7 +41,12 @@ class DomeController:
         request_url = self._master_url + remote_method
 
         s = self._httpClient
-        r = s.post(request_url, data)
+        
+        try:
+            r = s.post(request_url, data)
+        except requests.exceptions.ConnectionError as e:
+            r = s.post(request_url, data)
+            pass
        
         Debug(str(r.text))
 
@@ -45,20 +56,16 @@ class DomeController:
         data = {}
         request_result = self.api_call('GetControllerState', data)
         
+        self._fallback_script_name = request_result['script_name']
+        
         return request_result['mode']
         
-    def getScheduledAnimationScript(self):
+    def getAnimation(self):
         data = {}
-        request_result = self.api_call('GetScheduledAnimationScript', data)
+        request_result = self.api_call('GetAnimation', data)
         
-        return request_result['script_name']
+        return request_result
         
-    def getDefaultAnimationScript(self):
-        data = {}
-        request_result = self.api_call('GetDefaultAnimationScript', data)
-        
-        return request_result['script_name']
-    
     def stopScript(self):
         if not self._subprocess:
             return
@@ -69,23 +76,22 @@ class DomeController:
         self._runningFile.close()
 
         Debug("Waiting for subprocess to stop...")
-        if self._subprocess != None:
-            self._subprocess.communicate("STOP")
-            self._subprocess = None
+        self._subprocess.wait()
         Debug("Killed!")
         
-    def getScheduledShow(self):
-        data = {}
-        request_result = self.api_call('GetScheduledShow', data)
+        # Send black screen update
+        self.sendBlackScreen()
         
-        if not request_result['hasNewShow']:
-            return False
-        else:
-            return request_result['data'] 
-    
+        # Reset subprocess handle
+        self._subprocess = None
+        
+    def sendBlackScreen(self):
+        self.runScript( 'blackscreen.py' )
+        
     def run(self):
         while True:
             Debug("Loop...")
+            
 
             controller_state = self.getControllerState()
             
@@ -97,65 +103,101 @@ class DomeController:
                 
             self._state = controller_state
             
-            sleep = 15
+            sleep = 1
 
             Debug("Subprocess: " + str(self._subprocess))
             
             if controller_state == "0":
                 Debug("Player is set down, sleeping for 60 seconds")
-                sleep = 15
+                sleep = 60
                 
             elif controller_state == "1":
                 # Fetch next animation
-                animation = self.getScheduledShow()
+                animation_info = self.getAnimation()
+                
+                script_name = animation_info['script_name']
                 
                 # If we have a valid animation, send a stop signal and start playback
-                if animation != False:
+                if script_name == 'domeplayer.py':
+                    self._script_name = script_name                    
+                    if self._subprocess != None and self._subprocess.poll() == None:
+                        Debug("Animation player already running")
+                        # Send stop
+                        self.stopScript()
+                    
+                    try:    
+                        fp = open( 'LightData.dat', 'w' )
+                        fp.write( animation_info['animation'] )
+                        fp.close()
+                    finally:
+                        # Run animation
+                        self.runAnimation()
+                        # Set animation as played
+                        self.setAnimationPlayed( animation_info['id'] )
+                        
+                        Debug( "Done!" )
+                
+                elif self._script_name != script_name:
                     # Send stop
-                    # Start animation
-                    self._subprocess = None
-                    self._subprocess = subprocess.Popen([ "/usr/bin/python", "scripts/domeplayer.py", "LightData_3Btyes40fps30seconds.dat" ], stdout=PIPE, stdin=PIPE, stderr=PIPE)
-                    sleep = 1
+                    self.stopScript()
+                    
+                    Debug("Spawning script player")
+
+                    self.runScript( script_name )
+                    sleep = 5
                     
                 elif self._subprocess != None and self._subprocess.poll() == None:
                    Debug("Animation player already running")
+                   sleep = 5
+                   
                 else:
                     Debug("Animation player not running")
-                    Debug("Spawning default script player")
+                    Debug("Spawning script player")
+
+                    self.runScript( script_name )
+                    sleep = 5
                     
-                    script_name = self.getDefaultAnimationScript()
-                    
-                    script_file = "scripts/" + script_name
-                    Debug("Spawning scripted animation: " + script_file)
-                    self._subprocess = None
-                    self._subprocess = subprocess.Popen([ "/usr/bin/python", script_file ], stdout=PIPE, stdin=PIPE, stderr=PIPE)
-                    sleep = 1
-                    
-            else:
-                # Detect script change
-                script_name = self.getScheduledAnimationScript()
-                if self._script_name == None:
-                    Debug( "First run for scripted animation" )
-                elif self._script_name.strip() != script_name.strip():
-                    Debug( "Scripted animation change, stopping current script" )
-                    Debug( "Changed from " + str( self._script_name ) + " to " + script_name )
+            elif controller_state == "2":
+                if self._script_name != self._fallback_script_name:
+                    # Send stop
                     self.stopScript()
-                
-                self._script_name = script_name
                     
-                if self._subprocess != None and self._subprocess.poll() == None:
-                    Debug("Scripted animation already running")
+                    Debug("Spawning script player")
+
+                    self.runScript( self._fallback_script_name )
+                    sleep = 5
+                    
+                elif self._subprocess != None and self._subprocess.poll() == None:
+                   Debug("Animation player already running")
+                   sleep = 5
+                   
                 else:
-                    Debug("Scripted animation not running")
-                    script_file = "scripts/" + script_name
-                    Debug("Spawning scripted animation: " + script_file)
-                    self._subprocess = None
-                    self._subprocess = subprocess.Popen([ "/usr/bin/python", script_file ], stdout=PIPE, stdin=PIPE, stderr=PIPE)
-                sleep = 15
+                    Debug("Animation player not running")
+                    Debug("Spawning script player")
+
+                    self.runScript( self._fallback_script_name )
+                    
+                    sleep = 5
             
+            Debug( "Sleeping[" + str(sleep) + "]..." )
             for per in range(0, sleep):
-                Debug("Sleeping [" + str(sleep - per) + "]...")
+#                 Debug("Sleeping [" + str(sleep - per) + "]...")
                 time.sleep(1)
 
+    def runAnimation(self):
+         Debug( "Playing animation" )
+         self._subprocess = None
+        # Start animation
+         self._subprocess = subprocess.Popen([ "/usr/bin/python", "scripts/domeplayer.py", "LightData.dat" ], stdout=PIPE, stdin=PIPE, stderr=PIPE)
+         # Wait for animation to be done playing
+         self._subprocess.wait()
+
+    def runScript(self,script_name):
+        self._script_name = script_name                    
+        script_file = "scripts/" + script_name
+        Debug("Spawning scripted animation: " + script_file)
+        self._subprocess = None
+        self._subprocess = subprocess.Popen([ "/usr/bin/python", script_file ], stdout=PIPE, stdin=PIPE, stderr=PIPE)
+
 def Debug(message):
-    if Debug: print message
+    if Debug: print datetime.datetime.now(), message

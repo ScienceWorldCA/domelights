@@ -1,6 +1,7 @@
 function render() {
 
     //TODO Need to lock the update the defined FPS
+
     if (isMouseDown) {
         checkDomeInteraction();
     }
@@ -8,12 +9,11 @@ function render() {
     // Update Dome rotation
     DomeGroup.rotation.y += ( targetRotation - DomeGroup.rotation.y ) * 0.02;
 
+    //Process Events and render them to the light array
     EventManager.Update();
     EventManager.RenderFrame(EventManager.SequenceTime, false);
 
-    //TODO This needs to be moved from here and into the brush render code.
-    updateFadeAllLights();
-
+    //Render the WebGL view
     renderer.clear();
     composer.render();
 
@@ -37,8 +37,8 @@ function checkDomeInteraction() {
     raycaster.ray.set( camera.position, vector.sub( camera.position ).normalize());
 
     //iterate through all dome light collision sphere to test for collision
-    for (i = 0; i < 260; i++) {
-        intersects = raycaster.intersectObject( DomeLightManager.LightMeshes[i]);
+    for (var i = 0; i < 260; i++) {
+        var intersects = raycaster.intersectObject( DomeLightManager.LightMeshes[i]);
         if ( intersects.length > 0 ) {
 
             //Check to see if collision in on the front side of the dome.

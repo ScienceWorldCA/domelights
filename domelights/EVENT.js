@@ -11,7 +11,9 @@ EVENTMANAGER = function() {
 
     this.RenderFrame = function(frame, returnFrame)
     {
-        var x = 0;
+        var x;
+
+        ClearLights();
 
         //Render Background
         for(x = 0; x < this.Events.length; x++)
@@ -39,10 +41,9 @@ EVENTMANAGER = function() {
         //Create Stream
         if(returnFrame == true)
         {
-            var i = 0;
             var binaryFrame = "";
 
-            for (i = 0; i < 260; i++) {
+            for (var i = 0; i < 260; i++) {
 
                 var color = new THREE.Color();
                 color = DomeLightManager.Lights[i].color;
@@ -50,19 +51,17 @@ EVENTMANAGER = function() {
                 binaryFrame += color.getHexString();
             }
 
-            //TODO Need to map this frame to the SW Dome order.. Universe1,Universe2
             return binaryFrame;
         }
     };
 
     this.RenderSequence = function(JSONSequenceConstructionFile)
     {
-        var i = 0;
         var BinarySequenceStream = "";
 
         this.LoadSequence(JSONSequenceConstructionFile);
 
-        for (i = 0; i < this.SequenceLength; i++) {
+        for (var i = 0; i < this.SequenceLength; i++) {
             this.SequenceTime = i;
             BinarySequenceStream += this.RenderFrame(true);
         }
@@ -84,7 +83,7 @@ EVENTMANAGER = function() {
 
     this.RemoveEvent = function(atIndex)
     {
-        this.Events.pop(atIndex);
+        this.Events.remove(atIndex);
     };
 
     this.Update = function()

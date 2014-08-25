@@ -24,8 +24,10 @@ function setLightColor(newColor, index)
     //Set Light Color
     DomeLightManager.Lights[index].color.setRGB( newColor.r, newColor.g, newColor.b );
 
-    // Increase the size of the Particle based on it's color brightness // Color.l doesn't seem to work.
-    attributes.size.value[ index ] = 20 * (2 + ((newColor.r + newColor.g + newColor.b)/3));
+    // Increase the size of the Particle based on it's color brightness
+    var myCol = newColor.getHSL();
+    attributes.size.value[ index ] = 40 * (2 * myCol.l);
+
     attributes.customColor.value[index].r = newColor.r;
     attributes.customColor.value[index].g = newColor.g;
     attributes.customColor.value[index].b = newColor.b;
@@ -300,7 +302,7 @@ function BuildLights()
 
     for(var i in lightPositions)
     {
-        var color = new THREE.Color(Math.random(),Math.random(),Math.random());
+        var color = new THREE.Color(0,0,0);
         var vector = new THREE.Vector3(lightPositions[i][0], lightPositions[i][1], lightPositions[i][2]);
         var light = new DomeLightManager.Light(color, vector, new THREE.Vector2(22,23));
     }
@@ -324,7 +326,7 @@ function BuildLightGlows()
 
         values_size[ v ] = 40;
 
-        values_color[ v ] = new THREE.Color().setHSL( 0.01 + 0.1 * ( v / vl ), 1.0, 0.5 );
+        values_color[ v ] = new THREE.Color(0,0,0);
 
     }
 
@@ -333,42 +335,45 @@ function BuildLightGlows()
 
 
 //HELPER FUNCTIONS
-
-//TODO Need to move this to the brushes -  Fade all Lights on the dome
-function updateFadeAllLights(fadeAmount)
 {
-    var mFadeAmount = 0.03 || fadeAmount;
-
-    for (i = 0; i < 260; i++) {
-
-        var color = new THREE.Color();
-        color = DomeLightManager.Lights[i].color;
-        //var newColor = new THREE.Color();
-        //console.log('Col: ' + color.l);
-        if(color.r > 0) {
-            color.r -= mFadeAmount;
+    function ClearLights() {
+        for (var i = 0; i < DomeLightManager.Lights.length; i++) {
+            setLightColor(new THREE.Color(0, 0, 0), i);
         }
-        if(color.g > 0) {
-            color.g -= mFadeAmount;
-        }
-        if(color.b > 0) {
-            color.b -= mFadeAmount;
-        }
-
-        setLightColor(color, i);
     }
-}
 
-function HorizontalWipeTime(color, indexRaw)
-{
-    //Ensure that we are within the bounds of the Matrix (Wrap Index)
-    var index = indexRaw % (LightMatrixWidth);
+    function updateFadeAllLights(fadeAmount) {
+        var mFadeAmount = 0.03 || fadeAmount;
 
-    for(var y = 0; y < LightMatrixHeight; y++)
-    {
-        var lightIndex = LightMappingMatrix[y][index];
-        if(lightIndex != -1) {
-            setLightColor(color, lightIndex);
+        for (i = 0; i < 260; i++) {
+
+            var color = new THREE.Color();
+            color = DomeLightManager.Lights[i].color;
+            //var newColor = new THREE.Color();
+            //console.log('Col: ' + color.l);
+            if (color.r > 0) {
+                color.r -= mFadeAmount;
+            }
+            if (color.g > 0) {
+                color.g -= mFadeAmount;
+            }
+            if (color.b > 0) {
+                color.b -= mFadeAmount;
+            }
+
+            setLightColor(color, i);
+        }
+    }
+
+    function HorizontalWipeTime(color, indexRaw) {
+        //Ensure that we are within the bounds of the Matrix (Wrap Index)
+        var index = indexRaw % (LightMatrixWidth);
+
+        for (var y = 0; y < LightMatrixHeight; y++) {
+            var lightIndex = LightMappingMatrix[y][index];
+            if (lightIndex != -1) {
+                setLightColor(color, lightIndex);
+            }
         }
     }
 }

@@ -94,7 +94,7 @@ function SetBackground(event, uiIndex)
 function ClearDome(event, uiIndex)
 {
     UIObjectManager.Objects[uiIndex].mesh.scale.x = UIObjectManager.Objects[uiIndex].mesh.scale.y = 1;
-
+    ClearLights();
     EventManager.Events = [];
 }
 

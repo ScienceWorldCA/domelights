@@ -17,6 +17,7 @@ UI = function(projector, raycaster, camera, mouse)
         mUIObjects = val;
     });
 
+    //Check all UI for Collision Events
     this.Update = function(event)
     {
         //console.log(event.type);
@@ -24,14 +25,15 @@ UI = function(projector, raycaster, camera, mouse)
         projector.unprojectVector( vector, mCamera );
         raycaster.ray.set( mCamera.position, vector.sub( mCamera.position ).normalize() );
 
-        for (i = 0; i < mUIObjects.length; i++) {
+        for (var i = 0; i < mUIObjects.length; i++) {
             var intersects = raycaster.intersectObject( mUIObjects[i].mesh );
 
             if ( intersects.length > 0) {
                 mUIObjects[i].CallEvent(event, i);
+                break;
             }
         }
-    }
+    };
 
     //Helper Functions
 
@@ -62,7 +64,7 @@ UI = function(projector, raycaster, camera, mouse)
         //We only need to enable these if there is no touch interface
         //document.addEventListener( 'mouseout', this.Update, false );
         //document.addEventListener( 'mouseover', this.Update, false );
-    }
+    };
 
     this.CreateButton = function(texture, mPos, mSize)
     {
@@ -106,10 +108,10 @@ UI = function(projector, raycaster, camera, mouse)
             {
                 if(this.onMouseMove != null) this.onMouseMove(event, index);
             }
-        }
+        };
 
         this.init();
-    }
+    };
 
     this.init();
-}
+};

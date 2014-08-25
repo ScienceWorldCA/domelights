@@ -5,19 +5,70 @@
 EVENTMANAGER = function() {
 
     this.SequenceTime = 0; //Actual time of the Sequence.
-    this.SequenceLength = 15*40;
+    this.SequenceLength = 15*FPS;
+    this.Version = 1;
     this.Events = [];
 
-    this.RenderFrame = function()
+    this.RenderFrame = function(frame, returnFrame)
     {
+        var x;
+
+        ClearLights();
+
+        //Render Background
+        for(x = 0; x < this.Events.length; x++)
+        {
+            if((this.Events[x].StartTime < frame)&&
+               (this.Events[x].Brush.Duration + this.Events[x].StartTime > frame))
+            {
+                if(this.Events[x].IsBackground == true) {
+                    this.Events[x].Render(frame - this.Events[x].StartTime);
+                }
+            }
+        }
+        //Render Foreground
         for(x = 0; x < this.Events.length; x++)
         {
             if((this.Events[x].StartTime < this.SequenceTime)&&
-               (this.Events[x].Brush.Duration + this.Events[x].StartTime > this.SequenceTime))
+               (this.Events[x].Brush.Duration + this.Events[x].StartTime > frame))
             {
-                this.Events[x].Render(this.SequenceTime - this.Events[x].StartTime);
+                if(this.Events[x].IsBackground == false) {
+                    this.Events[x].Render(frame- this.Events[x].StartTime);
+                }
             }
         }
+
+        //Create Stream
+        if(returnFrame == true)
+        {
+            var binaryFrame = "";
+
+            for (var i = 0; i < 260; i++) {
+
+                var color = new THREE.Color();
+                color = DomeLightManager.Lights[i].color;
+
+                binaryFrame += color.getHexString();
+            }
+
+            return binaryFrame;
+        }
+    };
+
+    this.RenderSequence = function(JSONSequenceConstructionFile)
+    {
+        var BinarySequenceStream = "";
+
+        this.LoadSequence(JSONSequenceConstructionFile);
+
+        for (var i = 0; i < this.SequenceLength; i++) {
+            this.SequenceTime = i;
+            BinarySequenceStream += this.RenderFrame(true);
+        }
+
+        console.log("--- Stream Rendered ---");
+
+        return BinarySequenceStream;
     };
 
     this.AddEvent = function(event)
@@ -32,9 +83,8 @@ EVENTMANAGER = function() {
 
     this.RemoveEvent = function(atIndex)
     {
-        this.Events.pop(atIndex);
+        this.Events.remove(atIndex);
     };
-
 
     this.Update = function()
     {
@@ -44,14 +94,61 @@ EVENTMANAGER = function() {
         this.SequenceTime = Math.floor(timer);
     }
 
+    this.SaveSequence = function()
+    {
+        this.SequenceConstructionFile = {};
+        this.SequenceConstructionFile.Events = [];
+
+        //Set Sequence Properties
+        this.SequenceConstructionFile.Version = this.Version;
+        this.SequenceConstructionFile.SequenceLength = this.SequenceLength;
+
+        //Add all the Events
+        for(var index = 0; index < this.Events.length; index++) {
+
+            var SequenceConstructionEvent = {};
+
+            SequenceConstructionEvent.StartTime = this.Events[index].StartTime;
+            SequenceConstructionEvent.OriginLight = this.Events[index].OriginLight;
+            SequenceConstructionEvent.BrushID = this.Events[index].Brush.Index;
+            SequenceConstructionEvent.BrushData = this.Events[index].BrushData;
+
+            this.SequenceConstructionFile.Events.push(SequenceConstructionEvent);
+        }
+        return JSON.stringify(this.SequenceConstructionFile);
+    };
+
+    this.LoadSequence = function(JSONSequenceConstructionFile)
+    {
+        var SequenceConstructionFile = JSON.parse(JSONSequenceConstructionFile);
+        //Set Sequence Properties
+        if(this.Version > SequenceConstructionFile.Version){
+            console.log("--- Sequence Upgrade Maybe Required ---");
+        }
+
+        this.SequenceLength = SequenceConstructionFile.SequenceLength;
+
+        //Add all the Events
+        for(var index = 0; index < SequenceConstructionFile.Events.length; index++) {
+
+            var newEvent1 = new EVENT(SequenceConstructionFile.Events[index].StartTime,
+                                      SequenceConstructionFile.Events[index].OriginLight,
+                                      Brushes[SequenceConstructionFile.Events[index].BrushID],
+                                      SequenceConstructionFile.Events[index].BrushData);
+            this.AddEvent(newEvent1);
+        }
+
+        console.log("--- File Loaded ---");
+    };
 };
 
-var EVENT = function(time, originLight, lightMatrix, canvas, brush)
+var EVENT = function(time, originLight, brush, brushData)
 {
-    this.Canvas = canvas; //Canvas for lights to be rendered to.
+    this.IsBackground = false;
     this.StartTime = time; //Offset from the start of the sequence in frames.
     this.OriginLight = originLight; // The Light that the animation is based from.
     this.Brush = brush; // The brush that should be applied.
+    this.BrushData = jQuery.extend(false,brushData) || []; //Store Data that is used by the brush
 
     this.PrePaint = function()
     {
@@ -63,7 +160,7 @@ var EVENT = function(time, originLight, lightMatrix, canvas, brush)
     };
     this.Render = function(CurrentFrame) // Applies brush to canvas
     {
-        if (this.Brush.Render != null) this.Brush.Render(CurrentFrame, this.Canvas, this.OriginLight);
+        if (this.Brush.Render != null) this.Brush.Render(CurrentFrame, this.OriginLight, this.BrushData);
     };
 
 

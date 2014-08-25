@@ -13,78 +13,31 @@ function addLights()
     var ambientLight = new THREE.AmbientLight( 0x101022 ); // soft white light scene.add( light );
     scene.add(ambientLight);
 
-
     BuildLights();
     BuildLightGlows();
 
     //console.log(attributes.customColor.value[0].g);
 }
 
-function HorizontalWipeTime(color, indexRaw)
-{
-    //Ensure that we are within the bounds of the Matrix (Wrap Index)
-    var index = indexRaw % (LightMatrixWidth-1);
-
-    for(var y = 0; y < LightMatrixHeight; y++)
-    {
-        var lightIndex = LightMappingMatrix[y][index];
-        if(lightIndex != -1) {
-            setLightColor(color, lightIndex);
-        }
-    }
-}
-
-
 function setLightColor(newColor, index)
 {
-    //var color = brushColor;
-	//console.log(index);
-	//console.log('Col: ' + color.r);
-    //console.log(DomeLightManager.Lights[i]);
-
     //Set Light Color
     DomeLightManager.Lights[index].color.setRGB( newColor.r, newColor.g, newColor.b );
 
-    // Increase the size of the Particle based on it's color brightness // Color.l doesn't seem to work.
-    attributes.size.value[ index ] = 20 * (2 + ((newColor.r + newColor.g + newColor.b)/3));
+    // Increase the size of the Particle based on it's color brightness
+    var myCol = newColor.getHSL();
+    attributes.size.value[ index ] = 40 * (2 * myCol.l);
+
     attributes.customColor.value[index].r = newColor.r;
     attributes.customColor.value[index].g = newColor.g;
     attributes.customColor.value[index].b = newColor.b;
 
     attributes.size.needsUpdate = true;
     attributes.customColor.needsUpdate = true;
-
-}
-
-function updateFadeAllLights(fadeAmount)
-// Fade all Lights on the dome
-{
-
-    var mFadeAmount = 0.03 || fadeAmount;
-
-    for (i = 0; i < 260; i++) {
-	
-        var color = new THREE.Color();
-		color = DomeLightManager.Lights[i].color;
-		//var newColor = new THREE.Color();
-		//console.log('Col: ' + color.l);
-		if(color.r > 0) {
-            color.r -= mFadeAmount;
-        }
-        if(color.g > 0) {
-            color.g -= mFadeAmount;
-        }
-        if(color.b > 0) {
-            color.b -= mFadeAmount;
-        }
-
-        setLightColor(color, i);
-    }
 }
 
 function BuildLights()
 {
-
     //Light Positions
     var lightPositions = [  [8.345, 80.64, 6.063],
                             [8.345, 80.64, -6.063],
@@ -347,11 +300,9 @@ function BuildLights()
                             [26.54, -25.96, 51.46],
                             [42.32, -25.95, 41.76]];
 
-
-
     for(var i in lightPositions)
     {
-        var color = new THREE.Color(Math.random(),Math.random(),Math.random());
+        var color = new THREE.Color(0,0,0);
         var vector = new THREE.Vector3(lightPositions[i][0], lightPositions[i][1], lightPositions[i][2]);
         var light = new DomeLightManager.Light(color, vector, new THREE.Vector2(22,23));
     }
@@ -365,19 +316,64 @@ function BuildLightGlows()
         lightPlacementMesh.vertices.push( DomeLightManager.Lights[i].position );
     }
 
-    particles = new THREE.PointCloud( lightPlacementMesh, shaderMaterial );
+    LightGlowSprites = new THREE.PointCloud( lightPlacementMesh, shaderMaterial );
     var values_size = attributes.size.value;
     var values_color = attributes.customColor.value;
 
-    var vertices = particles.geometry.vertices;
+    var vertices = LightGlowSprites.geometry.vertices;
 
-    for( var v = 0,  vl = particles.geometry.vertices.length; v < vl; v++ ) {
+    for( var v = 0,  vl = LightGlowSprites.geometry.vertices.length; v < vl; v++ ) {
 
         values_size[ v ] = 40;
 
-        values_color[ v ] = new THREE.Color().setHSL( 0.01 + 0.1 * ( v / vl ), 1.0, 0.5 );
+        values_color[ v ] = new THREE.Color(0,0,0);
 
     }
 
-    DomeGroup.add( particles );
+    DomeGroup.add( LightGlowSprites );
+}
+
+
+//HELPER FUNCTIONS
+{
+    function ClearLights() {
+        for (var i = 0; i < DomeLightManager.Lights.length; i++) {
+            setLightColor(new THREE.Color(0, 0, 0), i);
+        }
+    }
+
+    function updateFadeAllLights(fadeAmount) {
+        var mFadeAmount = 0.03 || fadeAmount;
+
+        for (i = 0; i < 260; i++) {
+
+            var color = new THREE.Color();
+            color = DomeLightManager.Lights[i].color;
+            //var newColor = new THREE.Color();
+            //console.log('Col: ' + color.l);
+            if (color.r > 0) {
+                color.r -= mFadeAmount;
+            }
+            if (color.g > 0) {
+                color.g -= mFadeAmount;
+            }
+            if (color.b > 0) {
+                color.b -= mFadeAmount;
+            }
+
+            setLightColor(color, i);
+        }
+    }
+
+    function HorizontalWipeTime(color, indexRaw) {
+        //Ensure that we are within the bounds of the Matrix (Wrap Index)
+        var index = indexRaw % (LightMatrixWidth);
+
+        for (var y = 0; y < LightMatrixHeight; y++) {
+            var lightIndex = LightMappingMatrix[y][index];
+            if (lightIndex != -1) {
+                setLightColor(color, lightIndex);
+            }
+        }
+    }
 }

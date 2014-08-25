@@ -1,0 +1,14 @@
+{
+	"properties": [],
+	"logic": [],
+	"render": 
+	{
+		"engine": "Render_Simple",
+		"path": "error.php",
+		"properties": 
+		{
+			"page_title": "Error",
+			"error_message": "Placeholder error message"
+		}
+	}
+}

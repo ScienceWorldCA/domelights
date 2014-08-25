@@ -1,0 +1,7 @@
+local/*
+*.swp
+.project
+.pydevproject
+*.pyc
+*.log
+node_modules/*

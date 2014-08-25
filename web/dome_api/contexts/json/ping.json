@@ -1,0 +1,15 @@
+{
+	"properties": [],
+	"logic": [
+		{ "class": "Ping", "method": "Reply" }
+	],
+	"render": 
+	{
+		"engine": "Render_JSON",
+		"path": "",
+		"properties": 
+		{
+			"message": "Default context render property."
+		}
+	}
+}

@@ -1,13 +1,15 @@
 function createGeometries() {
 
-    var loader = new THREE.OBJLoader( manager );
+    var loader;
+    //Create ScienceWorld Dome
+    loader = new THREE.OBJLoader( manager );
     loader.load( 'obj/scienceworld/dome.obj', function ( object ) {
-        Mesh = object;
         object.name = "DomeCollision";
         DomeGroup.add( object );
     } );
 
-    var loader = new THREE.OBJLoader( manager );
+    //Create ScienceWorld Light Structure
+    loader = new THREE.OBJLoader( manager );
     loader.load( 'obj/scienceworld/Dome_Structure.obj', function ( object ) {
 //        object.traverse( function ( child ) {
 //
@@ -18,12 +20,11 @@ function createGeometries() {
 //            }
 //
 //        } );
-        Mesh = object;
         DomeGroup.add( object );
 
     } );
 
-    //Skybox
+    //TODO Add Skybox ??
     /*
     var path = "textures/cube/SwedishRoyalCastle/";
     var format = '.jpg';

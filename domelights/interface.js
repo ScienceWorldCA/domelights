@@ -41,13 +41,13 @@ function buildInterface() {
         button3.index = 1;
 
         // Add Background Solid Brushes
-        var button4 = new UIObjectManager.CreateButton('textures/ui/Gradient.png', new THREE.Vector2(-180, 60), new THREE.Vector2(20, 20));
+        var button4 = new UIObjectManager.CreateButton('textures/UI/Gradient.png', new THREE.Vector2(-180, 60), new THREE.Vector2(20, 20));
         button4.onMouseDown = SelectBrush;
         button4.onMouseUp = SetBackground;
         button4.material.color.setRGB(1, 1, 1);
         button4.index = 2;
 
-        var button5 = new UIObjectManager.CreateButton('textures/ui/sunnyDay.png', new THREE.Vector2(-180, 30), new THREE.Vector2(20, 20));
+        var button5 = new UIObjectManager.CreateButton('textures/UI/SunnyDay.png', new THREE.Vector2(-180, 30), new THREE.Vector2(20, 20));
         button5.onMouseDown = SelectBrush;
         button5.onMouseUp = SetBackground;
         button5.material.color.setRGB(1, 1, 1);
@@ -57,7 +57,7 @@ function buildInterface() {
     //Debug UI
     {
         //Clear Dome
-        var clearDome = new UIObjectManager.CreateButton('textures/ui/clear.png', new THREE.Vector2(180, -50), new THREE.Vector2(20, 8));
+        var clearDome = new UIObjectManager.CreateButton('textures/UI/clear.png', new THREE.Vector2(180, -50), new THREE.Vector2(20, 8));
         clearDome.onMouseUp = ClearDome;
         clearDome.onMouseDown = SelectBrush;
         clearDome.material.color.setRGB(1, 1, 1);

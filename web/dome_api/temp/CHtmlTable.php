@@ -8,7 +8,7 @@ include( '../etc/config.php' );
 class CHtmlTable
 {
 
- 	function __construct() 
+	function __construct() 
 	{
 		global $config ; 
 
@@ -17,8 +17,11 @@ class CHtmlTable
 		mysql_select_db($config['db']['name'], $this->db);
 
 		// ToDo: check to see if we failed to connect to the database 
-   } 
+	} 
 
+	public function DisplayValue( $colName, $value ) {
+		echo $value ; 
+	}
 
 	public function Display( $table )
 	{
@@ -31,12 +34,21 @@ class CHtmlTable
 			return ; 
 		}		
 		
-
+		$first = true ; 
 		echo '<table width="100%" border="1">';
 		while( $row = mysql_fetch_assoc( $result ) ) {
+			if( $first ) {
+				echo '<tr>';
+				echo '<td>Actions</td>';
+				foreach( $row  as $key=>$value ) {
+					echo '<th>'. $key .'</th>' ; 
+				}
+				echo '</tr>';
+			}
 			echo '<tr>';
+			echo '<td><a href="?act=delete&table='. $table .'&id='. $row['id'] .'">Delete</a></td>';
 			foreach( $row  as $key=>$value ) {
-				echo '<td>'. $value . '</td>' ; 
+				echo '<td>'. $this->DisplayValue( $key, $value ) .'</td>' ; 
 			}
 			echo '</tr>';
 		}

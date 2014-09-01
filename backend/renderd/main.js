@@ -28,6 +28,28 @@ var epoch = function() {
 	return Math.round(+new Date()/1000);
 }
 
+require( '../../domelights/includes/three.min.js' );
+require( '../../domelights/includes/jquery.min.js' );
+require( '../../includes/js/Detector.js' );
+
+require( '../../variables.js' );
+require( '../../lighting.js' );
+require( '../../geometries.js' );
+require( '../../createBrushes.js' );
+require( '../../events.js' );
+require( '../../init.js' );
+require( '../../render.js' );
+require( '../../renderPassSetup.js' );
+require( '../../interface.js' );
+
+require( '../../UI.js' );
+require( '../../BRUSH.js' );
+require( '../../LIGHT.js' );
+require( '../../SEQUENCE.js' );
+
+//initRendermode();
+
+
 var server = app.listen(1337, function() {
 	console.log('Listening on port %d', server.address().port);
 });

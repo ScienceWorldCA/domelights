@@ -239,7 +239,7 @@ class CSchedule
 		echo '<table>';
 		while( $row = mysql_fetch_assoc( $result ) ) {
 			echo '<tr>';
-			foreach( $col as $key=>$value ) {
+			foreach( $row  as $key=>$value ) {
 				echo '<td>'. $value . '</td>' ; 
 			}
 			echo '</tr>';

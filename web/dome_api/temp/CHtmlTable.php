@@ -44,7 +44,11 @@ class CHtmlTable
 				$this->ActView() ;
 				break;  
 			}
-
+			case 'delete':
+			{
+				$this->ActDelete() ;
+				break;  
+			}
 			default: 
 			{
 				echo 'ToDo: '. $this->page['act'] . "<br />\n";
@@ -76,6 +80,8 @@ class CHtmlTable
 			echo 'Error: Could not delete row';
 			return false ;
 		}
+		echo 'FYI: row deleted' ; 
+		this->ActView() ;
 		return true ; 
 	}
 

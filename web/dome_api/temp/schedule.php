@@ -110,7 +110,7 @@ class CSchedule
 		WHERE TIME( TIMESTAMP( '". $timeOfLastScheduledAnimation ."' ) ) > schedule.start
 		AND TIME( TIMESTAMP( '". $timeOfLastScheduledAnimation ."' ) ) < schedule.end
 		AND schedule.type =1
-		AND schedule.day >= dayofweek( TIMESTAMP( '". $row['end'] ."' ) ) 
+		AND schedule.day >= dayofweek( TIMESTAMP( '". $timeOfLastScheduledAnimation ."' ) ) 
 		LIMIT 1 ";
 
 		echo $sql_query . "\n"; 

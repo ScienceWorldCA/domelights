@@ -1,4 +1,4 @@
-v0.11
+v0.12
 <?php 
 // Connnect to the database 
 include( '../etc/config.php' );
@@ -119,29 +119,27 @@ class CSchedule
 			// No schedule at the current time of day. 
 			// Search the next avaliable schedule. 
 
+			// PHP: 0 (for Sunday) through 6 (for Saturday) 
+			// MySQL: Returns the weekday index for date (1 = Sunday, 2 = Monday, …, 7 = Saturday). These index values correspond to the ODBC standard.
+			$dayOfTheWeek = date( 'w', strtotime( $timeOfLastScheduledAnimation ) ) ; 
+			$dayOfTheWeek ++ ; // To change it from PHP version of the day of the week to MySQL version of day of the week. 
+			$dayOfTheWeek ++ ; // Add one day to find the next schedule for the next day
+			if( $dayOfTheWeek > 7) {
+				$dayOfTheWeek = 1 ; // Loop around from Saturday to Sunday. 
+			}
+
+
 			$sql_query = "SELECT * FROM schedule WHERE 
-			schedule.day >= dayofweek( TIMESTAMP( '". $timeOfLastScheduledAnimation ."' ) ) + 1 AND 
+			schedule.day >= ".$dayOfTheWeek." AND 
 			schedule.type = 1 
 			ORDER BY  `schedule`.`day` ASC 
 			LIMIT 1 ";
 			echo $sql_query . "\n"; 
 
 			$result = mysql_query( $sql_query, $this->db );
-			if( mysql_num_rows($result) <= 0 ) {
-				// Still nothing? Okay increase the day and start again. 
-				$sql_query = "SELECT * FROM schedule WHERE 			
-				schedule.day >= dayofweek( ADDTIME ( TIMESTAMP( '". $timeOfLastScheduledAnimation ."' ), '1:1') ) AND 
-				schedule.type = 1 
-				ORDER BY  `schedule`.`day` ASC 
-				LIMIT 1 ";
-				echo $sql_query . "\n"; 
-
-				$result = mysql_query( $sql_query, $this->db );
-				if( mysql_num_rows($result) <= 0 ) {
-					echo 'Error: Fuck you and the horse you road in on' ; 
-					return false;
-				}
-
+			if( mysql_num_rows($result) <= 0 ) {				
+				echo 'Error: Are there any schedules at all ?' ; 
+				return false;
 			}
 		}
 

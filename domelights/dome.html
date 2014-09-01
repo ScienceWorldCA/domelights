@@ -22,25 +22,60 @@
 			font-weight: bold;
 		}
 		
-		#userinput {
+		#blockout {
 			position: absolute;
+			margin: auto;
 			bottom: 0px;
 			left: 0px;
-			padding: 5px;
+			top: 0px;
+			right: 0px;
+			font-family: Monospace;
+			font-size: 13px;
+			text-align: center;
+			font-weight: bold;
+			background: grey;
+			opacity: 0.5;
+			width: 100%;
+			height: 100%;
+			float: inherit;
+			visibility: hidden;
+		}
+		
+		#userinput {
+			position: absolute;
+			margin: auto;
+			bottom: 0px;
+			left: 0px;
+			top: 0px;
+			right: 0px;
 			font-family: Monospace;
 			font-size: 13px;
 			text-align: center;
 			font-weight: bold;
 			background: black;
 			width: 350px;
+			height: 325px;
 			border: solid 1px white;
-			clear: both;
-			height: 25px;
-			z-index: auto;
+			z-index: 10;
+			float: inherit;
+			opacity: 1;
+			visibility: hidden;
 		}
 		
 		a {
 			color: #fff;
+		}
+		
+		.popuptitle {
+			width: 100%;
+			clear: both;
+			height: 25px;
+			border: solid 1px white;
+			margin: auto;
+		}
+		
+		.closebutton {
+			float: right;
 		}
 		</style>
 		<script src="api.js"></script>
@@ -65,8 +100,15 @@
 			}
 			
             function DisplaySubmit() {
-
+            	document.getElementById('blockout').style.visibility = 'visible';
+            	document.getElementById('userinput').style.visibility = 'visible';
                 console.log("Showing Submit Dialog");
+            }
+            
+            function CloseSubmit() {
+            	document.getElementById('userinput').style.visibility = 'hidden';
+            	document.getElementById('blockout').style.visibility = 'hidden';
+				EnableDomeEventHandles(true);
             }
 		</script>
 	</head>
@@ -75,14 +117,23 @@
 		<div id="container">
 		</div>
 		<div id="info">Science World - Dome Lights</div>
-	
+
+		<div id="blockout">&nbsp;</div>
 		<div id="userinput">
-			<form action='#' method='post'>
-				<label>Name:</label><input id='userrealname' name='userrealname' type='text' placeholder='<name>' size='32' value='Ty' /><label>Email Address:</label><input id='useremail' name='useremail' type='text' size='32' placeholder='<email>' value='tycho.eggen@gmail.com' /><input type='submit' id='storeResult' onClick="DoStoreAnimation(); return false;" value='Publish'>
+			<div class="popuptitle">Submit Animation<a class="closebutton" href="#" onclick="CloseSubmit();">X</a></div>
+			<div>Placeholder submit explanation</div>
+			<form id="userinputform" name="userinputform" action='#' method='post'>
+				<label>Name:</label><input id='userrealname' name='userrealname'
+					type='text' placeholder='<name>' size='32' value='Ty' /><label>Email
+					Address:</label><input id='useremail' name='useremail' type='text' size='32'
+					placeholder='<email>' value='tycho.eggen@gmail.com' /><input
+					type='submit' id='storeResult'
+					onClick="DoStoreAnimation(); return false;" value='Publish'>
 			</form>
 		</div>
-	
-		<script src="includes/three.min.js"></script>
+
+
+	<script src="includes/three.min.js"></script>
 		<script src="includes/jquery.min.js"></script>
 		<script src="includes/js/loaders/OBJLoader.js"></script>
 		<script src="includes/js/Detector.js"></script>

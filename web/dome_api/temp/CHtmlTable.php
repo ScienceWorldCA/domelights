@@ -71,7 +71,7 @@ class CHtmlTable
 		if( ! isset( $this->page['offset'] ) ) {
 			$this->page['offset'] = 0 ; 
 		}
-		$sql_query = 'LIMIT '. $this->page['limit']  .' '. $this->page['offset'] .', '. $this->page['offset'] .' ;' ; 
+		$sql_query .= 'LIMIT '. $this->page['limit']  .' '. $this->page['offset'] .', '. $this->page['offset'] .' ;' ; 
 
 
 		echo $sql_query . "\n"; 

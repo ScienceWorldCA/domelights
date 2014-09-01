@@ -5,66 +5,97 @@
 		<meta charset="utf-8">
 		<meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
 		<style>
-			body {
-				color: #ffffff;
-				background-color: #111111;
-				margin: 0px;
-				overflow: hidden;
-			}
-			#info {
-				position: absolute;
-				top: 0px;
-				width: 100%;
-				padding: 5px;
-				font-family: Monospace;
-				font-size: 13px;
-				text-align: center;
-				font-weight: bold;
-			}
-			a {
-				color: #fff;
-			}
+		body {
+			color: #ffffff;
+			background-color: #111111;
+			margin: 0px;
+			overflow: hidden;
+		}
+		#info {
+			position: absolute;
+			top: 0px;
+			width: 100%;
+			padding: 5px;
+			font-family: Monospace;
+			font-size: 13px;
+			text-align: center;
+			font-weight: bold;
+		}
+		
+		#userinput {
+			position: absolute;
+			bottom: 0px;
+			padding: 5px;
+			font-family: Monospace;
+			font-size: 13px;
+			text-align: center;
+			font-weight: bold;
+			background: black;
+			width: 100%;
+			border: solid 1px white;
+			clear: both;
+			height: 25px;
+			z-index: auto;
+		}
+		
+		a {
+			color: #fff;
+		}
 		</style>
 		<script src="api.js"></script>
 		<script language="javascript">
 			function DoStoreAnimation() {
-				var api = new FrontEnd_API();
 		
 				document.getElementById('storeResult').innerHTML = "Saving...";
 				
-				api.DoStoreAnimation();
-				
+				// Verify input
+				if( document.getElementById( 'userrealname' ).value == '' || document.getElementById( 'userrealname' ).value == '<name>') {
+					alert( "Missing user name!" );
+					return false;
+				} else if( document.getElementById( 'useremail' ).value == '' || document.getElementById( 'useremail' ).value == '<email>' ) {
+					alert( "Missing email address!" );
+					return false;
+				} else {
+					api.DoStoreAnimation();
+				}
+		
 				return false;
 			}
 		</script>
 	</head>
-
+	
 	<body>
-		<div id="container"></div>
-        <div id="info" >Science World - Dome Lights</div>
-		<div id="top" style="background: black; clear: both; width: 100%; height: 50px; bottom: 0px; position: absolute;"><form><input id="useremail" type="text" value='tycho.eggen@gmail.com' placeholder="<email address>" /><input type='submit' id="storeResult" onClick="DoStoreAnimation(); return false;" value='Publish'></form></div>
-
+		<div id="container">
+		</div>
+		<div id="info">Science World - Dome Lights</div>
+	
+		<div id="userinput">
+			<form action='#' method='post'>
+				<label>Name:</label><input id='userrealname' name='userrealname' type='text' placeholder='<name>' size='32' value='Ty' /><label>Email Address:</label><input id='useremail' name='useremail' type='text' size='32' placeholder='<email>' value='tycho.eggen@gmail.com' /><input type='submit' id='storeResult' onClick="DoStoreAnimation(); return false;" value='Publish'>
+			</form>
+		</div>
+	
 		<script src="includes/three.min.js"></script>
-        <script src="includes/jquery.min.js"></script>
+		<script src="includes/jquery.min.js"></script>
 		<script src="includes/js/loaders/OBJLoader.js"></script>
 		<script src="includes/js/Detector.js"></script>
 		<script src="includes/js/libs/stats.min.js"></script>
-
-        <script src="includes/js/renderers/WebGLDeferredRenderer.js"></script>
-        <script src="includes/js/ShaderDeferred.js"></script>
-        <script src="includes/js/shaders/VignetteShader.js"></script>
-        <script src="includes/js/shaders/CopyShader.js"></script>
-        <script src="includes/js/postprocessing/EffectComposer.js"></script>
-        <script src="includes/js/shaders/FXAAShader.js"></script>
-
-        <script src="includes/js/postprocessing/EffectComposer.js"></script>
-        <script src="includes/js/postprocessing/RenderPass.js"></script>
-        <script src="includes/js/postprocessing/MaskPass.js"></script>
-        <script src="includes/js/postprocessing/ShaderPass.js"></script>
-        <script src="includes/js/shaders/ConvolutionShader.js"></script>
-        <script src="includes/js/postprocessing/BloomPass.js"></script>
-
-        <script type="x-shader/x-vertex" id="vertexshader">
+	
+		<script src="includes/js/renderers/WebGLDeferredRenderer.js"></script>
+		<script src="includes/js/ShaderDeferred.js"></script>
+		<script src="includes/js/shaders/VignetteShader.js"></script>
+		<script src="includes/js/shaders/CopyShader.js"></script>
+		<script src="includes/js/postprocessing/EffectComposer.js"></script>
+		<script src="includes/js/shaders/FXAAShader.js"></script>
+	
+		<script src="includes/js/postprocessing/EffectComposer.js"></script>
+		<script src="includes/js/postprocessing/RenderPass.js"></script>
+		<script src="includes/js/postprocessing/MaskPass.js"></script>
+		<script src="includes/js/postprocessing/ShaderPass.js"></script>
+		<script src="includes/js/shaders/ConvolutionShader.js"></script>
+		<script src="includes/js/postprocessing/BloomPass.js"></script>
+	
+		<script type="x-shader/x-vertex" id="vertexshader">
 
 			attribute float size;
 			attribute vec3 customColor;
@@ -84,8 +115,8 @@
 			}
 
 		</script>
-
-        <script type="x-shader/x-fragment" id="fragmentshader">
+	
+		<script type="x-shader/x-fragment" id="fragmentshader">
 
 			uniform vec3 color;
 			uniform sampler2D texture;
@@ -102,37 +133,35 @@
 			}
 
 		</script>
-
+	
 		<script src="variables.js"></script>
-        <script src="lighting.js"></script>
+		<script src="lighting.js"></script>
 		<script src="geometries.js"></script>
-        <script src="createBrushes.js"></script>
+		<script src="createBrushes.js"></script>
 		<script src="events.js"></script>
 		<script src="init.js"></script>
 		<script src="render.js"></script>
-        <script src="renderPassSetup.js"></script>
-        <script src="interface.js"></script>
-        <script src="api.js"></script>
-
-        <script src="UI.js"></script>
-        <script src="BRUSH.js"></script>
-        <script src="LIGHT.js"></script>
-        <script src="EVENT.js"></script>
-
-        <script>
-
-			if ( ! Detector.webgl ) Detector.addGetWebGLMessage();
-
+		<script src="renderPassSetup.js"></script>
+		<script src="interface.js"></script>
+		<script src="api.js"></script>
+	
+		<script src="UI.js"></script>
+		<script src="BRUSH.js"></script>
+		<script src="LIGHT.js"></script>
+		<script src="EVENT.js"></script>
+	
+		<script>
+			if (!Detector.webgl)
+				Detector.addGetWebGLMessage();
+	
 			//init.js
 			initGraphicMode();
-            //initRendermode();
-
+			//initRendermode();
+	
 			//render.js
-            if (GraphicMode == true)
-			    animate();
-
+			if (GraphicMode == true)
+				animate();
 		</script>
-
 	</body>
 
 </html>

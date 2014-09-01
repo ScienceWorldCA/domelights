@@ -1,11 +1,13 @@
+// Define the FrontEnd_API class
 function FrontEnd_API() {
-	this.receivedResponse = false;
-	this.result = '';
 
-	this.api_call = function(remote_method, params, handler) {
+	// Define api_call method
+	this.api_call = function( remote_method, params, handler ) {
+		// Map the remote_method to the correct uri
 		uri = '/frontend_api/' + remote_method;
 
-		$.post(uri, $.param(params, true), handler);
+		// Do a post, serialize the params for the call
+		$.post( uri, $.param( params, true ), handler );
 	}
 
 	this.DoStoreAnimation = function() {
@@ -14,16 +16,19 @@ function FrontEnd_API() {
 		var emailInputAddress = document.getElementById( 'useremail' );
 		
 		// Verify input
-		if( emailInputAddress.value == '') {
+		if( document.getElementById( 'userrealname' ).value == '') {
+			alert( "Missing user name!" );
+			return false;
+		} else if( document.getElementById( 'useremail' ).value == '') {
 			alert( "Missing email address!" );
 			return false;
-		} else if( ! this.validateEmail( emailInputAddress.value ) ) {
+		} else if( ! this.validateEmail( document.getElementById( 'useremail' ).value ) ) {
 			alert( "Invalid email address!" );
 			return false;
 		} else {
 			var params = {};
 			params['sequence'] = sequence;
-			params['useremail'] = emailInputAddress.value;
+			params['useremail'] = document.getElementById( 'useremail' ).value;
 	
 			this.api_call(
 				'storesequence',
@@ -46,3 +51,6 @@ function FrontEnd_API() {
 	    return re.test(email);
 	} 
 }
+
+// Initialize the FrontEnd_API
+var api = new FrontEnd_API();

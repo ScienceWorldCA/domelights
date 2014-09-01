@@ -1,4 +1,4 @@
-v0.14
+v0.15
 <?php 
 // Connnect to the database 
 include( '../etc/config.php' );
@@ -62,7 +62,7 @@ class CSchedule
 	private function GetTimeOfLastScheduledAnimation( ) {
 		// 1) Find the last schedulled animation 
 		$sql_query = "
-		SELECT START FROM animations
+		SELECT start, end FROM animations
 		WHERE state =0 AND animations.start > CURRENT_TIMESTAMP() 
 		ORDER BY animations.start DESC 
 		LIMIT 1";
@@ -224,6 +224,9 @@ class CSchedule
 
 		echo '<h3>Check to see what the next animation is</h3>';
 		$nextScheduleAnimation = $this->GetNextScheduleAnimation() ; 
+		if( $nextScheduleAnimation === false ) {
+			echo "No schedule animations\n" ; 
+		}
 		var_dump ( $nextScheduleAnimation ) ;
 		echo "\n\n\n" ; 
 

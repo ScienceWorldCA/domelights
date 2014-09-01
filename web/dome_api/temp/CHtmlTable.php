@@ -32,7 +32,7 @@ class CHtmlTable
 		if( ! isset( $this->page['act'] ) ) {
 			$this->page['act'] = 'view' ; 
 		}
-		$avaliableMethods = array("view", "insert", "delete" );
+		$avaliableMethods = array('create', 'view', 'edit', 'delete', 'insert' );
 		if ( ! in_array($this->page['act'], $avaliableMethods) ) {
 			echo 'Error: act not allowed, act='. $this->page['act'] ; 
 			return ; 
@@ -49,9 +49,14 @@ class CHtmlTable
 				$this->ActDelete() ;
 				break;  
 			}
+			case 'create':
+			{
+				$this->DisplayCreate() ;
+				break;  
+			}			
 			case 'insert':
 			{
-				$this->DisplayInsert() ;
+				$this->ActInsert() ;
 				break;  
 			}			
 			default: 
@@ -80,12 +85,17 @@ class CHtmlTable
 		return '<input name="'. $colName  .'" type="text" />'; 
 	}
 
-	public function DisplayInsert( ) {
+	public function ActInsert() {
+		echo 'ToDo: ActInsert '; 
+	}
+
+	public function DisplayCreate( ) {
 
 		// find the table schema 
 		$sql_query = 'DESCRIBE '. $this->page['table'] .' ; ';
 		$result = mysql_query( $sql_query, $this->db );	
 
+		echo '<form action="?act=insert&table='. $this->page['table'].'" method="post">';
 		echo '<table border="1">' ;
 		echo '<tr><th>Name</th><th>Value</th><th>Description</th></tr>'; 
 		while( $row = mysql_fetch_assoc( $result ) ) {
@@ -96,21 +106,15 @@ class CHtmlTable
 			}
 
 			echo '<tr>';
-			
-			echo '<td>'. $columnTitle .'</td>';
-			
-			echo '<td>';
-			echo $this->DisplayInput( $row['Field'] ); 
-			echo '</td>';
-			
-			echo '<td>';
-			echo $this->DisplayDescription( $row['Field'] ); 
-			echo '</td>';		
-			
+			echo '<td>'. $columnTitle .'</td>';			
+			echo '<td>'. $this->DisplayInput( $row['Field'] ) .'</td>';			
+			echo '<td>'. $this->DisplayDescription( $row['Field'] ) .'</td>';
 			echo '</tr>';
 		}
 		echo '</table>'; 
 		echo '<input type="submit" />';
+
+		echo '</form>';
 	}
 
 	public function ActDelete( ) 

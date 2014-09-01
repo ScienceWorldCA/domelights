@@ -110,7 +110,7 @@ class CHtmlTable
 			} else {
 				$sql_query .=  "," ; 
 			}
-			$sql_query .=  "'". mysql_real_escape_string ( $key ) ."' " ; 
+			$sql_query .=   mysql_real_escape_string ( $key ) ." " ; 
 		}
 		$sql_query .= ') VALUES ( ' ;
 		$first = true ; 

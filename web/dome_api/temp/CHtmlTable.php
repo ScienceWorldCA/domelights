@@ -126,14 +126,16 @@ class CHtmlTable
 
 
 
-
+		// Insert the new row. 
 		echo $sql_query . "\n"; 
 		$result = mysql_query( $sql_query, $this->db );		
 		if( $result == NULL ) {
-			echo "Error: Could not insert new row. MySQL Error: ". mysql_error() ; 
-
+			echo "Error: Could not insert new row. <br />\nMySQL Error: ". mysql_error() ; 
 			return false; 
-		}	
+		} 
+		
+		echo 'New row was added.'; 
+		this->ActView() ; 
 
 		return true ;  
 	}

@@ -82,11 +82,44 @@ class CHtmlTable
 		return ''; 
 	}	
 	public function DisplayInput( $colName ) {
-		return '<input name="'. $colName  .'" type="text" />'; 
+		return '<input name="pram_'. $colName  .'" type="text" />'; 
 	}
 
-	public function ActInsert() {
-		echo 'ToDo: ActInsert '; 
+	public function ActInsert( ) {
+
+		
+		// Find the prams
+		$prams = array( ); 
+		foreach( $this->page as $key => $value ) {
+			if( strpos($key, 'pram_') === 0  ) {
+				$prams[ str_replace('pram_', '', $key ) ] = $value ; 
+			}
+		}
+
+		if( count( $prams ) <= 0 ) {
+			echo "Error: Nothing to insert" ; 
+			return false ; 
+		}
+
+		// Build the query 
+		$sql_query = 'INSERT INTO '. $this->page['table'] .' (' ; 
+		foreach ($prams as $key => $value) {
+			$sql_query .=  "'". mysql_real_escape_string ( $key ) ."', " ; 
+		}
+		$sql_query .= ') VALUES ( ' ;
+		foreach ($prams as $key => $value) {
+			$sql_query .=  "'". mysql_real_escape_string ( $value ) ."', " ; 
+		}
+		$sql_query .= ') ;' ;
+
+		echo $sql_query . "\n"; 
+		$result = mysql_query( $sql_query, $this->db );		
+		if( $result == NULL ) {
+			echo "Error: Could not insert new row."; 
+			return false; 
+		}	
+
+		return true ;  
 	}
 
 	public function DisplayCreate( ) {
@@ -125,6 +158,7 @@ class CHtmlTable
 		}
 
 		$sql_query = 'DELETE FROM '. $this->page['table'] .' WHERE id='. $this->page['id'] .' ; ';
+		echo $sql_query . "\n"; 
 		$result = mysql_query( $sql_query, $this->db );	
 		if( $result === false ) {
 			echo 'Error: Could not delete row';

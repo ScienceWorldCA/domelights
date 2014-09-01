@@ -11,7 +11,9 @@
 	{
 		public function DisplayTitle( $colName ) {
 			switch( $colName ) {
+				case 'created': 
 				case 'id': {
+					// Disable do not show. 
 					return ''; 
 				}
 				default: {

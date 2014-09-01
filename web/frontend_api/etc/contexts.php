@@ -24,6 +24,7 @@ $config['contexts']['storesequence'] = array(
 		array( 'class' => 'FrontEnd_API', 'method' => 'GetUserInfo' ),
 		array( 'class' => 'FrontEnd_API', 'method' => 'StoreSequence' ),
 // 		array( 'class' => 'FrontEnd_API', 'method' => 'ScheduleAnimation' ),
+// 		array( 'class' => 'FrontEnd_API', 'method' => 'ConvertAnimation' ),
 // 		array( 'class' => 'FrontEnd_API', 'method' => 'EmailSchedule' ),
 	),
 	'render' => array(

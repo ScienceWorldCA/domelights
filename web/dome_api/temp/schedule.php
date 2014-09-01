@@ -1,4 +1,4 @@
-v0.8
+v0.9
 <?php 
 // Connnect to the database 
 include( '../etc/config.php' );
@@ -57,7 +57,26 @@ class CSchedule
 		} else {
 			return mysql_fetch_assoc( $result ) ; 
 		}
+	}
 
+	private function GetTimeOfLastScheduledAnimation( ) {
+		// 1) Find the last schedulled animation 
+		$sql_query = "
+		SELECT START FROM animations
+		WHERE state =0 AND animations.start > CURRENT_TIMESTAMP() 
+		ORDER BY animations.start DESC 
+		LIMIT 1";
+
+		echo $sql_query . "\n"; 
+		$result = mysql_query( $sql_query, $this->db );
+		if( mysql_num_rows($result) <= 0 ) {
+			// This is not an error. This means that there is currently NO animation ahead of this animation. 
+			// We need to insert this animation at the next avaliable time. 
+			return date ( "Y-m-d H:i:s" ) ;
+		} else {
+			$row = mysql_fetch_assoc( $result ) 
+			return $row['end'] ;
+		}
 	}
 
 	public function AddNewAnimation( $user_id, $data, $source ) {
@@ -79,31 +98,17 @@ class CSchedule
 			return false; 
 		}
 
-		// 1) Find the last schedulled animation 
-		$sql_query = "
-		SELECT START FROM animations
-		WHERE state =0 AND animations.start > CURRENT_TIMESTAMP() 
-		ORDER BY animations.start DESC 
-		LIMIT 1";
 
-		echo $sql_query . "\n"; 
+		$timeOfLastScheduledAnimation = $this->GetTimeOfLastScheduledAnimation(); 
+		var_dump( $timeOfLastScheduledAnimation ) ; 
 
-		$result = mysql_query( $sql_query, $this->db );
-		if( mysql_num_rows($result) > 0 ) {
-			echo 'Error: Could not find any animations after this time' ;
-			return false ; 
-		}
-
-
-		$row = mysql_fetch_assoc( $result ) ;
-		var_dump( $row ) ;
 
 		// 2a) Find the schedual that fits one min past this time. 
 		$sql_query = "
 		SELECT * 
 		FROM `schedule` 
-		WHERE TIME( TIMESTAMP( '". $row['end'] ."' ) ) > schedule.start
-		AND TIME( TIMESTAMP( '". $row['end'] ."' ) ) < schedule.end
+		WHERE TIME( TIMESTAMP( '". $timeOfLastScheduledAnimation ."' ) ) > schedule.start
+		AND TIME( TIMESTAMP( '". $timeOfLastScheduledAnimation ."' ) ) < schedule.end
 		AND schedule.type =1
 		AND schedule.day >= dayofweek( TIMESTAMP( '". $row['end'] ."' ) ) 
 		LIMIT 1 ";

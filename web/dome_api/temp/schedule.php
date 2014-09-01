@@ -1,4 +1,4 @@
-v0.19
+v0.20
 <?php 
 // Connnect to the database 
 include( '../etc/config.php' );
@@ -227,10 +227,37 @@ class CSchedule
 	}
 
 
+	public function DisplayTable( $sql_query ) {
+		echo $sql_query . "\n"; 
+		$result = mysql_query( $sql_query, $this->db );		
+		if( $result == NULL ) {
+			echo "Nothing to show you!"; 
+			return ; 
+		}		
+		
 
+		echo '<table>';
+		while( $row = mysql_fetch_assoc( $result ) ) {
+			echo '<tr>';
+			foreach( $col as $key=>$value ) {
+				echo '<td>'. $value . '</td>' ; 
+			}
+			echo '</tr>';
+		}
+		echo '</table>';
+
+	}
 
 
 	public function RunTest() {
+
+		echo '<h3>Schedule</h3>' ; 
+		$this->DisplayTable( "SELECT * FROM schedule WHERE type='1'  LIMIT 0 , 30 ;" ) ; 
+		echo '<h3>Events</h3>' ; 
+		$this->DisplayTable( "SELECT * FROM events LIMIT 0 , 30" ) ; 
+		echo '<h3>animations (30) </h3>' ; 
+		$this->DisplayTable( "SELECT * FROM animations LIMIT 0 , 30" ) ; 
+
 		echo '<pre>'; 
 
 		echo '<h3>Adding in test animations</h3>' ; 
@@ -258,39 +285,6 @@ class CSchedule
 		$ret = $this->UpdateAnimationScheduleTime( $id, 60 ) ; 
 		var_dump ( $ret ) ;
 		echo "\n\n\n" ; 
-
-
-
-		/*
-
-		// 1) Find the last schedulled animation 
-		$sql_query = "
-		SELECT START FROM animations
-		WHERE state =0
-		ORDER BY animations.start DESC 
-		LIMIT 1";
-
-		echo $sql_query . "\n"; 
-		$result = mysql_query( $sql_query, $this->db );
-		$row = mysqli_fetch_array( $result ) ;
-		var_dump( $row ) ;
-
-		// 2a) Find the schedual that fits one min past this time. 
-		$sql_query = "
-		SELECT * 
-		FROM `schedule` 
-		WHERE TIME( TIMESTAMP( '". $row['end'] ."' ) ) > schedule.start
-		AND TIME( TIMESTAMP( '". $row['end'] ."' ) ) < schedule.end
-		AND schedule.type =1
-		AND schedule.day >= dayofweek( TIMESTAMP( '". $row['end'] ."' ) ) 
-		LIMIT 1 ";
-
-		echo $sql_query . "\n"; 
-		$result = mysql_query( $sql_query, $this->db );
-		while( $row = mysqli_fetch_array( $result ) ) {
-			var_dump( $row ) ;
-		}
-		*/
 
 
 		echo '</pre>'; 

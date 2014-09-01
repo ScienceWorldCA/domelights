@@ -84,5 +84,5 @@
 		}
 
 	}
-	$eventsDisplay->Render( $_REQUEST );
+	$display->Render( $_REQUEST );
 ?>

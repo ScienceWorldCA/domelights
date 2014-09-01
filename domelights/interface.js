@@ -112,11 +112,15 @@ function buildInterface() {
     function AutoSpinR(event, uiIndex)
     {
         UIObjectManager.Objects[uiIndex].mesh.scale.x = UIObjectManager.Objects[uiIndex].mesh.scale.y = 1;
+        FixedSpeedActive = true;
+        targetRotation = 0.05;
     }
 
     function AutoSpinL(event, uiIndex)
     {
         UIObjectManager.Objects[uiIndex].mesh.scale.x = UIObjectManager.Objects[uiIndex].mesh.scale.y = 1;
+        FixedSpeedActive = true;
+        targetRotation = -0.05;
     }
 }
 

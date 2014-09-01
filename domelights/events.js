@@ -33,6 +33,7 @@ function onDocumentMouseDown( event ) {
 	isMouseDown = true;
 	if (isMouseOverBar()) {
 		isMouseDownOverBar = true;
+        FixedSpeedActive = false;
 	}
 
 	document.addEventListener( 'mouseup', onDocumentMouseUp, false );

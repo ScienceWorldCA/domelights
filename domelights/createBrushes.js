@@ -52,7 +52,7 @@ function CreateBrushes() {
 
             //frame = frame*0.25;
             for (var y = 0; y < LightMatrixWidth; y++) {
-                col.setHSL(y * step, 1, 0.1);
+                col.setHSL(y * step, 1, 0.2);
                 HorizontalWipeTime(col, frame + y);
             }
 

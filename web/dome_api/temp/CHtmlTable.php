@@ -69,6 +69,9 @@ class CHtmlTable
 	public function DisplayValue( $colName, $value ) {
 		return $value ; 
 	}
+	public function DisplayDescription( $colName ) {
+		return ''; 
+	}	
 	public function DisplayInput( $colName ) {
 		return '<input name="'. $colName  .'" type="text" />'; 
 	}
@@ -79,24 +82,25 @@ class CHtmlTable
 		$sql_query = 'DESCRIBE '. $this->page['table'] .' ; ';
 		$result = mysql_query( $sql_query, $this->db );	
 
-		echo '<table width="100%">' ; 
+		echo '<table border="1">' ;
+		echo '<tr><th>Name</th><th>Value</th><th>Description</th></tr>'; 
 		while( $row = mysql_fetch_assoc( $result ) ) {
-
-			var_dump( $row ) ;
-			
 			echo '<tr>';
-			echo '<th>'. $row['Field'] .'</th>';
+
+			echo '<td>'. $row['Field'] .'</td>';
 			
 			echo '<td>';
 			echo $this->DisplayInput( $row['Field'] ); 
 			echo '</td>';
 			
+			echo '<td>';
+			echo $this->DisplayDescription( $row['Field'] ); 
+			echo '</td>';		
+			
 			echo '</tr>';
 		}
 		echo '</table>'; 
 		echo '<input type="submit" />';
-
-		echo 'ToDo: Insert' ; 
 	}
 
 	public function ActDelete( ) 

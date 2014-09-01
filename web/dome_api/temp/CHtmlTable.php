@@ -53,6 +53,11 @@ class CHtmlTable
 			{
 				$this->DisplayCreate() ;
 				break;  
+			}
+			case 'edit':
+			{
+				$this->DisplayEdit( $this->page['id'] ) ;
+				break;  
 			}			
 			case 'insert':
 			{
@@ -81,8 +86,8 @@ class CHtmlTable
 	public function DisplayDescription( $colName ) {
 		return ''; 
 	}	
-	public function DisplayInput( $colName ) {
-		return '<input name="pram_'. $colName  .'" type="text" />'; 
+	public function DisplayInput( $colName, $value="" ) {
+		return '<input name="pram_'. $colName  .'" type="text" value="'. $value .'"/>'; 
 	}
 
 	public function ActInsert( ) {
@@ -139,7 +144,6 @@ class CHtmlTable
 
 		return true ;  
 	}
-
 	public function DisplayCreate( ) {
 
 		// find the table schema 
@@ -164,6 +168,40 @@ class CHtmlTable
 		}
 		echo '</table>'; 
 		echo '<input type="submit" />';
+
+		echo '</form>';
+	}
+
+	public function DisplayEdit( $id = NULL ) {
+
+		if( ! isset( $this->page['id'] ) ) {
+			echo "Error: Missing id prameter"; 
+			return false ; 
+		}		
+
+		// find the table schema 
+		$sql_query = 'SELECT * FROM '. $this->page['table'] .' WHERE id="'. mysql_real_escape_string( $this->page['id'] ) .'"; ';
+		$result = mysql_query( $sql_query, $this->db );	
+
+		echo '<form action="?act=update&table='. $this->page['table'].'&id='. $this->page['id'] .'" method="post">';
+		echo '<table border="1">' ;
+		echo '<tr><th>Name</th><th>Value</th><th>Description</th></tr>'; 
+		while( $row = mysql_fetch_assoc( $result ) ) {
+			foreach( $row as $key => $value ) {			
+				$columnTitle = $this->DisplayTitle( $key ) ; 
+				if( strlen( $columnTitle) <= 0 ) {
+					continue; 
+				}
+
+				echo '<tr>';
+				echo '<td>'. $columnTitle .'</td>';			
+				echo '<td>'. $this->DisplayInput( $key, $value ) .'</td>';			
+				echo '<td>'. $this->DisplayDescription( $key ) .'</td>';
+				echo '</tr>';
+			}
+		}
+		echo '</table>'; 
+		echo '<input type="submit" value="Update" />';
 
 		echo '</form>';
 	}
@@ -221,7 +259,10 @@ class CHtmlTable
 				$first = false ; 
 			}
 			echo '<tr>';
-			echo '<td><a onclick="return confirm(\'Are you sure you want to delete this recode?\')" href="?act=delete&table='. $this->page['table'] .'&id='. $row['id'] .'">Delete</a></td>';
+			echo '<td>';
+			echo '<a onclick="return confirm(\'Are you sure you want to delete this recode?\')" href="?act=delete&table='. $this->page['table'] .'&id='. $row['id'] .'">Delete</a> ';
+			echo '<a href="?act=edit&table='. $this->page['table'] .'&id='. $row['id'] .'">Edit</a> ';
+			echo '</td>';
 			foreach( $row  as $key=>$value ) {
 				echo '<td>'. $this->DisplayValue( $key, $value ) .'</td>' ; 
 			}

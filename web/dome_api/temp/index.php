@@ -48,7 +48,7 @@
 		public function DisplayValue( $colName, $value ) {
 			switch( $colName ) {
 				case 'user_id': {
-					return '<a href="?act=view&id='. $value . '">'. $value .'</a>' ;
+					return '<a href="?act=edit&table=users&id='. $value . '">'. $value .'</a>' ;
 				}
 				default: {
 					return parent::DisplayValue(  $colName, $value ); 

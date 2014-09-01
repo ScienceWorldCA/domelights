@@ -77,7 +77,7 @@ class CSchedule
 		} else {
 			// We found at lest one animation ahead of us. 
 			$row = mysql_fetch_assoc( $result ) ;
-			return strtotime( $row['end'] );
+			return $row['end'] ;
 		}
 	}
 

@@ -74,7 +74,7 @@ class CSchedule
 			// We need to insert this animation at the next avaliable time. 
 			return date ( "Y-m-d H:i:s" ) ;
 		} else {
-			$row = mysql_fetch_assoc( $result ) 
+			$row = mysql_fetch_assoc( $result ) ;
 			return $row['end'] ;
 		}
 	}

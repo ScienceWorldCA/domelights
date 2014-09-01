@@ -89,7 +89,7 @@ class CSchedule
 		echo $sql_query . "\n"; 
 
 		$result = mysql_query( $this->db, $sql_query );
-		$row = mysqli_fetch_array( $result ) ;
+		$row = mysql_fetch_assoc( $result ) ;
 		var_dump( $row ) ;
 
 		// 2a) Find the schedual that fits one min past this time. 
@@ -104,8 +104,13 @@ class CSchedule
 
 		echo $sql_query . "\n"; 
 		$result = mysql_query( $sql_query, $this->db );
-		while( $row = mysqli_fetch_array( $result ) ) {
-			var_dump( $row ) ;
+		if( mysql_num_rows($result) > 0 ) {
+			while( $row = mysql_fetch_assoc( $result ) ) {
+				var_dump( $row ) ;
+			}
+		} else {
+			// No schedule. 
+			echo 'No Schedule' ; 
 		}
 
 
@@ -121,13 +126,16 @@ class CSchedule
 
 		echo '<h3>Check to see what the next animation is</h3>';
 		$nextScheduleAnimation = $this->GetNextScheduleAnimation() ; 
-		var_dump( $nextScheduleAnimation ) ;
+		var_dump ( $nextScheduleAnimation ) ;
 		echo "\n\n\n" ; 
 
 
 		echo '<h3>Insert a new animations</h3>';
+		$user_id 	= "1";
+		$data 		= "data look at all this data";
+		$source		= "This is the source that makes the data"; 
 		$addedScheduleAnimation = $this->AddNewAnimation( $user_id, $data, $source ) ; 
-		var_dump( $addedScheduleAnimation ) ;
+		var_dump ( $addedScheduleAnimation ) ;
 		echo "\n\n\n" ; 
 		/*
 

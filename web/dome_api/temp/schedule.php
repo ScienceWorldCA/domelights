@@ -215,7 +215,7 @@ class CSchedule
 		// Update the time. 
 		$scheduleTimeEnd = date( "Y-m-d H:i:s", strtotime( $scheduleTimeStart ) + $timeOfAnimation ) ;
 
-		$sql_query = "UPDATE animations SET start = '". $scheduleTimeStart ."', end = '". $scheduleTimeEnd ."' WHERE animations.id =3;"; 
+		$sql_query = "UPDATE animations SET start = '". $scheduleTimeStart ."', end = '". $scheduleTimeEnd ."' WHERE animations.id =". $id .";"; 
 		echo $sql_query . "\n"; 
 		$result = mysql_query( $sql_query, $this->db );
 		if( $result == NULL ) {

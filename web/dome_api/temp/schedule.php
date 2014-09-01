@@ -171,7 +171,7 @@ class CSchedule
 
 		// Get the last animation and add 60 secs to it. 
 		$timeOfLastScheduledAnimation = strtotime( $this->GetTimeOfLastScheduledAnimation() ) + 60 ; 
-		echo 'Last schedule animation time: '. $timeOfLastScheduledAnimation ) . "\n"; 
+		echo 'Last schedule animation time: '. $timeOfLastScheduledAnimation . "\n"; 
 
 
 		$scheduleTimeStart = $timeOfLastScheduledAnimation  ; 

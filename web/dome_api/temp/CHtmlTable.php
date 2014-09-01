@@ -62,7 +62,7 @@ class CHtmlTable
 
 	public function Display(  )
 	{
-		echp '<h1>Table: '. $this->page['table'] .'</h1>' ;
+		echo '<h1>Table: '. $this->page['table'] .'</h1>' ;
 
 		$sql_query = 'SELECT * FROM '. $this->page['table'] .' ';
 		if( ! isset( $this->page['limit'] ) ) {

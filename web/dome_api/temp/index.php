@@ -45,6 +45,17 @@
 			}
 		}
 
+		public function DisplayInput( $colName, $value="" ) {
+			switch( $colName ) {
+				case 'id': {
+					return $value ; // Read only 
+				}
+				default: {
+					return parent::DisplayInput( $colName, $value ); 
+				}
+			}
+		}
+
 		public function DisplayValue( $colName, $value ) {
 			switch( $colName ) {
 				case 'user_id': {

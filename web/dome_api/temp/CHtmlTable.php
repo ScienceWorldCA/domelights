@@ -21,7 +21,7 @@ class CHtmlTable
 	} 
 
 	public function Render( $prameters ) {
-		$page = $prameters  ; 
+		$this->page = $prameters  ; 
 
 		if( ! isset( $this->page['table'] ) ) {
 			echo "Error: Missing table prameter"; 

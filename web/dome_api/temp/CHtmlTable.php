@@ -4,7 +4,7 @@
 include( '../etc/config.php' );
 
 
-
+//CRUD
 class CHtmlTable
 {
 	public $page ; 
@@ -30,18 +30,18 @@ class CHtmlTable
 
 
 		if( ! isset( $this->page['act'] ) ) {
-			$this->page['act'] = 'list' ; 
+			$this->page['act'] = 'view' ; 
 		}
-		$avaliableMethods = array("list", "insert", "delete" );
+		$avaliableMethods = array("view", "insert", "delete" );
 		if ( ! in_array($this->page['act'], $avaliableMethods) ) {
 			echo 'Error: act not allowed, act='. $this->page['act'] ; 
 			return ; 
 		}
 
 		switch( $this->page['act'] ) {
-			case 'list':
+			case 'view':
 			{
-				$this->Display() ;
+				$this->ActView() ;
 				break;  
 			}
 
@@ -60,7 +60,11 @@ class CHtmlTable
 		return $value ; 
 	}
 
-	public function Display(  )
+	public function DisplayInsert( ) {
+
+	}
+
+	public function ActView(  )
 	{
 		echo '<h1>Table: '. $this->page['table'] .'</h1>' ;
 

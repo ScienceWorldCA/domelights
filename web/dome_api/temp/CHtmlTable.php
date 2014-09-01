@@ -87,7 +87,7 @@ class CHtmlTable
 			return false ;
 		}
 		echo 'FYI: row deleted' ; 
-		this->ActView() ;
+		$this->ActView() ;
 		return true ; 
 	}
 

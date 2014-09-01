@@ -1,4 +1,4 @@
-v0.18
+v0.19
 <?php 
 // Connnect to the database 
 include( '../etc/config.php' );

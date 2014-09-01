@@ -49,12 +49,13 @@ class CSchedule
 		WHERE TIMESTAMP( '". $start ."' ) BETWEEN animations.start AND animations.end 
 		LIMIT 1";
 
+		echo $sql_query . "\n\n"; 
 		$result = mysql_query( $sql_query , $this->db );
 		$num_rows = mysql_num_rows($result);
 		if( $num_rows <= 0 ) {
 			return false ; 
 		} else {
-			return mysqli_fetch_array( $result ) ; 
+			return mysql_fetch_assoc( $result ) ; 
 		}
 
 	}
@@ -86,7 +87,7 @@ class CSchedule
 		LIMIT 1";
 
 		echo $sql_query . "\n"; 
-		$result = mysqli_query( $this->db, $sql_query );
+		$result = mysql_query( $sql_query, $this->db );
 		$row = mysqli_fetch_array( $result ) ;
 		var_dump( $row ) ;
 
@@ -101,7 +102,7 @@ class CSchedule
 		LIMIT 1 ";
 
 		echo $sql_query . "\n"; 
-		$result = mysqli_query( $this->db, $sql_query );
+		$result = mysql_query( $sql_query, $this->db );
 		while( $row = mysqli_fetch_array( $result ) ) {
 			var_dump( $row ) ;
 		}

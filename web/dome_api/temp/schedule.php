@@ -1,4 +1,4 @@
-v0.9
+v0.11
 <?php 
 // Connnect to the database 
 include( '../etc/config.php' );
@@ -103,25 +103,50 @@ class CSchedule
 		var_dump( $timeOfLastScheduledAnimation ) ; 
 
 
-		// 2a) Find the schedual that fits one min past this time. 
-		$sql_query = "
-		SELECT * 
-		FROM `schedule` 
-		WHERE TIME( TIMESTAMP( '". $timeOfLastScheduledAnimation ."' ) ) > schedule.start
+		// 2a) Find the schedule that fits one min past this time. 
+		$sql_query = "SELECT * FROM `schedule` WHERE 
+		TIME( TIMESTAMP( '". $timeOfLastScheduledAnimation ."' ) ) > schedule.start
 		AND TIME( TIMESTAMP( '". $timeOfLastScheduledAnimation ."' ) ) < schedule.end
 		AND schedule.type =1
 		AND schedule.day >= dayofweek( TIMESTAMP( '". $timeOfLastScheduledAnimation ."' ) ) 
+		ORDER BY  `schedule`.`day` ASC 
 		LIMIT 1 ";
 
 		echo $sql_query . "\n"; 
 		$result = mysql_query( $sql_query, $this->db );
-		if( mysql_num_rows($result) > 0 ) {
-			while( $row = mysql_fetch_assoc( $result ) ) {
-				var_dump( $row ) ;
+		if( mysql_num_rows($result) <= 0 ) {
+			echo 'FYI. No schedule at this current time. Find the next avaliable schedule. '
+			// No schedule at the current time of day. 
+			// Search the next avaliable schedule. 
+
+			$sql_query = "SELECT * FROM schedule WHERE 			
+			schedule.day >= dayofweek( TIMESTAMP( '". $timeOfLastScheduledAnimation ."' ) ) + 1 AND 
+			schedule.type = 1 
+			ORDER BY  `schedule`.`day` ASC 
+			LIMIT 1 ";
+			echo $sql_query . "\n"; 
+
+			$result = mysql_query( $sql_query, $this->db );
+			if( mysql_num_rows($result) <= 0 ) {
+				// Still nothing? Okay increase the day and start again. 
+				$sql_query = "SELECT * FROM schedule WHERE 			
+				schedule.day >= dayofweek( ADDTIME ( TIMESTAMP( '". $timeOfLastScheduledAnimation ."' ), '1:1') ) AND 
+				schedule.type = 1 
+				ORDER BY  `schedule`.`day` ASC 
+				LIMIT 1 ";
+				echo $sql_query . "\n"; 
+
+				$result = mysql_query( $sql_query, $this->db );
+				if( mysql_num_rows($result) <= 0 ) {
+					echo 'Error: Fuck you and the horse you road in on' ; 
+					return false;
+				}
+
 			}
-		} else {
-			// No schedule. 
-			echo 'No Schedule' ; 
+		}
+
+		while( $row = mysql_fetch_assoc( $result ) ) {
+			var_dump( $row );
 		}
 
 

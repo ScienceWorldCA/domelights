@@ -23,9 +23,17 @@ class CHtmlTable
 		return $value ; 
 	}
 
-	public function Display( $table )
+	public function Display( $settings )
 	{
-		$sql_query = 'SELECT * FROM '. $table .' LIMIT 0 , 30 '; 
+
+		if( ! isset( $settings['table'] ) ) {
+			echo "Error: Missing table prameter"; 
+			exit(); 
+		}
+		echp '<h1>Table: '. $settings['table'] .'</h1>' ;
+
+		
+		$sql_query = 'SELECT * FROM '. $settings['table'] .' LIMIT 0 , 30 '; 
 
 		echo $sql_query . "\n"; 
 		$result = mysql_query( $sql_query, $this->db );		
@@ -39,7 +47,7 @@ class CHtmlTable
 		while( $row = mysql_fetch_assoc( $result ) ) {
 			if( $first ) {
 				echo '<tr>';
-				echo '<td>Actions</td>';
+				echo '<th>Actions</th>';
 				foreach( $row  as $key=>$value ) {
 					echo '<th>'. $key .'</th>' ; 
 				}
@@ -47,7 +55,7 @@ class CHtmlTable
 				$first = false ; 
 			}
 			echo '<tr>';
-			echo '<td><a href="?act=delete&table='. $table .'&id='. $row['id'] .'">Delete</a></td>';
+			echo '<td><a href="?act=delete&table='. $settings['table'] .'&id='. $row['id'] .'">Delete</a></td>';
 			foreach( $row  as $key=>$value ) {
 				echo '<td>'. $this->DisplayValue( $key, $value ) .'</td>' ; 
 			}
@@ -55,7 +63,7 @@ class CHtmlTable
 		}
 		echo '</table><br >';
 
-		echo '<a href="?act=insert&table='. $table .'">Insert new</a><br >';
+		echo '<a href="?act=insert&table='. $settings['table'] .'">Insert new</a><br >';
 	}
 	
 }

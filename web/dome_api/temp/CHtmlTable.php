@@ -29,16 +29,16 @@ class CHtmlTable
 		}
 
 
-		if( ! isset( $page['act'] ) ) {
-			$page['act'] = 'list' ; 
+		if( ! isset( $this->page['act'] ) ) {
+			$this->page['act'] = 'list' ; 
 		}
 		$avaliableMethods = array("list", "insert", "delete" );
-		if ( ! in_array($page['act'], $avaliableMethods) ) {
-			echo 'Error: act not allowed, act='. $page['act'] ; 
+		if ( ! in_array($this->page['act'], $avaliableMethods) ) {
+			echo 'Error: act not allowed, act='. $this->page['act'] ; 
 			return ; 
 		}
 
-		switch( $page['act'] ) {
+		switch( $this->page['act'] ) {
 			case 'list':
 			{
 				$this->Display() ;
@@ -47,7 +47,7 @@ class CHtmlTable
 
 			default: 
 			{
-				echo 'ToDo: '. $page['act'] . "<br />\n";
+				echo 'ToDo: '. $this->page['act'] . "<br />\n";
 				break; 
 			}
 		}

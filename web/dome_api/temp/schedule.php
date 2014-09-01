@@ -4,12 +4,13 @@
 include( '../etc/config.php' );
 
 
-
 class CSchedule
 {
 	private $db ; 
 	function __construct() 
 	{
+		global $config ; 
+
 		// Create connection
 		$this->db = mysql_connect( $config['db']['host'], $config['db']['user'], $config['db']['pass']);
 		mysql_select_db($config['db']['name'], $this->db);

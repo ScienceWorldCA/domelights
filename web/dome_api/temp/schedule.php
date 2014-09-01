@@ -227,36 +227,21 @@ class CSchedule
 	}
 
 
-	public function DisplayTable( $sql_query ) {
-		echo $sql_query . "\n"; 
-		$result = mysql_query( $sql_query, $this->db );		
-		if( $result == NULL ) {
-			echo "Nothing to show you!"; 
-			return ; 
-		}		
-		
 
-		echo '<table>';
-		while( $row = mysql_fetch_assoc( $result ) ) {
-			echo '<tr>';
-			foreach( $row  as $key=>$value ) {
-				echo '<td>'. $value . '</td>' ; 
-			}
-			echo '</tr>';
-		}
-		echo '</table>';
-
-	}
 
 
 	public function RunTest() {
 
+		/*
+		$table = new CHtmlTable() ; 
+		
 		echo '<h3>Schedule</h3>' ; 
-		$this->DisplayTable( "SELECT * FROM schedule WHERE type='1'  LIMIT 0 , 30 ;" ) ; 
+		$table->Display( "schedule" ) ; 
 		echo '<h3>Events</h3>' ; 
 		$this->DisplayTable( "SELECT * FROM events LIMIT 0 , 30" ) ; 
 		echo '<h3>animations (30) </h3>' ; 
 		$this->DisplayTable( "SELECT * FROM animations LIMIT 0 , 30" ) ; 
+		*/
 
 		echo '<pre>'; 
 

@@ -177,7 +177,7 @@ class CHtmlTable
 		}
 		echo '</table><br >';
 
-		echo '<a href="?act=insert&table='. $this->page['table'] .'">Insert new</a><br >';
+		echo '<a href="?act=create&table='. $this->page['table'] .'">Insert new</a><br >';
 	}
 	
 }

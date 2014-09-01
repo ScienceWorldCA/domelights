@@ -7,6 +7,7 @@ include( '../etc/config.php' );
 
 class CHtmlTable
 {
+	public $page ; 
 
 	function __construct() 
 	{
@@ -19,22 +20,51 @@ class CHtmlTable
 		// ToDo: check to see if we failed to connect to the database 
 	} 
 
+	public function Render( $prameters ) {
+		$page = $prameters  ; 
+
+		if( ! isset( $this->page['table'] ) ) {
+			echo "Error: Missing table prameter"; 
+			return ;
+		}
+
+
+		if( ! isset( $page['act'] ) ) {
+			$page['act'] = 'list' ; 
+		}
+		$avaliableMethods = array("list", "insert", "delete" );
+		if ( ! in_array($page['act'], $avaliableMethods) ) {
+			echo 'Error: act not allowed, act='. $page['act'] ; 
+			return ; 
+		}
+
+		switch( $page['act'] ) {
+			case 'list':
+			{
+				$this->Display() ;
+				break;  
+			}
+
+			default: 
+			{
+				echo 'ToDo: '. $page['act'] . "<br />\n";
+				break; 
+			}
+		}
+
+		// Everything looks good. 
+		return true ; 
+	}
+
 	public function DisplayValue( $colName, $value ) {
 		return $value ; 
 	}
 
-	public function Display( $settings )
+	public function Display(  )
 	{
+		echp '<h1>Table: '. $this->page['table'] .'</h1>' ;
 
-		if( ! isset( $settings['table'] ) ) {
-			echo "Error: Missing table prameter"; 
-			exit(); 
-		}
-		echp '<h1>Table: '. $settings['table'] .'</h1>' ;
-
-		
-		$sql_query = 'SELECT * FROM '. $settings['table'] .' LIMIT 0 , 30 '; 
-
+		$sql_query = 'SELECT * FROM '. $this->page['table'] .' LIMIT 0 , 30 '; 
 		echo $sql_query . "\n"; 
 		$result = mysql_query( $sql_query, $this->db );		
 		if( $result == NULL ) {
@@ -55,7 +85,7 @@ class CHtmlTable
 				$first = false ; 
 			}
 			echo '<tr>';
-			echo '<td><a href="?act=delete&table='. $settings['table'] .'&id='. $row['id'] .'">Delete</a></td>';
+			echo '<td><a href="?act=delete&table='. $this->page['table'] .'&id='. $row['id'] .'">Delete</a></td>';
 			foreach( $row  as $key=>$value ) {
 				echo '<td>'. $this->DisplayValue( $key, $value ) .'</td>' ; 
 			}
@@ -63,7 +93,7 @@ class CHtmlTable
 		}
 		echo '</table><br >';
 
-		echo '<a href="?act=insert&table='. $settings['table'] .'">Insert new</a><br >';
+		echo '<a href="?act=insert&table='. $this->page['table'] .'">Insert new</a><br >';
 	}
 	
 }

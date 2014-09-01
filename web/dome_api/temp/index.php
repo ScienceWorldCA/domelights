@@ -14,5 +14,5 @@
 	}
 
 	$displayTable = new CHtmlTable(); 
-	$displayTable->Display( $_REQUEST );
+	$displayTable->Render( $_REQUEST );
 ?>

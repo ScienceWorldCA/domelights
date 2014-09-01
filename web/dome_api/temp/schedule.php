@@ -44,7 +44,8 @@ class CSchedule
 		}
 
 		// NOTE: MySQL command BETWEEN is inclusive of the start and end timestamps. 
-		$sql_query = "SELECT * 
+		$sql_query = "
+		SELECT * 
 		FROM  animations
 		WHERE TIMESTAMP( '". $start ."' ) BETWEEN animations.start AND animations.end 
 		LIMIT 1";
@@ -85,9 +86,10 @@ class CSchedule
 	 *      value - returns the schedule occuring at this time. 
 	 */ 
 	private function CheckForBlackOutPeriod( $startTime ) {
-		$sql_query = "SELECT * FROM events
+		$sql_query = "
+		SELECT * FROM events
 		WHERE TIMESTAMP( '". $startTime ."' ) BETWEEN events.start AND events.end "; 
-		
+		echo $sql_query . "\n"; 
 		$result = mysql_query( $sql_query, $this->db );
 		if( mysql_num_rows($result) > 0 ) {
 			// There is a schedual at this time. We need to fine another time to run the animation. 
@@ -141,7 +143,8 @@ class CSchedule
 			}
 
 
-			$sql_query = "SELECT * FROM schedule WHERE 
+			$sql_query = "
+			SELECT * FROM schedule WHERE 
 			schedule.day >= ". $dayOfTheWeek ." AND 
 			schedule.type = 1 
 			ORDER BY schedule.day ASC 
@@ -171,7 +174,7 @@ class CSchedule
 
 		// Get the last animation and add 60 secs to it. 
 		$timeOfLastScheduledAnimation = date ( "Y-m-d H:i:s", strtotime( $this->GetTimeOfLastScheduledAnimation() ) + 60 ) ; 
-		echo 'Last schedule animation time: '. $timeOfLastScheduledAnimation . "\n"; 
+		echo 'Last schedule animation time: '. $timeOfLastScheduledAnimation . "\n\n\n"; 
 
 
 		$scheduleTimeStart = $timeOfLastScheduledAnimation  ; 
@@ -183,12 +186,14 @@ class CSchedule
 			if( $blackOutScheduleCheck != true ) {
 				// There is a black out schedule for this time. We can't use this time. 
 				// Set the time for 1 mins past the current black out period then test the schedule 
+				var_dump( $blackOutScheduleCheck ) ; 
 				$scheduleTimeStart = $blackOutScheduleCheck[ 'end' ] ; 
 				$schedulePeriod    = false ; // We changed the time. We have to recheck the schedule. 
 			} 
 
 			$schedulePeriodCheck = $this->CheckForSchedulePeriod( $scheduleTimeStart ) ; 
 			if( $schedulePeriodCheck != true ) {
+				var_dump( $schedulePeriodCheck ) ; 
 				$scheduleTimeStart = date( "Y-m-d H:i:s", $schedulePeriodCheck['start'] ) ; 
 				echo 'scheduleTimeStart: '. $scheduleTimeStart . "\n"; 
 				$blackOutScheduleCheck  = false ; 

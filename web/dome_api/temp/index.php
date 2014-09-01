@@ -4,7 +4,7 @@
 	include( '../etc/config.php' );
 
 	$act = 'list'; 
-	if( ! isset( $_REQUEST['act'] ) ) {
+	if( isset( $_REQUEST['act'] ) ) {
 		$act = $_REQUEST['act'] ; 
 	}
 
@@ -35,7 +35,7 @@
 				exit(); 
 			}
 
-			$displayTable = CHtmlTable(); 
+			$displayTable = new CHtmlTable(); 
 			$displayTable->Display( $_REQUEST['table'] );
 
 

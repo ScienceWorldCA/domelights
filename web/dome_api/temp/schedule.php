@@ -68,7 +68,7 @@ class CSchedule
 
 
 		echo '<h3>Check to see what the next animation is</h3>';
-		var_dump( $this->GetNextScheduleAnimation() ) 
+		var_dump( $this->GetNextScheduleAnimation() ) ;
 		echo "\n\n\n" ; 
 
 

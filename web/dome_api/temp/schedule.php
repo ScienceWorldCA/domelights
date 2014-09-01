@@ -115,11 +115,11 @@ class CSchedule
 		echo $sql_query . "\n"; 
 		$result = mysql_query( $sql_query, $this->db );
 		if( mysql_num_rows($result) <= 0 ) {
-			echo 'FYI. No schedule at this current time. Find the next avaliable schedule. '
+			echo 'FYI. No schedule at this current time. Find the next avaliable schedule. ';
 			// No schedule at the current time of day. 
 			// Search the next avaliable schedule. 
 
-			$sql_query = "SELECT * FROM schedule WHERE 			
+			$sql_query = "SELECT * FROM schedule WHERE 
 			schedule.day >= dayofweek( TIMESTAMP( '". $timeOfLastScheduledAnimation ."' ) ) + 1 AND 
 			schedule.type = 1 
 			ORDER BY  `schedule`.`day` ASC 

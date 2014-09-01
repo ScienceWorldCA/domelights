@@ -108,7 +108,7 @@ class CHtmlTable
 			if( $first ) {
 				$first = false; 				
 			} else {
-				$sql_query .=  ","
+				$sql_query .=  "," ; 
 			}
 			$sql_query .=  "'". mysql_real_escape_string ( $key ) ."' " ; 
 		}
@@ -118,7 +118,7 @@ class CHtmlTable
 			if( $first ) {
 				$first = false; 				
 			} else {
-				$sql_query .=  ","
+				$sql_query .=  "," ; 
 			}			
 			$sql_query .=  "'". mysql_real_escape_string ( $value ) ."' " ; 
 		}

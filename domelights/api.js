@@ -13,7 +13,7 @@ function FrontEnd_API() {
 	this.DoStoreAnimation = function() {
 		// Input
 		var sequence = SequenceManager.SaveSequence();
-		var emailInputAddress = document.getElementById( 'useremail' );
+		var emailInputAddress = document.getElementById( 'useremail' ).value;
 		
 		// Verify input
 		if( document.getElementById( 'userrealname' ).value == '') {

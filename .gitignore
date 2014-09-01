@@ -5,3 +5,7 @@ local/*
 *.pyc
 *.log
 node_modules/*
+.idea/vcs.xml
+*.xml
+.idea/domelights.iml
+.idea/.name

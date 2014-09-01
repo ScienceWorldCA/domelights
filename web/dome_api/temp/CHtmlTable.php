@@ -115,7 +115,8 @@ class CHtmlTable
 		echo $sql_query . "\n"; 
 		$result = mysql_query( $sql_query, $this->db );		
 		if( $result == NULL ) {
-			echo "Error: Could not insert new row."; 
+			echo "Error: Could not insert new row. MySQL Error: ". mysql_error() ; 
+
 			return false; 
 		}	
 

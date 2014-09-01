@@ -1,4 +1,4 @@
-v0.15
+v0.16
 <?php 
 // Connnect to the database 
 include( '../etc/config.php' );
@@ -232,6 +232,17 @@ class CSchedule
 	public function RunTest() {
 		echo '<pre>'; 
 
+		echo '<h3>Adding in test animations</h3>' ; 
+		$sql_query = "INSERT INTO animations (user_id) VALUES ('1');"; 
+		echo $sql_query . "\n"; 
+		$result = mysql_query( $sql_query, $this->db );
+		if( $result == NULL ) {
+			return false ;
+		}
+		$id = mysql_insert_id( $this->db ) ; 
+		echo "\n\n"; 
+
+
 
 		echo '<h3>Check to see what the next animation is</h3>';
 		$nextScheduleAnimation = $this->GetNextScheduleAnimation() ; 
@@ -243,7 +254,7 @@ class CSchedule
 
 
 		echo '<h3>Insert a new animations</h3>';
-		$ret = $this->UpdateAnimationScheduleTime( 3 ) ; 
+		$ret = $this->UpdateAnimationScheduleTime( $id ) ; 
 		var_dump ( $ret ) ;
 		echo "\n\n\n" ; 
 

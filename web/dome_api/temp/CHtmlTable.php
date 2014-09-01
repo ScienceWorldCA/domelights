@@ -135,7 +135,7 @@ class CHtmlTable
 		} 
 		
 		echo 'New row was added.'; 
-		this->ActView() ; 
+		$this->ActView() ; 
 
 		return true ;  
 	}

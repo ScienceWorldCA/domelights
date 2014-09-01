@@ -103,14 +103,29 @@ class CHtmlTable
 
 		// Build the query 
 		$sql_query = 'INSERT INTO '. $this->page['table'] .' (' ; 
+		$first = true ; 
 		foreach ($prams as $key => $value) {
-			$sql_query .=  "'". mysql_real_escape_string ( $key ) ."', " ; 
+			if( $first ) {
+				$first = false; 				
+			} else {
+				$sql_query .=  ","
+			}
+			$sql_query .=  "'". mysql_real_escape_string ( $key ) ."' " ; 
 		}
 		$sql_query .= ') VALUES ( ' ;
+		$first = true ; 
 		foreach ($prams as $key => $value) {
-			$sql_query .=  "'". mysql_real_escape_string ( $value ) ."', " ; 
+			if( $first ) {
+				$first = false; 				
+			} else {
+				$sql_query .=  ","
+			}			
+			$sql_query .=  "'". mysql_real_escape_string ( $value ) ."' " ; 
 		}
 		$sql_query .= ') ;' ;
+
+
+
 
 		echo $sql_query . "\n"; 
 		$result = mysql_query( $sql_query, $this->db );		

@@ -19,6 +19,7 @@
 
     var FPS = 40;
 
+    var FixedSpeedActive = false;
     var DomeLightManager;
     var UIObjectManager;
     var SequenceManager;

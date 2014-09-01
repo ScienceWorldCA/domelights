@@ -76,7 +76,7 @@ function buildInterface() {
         clearDome.material.color.setRGB(1, 1, 1);
         clearDome.index = 0;
 
-        var submitSequence = new UIObjectManager.CreateButton('textures/UI/submit.png', new THREE.Vector2(180, -70), new THREE.Vector2(20, 8));
+        var submitSequence = new UIObjectManager.CreateButton('textures/UI/Submit.png', new THREE.Vector2(180, -70), new THREE.Vector2(20, 8));
         submitSequence.onMouseUp = SubmitSequence;
         submitSequence.onMouseDown = ButtonDownClick;
         submitSequence.material.color.setRGB(1, 1, 1);
@@ -112,11 +112,15 @@ function buildInterface() {
     function AutoSpinR(event, uiIndex)
     {
         UIObjectManager.Objects[uiIndex].mesh.scale.x = UIObjectManager.Objects[uiIndex].mesh.scale.y = 1;
+        FixedSpeedActive = true;
+        targetRotation = 0.05;
     }
 
     function AutoSpinL(event, uiIndex)
     {
         UIObjectManager.Objects[uiIndex].mesh.scale.x = UIObjectManager.Objects[uiIndex].mesh.scale.y = 1;
+        FixedSpeedActive = true;
+        targetRotation = -0.05;
     }
 }
 

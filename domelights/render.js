@@ -7,7 +7,11 @@ function render() {
     }
 
     // Update Dome rotation
-    DomeGroup.rotation.y += ( targetRotation - DomeGroup.rotation.y ) * 0.02;
+    if(FixedSpeedActive == true)
+       DomeGroup.rotation.y += targetRotation;
+    else
+        DomeGroup.rotation.y += ( targetRotation - DomeGroup.rotation.y ) * 0.02;
+
 
     //Process Events and render them to the light array
     SequenceManager.Update();

@@ -65,11 +65,34 @@ class CHtmlTable
 		return true ; 
 	}
 
+
 	public function DisplayValue( $colName, $value ) {
 		return $value ; 
 	}
+	public function DisplayInput( $colName ) {
+		return '<input name="'. $colName  .'" type="text" />'; 
+	}
 
 	public function DisplayInsert( ) {
+
+		// find the table schema 
+		$sql_query = 'DESCRIBE '. $this->page['table'] .' ; ';
+		$result = mysql_query( $sql_query, $this->db );	
+
+		echo '<table width="100%">' ; 
+		while( $row = mysql_fetch_assoc( $result ) ) {
+			echo '<tr>';
+			echo '<th>'. $row['field'] .'</th>';
+			
+			echo '<td>';
+			echo $this->DisplayInput( $row['field'] ); 
+			echo '</td>';
+			
+			echo '</tr>';
+		}
+		echo '</table>'; 
+		echo '<input type="submit" />';
+
 		echo 'ToDo: Insert' ; 
 	}
 

@@ -126,10 +126,10 @@ class CSchedule
 
 
 		echo '<h3>Insert a new animations</h3>';
-		$addedScheduleAnimation = this->AddNewAnimation( $user_id, $data, $source )
+		$addedScheduleAnimation = $this->AddNewAnimation( $user_id, $data, $source )
 		var_dump( $addedScheduleAnimation ) ;
 		echo "\n\n\n" ; 
-
+		/*
 
 		// 1) Find the last schedulled animation 
 		$sql_query = "
@@ -158,22 +158,8 @@ class CSchedule
 		while( $row = mysqli_fetch_array( $result ) ) {
 			var_dump( $row ) ;
 		}
-
-		// 2b) If the above SELECT statment returns zero results then call this SELECT statatment to find the first schedul of the week. 
-		/*
-		SELECT * 
-		FROM `schedule` 
-		AND schedule.type =1
-		AND schedule.day >= 1 
-		LIMIT 1
 		*/
 
-		// 3) Now check the overides that are found in the events table to ensure that this time is not in a black out period. 
-		/*
-		SELECT * 
-		FROM `events` 
-		WHERE TIMESTAMP( '2014-08-22 09:14:00' ) BETWEEN events.start AND events.end 
-		*/
 
 		echo '</pre>'; 
 	} 

@@ -20,7 +20,7 @@ class CHtmlTable
 	} 
 
 	public function DisplayValue( $colName, $value ) {
-		echo $value ; 
+		return $value ; 
 	}
 
 	public function Display( $table )
@@ -44,6 +44,7 @@ class CHtmlTable
 					echo '<th>'. $key .'</th>' ; 
 				}
 				echo '</tr>';
+				$first = false ; 
 			}
 			echo '<tr>';
 			echo '<td><a href="?act=delete&table='. $table .'&id='. $row['id'] .'">Delete</a></td>';
@@ -52,7 +53,9 @@ class CHtmlTable
 			}
 			echo '</tr>';
 		}
-		echo '</table>';
+		echo '</table><br >';
+
+		echo '<a href="?act=insert&table='. $table .'">Insert new</a><br >';
 	}
 	
 }

@@ -49,6 +49,11 @@ class CHtmlTable
 				$this->ActDelete() ;
 				break;  
 			}
+			case 'insert':
+			{
+				$this->DisplayInsert() ;
+				break;  
+			}			
 			default: 
 			{
 				echo 'ToDo: '. $this->page['act'] . "<br />\n";
@@ -65,10 +70,11 @@ class CHtmlTable
 	}
 
 	public function DisplayInsert( ) {
-
+		echo 'ToDo: Insert' ; 
 	}
 
-	public function ActDelete( ) {
+	public function ActDelete( ) 
+	{
 		if( !isset( $this->page['id'] ) ) {
 			echo 'Error: Missing id prameter';
 			return false ; 

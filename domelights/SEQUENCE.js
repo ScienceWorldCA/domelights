@@ -2,7 +2,7 @@
  * Created by Robert Butterworth on 8/9/2014.
  */
 
-EVENTMANAGER = function() {
+SEQUENCE = function() {
 
     this.SequenceTime = 0; //Actual time of the Sequence.
     this.SequenceLength = 15*FPS;

@@ -12,7 +12,7 @@ function FrontEnd_API() {
 
 	this.DoStoreAnimation = function() {
 		// Input
-		var sequence = EventManager.SaveSequence();
+		var sequence = SequenceManager.SaveSequence();
 		var emailInputAddress = document.getElementById( 'useremail' );
 		
 		// Verify input

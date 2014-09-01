@@ -21,7 +21,7 @@
 
     var DomeLightManager;
     var UIObjectManager;
-    var EventManager;
+    var SequenceManager;
     var Brushes = [];
     var ActiveBrushID = 0;
     var ActiveBrushData = [];

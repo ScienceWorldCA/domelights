@@ -26,17 +26,17 @@ function initGraphicMode() {
     DomeLightManager = new DomeLights(DomeGroup);
 
     //EVENT.js // Main Event management
-    EventManager = new EVENTMANAGER(DomeLightManager);
+    SequenceManager = new SEQUENCE(DomeLightManager);
 
 
     //TEMP SEQUENCE
-      EventManager.SequenceLength = 6*FPS;
+      SequenceManager.SequenceLength = 6*FPS;
 //    var newEvent1 = new EVENT(5*FPS, 22, DomeLightManager, null, Brushes[1]);
-//    EventManager.AddEvent(newEvent1);
+//    SequenceManager.AddEvent(newEvent1);
 //    var newEvent2 = new EVENT(3*FPS, 29, DomeLightManager, null, Brushes[1]);
-//    EventManager.AddEvent(newEvent2);
+//    SequenceManager.AddEvent(newEvent2);
 //    var newEvent3 = new EVENT(1*FPS, 35, DomeLightManager, null, Brushes[1]);
-//    EventManager.AddEvent(newEvent3);
+//    SequenceManager.AddEvent(newEvent3);
 
 
     //geometries.js
@@ -107,7 +107,7 @@ function initRendermode()
     DomeLightManager = new DomeLights(DomeGroup);
 
     //EVENT.js // Main Event management
-    EventManager = new EVENTMANAGER(DomeLightManager);
+    SequenceManager = new SEQUENCE(DomeLightManager);
 
     //geometries.js
     createGeometries();
@@ -120,14 +120,14 @@ function initRendermode()
 
     //TEMP SEQUENCE
     {
-        EventManager.SequenceLength = 6 * FPS;
+        SequenceManager.SequenceLength = 6 * FPS;
         var newEvent1 = new EVENT(0, 0, Brushes[2]);
-        EventManager.AddEvent(newEvent1);
+        SequenceManager.AddEvent(newEvent1);
 
         var brushData = [];
         brushData[0] = new THREE.Color(1, 1, 1);
         var newEvent2 = new EVENT(20, 100, Brushes[0], brushData);
-        EventManager.AddEvent(newEvent2);
+        SequenceManager.AddEvent(newEvent2);
     }
 
     console.log("--- Render Mode Initialised ---");

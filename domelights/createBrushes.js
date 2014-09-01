@@ -42,7 +42,7 @@ function CreateBrushes() {
     var GradientBackgroundBrush = new Brush();
     {
         GradientBackgroundBrush.Index = 2;
-        GradientBackgroundBrush.Duration = EventManager.SequenceLength;
+        GradientBackgroundBrush.Duration = SequenceManager.SequenceLength;
         GradientBackgroundBrush.IsBackground = true;
         GradientBackgroundBrush.PrePaint = function () {return false;};
         GradientBackgroundBrush.Render = function (frame, originLight, brushData) {

@@ -10,8 +10,8 @@ function render() {
     DomeGroup.rotation.y += ( targetRotation - DomeGroup.rotation.y ) * 0.02;
 
     //Process Events and render them to the light array
-    EventManager.Update();
-    EventManager.RenderFrame(EventManager.SequenceTime, false);
+    SequenceManager.Update();
+    SequenceManager.RenderFrame(SequenceManager.SequenceTime, false);
 
     //Render the WebGL view
     renderer.clear();
@@ -48,8 +48,8 @@ function checkDomeInteraction() {
                 if(Brushes[ActiveBrushID].PrePaint(i) == true) {
 
                     //create new event at the light index at the current sequence time with the current brush data.
-                    var newEvent = new EVENT(EventManager.SequenceTime, i, Brushes[ActiveBrushID], ActiveBrushData);
-                    EventManager.AddEvent(newEvent);
+                    var newEvent = new EVENT(SequenceManager.SequenceTime, i, Brushes[ActiveBrushID], ActiveBrushData);
+                    SequenceManager.AddEvent(newEvent);
 
                     //Complete Post brush
                     Brushes[ActiveBrushID].PostPaint(i);

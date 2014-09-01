@@ -64,6 +64,21 @@ class CHtmlTable
 
 	}
 
+	public function ActDelete( ) {
+		if( !isset( $this->page['id'] ) ) {
+			echo 'Error: Missing id prameter';
+			return false ; 
+		}
+
+		$sql_query = 'DELETE FROM '. $this->page['table'] .' WHERE id='. $this->page['id'] .' ; ';
+		$result = mysql_query( $sql_query, $this->db );	
+		if( $result === false ) {
+			echo 'Error: Could not delete row';
+			return false ;
+		}
+		return true ; 
+	}
+
 	public function ActView(  )
 	{
 		echo '<h1>Table: '. $this->page['table'] .'</h1>' ;
@@ -98,7 +113,7 @@ class CHtmlTable
 				$first = false ; 
 			}
 			echo '<tr>';
-			echo '<td><a href="?act=delete&table='. $this->page['table'] .'&id='. $row['id'] .'">Delete</a></td>';
+			echo '<td><a onclick="return confirm(\'Are you sure you want to delete this recode?\')" href="?act=delete&table='. $this->page['table'] .'&id='. $row['id'] .'">Delete</a></td>';
 			foreach( $row  as $key=>$value ) {
 				echo '<td>'. $this->DisplayValue( $key, $value ) .'</td>' ; 
 			}

@@ -22,7 +22,7 @@ class CHtmlTable
 
 	public function Display( $table )
 	{
-		$sql_query = 'SELECT * FROM '. $table .' WHERE type="1"  LIMIT 0 , 30 '; 
+		$sql_query = 'SELECT * FROM '. $table .' LIMIT 0 , 30 '; 
 
 		echo $sql_query . "\n"; 
 		$result = mysql_query( $sql_query, $this->db );		

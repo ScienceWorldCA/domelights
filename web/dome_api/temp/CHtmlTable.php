@@ -64,7 +64,16 @@ class CHtmlTable
 	{
 		echp '<h1>Table: '. $this->page['table'] .'</h1>' ;
 
-		$sql_query = 'SELECT * FROM '. $this->page['table'] .' LIMIT 0 , 30 '; 
+		$sql_query = 'SELECT * FROM '. $this->page['table'] .' ';
+		if( ! isset( $this->page['limit'] ) ) {
+			$this->page['limit'] = 30 ; 
+		}
+		if( ! isset( $this->page['offset'] ) ) {
+			$this->page['offset'] = 0 ; 
+		}
+		$sql_query = 'LIMIT '. $this->page['limit']  .' '. $this->page['offset'] .', '. $this->page['offset'] .' ;' ; 
+
+
 		echo $sql_query . "\n"; 
 		$result = mysql_query( $sql_query, $this->db );		
 		if( $result == NULL ) {

@@ -1,4 +1,4 @@
-v0.5
+v0.6
 <?php 
 // Connnect to the database 
 include( '../etc/config.php' );
@@ -126,7 +126,7 @@ class CSchedule
 
 
 		echo '<h3>Insert a new animations</h3>';
-		$addedScheduleAnimation = $this->AddNewAnimation( $user_id, $data, $source )
+		$addedScheduleAnimation = $this->AddNewAnimation( $user_id, $data, $source ) ; 
 		var_dump( $addedScheduleAnimation ) ;
 		echo "\n\n\n" ; 
 		/*

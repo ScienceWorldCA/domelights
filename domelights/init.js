@@ -71,13 +71,31 @@ function initGraphicMode() {
 	container.appendChild( stats.domElement );
 
 	//events.js
-	window.addEventListener( 'resize', onWindowResize, false );
-	document.addEventListener( 'mousedown', onDocumentMouseDown, false );
-	document.addEventListener( 'mousemove', onDocumentMouseMove, false );
-	document.addEventListener( 'touchstart', onDocumentTouchStart, false );
-	document.addEventListener( 'touchmove', onDocumentTouchMove, false );
+    EnableDomeEventHandles(true);
+    window.addEventListener('resize', onWindowResize, false);
 
 }
+
+function EnableDomeEventHandles(state){
+
+    if(state == true) {
+
+        document.addEventListener('mousedown', onDocumentMouseDown, false);
+        document.addEventListener('mousemove', onDocumentMouseMove, false);
+        //document.addEventListener('touchstart', onDocumentTouchStart, false);
+        //document.addEventListener('touchmove', onDocumentTouchMove, false);
+    }
+    else
+    {
+        document.removeEventListener('mousedown', onDocumentMouseDown, false);
+        document.removeEventListener('mousemove', onDocumentMouseMove, false);
+        //document.removeEventListener('touchstart', onDocumentTouchStart, false);
+        //document.removeEventListener('touchmove', onDocumentTouchMove, false);
+    }
+
+    UIObjectManager.EnableEventHandles(state);
+}
+
 
 function initRendermode()
 {

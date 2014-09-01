@@ -62,6 +62,12 @@ function buildInterface() {
         clearDome.onMouseDown = SelectBrush;
         clearDome.material.color.setRGB(1, 1, 1);
         clearDome.index = 0;
+
+        var submitSequence = new UIObjectManager.CreateButton('textures/UI/submit.png', new THREE.Vector2(180, -70), new THREE.Vector2(20, 8));
+        submitSequence.onMouseUp = SubmitSequence;
+        submitSequence.onMouseDown = SelectBrush;
+        submitSequence.material.color.setRGB(1, 1, 1);
+        submitSequence.index = 0;
     }
 }
 
@@ -96,6 +102,13 @@ function ClearDome(event, uiIndex)
     UIObjectManager.Objects[uiIndex].mesh.scale.x = UIObjectManager.Objects[uiIndex].mesh.scale.y = 1;
     ClearLights();
     EventManager.Events = [];
+}
+
+function SubmitSequence(event, uiIndex)
+{
+    UIObjectManager.Objects[uiIndex].mesh.scale.x = UIObjectManager.Objects[uiIndex].mesh.scale.y = 1;
+    EnableDomeEventHandles(false);
+    DisplaySubmit();
 }
 
 

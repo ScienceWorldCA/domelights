@@ -81,11 +81,14 @@ class CHtmlTable
 
 		echo '<table width="100%">' ; 
 		while( $row = mysql_fetch_assoc( $result ) ) {
+
+			var_dump( $row ) ;
+			
 			echo '<tr>';
-			echo '<th>'. $row['field'] .'</th>';
+			echo '<th>'. $row['Field'] .'</th>';
 			
 			echo '<td>';
-			echo $this->DisplayInput( $row['field'] ); 
+			echo $this->DisplayInput( $row['Field'] ); 
 			echo '</td>';
 			
 			echo '</tr>';

@@ -65,6 +65,10 @@ class CHtmlTable
 		return true ; 
 	}
 
+	// If this returns empty value then this column will not be displayed. 
+	public function DisplayTitle( $colName ) {
+		return $colName ; 
+	}
 
 	public function DisplayValue( $colName, $value ) {
 		return $value ; 
@@ -85,9 +89,15 @@ class CHtmlTable
 		echo '<table border="1">' ;
 		echo '<tr><th>Name</th><th>Value</th><th>Description</th></tr>'; 
 		while( $row = mysql_fetch_assoc( $result ) ) {
-			echo '<tr>';
+			
+			$columnTitle = $this->DisplayTitle( $row['Field'] ) ; 
+			if( strlen( $columnTitle) <= 0 ) {
+				continue; 
+			}
 
-			echo '<td>'. $row['Field'] .'</td>';
+			echo '<tr>';
+			
+			echo '<td>'. $columnTitle .'</td>';
 			
 			echo '<td>';
 			echo $this->DisplayInput( $row['Field'] ); 

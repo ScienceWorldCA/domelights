@@ -189,7 +189,9 @@ class CSchedule
 				var_dump( $blackOutScheduleCheck ) ; 
 				$scheduleTimeStart = $blackOutScheduleCheck[ 'end' ] ; 
 				$schedulePeriod    = false ; // We changed the time. We have to recheck the schedule. 
-			} 
+			} else {
+				echo "Good: No events schedulled at this time\n";
+			}
 
 			$schedulePeriodCheck = $this->CheckForSchedulePeriod( $scheduleTimeStart ) ; 
 			if( $schedulePeriodCheck != true ) {
@@ -197,20 +199,24 @@ class CSchedule
 				$scheduleTimeStart = date( "Y-m-d H:i:s", $schedulePeriodCheck['start'] ) ; 
 				echo 'scheduleTimeStart: '. $scheduleTimeStart . "\n"; 
 				$blackOutScheduleCheck  = false ; 
+			} else {
+				echo "Good: Time inside a schedulle\n" ; 
 			}
 
 
 			if( $blackOutScheduleCheck === true && $schedulePeriodCheck === true ) {
+				echo "Good: we found a good time.\n"; 
 				break; // We found a good one. 
 			}
 
-			echo "We need to recheck.\n";
+			echo "FYI: We need to recheck.\n";
 		}
 
 		// Update the time. 
 		$scheduleTimeEnd = date( "Y-m-d H:i:s", strtotime( $scheduleTimeStart ) + $timeOfAnimation ) ;
 
 		$sql_query = "UPDATE animations SET start = '". $scheduleTimeStart ."', end = '". $scheduleTimeEnd ."' WHERE animations.id =3;"; 
+		echo $sql_query . "\n"; 
 		$result = mysql_query( $sql_query, $this->db );
 		if( $result == NULL ) {
 			return false ;

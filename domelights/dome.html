@@ -116,9 +116,9 @@
 	<body>
 		<div id="container">
 		</div>
-		<div id="blockout">&nbsp;</div>
+		<div id="blockout" onclick="CloseSubmit();">&nbsp;</div>
 		<div id="userinput">
-			<div class="popuptitle">Submit Animation<a class="closebutton" href="#" onclick="CloseSubmit();">X</a></div>
+			<div class="popuptitle">Submit Animation<a class="closebutton" href="#" onclick="CloseSubmit();return false;">X</a></div>
 			<div>Placeholder submit explanation</div>
 			<form id="userinputform" name="userinputform" action='#' method='post'>
 				<label>Name:</label><input id='userrealname' name='userrealname'

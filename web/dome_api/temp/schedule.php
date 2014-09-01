@@ -1,9 +1,5 @@
-v0.3
+v0.5
 <?php 
-
-
-
-
 // Connnect to the database 
 include( '../etc/config.php' );
 
@@ -64,6 +60,56 @@ class CSchedule
 
 	}
 
+	public function AddNewAnimation( $user_id, $data, $source ) {
+		if( $user_id == NULL || $user_id <= 0 ) {
+			// Error, Invalid USER ID 
+			echo "Error: Invalid User ID prameter";  
+			return false; 
+		}
+
+		if( $data == NULL  ) {
+			// Error, Invalid USER ID 
+			echo "Error: Invalid data prameter";  
+			return false; 
+		}
+
+		if( $source == NULL ) {
+			// Error, Invalid USER ID 
+			echo "Error: Invalid source prameter";  
+			return false; 
+		}
+
+		// 1) Find the last schedulled animation 
+		$sql_query = "
+		SELECT START FROM animations
+		WHERE state =0 AND animations.start > CURRENT_TIMESTAMP() 
+		ORDER BY animations.start DESC 
+		LIMIT 1";
+
+		echo $sql_query . "\n"; 
+
+		$result = mysql_query( $this->db, $sql_query );
+		$row = mysqli_fetch_array( $result ) ;
+		var_dump( $row ) ;
+
+		// 2a) Find the schedual that fits one min past this time. 
+		$sql_query = "
+		SELECT * 
+		FROM `schedule` 
+		WHERE TIME( TIMESTAMP( '". $row['end'] ."' ) ) > schedule.start
+		AND TIME( TIMESTAMP( '". $row['end'] ."' ) ) < schedule.end
+		AND schedule.type =1
+		AND schedule.day >= dayofweek( TIMESTAMP( '". $row['end'] ."' ) ) 
+		LIMIT 1 ";
+
+		echo $sql_query . "\n"; 
+		$result = mysql_query( $sql_query, $this->db );
+		while( $row = mysqli_fetch_array( $result ) ) {
+			var_dump( $row ) ;
+		}
+
+
+	}
 
 
 
@@ -74,13 +120,15 @@ class CSchedule
 
 
 		echo '<h3>Check to see what the next animation is</h3>';
-		var_dump( $this->GetNextScheduleAnimation() ) ;
+		$nextScheduleAnimation = $this->GetNextScheduleAnimation() ; 
+		var_dump( $nextScheduleAnimation ) ;
 		echo "\n\n\n" ; 
 
 
-
-
-
+		echo '<h3>Insert a new animations</h3>';
+		$addedScheduleAnimation = this->AddNewAnimation( $user_id, $data, $source )
+		var_dump( $addedScheduleAnimation ) ;
+		echo "\n\n\n" ; 
 
 
 		// 1) Find the last schedulled animation 

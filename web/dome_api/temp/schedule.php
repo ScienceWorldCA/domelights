@@ -1,4 +1,4 @@
-v0.6
+v0.8
 <?php 
 // Connnect to the database 
 include( '../etc/config.php' );
@@ -88,7 +88,13 @@ class CSchedule
 
 		echo $sql_query . "\n"; 
 
-		$result = mysql_query( $this->db, $sql_query );
+		$result = mysql_query( $sql_query, $this->db );
+		if( mysql_num_rows($result) > 0 ) {
+			echo 'Error: Could not find any animations after this time' ;
+			return false ; 
+		}
+
+
 		$row = mysql_fetch_assoc( $result ) ;
 		var_dump( $row ) ;
 

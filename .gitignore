@@ -4,4 +4,4 @@ local/*
 .pydevproject
 *.pyc
 *.log
-node_modules/*
+backend/renderd/node_modules

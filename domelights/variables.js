@@ -1,4 +1,13 @@
-    var GraphicMode = true;
+if( ! window ) {
+
+	var window = function() {
+		innerWidth = 1024;
+		innerHeight = 768;
+	}
+
+}
+
+	var GraphicMode = true;
 
     var renderer, composer, scene, camera, stats;
     var DomeGroup, swipeMesh;
@@ -52,7 +61,7 @@
         var uniforms = {
 
             color: { type: "c", value: new THREE.Color(0xffffff) },
-            texture: { type: "t", value: THREE.ImageUtils.loadTexture("textures/lensflare/lensflare0.png") }
+            texture: { type: "t", value: THREE.ImageUtils.loadTexture('textures/lensflare/lensflare0.png') }
 
         };
 

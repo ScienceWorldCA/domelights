@@ -7,8 +7,8 @@
 
 var http = require( 'http' );
 var fs = require( 'fs' );
-var crypto = require('crypto');
-var CryptoJS = require('crypto-js');
+//var crypto = require('crypto');
+//var CryptoJS = require('crypto-js');
 var THREE = require( 'three' );
 var jsdom = require("jsdom").jsdom;
 
@@ -17,5 +17,5 @@ document = jsdom( htmlSource );
 window = document.parentWindow;
 
 if( ! window.document ) {
-	throw new Exception( "Retarded" );
+	throw new Exception( "ERROR: Something went horribly wrong with JSDOM" );
 }

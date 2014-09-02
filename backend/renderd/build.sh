@@ -24,4 +24,4 @@ echo "Building renderd..."
  cat _server.js
 } > renderd.tmp
 echo "Copying renderd"
-cp renderd.tmp renderd.js
+mv renderd.tmp renderd.js

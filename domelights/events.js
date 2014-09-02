@@ -34,6 +34,7 @@ function onDocumentMouseDown( event ) {
 	if (isMouseOverBar()) {
 		isMouseDownOverBar = true;
         FixedSpeedActive = false;
+        targetRotation = DomeGroup.rotation.y;
 	}
 
 	document.addEventListener( 'mouseup', onDocumentMouseUp, false );

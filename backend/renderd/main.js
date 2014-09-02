@@ -7,12 +7,36 @@ var fs = require( 'fs' );
 var crypto = require('crypto');
 var CryptoJS = require('crypto-js');
 
+var THREE = require( 'three' );
+
 var debug = fs.existsSync('debug');
 
 if (debug)
 	console.log('Starting in debug mode');
 
-// ---
+var epoch = function() {
+	return Math.round(+new Date()/1000);
+}
+
+require( '../../domelights/variables.js' );
+require( '../../domelights/lighting.js' );
+require( '../../domelights/geometries.js' );
+require( '../../domelights/createBrushes.js' );
+require( '../../domelights/events.js' );
+require( '../../domelights/init.js' );
+require( '../../domelights/render.js' );
+require( '../../domelights/renderPassSetup.js' );
+require( '../../domelights/interface.js' );
+
+require( '../../domelights/UI.js' );
+require( '../../domelights/BRUSH.js' );
+require( '../../domelights/LIGHT.js' );
+require( '../../domelights/SEQUENCE.js' );
+
+//initRendermode();
+
+
+//---
 
 var express = require('express');
 var app = express();
@@ -23,32 +47,6 @@ app.use(express.urlencoded());
 app.engine('ejs', engine);
 app.set('views', __dirname);
 app.set('view engine', 'ejs');
-
-var epoch = function() {
-	return Math.round(+new Date()/1000);
-}
-
-require( '../../domelights/includes/three.min.js' );
-require( '../../domelights/includes/jquery.min.js' );
-require( '../../includes/js/Detector.js' );
-
-require( '../../variables.js' );
-require( '../../lighting.js' );
-require( '../../geometries.js' );
-require( '../../createBrushes.js' );
-require( '../../events.js' );
-require( '../../init.js' );
-require( '../../render.js' );
-require( '../../renderPassSetup.js' );
-require( '../../interface.js' );
-
-require( '../../UI.js' );
-require( '../../BRUSH.js' );
-require( '../../LIGHT.js' );
-require( '../../SEQUENCE.js' );
-
-//initRendermode();
-
 
 var server = app.listen(1337, function() {
 	console.log('Listening on port %d', server.address().port);

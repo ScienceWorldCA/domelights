@@ -14387,9 +14387,11 @@ function BuildLightGlows()
         //Ensure that we are within the bounds of the Matrix (Wrap Index)
         var index = indexRaw % (LightMatrixWidth);
 
+	console.log( "Index: " + index );
+
         for (var y = 0; y < LightMatrixHeight; y++) {
             var lightIndex = LightMappingMatrix[y][index];
-            if (lightIndex != -1) {
+            if ( lightIndex !== 'undefined' && lightIndex >= 0 ) {
                 setLightColor(color, lightIndex);
             }
         }
@@ -14566,6 +14568,7 @@ function onDocumentMouseDown( event ) {
 	if (isMouseOverBar()) {
 		isMouseDownOverBar = true;
         FixedSpeedActive = false;
+        targetRotation = DomeGroup.rotation.y;
 	}
 
 	document.addEventListener( 'mouseup', onDocumentMouseUp, false );
@@ -14963,25 +14966,46 @@ function buildInterface() {
 
     // Add Solid Color Brushes
     {
-        var button1 = new UIObjectManager.CreateButton('file://../../domelights/textures/sprites/circle.png', new THREE.Vector2(180, 0), new THREE.Vector2(30, 30));
+        var button1 = new UIObjectManager.CreateButton('file://../../domelights/textures/sprites/circle.png', new THREE.Vector2(190, 50), new THREE.Vector2(20, 20));
         button1.onMouseDown = ButtonDownClick;
         button1.onMouseUp = SetBrush;
         button1.material.color.setRGB(0, 1, 0);
         button1.index = 1;
 
-        var button2 = new UIObjectManager.CreateButton('file://../../domelights/textures/sprites/circle.png', new THREE.Vector2(180, 30), new THREE.Vector2(30, 30));
+        var button2 = new UIObjectManager.CreateButton('file://../../domelights/textures/sprites/circle.png', new THREE.Vector2(190, 70), new THREE.Vector2(20, 20));
         button2.onMouseUp = SetBrush;
         button2.onMouseDown = ButtonDownClick;
         button2.material.color.setRGB(1, 0, 0);
         button2.index = 1;
 
-        var button3 = new UIObjectManager.CreateButton('file://../../domelights/textures/sprites/circle.png', new THREE.Vector2(180, 60), new THREE.Vector2(30, 30));
+        var button3 = new UIObjectManager.CreateButton('file://../../domelights/textures/sprites/circle.png', new THREE.Vector2(190, 90), new THREE.Vector2(20, 20));
         button3.onMouseUp = SetBrush;
         button3.onMouseDown = ButtonDownClick;
         button3.material.color.setRGB(0, 0, 1);
         button3.index = 1;
 
-        // Add Background Solid Brushes
+        var button4 = new UIObjectManager.CreateButton('file://../../domelights/textures/sprites/circle.png', new THREE.Vector2(170, 50), new THREE.Vector2(20, 20));
+        button4.onMouseDown = ButtonDownClick;
+        button4.onMouseUp = SetBrush;
+        button4.material.color.setRGB(1, 1, 0);
+        button4.index = 1;
+
+        var button5 = new UIObjectManager.CreateButton('file://../../domelights/textures/sprites/circle.png', new THREE.Vector2(170, 70), new THREE.Vector2(20, 20));
+        button5.onMouseUp = SetBrush;
+        button5.onMouseDown = ButtonDownClick;
+        button5.material.color.setRGB(1, 0, 1);
+        button5.index = 1;
+
+        var button6 = new UIObjectManager.CreateButton('file://../../domelights/textures/sprites/circle.png', new THREE.Vector2(170, 90), new THREE.Vector2(20, 20));
+        button6.onMouseUp = SetBrush;
+        button6.onMouseDown = ButtonDownClick;
+        button6.material.color.setRGB(0, 1, 1);
+        button6.index = 1;
+    }
+
+
+    // Add Background Solid Brushes
+    {
         var button4 = new UIObjectManager.CreateButton('file://../../domelights/textures/UI/Gradient.png', new THREE.Vector2(-180, 60), new THREE.Vector2(20, 20));
         button4.onMouseDown = ButtonDownClick;
         button4.onMouseUp = SetBackground;
@@ -15004,6 +15028,7 @@ function buildInterface() {
         clearDome.material.color.setRGB(1, 1, 1);
         clearDome.index = 0;
 
+        //Submit Sequence
         var submitSequence = new UIObjectManager.CreateButton('file://../../domelights/textures/UI/Submit.png', new THREE.Vector2(180, -70), new THREE.Vector2(20, 8));
         submitSequence.onMouseUp = SubmitSequence;
         submitSequence.onMouseDown = ButtonDownClick;

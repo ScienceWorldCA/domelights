@@ -24,7 +24,7 @@
     var UIObjectManager;
     var SequenceManager;
     var Brushes = [];
-    var ActiveBrushID = 0;
+    var ActiveBrushID = 1;
     var ActiveBrushData = [];
 
     var Aspect = [16, 8];

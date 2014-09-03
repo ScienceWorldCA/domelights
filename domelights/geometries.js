@@ -26,7 +26,7 @@ function createGeometries() {
 
     //TODO Add Skybox ??
     /*
-    var path = "textures/cube/SwedishRoyalCastle/";
+    var path = 'textures/cube/SwedishRoyalCastle/';
     var format = '.jpg';
     var urls = [
             path + 'px' + format, path + 'nx' + format,

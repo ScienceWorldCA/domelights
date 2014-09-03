@@ -376,4 +376,16 @@ function BuildLightGlows()
             }
         }
     }
+
+    function VerticalWipeTime(color, indexRaw) {
+        //Ensure that we are within the bounds of the Matrix (Wrap Index)
+        var index = indexRaw % (LightMatrixHeight);
+
+        for (var x = 0; x < LightMatrixWidth; x++) {
+            var lightIndex = LightMappingMatrix[index][x];
+            if (lightIndex != -1) {
+                setLightColor(color, lightIndex);
+            }
+        }
+    }
 }

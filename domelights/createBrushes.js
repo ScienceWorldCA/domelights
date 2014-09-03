@@ -60,4 +60,16 @@ function CreateBrushes() {
         };
         Brushes.push(GradientBackgroundBrush);
     }
+
+    var VerticalRainbowWipeBrush = new Brush();
+    {
+        VerticalRainbowWipeBrush.Index = 3;
+        VerticalRainbowWipeBrush.Duration = LightMatrixHeight * 3;
+        VerticalRainbowWipeBrush.Render = function (frame, originLight, brushData) {
+            VerticalWipeTime(new THREE.Color(1, 0, 0), frame - 1);
+            VerticalWipeTime(new THREE.Color(0, 1, 0), frame);
+            VerticalWipeTime(new THREE.Color(0, 0, 1), frame + 1);
+        };
+        Brushes.push(VerticalRainbowWipeBrush);
+    }
 }

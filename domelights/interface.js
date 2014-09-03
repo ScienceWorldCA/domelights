@@ -85,7 +85,7 @@ function buildInterface() {
         button5.onMouseDown = ButtonDownClick;
         button5.onMouseUp = SetBackground;
         button5.material.color.setRGB(1, 1, 1);
-        button5.index = 2;
+        button5.index = 3;
     }
 
     //Debug UI

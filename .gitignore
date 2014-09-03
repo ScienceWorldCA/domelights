@@ -3,8 +3,10 @@ local/*
 .project
 .pydevproject
 *.pyc
-<<<<<<< HEAD
-=======
 *.log
+backend/renderd/node_modules
 node_modules/*
->>>>>>> refs/heads/development
+.idea/vcs.xml
+*.xml
+.idea/domelights.iml
+.idea/.name

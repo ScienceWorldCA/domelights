@@ -8,21 +8,12 @@ function CreateBrushes() {
     {
         WipeBrush.Index = 0;
         WipeBrush.Duration = 40;
-        WipeBrush.PrePaint = function (index) {
-            return true;
-        };
-        WipeBrush.PostPaint = function (index) {
-            return true;
-        };
         WipeBrush.Render = function (frame, originLight, brushData) {
-            var col = new THREE.Color();
-            col.setRGB(brushColor.r, brushColor.g, brushColor.b);
-
-            HorizontalWipeTime(new THREE.Color(0, 0, 0), frame);
-            HorizontalWipeTime(new THREE.Color(0.2, 0, 0), frame + 1);
-            HorizontalWipeTime(new THREE.Color(1, 0, 0), frame + 2);
-            HorizontalWipeTime(new THREE.Color(0.7, 0, 0), frame + 3);
-            HorizontalWipeTime(new THREE.Color(0.2, 0, 0), frame + 4);
+            HorizontalWipeTime(new THREE.Color(1.0, 0, 0), frame);
+            HorizontalWipeTime(new THREE.Color(0.7, 0, 0), frame + 1);
+            HorizontalWipeTime(new THREE.Color(0.5, 0, 0), frame + 2);
+            HorizontalWipeTime(new THREE.Color(0.2, 0, 0), frame + 3);
+            HorizontalWipeTime(new THREE.Color(0.0, 0, 0), frame + 4);
         };
         Brushes.push(WipeBrush);
     }
@@ -30,16 +21,19 @@ function CreateBrushes() {
     var ColorBrush = new Brush();
     {
         ColorBrush.Index = 1;
-        ColorBrush.Duration = 20;
-        ColorBrush.PrePaint = function (index) {
-            return true;
-        };
-        ColorBrush.PostPaint = function (index) {
-            return true;
-        };
+        ColorBrush.Duration = 50;
         ColorBrush.Render = function (frame, originLight, brushData) {
+
+            var fadeMultipler = 1 - (1 / this.Duration) * frame;
+
             var col = new THREE.Color();
-            col.setRGB(brushData[0].r, brushData[0].g, brushData[0].b);
+
+            var myCol = brushData[0].getHSL();
+            col.setHSL(myCol.h, myCol.s, myCol.l * fadeMultipler);
+
+            //TODO Implement Alpha using fadeMultipler
+
+            //console.log(frame + " = " + col.r + "," + col.g +  "," + col.b);
             setLightColor(col, originLight);
         };
         Brushes.push(ColorBrush);
@@ -48,18 +42,17 @@ function CreateBrushes() {
     var GradientBackgroundBrush = new Brush();
     {
         GradientBackgroundBrush.Index = 2;
-        GradientBackgroundBrush.Duration = EventManager.SequenceLength;
+        GradientBackgroundBrush.Duration = SequenceManager.SequenceLength;
         GradientBackgroundBrush.IsBackground = true;
-        GradientBackgroundBrush.PrePaint = function (index) {return false;};
+        GradientBackgroundBrush.PrePaint = function () {return false;};
         GradientBackgroundBrush.Render = function (frame, originLight, brushData) {
             var col = new THREE.Color();
-            //col.setRGB(this.Color.r, this.Color.g, this.Color.b);
 
             var step = 1 / LightMatrixWidth;
 
             //frame = frame*0.25;
             for (var y = 0; y < LightMatrixWidth; y++) {
-                col.setHSL(y * step, 1, 0.1);
+                col.setHSL(y * step, 1, 0.2);
                 HorizontalWipeTime(col, frame + y);
             }
 

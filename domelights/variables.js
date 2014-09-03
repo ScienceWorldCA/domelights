@@ -1,4 +1,13 @@
-    var GraphicMode = true;
+if( ! window ) {
+
+	var window = function() {
+		innerWidth = 1024;
+		innerHeight = 768;
+	}
+
+}
+
+	var GraphicMode = true;
 
     var renderer, composer, scene, camera, stats;
     var DomeGroup, swipeMesh;
@@ -19,11 +28,12 @@
 
     var FPS = 40;
 
+    var FixedSpeedActive = false;
     var DomeLightManager;
     var UIObjectManager;
-    var EventManager;
+    var SequenceManager;
     var Brushes = [];
-    var ActiveBrushID = 0;
+    var ActiveBrushID = 1;
     var ActiveBrushData = [];
 
     var Aspect = [16, 8];
@@ -51,7 +61,7 @@
         var uniforms = {
 
             color: { type: "c", value: new THREE.Color(0xffffff) },
-            texture: { type: "t", value: THREE.ImageUtils.loadTexture("textures/lensflare/lensflare0.png") }
+            texture: { type: "t", value: THREE.ImageUtils.loadTexture('textures/lensflare/lensflare0.png') }
 
         };
 

@@ -25,14 +25,15 @@ UI = function(projector, raycaster, camera, mouse)
         projector.unprojectVector( vector, mCamera );
         raycaster.ray.set( mCamera.position, vector.sub( mCamera.position ).normalize() );
 
-        for (i = 0; i < mUIObjects.length; i++) {
+        for (var i = 0; i < mUIObjects.length; i++) {
             var intersects = raycaster.intersectObject( mUIObjects[i].mesh );
 
             if ( intersects.length > 0) {
                 mUIObjects[i].CallEvent(event, i);
+                break;
             }
         }
-    }
+    };
 
     //Helper Functions
 
@@ -56,13 +57,27 @@ UI = function(projector, raycaster, camera, mouse)
 
     this.init = function()
     {
-        document.addEventListener( 'mouseup', this.Update, false );
-        document.addEventListener( 'mousedown', this.Update, false );
-        document.addEventListener( 'mousemove', this.Update, false );
+        this.EnableEventHandles(true);
 
         //We only need to enable these if there is no touch interface
         //document.addEventListener( 'mouseout', this.Update, false );
         //document.addEventListener( 'mouseover', this.Update, false );
+    };
+
+    this.EnableEventHandles = function(state){
+
+        if(state == true) {
+
+            document.addEventListener( 'mouseup', this.Update, false );
+            document.addEventListener( 'mousedown', this.Update, false );
+            document.addEventListener( 'mousemove', this.Update, false );
+        }
+        else
+        {
+            document.removeEventListener( 'mouseup', this.Update, false );
+            document.removeEventListener( 'mousedown', this.Update, false );
+            document.removeEventListener( 'mousemove', this.Update, false );
+        }
     }
 
     this.CreateButton = function(texture, mPos, mSize)
@@ -107,10 +122,10 @@ UI = function(projector, raycaster, camera, mouse)
             {
                 if(this.onMouseMove != null) this.onMouseMove(event, index);
             }
-        }
+        };
 
         this.init();
-    }
+    };
 
     this.init();
-}
+};

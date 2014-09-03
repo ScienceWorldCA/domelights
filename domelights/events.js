@@ -16,7 +16,7 @@ function isMouseOverBar() {
    	var vector = new THREE.Vector3( mouse.x, mouse.y, .5 );
 	projector.unprojectVector( vector, camera );
 	raycaster.ray.set( camera.position, vector.sub( camera.position ).normalize() );
-	intersects = raycaster.intersectObject( swipeMesh );
+	var intersects = raycaster.intersectObject( swipeMesh );
 
 	if ( intersects.length > 0 ) {
 		return true;
@@ -33,6 +33,8 @@ function onDocumentMouseDown( event ) {
 	isMouseDown = true;
 	if (isMouseOverBar()) {
 		isMouseDownOverBar = true;
+        FixedSpeedActive = false;
+        targetRotation = DomeGroup.rotation.y;
 	}
 
 	document.addEventListener( 'mouseup', onDocumentMouseUp, false );

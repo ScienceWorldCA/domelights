@@ -6,13 +6,33 @@ $config['contexts']['ping'] = array(
 	'properties' => array(
 	),
 	'logic' => array(
-		array( 'class' => 'Ping', 'method' => 'Reply' ),
+		array( 'class' => 'FrontEnd_API', 'method' => 'Reply' ),
 	),
 	'render' => array(
 		'engine' => 'Render_JSON',
 		'path' => '',
 		'properties' => array(
 			'message' => 'Default context render property.',
+		),
+	),
+);
+
+$config['contexts']['storesequence'] = array(
+	'properties' => array(
+	),
+	'logic' => array(
+		array( 'class' => 'FrontEnd_API', 'method' => 'GetUserInfo' ),
+		array( 'class' => 'FrontEnd_API', 'method' => 'StoreSequence' ),
+// 		array( 'class' => 'FrontEnd_API', 'method' => 'ScheduleAnimation' ),
+// 		array( 'class' => 'FrontEnd_API', 'method' => 'ConvertAnimation' ),
+// 		array( 'class' => 'FrontEnd_API', 'method' => 'EmailSchedule' ),
+	),
+	'render' => array(
+		'engine' => 'Render_JSON',
+		'path' => '',
+		'properties' => array(
+			'result' => false,
+			'message' => 'Failed',
 		),
 	),
 );

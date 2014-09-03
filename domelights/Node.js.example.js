@@ -19,16 +19,16 @@
 //<script src="UI.js"></script>
 //<script src="BRUSH.js"></script>
 //<script src="LIGHT.js"></script>
-//<script src="EVENT.js"></script>
+//<script src="SEQUENCE.js"></script>
 
 //initRendermode();
 
 // THIS DATA IS STILL RAW AND NOT MAPPED TO SW DOME
-//var BinarySequenceStream = EventManager.RenderSequence(JSONSequenceConstructionFile);
+//var BinarySequenceStream = SequenceManager.RenderSequence(JSONSequenceConstructionFile);
 
 /*
    This is information for live update
    -----------------------------------
- var STREAM = EventManager.RenderFrame(FrameToStream,true);
+ var STREAM = SequenceManager.RenderFrame(FrameToStream,true);
 
  */

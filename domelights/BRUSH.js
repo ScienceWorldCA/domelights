@@ -10,8 +10,8 @@ var Brush = function(){
 
     this.Data = []; // Arbitrary data for the brush
 
-    this.PrePaint = null; // Called before paint is applied
-    this.PostPaint = null; // Called after paint is applied
+    this.PrePaint =  function(){return true;}; // Called before paint is applied
+    this.PostPaint =  function(){return true;}; // Called after paint is applied
 
     //INIT
     this.init = function(){

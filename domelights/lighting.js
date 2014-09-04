@@ -388,4 +388,18 @@ function BuildLightGlows()
             }
         }
     }
+
+    function GetLightInMatrix(lightIndex)
+    {
+        for (var i=0, len=LightMatrixHeight; i<len; i++) {
+            for (var j=0, len2=LightMatrixWidth; j<len2; j++) {
+                if (LightMappingMatrix[i][j] === lightIndex)
+                {
+                   return {x: j, y: i};
+                }
+            }
+        }
+        return {x: -1, y: -1};
+    }
+
 }

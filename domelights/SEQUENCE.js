@@ -100,6 +100,20 @@ SEQUENCE = function() {
         this.SequenceTime = Math.floor(timer);
     }
 
+    function RebuildBrushData(Data)
+    {
+      var CleanData = [];
+
+      for(var x =0; x < Object.keys(Data).length; x++)
+      {
+          if(Data[x].r != undefined && Data[x].g != undefined && Data[x].b != undefined)
+              CleanData[x] = new THREE.Color(Data[x].r,Data[x].g,Data[x].b);
+          else
+              CleanData[x] = Data[x];
+      }
+      return CleanData;
+    }
+
     this.SaveSequence = function()
     {
         this.SequenceConstructionFile = {};
@@ -142,7 +156,7 @@ SEQUENCE = function() {
             var newEvent1 = new EVENT(SequenceConstructionFile.Events[index].StartTime,
                                       SequenceConstructionFile.Events[index].OriginLight,
                                       Brushes[SequenceConstructionFile.Events[index].BrushID],
-                                      SequenceConstructionFile.Events[index].BrushData);
+                                      RebuildBrushData(SequenceConstructionFile.Events[index].BrushData));
             this.AddEvent(newEvent1);
         }
 

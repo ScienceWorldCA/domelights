@@ -69,7 +69,7 @@ SEQUENCE = function() {
 
         for (var i = 0; i < this.SequenceLength; i++) {
             this.SequenceTime = i;
-            BinarySequenceStream += this.RenderFrame(true);
+            BinarySequenceStream += this.RenderFrame(i,true);
         }
 
         console.log("--- Stream Rendered ---");
@@ -100,6 +100,7 @@ SEQUENCE = function() {
         this.SequenceTime = Math.floor(timer);
     }
 
+    //Used to load Objects with the right types
     function RebuildBrushData(Data)
     {
       var CleanData = [];

@@ -61,6 +61,12 @@ SEQUENCE = function() {
 
         this.LoadSequence(JSONSequenceConstructionFile);
 
+        if(this.Events.length < 1)
+        {
+            console.log("--- No Events in Sequence to Render ---");
+            return undefined;
+        }
+
         for (var i = 0; i < this.SequenceLength; i++) {
             this.SequenceTime = i;
             BinarySequenceStream += this.RenderFrame(true);
@@ -120,6 +126,8 @@ SEQUENCE = function() {
 
     this.LoadSequence = function(JSONSequenceConstructionFile)
     {
+        this.Events = [];
+
         var SequenceConstructionFile = JSON.parse(JSONSequenceConstructionFile);
         //Set Sequence Properties
         if(this.Version > SequenceConstructionFile.Version){

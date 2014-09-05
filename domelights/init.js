@@ -1,4 +1,6 @@
-function initGraphicMode() {
+function initGraphicMode()
+//Init into display mode and not render mode.
+{
 
 	container = document.getElementById( 'container' );
 
@@ -28,16 +30,18 @@ function initGraphicMode() {
     //EVENT.js // Main Event management
     SequenceManager = new SEQUENCE(DomeLightManager);
 
-
     //TEMP SEQUENCE
       SequenceManager.SequenceLength = 6*FPS;
-//    var newEvent1 = new EVENT(5*FPS, 22, DomeLightManager, null, Brushes[1]);
-//    SequenceManager.AddEvent(newEvent1);
-//    var newEvent2 = new EVENT(3*FPS, 29, DomeLightManager, null, Brushes[1]);
-//    SequenceManager.AddEvent(newEvent2);
-//    var newEvent3 = new EVENT(1*FPS, 35, DomeLightManager, null, Brushes[1]);
-//    SequenceManager.AddEvent(newEvent3);
+    //    var newEvent1 = new EVENT(5*FPS, 22, DomeLightManager, null, Brushes[1]);
+    //    SequenceManager.AddEvent(newEvent1);
+    //    var newEvent2 = new EVENT(3*FPS, 29, DomeLightManager, null, Brushes[1]);
+    //    SequenceManager.AddEvent(newEvent2);
+    //    var newEvent3 = new EVENT(1*FPS, 35, DomeLightManager, null, Brushes[1]);
+    //    SequenceManager.AddEvent(newEvent3);
 
+
+    //TIMELINE.js //Main Timeline Manager
+    TimelineManager = new TIMELINE(SequenceManager.SequenceLength);
 
     //geometries.js
     createGeometries();
@@ -98,6 +102,7 @@ function EnableDomeEventHandles(state){
 
 
 function initRendermode()
+//Init into Render mode and not display mode
 {
     GraphicMode = false;
 

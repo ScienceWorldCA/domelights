@@ -21,6 +21,7 @@ function addLights()
 
 function setLightColor(newColor, index)
 {
+    newColor = newColor || new THREE.Color(1,1,1);
     //Set Light Color
     DomeLightManager.Lights[index].color.setRGB( newColor.r, newColor.g, newColor.b );
 
@@ -386,6 +387,14 @@ function BuildLightGlows()
             if (lightIndex != -1) {
                 setLightColor(color, lightIndex);
             }
+        }
+    }
+
+    function SetAllLighs(color)
+    {
+        for (i = 0; i < 260; i++)
+        {
+            setLightColor(color, i);
         }
     }
 

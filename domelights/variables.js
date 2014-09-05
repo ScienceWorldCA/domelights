@@ -34,7 +34,7 @@ if( ! window ) {
     var SequenceManager;
     var Brushes = [];
     var ActiveBrushID = 1;
-    var ActiveBrushData = [];
+    var ActiveBrushData = [new THREE.Color(1, 1, 1)];
 
     var Aspect = [16, 8];
 

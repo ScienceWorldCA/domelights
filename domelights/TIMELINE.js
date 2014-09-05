@@ -22,7 +22,45 @@ TIMELINE = function(length)
     //Init
     this.init = function()
     {
-        this.material = new THREE.LineBasicMaterial({ vertexColors: THREE.VertexColors });
+        var segments = 10;
+
+        var geometry = new THREE.BufferGeometry();
+        var material = new THREE.LineBasicMaterial({ vertexColors: THREE.VertexColors});
+        material.linewidth = 5;
+
+        var positions = new Float32Array( segments * 3 );
+        var colors = new Float32Array( segments * 3 );
+
+        var r = 180;
+
+        for ( var i = 0; i < segments; i ++ ) {
+
+            var x = Math.random() * r - r / 2;
+            var y = Math.random() * r - r / 2;
+            var z = Math.random() * r - r / 2;
+
+            // positions
+
+            positions[ i * 3 ] = x;
+            positions[ i * 3 + 1 ] = y;
+            positions[ i * 3 + 2 ] = z;
+
+            // colors
+
+            colors[ i * 3 ] = ( x / r ) + 0.5;
+            colors[ i * 3 + 1 ] = ( y / r ) + 0.5;
+            colors[ i * 3 + 2 ] = ( z / r ) + 0.5;
+
+        }
+
+        geometry.addAttribute( 'position', new THREE.BufferAttribute( positions, 3 ) );
+        geometry.addAttribute( 'color', new THREE.BufferAttribute( colors, 3 ) );
+
+        geometry.computeBoundingSphere();
+
+        var mesh = new THREE.Line( geometry, material );
+
+        scene.add( mesh );
     };
-    this.init();
+    //this.init();
 }

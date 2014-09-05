@@ -13946,8 +13946,8 @@ if( ! window ) {
     var UIObjectManager;
     var SequenceManager;
     var Brushes = [];
-    var ActiveBrushID = 0;
-    var ActiveBrushData = [];
+    var ActiveBrushID = 1;
+    var ActiveBrushData = [new THREE.Color(1, 1, 1)];
 
     var Aspect = [16, 8];
 
@@ -14039,6 +14039,7 @@ function addLights()
 
 function setLightColor(newColor, index)
 {
+    newColor = newColor || new THREE.Color(1,1,1);
     //Set Light Color
     DomeLightManager.Lights[index].color.setRGB( newColor.r, newColor.g, newColor.b );
 
@@ -14387,15 +14388,47 @@ function BuildLightGlows()
         //Ensure that we are within the bounds of the Matrix (Wrap Index)
         var index = indexRaw % (LightMatrixWidth);
 
-	console.log( "Index: " + index );
-
         for (var y = 0; y < LightMatrixHeight; y++) {
             var lightIndex = LightMappingMatrix[y][index];
-            if ( lightIndex !== 'undefined' && lightIndex >= 0 ) {
+            if (lightIndex != -1) {
                 setLightColor(color, lightIndex);
             }
         }
     }
+
+    function VerticalWipeTime(color, indexRaw) {
+        //Ensure that we are within the bounds of the Matrix (Wrap Index)
+        var index = indexRaw % (LightMatrixHeight);
+
+        for (var x = 0; x < LightMatrixWidth; x++) {
+            var lightIndex = LightMappingMatrix[index][x];
+            if (lightIndex != -1) {
+                setLightColor(color, lightIndex);
+            }
+        }
+    }
+
+    function SetAllLighs(color)
+    {
+        for (i = 0; i < 260; i++)
+        {
+            setLightColor(color, i);
+        }
+    }
+
+    function GetLightInMatrix(lightIndex)
+    {
+        for (var i=0, len=LightMatrixHeight; i<len; i++) {
+            for (var j=0, len2=LightMatrixWidth; j<len2; j++) {
+                if (LightMappingMatrix[i][j] === lightIndex)
+                {
+                   return {x: j, y: i};
+                }
+            }
+        }
+        return {x: -1, y: -1};
+    }
+
 }
 
 // Include: ../../domelights/geometries.js
@@ -14428,7 +14461,7 @@ function createGeometries() {
 
     //TODO Add Skybox ??
     /*
-    var path = "textures/cube/SwedishRoyalCastle/";
+    var path = 'file://../../domelights/textures/cube/SwedishRoyalCastle/';
     var format = '.jpg';
     var urls = [
             path + 'px' + format, path + 'nx' + format,
@@ -14465,6 +14498,7 @@ function createGeometries() {
 
     */
 }
+
 // Include: ../../domelights/createBrushes.js
 
 /**
@@ -14528,6 +14562,18 @@ function CreateBrushes() {
 
         };
         Brushes.push(GradientBackgroundBrush);
+    }
+
+    var VerticalRainbowWipeBrush = new Brush();
+    {
+        VerticalRainbowWipeBrush.Index = 3;
+        VerticalRainbowWipeBrush.Duration = LightMatrixHeight * 3;
+        VerticalRainbowWipeBrush.Render = function (frame, originLight, brushData) {
+            VerticalWipeTime(new THREE.Color(1, 0, 0), frame - 1);
+            VerticalWipeTime(new THREE.Color(0, 1, 0), frame);
+            VerticalWipeTime(new THREE.Color(0, 0, 1), frame + 1);
+        };
+        Brushes.push(VerticalRainbowWipeBrush);
     }
 }
 // Include: ../../domelights/events.js
@@ -14655,7 +14701,9 @@ function onDocumentTouchMove( event ) {
 
 // Include: ../../domelights/init.js
 
-function initGraphicMode() {
+function initGraphicMode()
+//Init into display mode and not render mode.
+{
 
 	container = document.getElementById( 'container' );
 
@@ -14685,16 +14733,18 @@ function initGraphicMode() {
     //EVENT.js // Main Event management
     SequenceManager = new SEQUENCE(DomeLightManager);
 
-
     //TEMP SEQUENCE
       SequenceManager.SequenceLength = 6*FPS;
-//    var newEvent1 = new EVENT(5*FPS, 22, DomeLightManager, null, Brushes[1]);
-//    SequenceManager.AddEvent(newEvent1);
-//    var newEvent2 = new EVENT(3*FPS, 29, DomeLightManager, null, Brushes[1]);
-//    SequenceManager.AddEvent(newEvent2);
-//    var newEvent3 = new EVENT(1*FPS, 35, DomeLightManager, null, Brushes[1]);
-//    SequenceManager.AddEvent(newEvent3);
+    //    var newEvent1 = new EVENT(5*FPS, 22, DomeLightManager, null, Brushes[1]);
+    //    SequenceManager.AddEvent(newEvent1);
+    //    var newEvent2 = new EVENT(3*FPS, 29, DomeLightManager, null, Brushes[1]);
+    //    SequenceManager.AddEvent(newEvent2);
+    //    var newEvent3 = new EVENT(1*FPS, 35, DomeLightManager, null, Brushes[1]);
+    //    SequenceManager.AddEvent(newEvent3);
 
+
+    //TIMELINE.js //Main Timeline Manager
+    TimelineManager = new TIMELINE(SequenceManager.SequenceLength);
 
     //geometries.js
     createGeometries();
@@ -14755,6 +14805,7 @@ function EnableDomeEventHandles(state){
 
 
 function initRendermode()
+//Init into Render mode and not display mode
 {
     GraphicMode = false;
 
@@ -15016,7 +15067,7 @@ function buildInterface() {
         button5.onMouseDown = ButtonDownClick;
         button5.onMouseUp = SetBackground;
         button5.material.color.setRGB(1, 1, 1);
-        button5.index = 2;
+        button5.index = 3;
     }
 
     //Debug UI
@@ -15396,9 +15447,15 @@ SEQUENCE = function() {
 
         this.LoadSequence(JSONSequenceConstructionFile);
 
+        if(this.Events.length < 1)
+        {
+            console.log("--- No Events in Sequence to Render ---");
+            return undefined;
+        }
+
         for (var i = 0; i < this.SequenceLength; i++) {
             this.SequenceTime = i;
-            BinarySequenceStream += this.RenderFrame(true);
+            BinarySequenceStream += this.RenderFrame(i,true);
         }
 
         console.log("--- Stream Rendered ---");
@@ -15429,6 +15486,21 @@ SEQUENCE = function() {
         this.SequenceTime = Math.floor(timer);
     }
 
+    //Used to load Objects with the right types
+    function RebuildBrushData(Data)
+    {
+      var CleanData = [];
+
+      for(var x =0; x < Object.keys(Data).length; x++)
+      {
+          if(Data[x].r != undefined && Data[x].g != undefined && Data[x].b != undefined)
+              CleanData[x] = new THREE.Color(Data[x].r,Data[x].g,Data[x].b);
+          else
+              CleanData[x] = Data[x];
+      }
+      return CleanData;
+    }
+
     this.SaveSequence = function()
     {
         this.SequenceConstructionFile = {};
@@ -15455,6 +15527,8 @@ SEQUENCE = function() {
 
     this.LoadSequence = function(JSONSequenceConstructionFile)
     {
+        this.Events = [];
+
         var SequenceConstructionFile = JSON.parse(JSONSequenceConstructionFile);
         //Set Sequence Properties
         if(this.Version > SequenceConstructionFile.Version){
@@ -15469,7 +15543,7 @@ SEQUENCE = function() {
             var newEvent1 = new EVENT(SequenceConstructionFile.Events[index].StartTime,
                                       SequenceConstructionFile.Events[index].OriginLight,
                                       Brushes[SequenceConstructionFile.Events[index].BrushID],
-                                      SequenceConstructionFile.Events[index].BrushData);
+                                      RebuildBrushData(SequenceConstructionFile.Events[index].BrushData));
             this.AddEvent(newEvent1);
         }
 

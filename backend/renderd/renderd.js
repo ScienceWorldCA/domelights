@@ -15633,13 +15633,12 @@ app.post('/render', function(req, res) {
 				result: "OK",
 		};
 		result_set['sequence'] = SequenceManager.RenderSequence( req.body.sequence ).toString( 'base64' );
-		console.log( sequence );
+		console.log( result_set['sequence'] );
 		res.send( JSON.stringify( result_set ) );
 	}
 });
 
 //var BinarySequenceStream = SequenceManager.RenderSequence(JSONSequenceConstructionFile);
-
 /*
    This is information for live update
    -----------------------------------

@@ -122,10 +122,11 @@ function buildInterface() {
         timeline.tag = 5;
         timeline.name = "MainTimeline";
 
-        timeline.TimeHandle.onMouseDown = onTimeHandleMouseDown;
-        timeline.TimeHandle.onMouseUp = onTimeHandleMouseUp;
-        timeline.TimeHandle.onMouseMove = onDragTimeline;
-        timeline.onMouseMove = onTimelineMove;
+        //Todo: Fix Dragging of timeline
+        //timeline.TimeHandle.onMouseDown = onTimeHandleMouseDown;
+        //timeline.TimeHandle.onMouseUp = onTimeHandleMouseUp;
+        //timeline.TimeHandle.onMouseMove = onDragTimeline;
+        //timeline.onMouseMove = onTimelineMove;
 
         function onTimeHandleMouseDown(event, uiObject)
         {
@@ -154,7 +155,6 @@ function buildInterface() {
 
         function onTimelineMove(event, uiObject)
         {
-            //Todo -- Fix dragging on timeline.
             if(uiObject.TimeHandle.isMouseDown == true)
             {
                var frameStep = uiObject.Size.x / SequenceManager.SequenceLength;

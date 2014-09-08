@@ -8,7 +8,7 @@ function initGraphicMode()
 
 	camera = new THREE.PerspectiveCamera( 45, Aspect[0] / Aspect[1], 1, 1000 );
 	camera.position.z = 250;
-    camera.far = 251; //We force the far plane in as an optimisation to cull back of the dome FX, eg.un-depth tested
+    camera.far = 253; //We force the far plane in as an optimisation to cull back of the dome FX, eg.un-depth tested
 
     //Create interaction casters
     projector = new THREE.Projector();
@@ -41,7 +41,7 @@ function initGraphicMode()
 
 
     //TIMELINE.js //Main Timeline Manager
-    TimelineManager = new TIMELINE(SequenceManager.SequenceLength);
+   //TimelineManager = new TIMELINE(SequenceManager.SequenceLength);
 
     //geometries.js
     createGeometries();
@@ -57,6 +57,7 @@ function initGraphicMode()
 
     //interface.js
     buildInterface();
+
 
     renderer = new THREE.WebGLRenderer({ width: window.innerWidth, height: ((window.innerWidth/Aspect[0])* Aspect[1] ), scale: 1});
     //renderer = new THREE.WebGLDeferredRenderer( { width: window.innerWidth, height: ((window.innerWidth/Aspect[0])* Aspect[1] ), scale: 1, antialias: false } );

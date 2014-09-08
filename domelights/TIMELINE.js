@@ -22,10 +22,10 @@ TIMELINE = function(length)
     //Init
     this.init = function()
     {
-        var segments = 10;
+        var segments = 100;
 
         var geometry = new THREE.BufferGeometry();
-        var material = new THREE.LineBasicMaterial({ vertexColors: THREE.VertexColors});
+        var material = new THREE.LineBasicMaterial( { color: 0xffffff, opacity: 1, linewidth: 3, vertexColors: THREE.VertexColors } );
         material.linewidth = 5;
 
         var positions = new Float32Array( segments * 3 );
@@ -62,5 +62,5 @@ TIMELINE = function(length)
 
         scene.add( mesh );
     };
-    //this.init();
+    this.init();
 }

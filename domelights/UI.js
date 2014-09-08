@@ -4,11 +4,17 @@
 
 UI = function(projector, raycaster, camera, mouse)
 {
+    var self = this;
     var mUIObjects = [];
     var mCamera = camera;
 
-    // If this is not a touch interface, we may need to add rollover management
+    //Helper Objects
+    this.UpdateEvent = function()
+    {
+        this.type = "uiupdate"
+    };
 
+    // If this is not a touch interface, we may need to add rollover management
     this.__defineGetter__("Objects", function(){
         return mUIObjects;
     });
@@ -20,22 +26,60 @@ UI = function(projector, raycaster, camera, mouse)
     //Check all UI for Collision Events
     this.Update = function(event)
     {
-        //console.log(event.type);
+        //console.log(event);
         var vector = new THREE.Vector3( mouse.x, mouse.y, 0.5 );
         projector.unprojectVector( vector, mCamera );
         raycaster.ray.set( mCamera.position, vector.sub( mCamera.position ).normalize() );
 
         for (var i = 0; i < mUIObjects.length; i++) {
-            var intersects = raycaster.intersectObject( mUIObjects[i].mesh );
 
-            if ( intersects.length > 0) {
-                mUIObjects[i].CallEvent(event, i);
-                break;
+            //Check for interaction
+            if(mUIObjects[i].mesh != null)
+            {
+                var intersects = raycaster.intersectObject( mUIObjects[i].mesh );
+                if ( intersects.length > 0) {
+                    //mUIObjects[i].CallEvent(event, i);
+                    CallEvent(event, mUIObjects[i]);
+                }
             }
         }
     };
 
+    //Call update on UI Objects
+    this.UpdateUI = function()
+    {
+       for (var i = 0; i < mUIObjects.length; i++) {CallEvent(new this.UpdateEvent(),mUIObjects[i]);}
+    };
+
+    this.AddUIObject = function(uiObject)
+    {
+        uiObject.index = mUIObjects.length;
+        mUIObjects.push(uiObject);
+    }
+
     //Helper Functions
+    function CallEvent(event, uiObject)
+    {
+       //console.log(uiObject);
+        //console.log(">>: " + event.type);
+
+        if(event.type == "uiupdate")
+        {
+            if(uiObject.onUIUpdate != null) uiObject.onUIUpdate(event, uiObject);
+        }
+        else if(event.type == "mousedown")
+        {
+            if(uiObject.onMouseDown != null) uiObject.onMouseDown(event, uiObject);
+        }
+        else if(event.type == "mouseup")
+        {
+            if(uiObject.onMouseUp != null) uiObject.onMouseUp(event, uiObject);
+        }
+        else if(event.type == "mousemove")
+        {
+            if(uiObject.onMouseMove != null) uiObject.onMouseMove(event, uiObject);
+        }
+    };
 
     //    this.Convert3DtoUISpace = function(pos, camera)
     //    {
@@ -80,15 +124,70 @@ UI = function(projector, raycaster, camera, mouse)
         }
     }
 
-    this.CreateButton = function(texture, mPos, mSize)
+
+    this.BaseUIObject = function(texture, mPos, mSize, groupID)
     {
         this.index = null;
         this.onMouseUp = null;
         this.onMouseDown = null;
         this.onMouseMove = null;
+        this.onUIUpdate = null;
         this.mesh = null;
         this.material = null;
         this.map = null;
+        this.tag = null;
+        this.name = "";
+        this.GroupID = groupID || 0;
+    };
+
+    this.Button = function(texture, mPos, mSize, groupID)
+    {
+        //this.prototype = new self.BaseUIObject(texture, mPos, mSize, groupID);
+        this.index = null;
+        this.onMouseUp = null;
+        this.onMouseDown = null;
+        this.onMouseMove = null;
+        this.onUIUpdate = null;
+        this.mesh = null;
+        this.material = null;
+        this.map = null;
+        this.tag = null;
+        this.name = "";
+        this.GroupID = groupID || 0;
+
+        this.init = function()
+        {
+            this.map = THREE.ImageUtils.loadTexture( texture );
+
+            this.material = new THREE.MeshBasicMaterial({
+                color:0xffffff, shading: THREE.FlatShading,
+                map:  this.map
+            });
+
+            this.mesh = new THREE.Mesh( new THREE.PlaneGeometry( mSize.x, mSize.y, 0, 0 ), this.material );
+            this.mesh.position.set(  mPos.x,  mPos.y, 0 );
+            scene.add(  this.mesh );
+
+            self.AddUIObject(this);
+            return this;
+        };
+        this.init();
+    };
+
+    this.Tab = function(texture, mPos, mSize, groupID)
+    {
+       //this.prototype = new self.BaseUIObject(texture, mPos, mSize, groupID);
+        this.index = null;
+        this.onMouseUp = null;
+        this.onMouseDown = null;
+        this.onMouseMove = null;
+        this.onUIUpdate = null;
+        this.mesh = null;
+        this.material = null;
+        this.map = null;
+        this.tag = null;
+        this.name = "";
+        this.GroupID = groupID || 0;
 
         this.init = function() {
 
@@ -103,29 +202,129 @@ UI = function(projector, raycaster, camera, mouse)
             this.mesh.position.set(  mPos.x,  mPos.y, 0 );
             scene.add(  this.mesh );
 
-            mUIObjects.push(this);
+            self.AddUIObject(this);
+            return this;
         };
-
-        this.CallEvent = function(event, index)
-        {
-            //console.log(event.type);
-
-            if(event.type == "mousedown")
-            {
-                if(this.onMouseDown != null) this.onMouseDown(event, index);
-            }
-            else if(event.type == "mouseup")
-            {
-                if(this.onMouseUp != null) this.onMouseUp(event, index);
-            }
-            else if(event.type == "mousemove")
-            {
-                if(this.onMouseMove != null) this.onMouseMove(event, index);
-            }
-        };
-
         this.init();
     };
+
+    this.Timeline = function(texture, mPos, mSize, groupID)
+    {
+        //this.prototype = new self.BaseUIObject(texture, mPos, mSize, groupID);
+        this.index = null;
+        this.onMouseUp = null;
+        this.onMouseDown = null;
+        this.onMouseMove = null;
+        this.onUIUpdate = null;
+        this.mesh = null;
+        this.material = null;
+        this.map = null;
+        this.tag = null;
+        this.name = "";
+        this.GroupID = groupID || 0;
+
+        //Timeline Specific
+        this.Size = new THREE.Vector2(mSize.x,mSize.y);
+        this.Position = new THREE.Vector2(mPos.x,mPos.y);
+        this.TimeHandle = null;
+        this.SequenceTime = null;
+        this.SequenceLength = null;
+
+        //Update Timeline with
+        this.onUIUpdate = function(event, uiObject)
+        {
+            if(this.TimeHandle != null)
+            {
+                var yPos = this.Position.y + (this.Size.y / 2);
+
+                frameStep = this.Size.x / this.SequenceLength();
+
+                this.TimeHandle.mesh.position.set(this.Position.x + (frameStep *  this.SequenceTime()),  yPos, 1 );
+                //this.mesh.position.set(  mPos.x,  mPos.y, 0 );
+            }
+        };
+
+        this.DrawTimelineLines = function()
+        {
+            var yPos = this.Position.y + (this.Size.y / 2);
+
+            DrawLine(
+                new THREE.Vector3(this.Position.x, yPos,0 ),
+                new THREE.Vector3(this.Position.x + this.Size.x, yPos,0)
+            );
+        };
+
+        this.init = function()
+        {
+            this.mesh = new THREE.Mesh( new THREE.PlaneGeometry( mSize.x, mSize.y/4, 0, 0 ), new THREE.MeshBasicMaterial({color:0x000000}));
+            this.mesh.position.set(  mPos.x + (mSize.x /2),  mPos.y + (mSize.y / 2), -0.5 );
+            scene.add(  this.mesh );
+
+            this.DrawTimelineLines();
+            this.TimeHandle = new self.Button('textures/sprites/circle.png', new THREE.Vector2(0,0), new THREE.Vector2(10, 10));
+            self.AddUIObject(this);
+            return this;
+        };
+        this.init();
+    };
+
+    function DrawLine(Pos1, Pos2)
+    {
+//        //for (var i = 0; i < 300; i++) {
+//
+//            var geometry = new THREE.BufferGeometry();
+//            var material = new THREE.LineBasicMaterial({ vertexColors: THREE.VertexColors });
+//
+//            var positions = new Float32Array(6);
+//            positions = [300,300,300,-300,-300,-300];
+//
+//            var colors = new Float32Array(6);
+//            colors= [1,1,1,1,1,1];
+//
+//            geometry.addAttribute( 'position', new THREE.BufferAttribute( positions, 3 ) );
+//            geometry.addAttribute( 'color', new THREE.BufferAttribute( colors, 3 ) );
+//
+//            geometry.computeBoundingSphere();
+//
+//            mesh = new THREE.Line( geometry, material );
+        var geometry = new THREE.BufferGeometry();
+        var material = new THREE.LineBasicMaterial({ vertexColors: THREE.VertexColors, linewidth: 5 });
+
+        var positions = new Float32Array( 6 );
+        var colors = new Float32Array( 6 );
+
+        //for ( var i = 0; i < segments; i ++ ) {
+
+            // positions
+            positions[0] = Pos1.x;
+            positions[1] = Pos1.y;
+            positions[2] = Pos1.z;
+
+            positions[3] = Pos2.x;
+            positions[4] = Pos2.y;
+            positions[5] = Pos2.z;
+
+            // colors
+            colors[0] =  1.0;
+            colors[1] =  1.0;
+            colors[2] =  1.0;
+            // colors
+            colors[3] =  1.0;
+            colors[4] =  1.0;
+            colors[5] =  1.0;
+
+        //}
+
+        geometry.addAttribute( 'position', new THREE.BufferAttribute( positions, 3 ) );
+        geometry.addAttribute( 'color', new THREE.BufferAttribute( colors, 3 ) );
+
+        geometry.computeBoundingSphere();
+
+        var mesh = new THREE.Line( geometry, material );
+        scene.add(mesh);
+        //}
+    }
+
 
     this.init();
 };

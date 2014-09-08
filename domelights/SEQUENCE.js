@@ -8,6 +8,17 @@ SEQUENCE = function() {
     this.SequenceLength = 15*FPS;
     this.Version = 1;
     this.Events = [];
+    this.Play = true;
+
+    this.GetSequenceTime = function()
+    {
+        return this.SequenceTime;
+    };
+
+    this.GetSequenceLength = function()
+    {
+        return this.SequenceLength;
+    };
 
     this.RenderFrame = function(frame, returnFrame)
     {
@@ -18,7 +29,7 @@ SEQUENCE = function() {
         //Render Background
         for(x = 0; x < this.Events.length; x++)
         {
-            if((this.Events[x].StartTime < frame)&&
+            if((this.Events[x].StartTime <= frame)&&
                (this.Events[x].Brush.Duration + this.Events[x].StartTime > frame))
             {
                 if(this.Events[x].IsBackground == true) {
@@ -29,7 +40,7 @@ SEQUENCE = function() {
         //Render Foreground
         for(x = 0; x < this.Events.length; x++)
         {
-            if((this.Events[x].StartTime < this.SequenceTime)&&
+            if((this.Events[x].StartTime <= this.SequenceTime)&&
                (this.Events[x].Brush.Duration + this.Events[x].StartTime > frame))
             {
                 if(this.Events[x].IsBackground == false) {
@@ -94,10 +105,13 @@ SEQUENCE = function() {
 
     this.Update = function()
     {
-        timer += 0.8;
-        if(timer > this.SequenceLength) timer = 0.0;
+        if(this.Play == true)
+        {
+            timer += 0.8;
+            if (timer > this.SequenceLength) timer = 0.0;
 
-        this.SequenceTime = Math.floor(timer);
+            this.SequenceTime = Math.floor(timer);
+        }
     }
 
     //Used to load Objects with the right types

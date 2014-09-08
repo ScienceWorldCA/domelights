@@ -17,6 +17,8 @@ function render() {
     SequenceManager.Update();
     SequenceManager.RenderFrame(SequenceManager.SequenceTime, false);
 
+    UIObjectManager.UpdateUI();
+
     //Render the WebGL view
     renderer.clear();
     composer.render();

@@ -64,12 +64,35 @@ function CreateBrushes() {
     var VerticalRainbowWipeBrush = new Brush();
     {
         VerticalRainbowWipeBrush.Index = 3;
-        VerticalRainbowWipeBrush.Duration = LightMatrixHeight * 3;
+        VerticalRainbowWipeBrush.Duration = (LightMatrixHeight * 3);
         VerticalRainbowWipeBrush.Render = function (frame, originLight, brushData) {
-            VerticalWipeTime(new THREE.Color(1, 0, 0), frame - 1);
-            VerticalWipeTime(new THREE.Color(0, 1, 0), frame);
-            VerticalWipeTime(new THREE.Color(0, 0, 1), frame + 1);
+            VerticalWipeTime(new THREE.Color(1, 0, 0), frame);
+            if (frame < this.Duration - 2)
+            {
+                VerticalWipeTime(new THREE.Color(0, 1, 0), frame + 1);
+                VerticalWipeTime(new THREE.Color(0, 0, 1), frame + 2);
+            }
         };
         Brushes.push(VerticalRainbowWipeBrush);
+    }
+
+    var DomeFlashBrush = new Brush();
+    {
+        DomeFlashBrush.Index = 4;
+        DomeFlashBrush.Duration = 50;
+        DomeFlashBrush.Render = function (frame, originLight, brushData) {
+
+            //TODO: Add nice fade in and fade out + do alpha blend
+            var pulseColour = new THREE.Color(0,1,0);
+            var fadeMultiplier = 1 - (1 / this.Duration) * frame;
+            var myColour = pulseColour.getHSL();
+
+            var col = new THREE.Color();
+            col.setHSL(myColour.h, myColour.s, myColour.l * fadeMultiplier);
+
+            SetAllLighs(col);
+
+        };
+        Brushes.push(DomeFlashBrush);
     }
 }

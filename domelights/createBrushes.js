@@ -90,7 +90,7 @@ function CreateBrushes() {
             var col = new THREE.Color();
             col.setHSL(myColour.h, myColour.s, myColour.l * fadeMultiplier);
 
-            SetAllLighs(col);
+            SetAllLights(col);
 
         };
         Brushes.push(DomeFlashBrush);

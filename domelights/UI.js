@@ -9,10 +9,21 @@ UI = function(projector, raycaster, camera, mouse)
     var mCamera = camera;
 
     //Helper Objects
-    this.UpdateEvent = function()
+    var UpdateEvent = function()
     {
         this.type = "uiupdate"
     };
+
+    var MouseEnterEvent = function()
+    {
+        this.type = "mouseenter"
+    };
+
+    var MouseExitEvent = function()
+    {
+        this.type = "mouseexit"
+    };
+
 
     // If this is not a touch interface, we may need to add rollover management
     this.__defineGetter__("Objects", function(){
@@ -27,6 +38,8 @@ UI = function(projector, raycaster, camera, mouse)
     this.Update = function(event)
     {
         //console.log(event);
+        var hitUI = [];
+
         var vector = new THREE.Vector3( mouse.x, mouse.y, 0.5 );
         projector.unprojectVector( vector, mCamera );
         raycaster.ray.set( mCamera.position, vector.sub( mCamera.position ).normalize() );
@@ -38,9 +51,43 @@ UI = function(projector, raycaster, camera, mouse)
             {
                 var intersects = raycaster.intersectObject( mUIObjects[i].mesh );
                 if ( intersects.length > 0) {
-                    //mUIObjects[i].CallEvent(event, i);
-                    CallEvent(event, mUIObjects[i]);
+
+                    //Copy the intersection into the event for later use
+                    event.intersection = intersects;
+
+                    //Determine if it is a mouse enter event
+                    if(event.type == "mousemove" && mUIObjects[i].MouseOver == false)
+                    {
+                        mUIObjects[i].MouseOver = true;
+                        CallEvent(new MouseEnterEvent(), mUIObjects[i]);
+                    }
+                    else
+                    {
+                        //Handle all over events
+                        CallEvent(event, mUIObjects[i]);
+                    }
+
+                    //Add it to the List of hit UI
+                    hitUI.push(i);
+                    //break;
                 }
+            }
+        }
+
+        //Determine Mouse Exit Event
+        for (var i = 0; i < mUIObjects.length; i++)
+        {
+            //check all items and skip hitUI items
+            if(jQuery.inArray(i,hitUI) == -1)
+            {
+                //UI wasn't just hit in update, check to see if it has mouseOver
+                if(mUIObjects[i].MouseOver == true)
+                {
+                    //Mouse Exited UI
+                    CallEvent(new MouseExitEvent(), mUIObjects[i]);
+                    mUIObjects[i].MouseOver = false;
+                }
+
             }
         }
     };
@@ -48,7 +95,7 @@ UI = function(projector, raycaster, camera, mouse)
     //Call update on UI Objects
     this.UpdateUI = function()
     {
-       for (var i = 0; i < mUIObjects.length; i++) {CallEvent(new this.UpdateEvent(),mUIObjects[i]);}
+       for (var i = 0; i < mUIObjects.length; i++) {CallEvent(new UpdateEvent(),mUIObjects[i]);}
     };
 
     this.AddUIObject = function(uiObject)
@@ -78,6 +125,14 @@ UI = function(projector, raycaster, camera, mouse)
         else if(event.type == "mousemove")
         {
             if(uiObject.onMouseMove != null) uiObject.onMouseMove(event, uiObject);
+        }
+        else if(event.type == "mouseenter")
+        {
+            if(uiObject.onMouseEnter != null) uiObject.onMouseEnter(event, uiObject);
+        }
+        else if(event.type == "mouseexit")
+        {
+            if(uiObject.onMouseExit != null) uiObject.onMouseExit(event, uiObject);
         }
     };
 
@@ -131,7 +186,10 @@ UI = function(projector, raycaster, camera, mouse)
         this.onMouseUp = null;
         this.onMouseDown = null;
         this.onMouseMove = null;
+        this.onMouseEnter = null;
+        this.onMouseExit = null;
         this.onUIUpdate = null;
+        this.MouseOver = false;
         this.mesh = null;
         this.material = null;
         this.map = null;
@@ -147,7 +205,10 @@ UI = function(projector, raycaster, camera, mouse)
         this.onMouseUp = null;
         this.onMouseDown = null;
         this.onMouseMove = null;
+        this.onMouseEnter = null;
+        this.onMouseExit = null;
         this.onUIUpdate = null;
+        this.MouseOver = false;
         this.mesh = null;
         this.material = null;
         this.map = null;
@@ -181,7 +242,10 @@ UI = function(projector, raycaster, camera, mouse)
         this.onMouseUp = null;
         this.onMouseDown = null;
         this.onMouseMove = null;
+        this.onMouseEnter = null;
+        this.onMouseExit = null;
         this.onUIUpdate = null;
+        this.MouseOver = false;
         this.mesh = null;
         this.material = null;
         this.map = null;
@@ -215,7 +279,10 @@ UI = function(projector, raycaster, camera, mouse)
         this.onMouseUp = null;
         this.onMouseDown = null;
         this.onMouseMove = null;
+        this.onMouseEnter = null;
+        this.onMouseExit = null;
         this.onUIUpdate = null;
+        this.MouseOver = false;
         this.mesh = null;
         this.material = null;
         this.map = null;
@@ -237,7 +304,7 @@ UI = function(projector, raycaster, camera, mouse)
             {
                 var yPos = this.Position.y + (this.Size.y / 2);
 
-                frameStep = this.Size.x / this.SequenceLength();
+                var frameStep = this.Size.x / this.SequenceLength();
 
                 this.TimeHandle.mesh.position.set(this.Position.x + (frameStep *  this.SequenceTime()),  yPos, 1 );
                 //this.mesh.position.set(  mPos.x,  mPos.y, 0 );
@@ -252,11 +319,19 @@ UI = function(projector, raycaster, camera, mouse)
                 new THREE.Vector3(this.Position.x, yPos,0 ),
                 new THREE.Vector3(this.Position.x + this.Size.x, yPos,0)
             );
+            DrawLine(
+                new THREE.Vector3(this.Position.x, this.Position.y + (this.Size.y * 0.25),0 ),
+                new THREE.Vector3(this.Position.x, this.Position.y + (this.Size.y * 0.75),0)
+            );
+            DrawLine(
+                new THREE.Vector3(this.Position.x + this.Size.x, this.Position.y + (this.Size.y * 0.25),0 ),
+                new THREE.Vector3(this.Position.x + this.Size.x, this.Position.y + (this.Size.y * 0.75),0)
+            );
         };
 
         this.init = function()
         {
-            this.mesh = new THREE.Mesh( new THREE.PlaneGeometry( mSize.x, mSize.y/4, 0, 0 ), new THREE.MeshBasicMaterial({color:0x000000}));
+            this.mesh = new THREE.Mesh( new THREE.PlaneGeometry( mSize.x, mSize.y, 0, 0 ), new THREE.MeshBasicMaterial({color:0x000000}));
             this.mesh.position.set(  mPos.x + (mSize.x /2),  mPos.y + (mSize.y / 2), -0.5 );
             scene.add(  this.mesh );
 

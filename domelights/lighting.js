@@ -368,7 +368,7 @@ function BuildLightGlows()
 
     function HorizontalWipeTime(color, indexRaw) {
         //Ensure that we are within the bounds of the Matrix (Wrap Index)
-        var index = indexRaw % (LightMatrixWidth);
+        var index = Math.floor(indexRaw % (LightMatrixWidth));
 
         for (var y = 0; y < LightMatrixHeight; y++) {
             var lightIndex = LightMappingMatrix[y][index];
@@ -380,7 +380,7 @@ function BuildLightGlows()
 
     function VerticalWipeTime(color, indexRaw) {
         //Ensure that we are within the bounds of the Matrix (Wrap Index)
-        var index = indexRaw % (LightMatrixHeight);
+        var index = Math.floor(indexRaw % (LightMatrixHeight));
 
         for (var x = 0; x < LightMatrixWidth; x++) {
             var lightIndex = LightMappingMatrix[index][x];
@@ -390,7 +390,7 @@ function BuildLightGlows()
         }
     }
 
-    function SetAllLighs(color)
+    function SetAllLights(color)
     {
         for (i = 0; i < 260; i++)
         {

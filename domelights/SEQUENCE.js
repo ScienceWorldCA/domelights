@@ -15,6 +15,12 @@ SEQUENCE = function() {
         return this.SequenceTime;
     };
 
+    this.SetSequenceTime = function(time)
+    {
+        timer = time;
+        this.SequenceTime = time;
+    }
+
     this.GetSequenceLength = function()
     {
         return this.SequenceLength;

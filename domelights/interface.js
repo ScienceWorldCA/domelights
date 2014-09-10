@@ -51,53 +51,82 @@ function buildInterface() {
         Play.material.color.setRGB(1, 1, 1);
         Play.tag = true;
         Play.name = "Play";
+
+        function PlaySequence(event, uiObject)
+        {
+            SequenceManager.Play = uiObject.tag;
+            uiObject.mesh.scale.x = uiObject.mesh.scale.y = 1;
+        }
+
+        function PauseUpdateUI(event, uiObject)
+        {
+            if(SequenceManager.Play == true)
+            {
+                uiObject.material.color.setRGB(1, 1, 1);
+            }
+            else
+            {
+                uiObject.material.color.setRGB(1, 1, 0);
+            }
+        }
+
+        function PlayUpdateUI(event, uiObject)
+        {
+            if(SequenceManager.Play == true)
+            {
+                uiObject.material.color.setRGB(0, 1, 0);
+            }
+            else
+            {
+                uiObject.material.color.setRGB(1, 1, 0);
+            }
+        }
     }
 
     // Add Solid Color Brushes
     {
-        var button1 = new UIObjectManager.Button('textures/sprites/circle.png', new THREE.Vector2(190, 50), new THREE.Vector2(20, 20));
+        var button1 = new UIObjectManager.Button('textures/sprites/circle.png', new THREE.Vector2(190, 50), new THREE.Vector2(20, 20), 1, 1);
         button1.onMouseDown = ButtonDownClick;
         button1.onMouseUp = SetBrush;
         button1.material.color.setRGB(0, 1, 0);
         button1.name = "button1";
         button1.tag = 1;
 
-        var button2 = new UIObjectManager.Button('textures/sprites/circle.png', new THREE.Vector2(190, 70), new THREE.Vector2(20, 20));
+        var button2 = new UIObjectManager.Button('textures/sprites/circle.png', new THREE.Vector2(190, 70), new THREE.Vector2(20, 20), 1, 1);
         button2.onMouseUp = SetBrush;
         button2.onMouseDown = ButtonDownClick;
         button2.material.color.setRGB(1, 0, 0);
         button2.name = "button2";
         button2.tag = 1;
 
-        var button3 = new UIObjectManager.Button('textures/sprites/circle.png', new THREE.Vector2(190, 90), new THREE.Vector2(20, 20));
+        var button3 = new UIObjectManager.Button('textures/sprites/circle.png', new THREE.Vector2(190, 90), new THREE.Vector2(20, 20), 1, 1);
         button3.onMouseUp = SetBrush;
         button3.onMouseDown = ButtonDownClick;
         button3.material.color.setRGB(0, 0, 1);
         button3.name = "button3";
         button3.tag = 1;
 
-        var button4 = new UIObjectManager.Button('textures/sprites/circle.png', new THREE.Vector2(170, 50), new THREE.Vector2(20, 20));
+        var button4 = new UIObjectManager.Button('textures/sprites/circle.png', new THREE.Vector2(170, 50), new THREE.Vector2(20, 20), 1, 2);
         button4.onMouseDown = ButtonDownClick;
         button4.onMouseUp = SetBrush;
         button4.material.color.setRGB(1, 1, 0);
         button4.name = "button4";
         button4.tag = 1;
 
-        var button5 = new UIObjectManager.Button('textures/sprites/circle.png', new THREE.Vector2(170, 70), new THREE.Vector2(20, 20));
+        var button5 = new UIObjectManager.Button('textures/sprites/circle.png', new THREE.Vector2(170, 70), new THREE.Vector2(20, 20), 1, 2);
         button5.onMouseUp = SetBrush;
         button5.onMouseDown = ButtonDownClick;
         button5.material.color.setRGB(1, 0, 1);
         button5.name = "button5";
         button5.tag = 1;
 
-        var button6 = new UIObjectManager.Button('textures/sprites/circle.png', new THREE.Vector2(170, 90), new THREE.Vector2(20, 20));
+        var button6 = new UIObjectManager.Button('textures/sprites/circle.png', new THREE.Vector2(170, 90), new THREE.Vector2(20, 20), 1, 2);
         button6.onMouseUp = SetBrush;
         button6.onMouseDown = ButtonDownClick;
         button6.material.color.setRGB(0, 1, 1);
         button6.name = "button6";
         button6.tag = 1;
     }
-
 
     // Add Background Solid Brushes
     {
@@ -201,10 +230,72 @@ function buildInterface() {
     }
 
 
+    var ColorPicker = new UIObjectManager.ColorPicker(new THREE.Vector2(170, -40), new THREE.Vector2(50, 50));
+    {
+        ColorPicker.name = "Color Picker";
+        ColorPicker.HueRing.onMouseMove = ColorPickerMove;
+        ColorPicker.HueRing.onMouseDown = ColorPickerMouseDown;
+        ColorPicker.HueRing.onMouseUp = ColorPickerMouseUp;
+        ColorPicker.HueRing.onMouseExit = ColorPickerMouseExit;
+
+        function SetColorFromPicker(event, uiObject) {
+            uiObject.UpdateHuePosition(event);
+            ActiveBrushData[0].setHSL(uiObject.Hue, 1 , 0.5);
+        }
+
+        function ColorPickerMove(event, uiObject) {
+            if (uiObject.isMouseDown == true) {
+               SetColorFromPicker(event, uiObject);
+            }
+        }
+
+        function ColorPickerMouseDown(event, uiObject) {
+            //console.log(event);
+            uiObject.isMouseDown = true;
+            SetColorFromPicker(event, uiObject);
+        }
+
+        function ColorPickerMouseUp(event, uiObject) {
+            //console.log(event);
+            uiObject.isMouseDown = false;
+        }
+
+        function ColorPickerMouseExit(event, uiObject) {
+            //console.log(event);
+            uiObject.isMouseDown = false;
+        }
+    }
+
+    //Brush Tabs
+    {
+        var tabButton1 = new UIObjectManager.Tab('textures/sprites/circle.png', new THREE.Vector2(130, 90), new THREE.Vector2(20, 20), 1, 1);
+        tabButton1.onMouseUp = SetTabIndex;
+        tabButton1.onMouseDown = ButtonDownClick;
+        tabButton1.material.color.setRGB(1, 1, 1);
+        tabButton1.name = "Tab 1";
+        tabButton1.tag = 1;
+        //tabButton1.UIObjectsList = UIObjectManager.UIObjectsList;
+
+        var tabButton2 = new UIObjectManager.Tab('textures/sprites/circle.png', new THREE.Vector2(130, 70), new THREE.Vector2(20, 20), 1, 2);
+        tabButton2.onMouseUp = SetTabIndex;
+        tabButton2.onMouseDown = ButtonDownClick;
+        tabButton2.material.color.setRGB(1, 1, 1);
+        tabButton2.name = "Tab 2";
+        tabButton2.tag = 1;
+        //tabButton2.UIObjectsList = UIObjectManager.UIObjectsList;
+
+        function SetTabIndex(event, uiObject)
+        {
+            uiObject.onSwitchTabs();
+            uiObject.mesh.scale.x = uiObject.mesh.scale.y = 1;
+        }
+
+    }
+
     //Debug UI
     {
         //Clear Dome
-        var clearDome = new UIObjectManager.Button('textures/UI/clear.png', new THREE.Vector2(180, -50), new THREE.Vector2(20, 8));
+        var clearDome = new UIObjectManager.Button('textures/UI/clear.png', new THREE.Vector2(-190, -95), new THREE.Vector2(20, 8));
         clearDome.onMouseUp = ClearDome;
         clearDome.onMouseDown = ButtonDownClick;
         clearDome.onMouseEnter = ButtonDownClick;
@@ -214,7 +305,7 @@ function buildInterface() {
         clearDome.name = "ClearDome";
 
         //Submit Sequence
-        var submitSequence = new UIObjectManager.Button('textures/UI/Submit.png', new THREE.Vector2(180, -70), new THREE.Vector2(20, 8));
+        var submitSequence = new UIObjectManager.Button('textures/UI/Submit.png', new THREE.Vector2(190, -95), new THREE.Vector2(20, 8));
         submitSequence.onMouseUp = SubmitSequence;
         submitSequence.onMouseDown = ButtonDownClick;
         submitSequence.onMouseEnter = ButtonDownClick;
@@ -224,7 +315,6 @@ function buildInterface() {
         submitSequence.name = "SubmitSequence";
     }
 }
-
 
 //Brush Functions
 {
@@ -276,37 +366,6 @@ function buildInterface() {
         FixedSpeedActive = true;
         targetRotation = -0.05;
     }
-
-    function PlaySequence(event, uiObject)
-    {
-        SequenceManager.Play = uiObject.tag;
-        uiObject.mesh.scale.x = uiObject.mesh.scale.y = 1;
-    }
-
-    function PauseUpdateUI(event, uiObject)
-    {
-        if(SequenceManager.Play == true)
-        {
-            uiObject.material.color.setRGB(1, 1, 1);
-        }
-        else
-        {
-            uiObject.material.color.setRGB(1, 1, 0);
-        }
-    }
-
-    function PlayUpdateUI(event, uiObject)
-    {
-        if(SequenceManager.Play == true)
-        {
-            uiObject.material.color.setRGB(0, 1, 0);
-        }
-        else
-        {
-            uiObject.material.color.setRGB(1, 1, 0);
-        }
-    }
-
 }
 
 

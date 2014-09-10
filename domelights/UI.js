@@ -47,7 +47,7 @@ UI = function(projector, raycaster, camera, mouse)
         for (var i = 0; i < mUIObjects.length; i++) {
 
             //Check for interaction
-            if(mUIObjects[i].mesh != null)
+            if(mUIObjects[i].mesh != null && mUIObjects[i].mesh.visible == true)
             {
                 var intersects = raycaster.intersectObject( mUIObjects[i].mesh );
                 if ( intersects.length > 0) {
@@ -180,7 +180,7 @@ UI = function(projector, raycaster, camera, mouse)
     }
 
 
-    this.BaseUIObject = function(texture, mPos, mSize, groupID)
+    this.BaseUIObject = function(texture, mPos, mSize, groupID, tabID)
     {
         this.index = null;
         this.onMouseUp = null;
@@ -196,9 +196,10 @@ UI = function(projector, raycaster, camera, mouse)
         this.tag = null;
         this.name = "";
         this.GroupID = groupID || 0;
+        this.TabID = tabID || 0;
     };
 
-    this.Button = function(texture, mPos, mSize, groupID)
+    this.Button = function(texture, mPos, mSize, groupID, tabID)
     {
         //this.prototype = new self.BaseUIObject(texture, mPos, mSize, groupID);
         this.index = null;
@@ -215,6 +216,7 @@ UI = function(projector, raycaster, camera, mouse)
         this.tag = null;
         this.name = "";
         this.GroupID = groupID || 0;
+        this.TabID = tabID || 0;
 
         this.init = function()
         {
@@ -235,7 +237,7 @@ UI = function(projector, raycaster, camera, mouse)
         this.init();
     };
 
-    this.Tab = function(texture, mPos, mSize, groupID)
+    this.Tab = function(texture, mPos, mSize, groupID, tabID)
     {
        //this.prototype = new self.BaseUIObject(texture, mPos, mSize, groupID);
         this.index = null;
@@ -244,7 +246,6 @@ UI = function(projector, raycaster, camera, mouse)
         this.onMouseMove = null;
         this.onMouseEnter = null;
         this.onMouseExit = null;
-        this.onUIUpdate = null;
         this.MouseOver = false;
         this.mesh = null;
         this.material = null;
@@ -252,6 +253,33 @@ UI = function(projector, raycaster, camera, mouse)
         this.tag = null;
         this.name = "";
         this.GroupID = groupID || 0;
+        this.TabID = tabID || 0;
+
+        this.onSwitchTabs = function()
+        {
+            for (var i = 0; i < mUIObjects.length; i++) {
+
+                //Skip if self
+                if(i == this.index){i++;}
+
+                //console.log(mUIObjects[i].name + " : " + mUIObjects[i].TabID);
+                //Only operate on same Group ID Items
+                if(this.GroupID == mUIObjects[i].GroupID )
+                {
+                    //Toggle visibility on active Tab Items
+                    if(this.TabID == mUIObjects[i].TabID)
+                    {
+                        mUIObjects[i].mesh.visible = false;
+                    }
+                    else
+                    {
+                        mUIObjects[i].mesh.visible = true;
+                    }
+                }
+
+
+            }
+        };
 
         this.init = function() {
 
@@ -272,7 +300,7 @@ UI = function(projector, raycaster, camera, mouse)
         this.init();
     };
 
-    this.Timeline = function(texture, mPos, mSize, groupID)
+    this.Timeline = function(texture, mPos, mSize, groupID, tabID)
     {
         //this.prototype = new self.BaseUIObject(texture, mPos, mSize, groupID);
         this.index = null;
@@ -289,6 +317,7 @@ UI = function(projector, raycaster, camera, mouse)
         this.tag = null;
         this.name = "";
         this.GroupID = groupID || 0;
+        this.TabID = tabID || 0;
 
         //Timeline Specific
         this.Size = new THREE.Vector2(mSize.x,mSize.y);
@@ -337,6 +366,128 @@ UI = function(projector, raycaster, camera, mouse)
 
             this.DrawTimelineLines();
             this.TimeHandle = new self.Button('textures/sprites/circle.png', new THREE.Vector2(0,0), new THREE.Vector2(10, 10));
+            self.AddUIObject(this);
+            return this;
+        };
+        this.init();
+    };
+
+    this.ColorRing = function(mPos, mSize, groupID, tabID)
+    {
+        //this.prototype = new self.BaseUIObject(texture, mPos, mSize, groupID);
+        this.index = null;
+        this.onMouseUp = null;
+        this.onMouseDown = null;
+        this.onMouseMove = null;
+        this.onMouseEnter = null;
+        this.onMouseExit = null;
+        this.onUIUpdate = null;
+        this.MouseOver = false;
+        this.mesh = null;
+        this.material = null;
+        this.map = null;
+        this.tag = null;
+        this.name = "";
+        this.GroupID = groupID || 0;
+        this.TabID = tabID || 0;
+
+        this.Hue = 0;
+        this.HueHandle = new THREE.Object3D;
+        this.OnColorUpdated = null;
+
+        this.UpdateHuePosition = function(event)
+        {
+            //Get Hit Point from event and make a vector
+            var vec = new THREE.Vector2(this.HueHandle.position.x - event.intersection[0].point.x,
+                                        event.intersection[0].point.y - this.HueHandle.position.y);
+            vec.normalize();
+            //convert the vector to radians
+            this.Hue =  this.HueHandle.rotation.z = Math.atan2( vec.x, vec.y );
+            this.Hue = (this.HueHandle.rotation.z / Math.PI)/2 + 0.5;
+
+            this.OnColorUpdated(this.Hue);
+        };
+
+        this.init = function()
+        {
+            this.map = THREE.ImageUtils.loadTexture( 'textures/ui/ColorWheel.png' );
+
+            this.material = new THREE.MeshBasicMaterial({
+                color:0xffffff, shading: THREE.FlatShading,
+                map:  this.map
+            });
+
+            this.HueHandle.position.set(mPos.x, mPos.y, 0);
+
+            var object = new THREE.Mesh( new THREE.RingGeometry( 2.3, 3.3, 20, 0, 0, Math.PI * 2 ), new THREE.MeshBasicMaterial({color:0xFFFFFF, shading: THREE.FlatShading}));
+            object.position.set(0 , 27.5, 1 );
+            this.HueHandle.add( object );
+
+            object = new THREE.Mesh( new THREE.RingGeometry( 2, 3.6, 20, 0, 0, Math.PI * 2 ), new THREE.MeshBasicMaterial({color:0x000000, shading: THREE.FlatShading}));
+            object.position.set(0 , 27.7, 1 );
+            this.HueHandle.add( object );
+
+            scene.add(this.HueHandle);
+
+            object = new THREE.Mesh( new THREE.RingGeometry( 25, 30, 40, 0, 0, Math.PI * 2 ), this.material );
+            object.position.set( mPos.x, mPos.y, 0 );
+            scene.add( object );
+
+            this.mesh = new THREE.Mesh( new THREE.RingGeometry( 20, 35, 40, 0, 0, Math.PI * 2 ), new THREE.MeshBasicMaterial({color:0x000000, shading: THREE.FlatShading}) );
+            this.mesh.position.set( mPos.x, mPos.y, -1);
+            scene.add( this.mesh );
+
+            self.AddUIObject(this);
+            return this;
+        };
+        this.init();
+    };
+
+    this.ColorPicker = function(mPos, mSize, groupID, tabID)
+    {
+        //this.prototype = new self.BaseUIObject(texture, mPos, mSize, groupID);
+        var ColorPicker = this;
+        this.index = null;
+        this.onMouseUp = null;
+        this.onMouseDown = null;
+        this.onMouseMove = null;
+        this.onMouseEnter = null;
+        this.onMouseExit = null;
+        this.onUIUpdate = null;
+        this.MouseOver = false;
+        this.mesh = null;
+        this.material = null;
+        this.map = null;
+        this.tag = null;
+        this.name = "";
+        this.GroupID = groupID || 0;
+        this.TabID = tabID || 0;
+
+        this.HueRing = null;
+
+        this.UpdateColor = function(Hue)
+        {
+            ColorPicker.material.color.setHSL(Hue, 1, 0.5);
+        };
+
+        this.init = function()
+        {
+
+            this.material = new THREE.MeshBasicMaterial({
+                color:0xffffff, shading: THREE.FlatShading,
+                map:  this.map
+            });
+
+            this.mesh = new THREE.Mesh( new THREE.PlaneGeometry( 31, 31, 0, 0 ), this.material);
+            this.mesh.position.set( mPos.x, mPos.y, 1 );
+            scene.add( this.mesh );
+
+            //this.mesh.position.set(  mPos.x,  mPos.y, 0 );
+            //scene.add(  this.mesh );
+            this.HueRing = new self.ColorRing(mPos, mSize, groupID, tabID);
+            this.HueRing.name = "HueRing";
+            this.HueRing.OnColorUpdated = this.UpdateColor;
+
             self.AddUIObject(this);
             return this;
         };

@@ -74,7 +74,7 @@
 
 
 	$avaliableTables = array('events', "schedule", "animations", 'users' );
-	if ( ! in_array($_REQUEST['table'], $avaliableTables) ) {
+	if( ! isset( $_REQUEST['table'] ) || ! in_array($_REQUEST['table'], $avaliableTables) ) {
 		echo 'Error: table not allowed, table name='. $_REQUEST['table'] ; 
 		exit(); 
 	}

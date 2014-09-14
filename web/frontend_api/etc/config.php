@@ -4,12 +4,13 @@
 if( ! isset( $config ) )
 	$config = array();
 
-$config['db']['type'] = "mysql";
-$config['db']['host'] = "localhost";
-$config['db']['user'] = 'domelights';
-$config['db']['pass'] = '89hvuQ3921wr';
-$config['db']['name'] = 'domelights';
+// Load default configuration
+require_once( 'config_defaults.php' );
 
+// Load local configuration
+require_once( 'config_local.php' );
+
+// Setup the dsn
 $config['db']['dsn'] = sprintf( "%s:host=%s;dbname=%s", $config['db']['type'], $config['db']['host'], $config['db']['name'] );
 
 ?>

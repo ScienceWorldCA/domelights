@@ -6,9 +6,20 @@
 class DomeController {
 
 	private $dbconn;
+	private $schedule_instance = null;
 
 	public function __construct() {
 		$this->dbconn = ColoreDBConnector::getInstance();
+	}
+
+	/* _GetScheduleInstance
+	 * Gets an instance of the Scheduler, maintaining a single instance. (Faux Singleton)
+	 */
+	private function _GetScheduleInstance() {
+		if( $this->schedule_instance == null )
+			$this->schedule_instance = new CSchedule();
+
+		return $this->schedule_instance;
 	}
 	
 	public function AuthenticateController( ColoreRequestHelper &$cro ) {

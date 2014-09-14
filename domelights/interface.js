@@ -370,7 +370,7 @@ function buildInterface() {
         }
 
 
-        var tabButton1 = new UIObjectManager.Tab('textures/ui/GradientTab.png', new THREE.Vector2(138, 95), new THREE.Vector2(25, 10), 0, 1, 1);
+        var tabButton1 = new UIObjectManager.Tab('textures/UI/GradientTab.png', new THREE.Vector2(138, 95), new THREE.Vector2(25, 10), 0, 1, 1);
         tabButton1.onMouseUp = SetTabIndex;
         tabButton1.onMouseDown = SelectTab;
         tabButton1.material.color.setRGB(1, 1, 1);
@@ -380,7 +380,7 @@ function buildInterface() {
         tabButton1.onActiveTab = onActiveTab;
         //tabButton1.UIObjectsList = UIObjectManager.UIObjectsList;
 
-        var tabButton2 = new UIObjectManager.Tab('textures/ui/SolidTab.png', new THREE.Vector2(165, 95), new THREE.Vector2(25, 10), 0, 1, 2);
+        var tabButton2 = new UIObjectManager.Tab('textures/UI/SolidTab.png', new THREE.Vector2(165, 95), new THREE.Vector2(25, 10), 0, 1, 2);
         tabButton2.onMouseUp = SetTabIndex;
         tabButton2.onMouseDown = SelectTab;
         tabButton2.material.color.setRGB(0.4, 0.4, 0.4);
@@ -389,7 +389,7 @@ function buildInterface() {
         tabButton2.onInactiveTab = onInactiveTab;
         tabButton2.onActiveTab = onActiveTab;
 
-        var tabButton3 = new UIObjectManager.Tab('textures/ui/FXTab.png', new THREE.Vector2(192, 95), new THREE.Vector2(25, 10), 0, 1, 3);
+        var tabButton3 = new UIObjectManager.Tab('textures/UI/FXTab.png', new THREE.Vector2(192, 95), new THREE.Vector2(25, 10), 0, 1, 3);
         tabButton3.onMouseUp = SetTabIndex;
         tabButton3.onMouseDown = SelectTab;
         tabButton3.material.color.setRGB(0.4, 0.4, 0.4);

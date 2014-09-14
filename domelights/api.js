@@ -29,16 +29,19 @@ function FrontEnd_API() {
 			var params = {};
 			params['sequence'] = sequence;
 			params['useremail'] = document.getElementById( 'useremail' ).value;
+			params['userrealname'] = document.getElementById( 'userrealname' ).value;
 	
 			this.api_call(
 				'storesequence',
 				params,
 				function(data) {
-					alert( data.schedule_message );
+					console.log( data );
+					alert( data.message );
 					if( data.result ) {
-						document.getElementById('storeResult').value = data.message;
+						document.getElementById('storeResult').enabled = false;
+						document.getElementById('storeResult').value = 'Scheduled';
 					} else {
-						document.getElementById('storeResult').value = 'Publish';
+						document.getElementById('storeResult').value = 'Retry';
 					}
 				}
 			);

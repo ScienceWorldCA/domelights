@@ -1,7 +1,6 @@
-v0.20
 <?php 
 // Connnect to the database 
-include( '../etc/config.php' );
+require_once( '../etc/config.php' );
 
 
 class CSchedule

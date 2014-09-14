@@ -1,11 +1,13 @@
 <?php 
 // Connnect to the database 
-include( '../etc/config.php' );
+require_once( dirname( __FILE__ ) . '/../etc/config.php' );
 
 
 class CSchedule
 {
-	private $db ; 
+	private $db ;
+	private $DEBUG = false;
+	
 	function __construct() 
 	{
 		global $config ; 
@@ -49,7 +51,7 @@ class CSchedule
 		WHERE TIMESTAMP( '". $start ."' ) BETWEEN animations.start AND animations.end 
 		LIMIT 1";
 
-		echo $sql_query . "\n\n"; 
+		if( $this->DEBUG ) echo $sql_query . "\n\n"; 
 		$result = mysql_query( $sql_query , $this->db );
 		$num_rows = mysql_num_rows($result);
 		if( $num_rows <= 0 ) {
@@ -60,14 +62,14 @@ class CSchedule
 	}
 
 	private function GetTimeOfLastScheduledAnimation( ) {
-		// 1) Find the last schedulled animation 
+		// 1) Find the last scheduled animation 
 		$sql_query = "
 		SELECT start, end FROM animations
 		WHERE state = 0 AND animations.start > CURRENT_TIMESTAMP() 
 		ORDER BY animations.start DESC 
 		LIMIT 1";
 
-		echo $sql_query . "\n"; 
+		if( $this->DEBUG ) echo $sql_query . "\n"; 
 		$result = mysql_query( $sql_query, $this->db );
 		if( mysql_num_rows($result) <= 0 ) {
 			// This is not an error. This means that there is currently NO animation ahead of this animation. 
@@ -89,7 +91,7 @@ class CSchedule
 		$sql_query = "
 		SELECT * FROM events
 		WHERE TIMESTAMP( '". $startTime ."' ) BETWEEN events.start AND events.end "; 
-		echo $sql_query . "\n"; 
+		if( $this->DEBUG ) echo $sql_query . "\n"; 
 		$result = mysql_query( $sql_query, $this->db );
 		if( mysql_num_rows($result) > 0 ) {
 			// There is a schedual at this time. We need to fine another time to run the animation. 
@@ -122,12 +124,12 @@ class CSchedule
 		ORDER BY  `schedule`.`day` ASC 
 		LIMIT 1 ";
 
-		echo $sql_query . "\n"; 
+		if( $this->DEBUG ) echo $sql_query . "\n"; 
 		$result = mysql_query( $sql_query, $this->db );
 		if( mysql_num_rows($result) > 0 ) {
 			return true ; // This is a good time 
 		} else 
-			echo "FYI. No schedule at this current time. Find the next avaliable schedule. \n";
+			if( $this->DEBUG ) echo "FYI. No schedule at this current time. Find the next avaliable schedule. \n";
 			// No schedule at the current time of day. 
 			// Search the next avaliable schedule. 
 
@@ -149,11 +151,11 @@ class CSchedule
 			schedule.type = 1 
 			ORDER BY schedule.day ASC 
 			LIMIT 1 ";
-			echo $sql_query . "\n"; 
+			if( $this->DEBUG ) echo $sql_query . "\n"; 
 
 			$result = mysql_query( $sql_query, $this->db );
 			if( mysql_num_rows($result) <= 0 ) {				
-				echo 'Error: Are there any schedules at all ?' ; 
+				if( $this->DEBUG ) echo 'Error: Are there any schedules at all ?' ; 
 				return false;
 			}
 			
@@ -169,7 +171,7 @@ class CSchedule
 	public function UpdateAnimationScheduleTime( $id, $timeOfAnimation = NULL ) {
 		if( $id == NULL ) {
 			// Error, Invalid USER ID 
-			echo "Error: Invalid ID prameter";  
+			if( $this->DEBUG ) echo "Error: Invalid ID prameter";  
 			return false; 
 		}
 
@@ -179,7 +181,7 @@ class CSchedule
 
 		// Get the last animation and add 60 secs to it. 
 		$timeOfLastScheduledAnimation = $this->GetTimeOfLastScheduledAnimation()  ; 
-		echo 'Last schedule animation time: '. $timeOfLastScheduledAnimation . "\n\n\n"; 
+		if( $this->DEBUG ) echo 'Last schedule animation time: '. $timeOfLastScheduledAnimation . "\n\n\n"; 
 
 
 		$scheduleTimeStart = $timeOfLastScheduledAnimation  ; 
@@ -195,33 +197,33 @@ class CSchedule
 				$scheduleTimeStart = $blackOutScheduleCheck[ 'end' ] ; 
 				$schedulePeriod    = false ; // We changed the time. We have to recheck the schedule. 
 			} else {
-				echo "Good: No events schedulled at this time\n";
+				if( $this->DEBUG ) echo "Good: No events scheduled at this time\n";
 			}
 
 			$schedulePeriodCheck = $this->CheckForSchedulePeriod( $scheduleTimeStart ) ; 
 			if( $schedulePeriodCheck != true ) {
 				var_dump( $schedulePeriodCheck ) ; 
 				$scheduleTimeStart = date( "Y-m-d H:i:s", $schedulePeriodCheck['start'] ) ; 
-				echo 'scheduleTimeStart: '. $scheduleTimeStart . "\n"; 
+				if( $this->DEBUG ) echo 'scheduleTimeStart: '. $scheduleTimeStart . "\n"; 
 				$blackOutScheduleCheck  = false ; 
 			} else {
-				echo "Good: Time inside a schedulle\n" ; 
+				if( $this->DEBUG ) echo "Good: Time inside a schedulle\n" ; 
 			}
 
 
 			if( $blackOutScheduleCheck === true && $schedulePeriodCheck === true ) {
-				echo "Good: we found a good time.\n"; 
+				if( $this->DEBUG ) echo "Good: we found a good time.\n"; 
 				break; // We found a good one. 
 			}
 
-			echo "FYI: We need to recheck.\n";
+			if( $this->DEBUG ) echo "FYI: We need to recheck.\n";
 		}
 
 		// Update the time. 
 		$scheduleTimeEnd = date( "Y-m-d H:i:s", strtotime( $scheduleTimeStart ) + $timeOfAnimation ) ;
 
 		$sql_query = "UPDATE animations SET start = '". $scheduleTimeStart ."', end = '". $scheduleTimeEnd ."' WHERE animations.id =". $id .";"; 
-		echo $sql_query . "\n"; 
+		if( $this->DEBUG ) echo $sql_query . "\n"; 
 		$result = mysql_query( $sql_query, $this->db );
 		if( $result == NULL ) {
 			return false ;

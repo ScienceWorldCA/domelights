@@ -93,7 +93,7 @@
 					return false;
 				} else {
 					api.DoStoreAnimation();
-                    EnableDomeEventHandles(true);
+                    // EnableDomeEventHandles(true);
 				}
 		
 				return false;
@@ -103,6 +103,7 @@
             	document.getElementById('blockout').style.visibility = 'visible';
             	document.getElementById('userinput').style.visibility = 'visible';
                 console.log("Showing Submit Dialog");
+				EnableDomeEventHandles(false);
             }
             
             function CloseSubmit() {

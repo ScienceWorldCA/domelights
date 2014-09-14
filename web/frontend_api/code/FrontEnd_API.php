@@ -29,14 +29,18 @@ class FrontEnd_API {
 		$useremail = $cro->getRequestProperties( 'useremail' );
 
 		// Check input
-		if( ! $useremail ) ) {
+		if( ! $useremail ) {
 			$cro->setRenderProperty( 'message', 'Missing email address' );
 			$cro->setRenderProperty( 'result', false );
 			return false;
 		}
-		// Verify input
-		if( ! $userrealname || ! $useremail || ! filter_var( $useremail, FILTER_VALIDATE_EMAIL ) ) {
-			$cro->setRenderProperty( 'message', 'Missing or invalid input' );
+		if( ! $userrealname ) {
+			$cro->setRenderProperty( 'message', 'Missing or invalid real name' );
+			$cro->setRenderProperty( 'result', false );
+			return false;
+		}
+		if( filter_var( $useremail, FILTER_VALIDATE_EMAIL ) ) {
+			$cro->setRenderProperty( 'message', 'Invalid email address' );
 			$cro->setRenderProperty( 'result', false );
 			return false;
 		}
@@ -64,7 +68,7 @@ class FrontEnd_API {
 		$user_info = $this->dbconn->mappedQuery( $query );
 
 		// If not valid user, then schedule StoreUserInfo, else assign variables and continue
-		if( ! $user_info ) {
+		if( ! $user_info || ! isset( $user_info['id'] ) || ! is_numeric( $user_info['id'] ) ) {
 			$cro->insertLogic( array( 'class' => 'FrontEnd_API', 'method' => 'StoreUserInfo' ) );
 		} else {
 			$cro->user_id = $user_info['id'];
@@ -75,9 +79,9 @@ class FrontEnd_API {
 
 	public function StoreUserInfo( ColoreRequestHelper &$cro ) {
 		// Get input
-		$userrealname = $cro->getRequestProperties( 'userrealname' );
-		$useremail = $cro->getRequestProperties( 'useremail' );
-
+		$userrealname = $cro->getRequestProperty( 'userrealname' );
+		$useremail = $cro->getRequestProperty( 'useremail' );
+		
 		// Store user info
 		$query = array(
 				'action' => 'insert',
@@ -95,7 +99,7 @@ class FrontEnd_API {
 		if( $user_stored ) {
 			$cro->insertLogic( array( 'class' => 'FrontEnd_API', 'method' => 'GetUserInfo' ) );
 		} else {
-			$cro->setRenderProperty( 'message', 'Missing email address' );
+			$cro->setRenderProperty( 'message', __LINE__ . ':Error saving user information' );
 			$cro->setRenderProperty( 'result', false );
 			return false;
 		}
@@ -106,10 +110,15 @@ class FrontEnd_API {
 		$request_properties = $cro->getRequestProperties();
 
 		$user_id = $cro->user_id;
-		$sequence = $request_properties['sequence'];
+		$sequence = $cro->getRequestProperty( 'sequence' );
 
 		// Verify input
-		if( ! is_numeric( $cro->user_id ) || ! $sequence ) {
+		if( ! is_numeric( $cro->user_id ) ) {
+			$cro->setRenderProperty( 'message', 'Missing user input' );
+			$cro->setRenderProperty( 'result', false );
+			return false;
+		}
+		if( ! $sequence ) {
 			$cro->setRenderProperty( 'message', 'Missing animation input' );
 			$cro->setRenderProperty( 'result', false );
 			return false;
@@ -129,7 +138,13 @@ class FrontEnd_API {
 
 		$res = $this->dbconn->mappedQuery( $query );
 
-		$cro->animationID = $this->GetAnimationIDByToken( $cro->animationToken );
+		$animationID_result = $this->GetAnimationIDByToken( $cro->animationToken );
+		
+		if( ! $animationID_result ) {
+			return false;
+		}
+		
+		$cro->animationID = $animationID_result['id'];
 			
 		$cro->setRenderProperty( 'result', true );
 	}
@@ -177,7 +192,7 @@ class FrontEnd_API {
 			return false;
 		}
 
-		$cro->animationStartTime = $schedule_start;
+		$cro->animationStartTime = $schedule_start['start'];
 	}
 
 	public function EmailSchedule( ColoreRequestHelper &$cro ) {
@@ -186,10 +201,10 @@ class FrontEnd_API {
 		$mail_result = mail(
 				$cro->useremail, // Recipient
 				$config['email']['subject']['animation_shedule_confirmation'], // Subject
-				sprintf( $config['email']['body']['animation_shedule_confirmation'], $cro->userrealname, $cro->animationStart ), // Message
+				sprintf( $config['email']['body']['animation_shedule_confirmation'], $cro->userrealname, $cro->animationStartTime ), // Message
 				$config['email']['headers'] // Headers
 		);
-		$cro->setRenderProperty( 'schedule_message', "Your animation has been scheduled for:\n\n%s\n\nYou will also receive an email containing this time." );
+		$cro->setRenderProperty( 'message', sprintf( "Your animation has been scheduled for:\n\n%s\n\nYou will also receive an email containing this time.", $cro->animationStartTime ) );
 		$cro->setRenderProperty( 'result', true );
 	}
 

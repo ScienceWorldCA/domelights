@@ -19,6 +19,7 @@ class Render_JSON implements ColoreRenderHelper {
 
 		header( 'Content-Type: application/json' );
 		
+		@error_log( json_encode( $outputProperties ) );
 		echo json_encode( $outputProperties );
 	}
 

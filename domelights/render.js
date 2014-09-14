@@ -27,8 +27,10 @@ function render() {
 
 function animate(){
 
-        requestAnimationFrame(animate);
 
+        var requestAnimationFrame = window.requestAnimationFrame || window.mozRequestAnimationFrame || window.webkitRequestAnimationFrame || window.msRequestAnimationFrame;
+
+        requestAnimationFrame(animate);
         //render.js
         render();
 

@@ -31,7 +31,7 @@ function initGraphicMode()
     SequenceManager = new SEQUENCE(DomeLightManager);
 
     //TEMP SEQUENCE
-      SequenceManager.SequenceLength = 6*FPS;
+      SequenceManager.SequenceLength = 15*FPS;
     //    var newEvent1 = new EVENT(5*FPS, 22, DomeLightManager, null, Brushes[1]);
     //    SequenceManager.AddEvent(newEvent1);
     //    var newEvent2 = new EVENT(3*FPS, 29, DomeLightManager, null, Brushes[1]);
@@ -55,12 +55,14 @@ function initGraphicMode()
     //createBrushes.js
     CreateBrushes();
 
+    var rendererHeight = (window.innerWidth/Aspect[0]) * Aspect[1];
+
+    renderer = new THREE.WebGLRenderer({ width: window.innerWidth, height: rendererHeight, scale: 1, maxLights: 264, antialias : false, precision: "lowp"});
+    //renderer = new THREE.WebGLDeferredRenderer( { width: window.innerWidth, height: ((window.innerWidth/Aspect[0])* Aspect[1] ), scale: 1, antialias: false } );
+
     //interface.js
     buildInterface();
 
-
-    renderer = new THREE.WebGLRenderer({ width: window.innerWidth, height: ((window.innerWidth/Aspect[0])* Aspect[1] ), scale: 1});
-    //renderer = new THREE.WebGLDeferredRenderer( { width: window.innerWidth, height: ((window.innerWidth/Aspect[0])* Aspect[1] ), scale: 1, antialias: false } );
     onWindowResize();
 
     //Setup Render Pass

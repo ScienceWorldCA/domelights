@@ -4,6 +4,79 @@
 //Create UI
 function buildInterface() {
 
+    //Debug Functions
+    function ClearDome(event, uiObject)
+    {
+        uiObject.mesh.scale.x = uiObject.mesh.scale.y = 1;
+        ClearLights();
+        SequenceManager.Events = [];
+    }
+
+    function SubmitSequence(event, uiObject)
+    {
+        uiObject.mesh.scale.x = uiObject.mesh.scale.y = 1;
+        EnableDomeEventHandles(false);
+        DisplaySubmit();
+    }
+
+    //Brush Functions
+    {
+        function updateBrushColor(event, uiObject)
+        {
+            if(uiObject.mesh.visible == true) {
+                uiObject.material.color = Clone(ActiveBrushData[0]);
+            }
+        }
+        function ResetUI(event, uiObject)
+        {
+            uiObject.mesh.scale.x = uiObject.mesh.scale.y = 1;
+        }
+
+        function SetBrush(event, uiObject)
+        {
+            uiObject.mesh.scale.x = uiObject.mesh.scale.y = 1;
+
+            ActiveBrushID = uiObject.tag;
+            ActiveBrushData[0] = uiObject.material.color;
+        }
+
+        function ButtonDownClick(event, uiObject)
+        {
+            uiObject.mesh.scale.x = uiObject.mesh.scale.y = 1.2;
+        }
+
+        function SetForeground(event, uiObject)
+        {
+            uiObject.mesh.scale.x = uiObject.mesh.scale.y = 1;
+
+            var newEvent = new EVENT(SequenceManager.SequenceTime, 0, Brushes[uiObject.tag]);
+            SequenceManager.AddEvent(newEvent);
+        }
+
+        function SetBackground(event, uiObject)
+        {
+            uiObject.mesh.scale.x = uiObject.mesh.scale.y = 1;
+
+            var newEvent = new EVENT(0, 0, Brushes[uiObject.tag]);
+            newEvent.IsBackground = true;
+            SequenceManager.AddEvent(newEvent);
+        }
+
+        function AutoSpinR(event, uiObject)
+        {
+            uiObject.mesh.scale.x = uiObject.mesh.scale.y = 1;
+            FixedSpeedActive = true;
+            targetRotation = 0.05;
+        }
+
+        function AutoSpinL(event, uiObject)
+        {
+            uiObject.mesh.scale.x = uiObject.mesh.scale.y = 1;
+            FixedSpeedActive = true;
+            targetRotation = -0.05;
+        }
+    }
+
     //Create Swiper UI
     {
         var map1 = THREE.ImageUtils.loadTexture('textures/UI/spin_bar.png');
@@ -36,22 +109,6 @@ function buildInterface() {
 
     //Playback Controls
     {
-        var Pause = new UIObjectManager.Button('textures/UI/Pause.png', new THREE.Vector2(-5, -85), new THREE.Vector2(10, 10));
-        Pause.onMouseDown = ButtonDownClick;
-        Pause.onMouseUp = PlaySequence;
-        Pause.onUIUpdate = PauseUpdateUI;
-        Pause.material.color.setRGB(1, 1, 1);
-        Pause.tag = false;
-        Pause.name = "Pause";
-
-        var Play = new UIObjectManager.Button('textures/UI/Play.png', new THREE.Vector2(5, -85), new THREE.Vector2(10, 10));
-        Play.onMouseDown = ButtonDownClick;
-        Play.onMouseUp = PlaySequence;
-        Play.onUIUpdate = PlayUpdateUI;
-        Play.material.color.setRGB(1, 1, 1);
-        Play.tag = true;
-        Play.name = "Play";
-
         function PlaySequence(event, uiObject)
         {
             SequenceManager.Play = uiObject.tag;
@@ -81,55 +138,70 @@ function buildInterface() {
                 uiObject.material.color.setRGB(1, 1, 0);
             }
         }
+
+        var Pause = new UIObjectManager.Button('textures/UI/Pause.png', new THREE.Vector2(-5, -85), new THREE.Vector2(10, 10));
+        Pause.onMouseDown = ButtonDownClick;
+        Pause.onMouseUp = PlaySequence;
+        Pause.onUIUpdate = PauseUpdateUI;
+        Pause.material.color.setRGB(1, 1, 1);
+        Pause.tag = false;
+        Pause.name = "Pause";
+
+        var Play = new UIObjectManager.Button('textures/UI/Play.png', new THREE.Vector2(5, -85), new THREE.Vector2(10, 10));
+        Play.onMouseDown = ButtonDownClick;
+        Play.onMouseUp = PlaySequence;
+        Play.onUIUpdate = PlayUpdateUI;
+        Play.material.color.setRGB(1, 1, 1);
+        Play.tag = true;
+        Play.name = "Play";
+
     }
 
     // Add Solid Color Brushes
     {
-        var button1 = new UIObjectManager.Button('textures/sprites/circle.png', new THREE.Vector2(190, 50), new THREE.Vector2(20, 20), 1, 1);
+        var button1 = new UIObjectManager.Button('textures/sprites/circle.png', new THREE.Vector2(150, 60), new THREE.Vector2(40, 40), 1, 1);
         button1.onMouseDown = ButtonDownClick;
         button1.onMouseUp = SetBrush;
+        button1.onUIUpdate = updateBrushColor;
         button1.material.color.setRGB(0, 1, 0);
         button1.name = "button1";
         button1.tag = 1;
 
-        var button2 = new UIObjectManager.Button('textures/sprites/circle.png', new THREE.Vector2(190, 70), new THREE.Vector2(20, 20), 1, 1);
-        button2.onMouseUp = SetBrush;
+        var button2 = new UIObjectManager.Button('textures/sprites/circle.png', new THREE.Vector2(150, 60), new THREE.Vector2(30, 30), 1, 2);
         button2.onMouseDown = ButtonDownClick;
-        button2.material.color.setRGB(1, 0, 0);
+        button2.onMouseUp = SetBrush;
+        button2.onUIUpdate = updateBrushColor;
+        button2.material.color.setRGB(0, 1, 1);
         button2.name = "button2";
         button2.tag = 1;
 
-        var button3 = new UIObjectManager.Button('textures/sprites/circle.png', new THREE.Vector2(190, 90), new THREE.Vector2(20, 20), 1, 1);
-        button3.onMouseUp = SetBrush;
+        var button3 = new UIObjectManager.Button('textures/sprites/circle.png', new THREE.Vector2(150, 60), new THREE.Vector2(40, 40), 1, 3);
         button3.onMouseDown = ButtonDownClick;
-        button3.material.color.setRGB(0, 0, 1);
+        button3.onMouseUp = SetBrush;
+        button3.onUIUpdate = updateBrushColor;
+        button3.material.color.setRGB(1, 1, 0);
         button3.name = "button3";
         button3.tag = 1;
-
-        var button4 = new UIObjectManager.Button('textures/sprites/circle.png', new THREE.Vector2(170, 50), new THREE.Vector2(20, 20), 1, 2);
-        button4.onMouseDown = ButtonDownClick;
-        button4.onMouseUp = SetBrush;
-        button4.material.color.setRGB(1, 1, 0);
-        button4.name = "button4";
-        button4.tag = 1;
-
-        var button5 = new UIObjectManager.Button('textures/sprites/circle.png', new THREE.Vector2(170, 70), new THREE.Vector2(20, 20), 1, 2);
-        button5.onMouseUp = SetBrush;
-        button5.onMouseDown = ButtonDownClick;
-        button5.material.color.setRGB(1, 0, 1);
-        button5.name = "button5";
-        button5.tag = 1;
-
-        var button6 = new UIObjectManager.Button('textures/sprites/circle.png', new THREE.Vector2(170, 90), new THREE.Vector2(20, 20), 1, 2);
-        button6.onMouseUp = SetBrush;
-        button6.onMouseDown = ButtonDownClick;
-        button6.material.color.setRGB(0, 1, 1);
-        button6.name = "button6";
-        button6.tag = 1;
     }
 
     // Add Background Solid Brushes
     {
+        function spinUpdate(event, uiObject)
+        {
+            //console.log(uiObject);
+
+            if(uiObject.mesh.rotation.z < -1.5)
+            {
+                uiObject.spin = 0.1;
+            }
+            else if (uiObject.mesh.rotation.z > 1.5)
+            {
+                uiObject.spin = -0.1;
+            }
+
+            uiObject.mesh.rotation.z += uiObject.spin;
+        }
+
         var bbutton1 = new UIObjectManager.Button('textures/UI/Gradient.png', new THREE.Vector2(-180, 60), new THREE.Vector2(20, 20));
         bbutton1.onMouseDown = ButtonDownClick;
         bbutton1.onMouseUp = SetBackground;
@@ -147,31 +219,16 @@ function buildInterface() {
         var bbutton3 = new UIObjectManager.Button('textures/UI/smiley-face.png', new THREE.Vector2(-180, 0), new THREE.Vector2(20, 20));
         bbutton3.onMouseDown = ButtonDownClick;
         bbutton3.onMouseUp = SetForeground;
+        bbutton3.onUIUpdate = spinUpdate;
         bbutton3.material.color.setRGB(1, 1, 1);
         bbutton3.tag = 4;
         bbutton3.name = "Background 3";
+        bbutton3.spin = -0.1;
+
     }
 
     var timeline = new UIObjectManager.Timeline('textures/UI/smiley-face.png', new THREE.Vector2(-90, -105), new THREE.Vector2(180, 20));
     {
-        //timeline.onMouseDown = ButtonDownClick;
-        //timeline.onMouseUp = SetForeground;
-        //timeline.material.color.setRGB(1, 1, 1);
-        timeline.SequenceTime = GetSequenceTime;
-        timeline.SequenceLength = GetSequenceLength;
-        timeline.tag = 5;
-        timeline.name = "MainTimeline";
-
-        //Todo: Fix Dragging of timeline
-        timeline.TimeHandle.onMouseDown = onTimeHandleMouseDown;
-        timeline.TimeHandle.onMouseUp = onTimeHandleMouseUp;
-        timeline.TimeHandle.onMouseEnter = onTimeHandleMouseEnter;
-        timeline.TimeHandle.onMouseExit = onTimeHandleMouseExit;
-        //timeline.TimeHandle.onMouseMove = onDragTimeline;
-        timeline.onMouseMove = onTimelineMove;
-        timeline.onMouseUp = onTimeHandleMouseUp;
-        timeline.onMouseExit = onTimelineMouseExit;
-
         function onTimeHandleMouseDown(event, uiObject)
         {
             this.mesh.scale.x = this.mesh.scale.y = 1.2;
@@ -212,9 +269,9 @@ function buildInterface() {
         {
             if(uiObject.TimeHandle.isMouseDown == true)
             {
-              SequenceManager.Play = false;
-              var frameStep =  SequenceManager.SequenceLength / uiObject.Size.x;
-              SequenceManager.SetSequenceTime((event.intersection[0].point.x - uiObject.Position.x) * frameStep);
+                SequenceManager.Play = false;
+                var frameStep =  SequenceManager.SequenceLength / uiObject.Size.x;
+                SequenceManager.SetSequenceTime((event.intersection[0].point.x - uiObject.Position.x) * frameStep);
             }
         }
 
@@ -224,72 +281,127 @@ function buildInterface() {
             uiObject.TimeHandle.mesh.scale.x = uiObject.TimeHandle.mesh.scale.y = 1;
         }
 
-
         function GetSequenceTime(){ return SequenceManager.GetSequenceTime();}
         function GetSequenceLength(){ return SequenceManager.GetSequenceLength();}
-    }
 
+        //timeline.onMouseDown = ButtonDownClick;
+        //timeline.onMouseUp = SetForeground;
+        //timeline.material.color.setRGB(1, 1, 1);
+        timeline.SequenceTime = GetSequenceTime;
+        timeline.SequenceLength = GetSequenceLength;
+        timeline.tag = 5;
+        timeline.name = "MainTimeline";
+
+        //Todo: Fix Dragging of timeline
+        timeline.TimeHandle.onMouseDown = onTimeHandleMouseDown;
+        timeline.TimeHandle.onMouseUp = onTimeHandleMouseUp;
+        timeline.TimeHandle.onMouseEnter = onTimeHandleMouseEnter;
+        timeline.TimeHandle.onMouseExit = onTimeHandleMouseExit;
+        //timeline.TimeHandle.onMouseMove = onDragTimeline;
+        timeline.onMouseMove = onTimelineMove;
+        timeline.onMouseUp = onTimeHandleMouseUp;
+        timeline.onMouseExit = onTimelineMouseExit;
+    }
 
     var ColorPicker = new UIObjectManager.ColorPicker(new THREE.Vector2(170, -40), new THREE.Vector2(50, 50));
     {
-        ColorPicker.name = "Color Picker";
-        ColorPicker.HueRing.onMouseMove = ColorPickerMove;
-        ColorPicker.HueRing.onMouseDown = ColorPickerMouseDown;
-        ColorPicker.HueRing.onMouseUp = ColorPickerMouseUp;
-        ColorPicker.HueRing.onMouseExit = ColorPickerMouseExit;
-
-        function SetColorFromPicker(event, uiObject) {
-            uiObject.UpdateHuePosition(event);
-            ActiveBrushData[0].setHSL(uiObject.Hue, 1 , 0.5);
+        function onColorPickerColorUpdated(event, uiObject)
+        {
+            ActiveBrushData[0].setHSL(uiObject.Hue, uiObject.Sat , uiObject.Light);
         }
 
-        function ColorPickerMove(event, uiObject) {
+       function PickerMouseMove(event, uiObject) {
             if (uiObject.isMouseDown == true) {
-               SetColorFromPicker(event, uiObject);
+                uiObject.UpdatePosition(event);
             }
         }
 
-        function ColorPickerMouseDown(event, uiObject) {
+        function PickerMouseDown(event, uiObject) {
             //console.log(event);
             uiObject.isMouseDown = true;
-            SetColorFromPicker(event, uiObject);
+            uiObject.UpdatePosition(event);
         }
 
-        function ColorPickerMouseUp(event, uiObject) {
+        function PickerMouseUp(event, uiObject) {
             //console.log(event);
             uiObject.isMouseDown = false;
         }
 
-        function ColorPickerMouseExit(event, uiObject) {
+        function PickerMouseExit(event, uiObject) {
             //console.log(event);
-            uiObject.isMouseDown = false;
+            //uiObject.isMouseDown = false;
         }
+
+        ColorPicker.name = "Color Picker";
+        ColorPicker.onColorUpdated = onColorPickerColorUpdated;
+        ColorPicker.HueRing.onMouseMove = PickerMouseMove;
+        ColorPicker.HueRing.onMouseDown = PickerMouseDown;
+        ColorPicker.HueRing.onMouseUp = PickerMouseUp;
+        ColorPicker.HueRing.onMouseExit = PickerMouseExit;
+
+        ColorPicker.onMouseMove = PickerMouseMove;
+        ColorPicker.onMouseDown = PickerMouseDown;
+        ColorPicker.onMouseUp = PickerMouseUp;
+        ColorPicker.onMouseExit = PickerMouseExit;
+
+        ColorPicker.SetColor(new THREE.Color(1,0,1).getHSL());
+
     }
 
     //Brush Tabs
     {
-        var tabButton1 = new UIObjectManager.Tab('textures/sprites/circle.png', new THREE.Vector2(130, 90), new THREE.Vector2(20, 20), 1, 1);
-        tabButton1.onMouseUp = SetTabIndex;
-        tabButton1.onMouseDown = ButtonDownClick;
-        tabButton1.material.color.setRGB(1, 1, 1);
-        tabButton1.name = "Tab 1";
-        tabButton1.tag = 1;
-        //tabButton1.UIObjectsList = UIObjectManager.UIObjectsList;
-
-        var tabButton2 = new UIObjectManager.Tab('textures/sprites/circle.png', new THREE.Vector2(130, 70), new THREE.Vector2(20, 20), 1, 2);
-        tabButton2.onMouseUp = SetTabIndex;
-        tabButton2.onMouseDown = ButtonDownClick;
-        tabButton2.material.color.setRGB(1, 1, 1);
-        tabButton2.name = "Tab 2";
-        tabButton2.tag = 1;
-        //tabButton2.UIObjectsList = UIObjectManager.UIObjectsList;
-
         function SetTabIndex(event, uiObject)
         {
             uiObject.onSwitchTabs();
             uiObject.mesh.scale.x = uiObject.mesh.scale.y = 1;
         }
+        function SelectTab(event, uiObject)
+        {
+            uiObject.mesh.scale.x = uiObject.mesh.scale.y = 1.05;
+        }
 
+        function onInactiveTab(uiObject)
+        {
+            uiObject.material.color.setRGB(0.4, 0.4, 0.4);
+        }
+        function onActiveTab(uiObject)
+        {
+            uiObject.material.color.setRGB(1, 1, 1);
+        }
+
+
+        var tabButton1 = new UIObjectManager.Tab('textures/ui/GradientTab.png', new THREE.Vector2(138, 95), new THREE.Vector2(25, 10), 0, 1, 1);
+        tabButton1.onMouseUp = SetTabIndex;
+        tabButton1.onMouseDown = SelectTab;
+        tabButton1.material.color.setRGB(1, 1, 1);
+        tabButton1.name = "Gradient Brushes";
+        tabButton1.tag = 1;
+        tabButton1.onInactiveTab = onInactiveTab;
+        tabButton1.onActiveTab = onActiveTab;
+        //tabButton1.UIObjectsList = UIObjectManager.UIObjectsList;
+
+        var tabButton2 = new UIObjectManager.Tab('textures/ui/SolidTab.png', new THREE.Vector2(165, 95), new THREE.Vector2(25, 10), 0, 1, 2);
+        tabButton2.onMouseUp = SetTabIndex;
+        tabButton2.onMouseDown = SelectTab;
+        tabButton2.material.color.setRGB(0.4, 0.4, 0.4);
+        tabButton2.name = "Solid Brushes";
+        tabButton2.tag = 1;
+        tabButton2.onInactiveTab = onInactiveTab;
+        tabButton2.onActiveTab = onActiveTab;
+
+        var tabButton3 = new UIObjectManager.Tab('textures/ui/FXTab.png', new THREE.Vector2(192, 95), new THREE.Vector2(25, 10), 0, 1, 3);
+        tabButton3.onMouseUp = SetTabIndex;
+        tabButton3.onMouseDown = SelectTab;
+        tabButton3.material.color.setRGB(0.4, 0.4, 0.4);
+        tabButton3.name = "FX Brushes";
+        tabButton3.tag = 1;
+        tabButton3.onInactiveTab = onInactiveTab;
+        tabButton3.onActiveTab = onActiveTab;
+
+        tabButton1.onSwitchTabs();
+
+        var Line1 = new UIObjectManager.DrawLine(new THREE.Vector3(210, 89,0 ), new THREE.Vector3(120, 89,0), new THREE.Color(0.8,0.8,0.8), new THREE.Color(0.8,0.8,0.8));
+        //tabButton2.UIObjectsList = UIObjectManager.UIObjectsList;
     }
 
     //Debug UI
@@ -316,74 +428,6 @@ function buildInterface() {
     }
 }
 
-//Brush Functions
-{
-    function ResetUI(event, uiObject)
-    {
-        uiObject.mesh.scale.x = uiObject.mesh.scale.y = 1;
-    }
-
-    function SetBrush(event, uiObject)
-    {
-        uiObject.mesh.scale.x = uiObject.mesh.scale.y = 1;
-
-        ActiveBrushID = uiObject.tag;
-        ActiveBrushData[0] = uiObject.material.color;
-    }
-
-    function ButtonDownClick(event, uiObject)
-    {
-        uiObject.mesh.scale.x = uiObject.mesh.scale.y = 1.2;
-    }
-
-    function SetForeground(event, uiObject)
-    {
-        uiObject.mesh.scale.x = uiObject.mesh.scale.y = 1;
-
-        var newEvent = new EVENT(SequenceManager.SequenceTime, 0, Brushes[uiObject.tag]);
-        SequenceManager.AddEvent(newEvent);
-    }
-
-    function SetBackground(event, uiObject)
-    {
-        uiObject.mesh.scale.x = uiObject.mesh.scale.y = 1;
-
-        var newEvent = new EVENT(0, 0, Brushes[uiObject.tag]);
-        newEvent.IsBackground = true;
-        SequenceManager.AddEvent(newEvent);
-    }
-
-    function AutoSpinR(event, uiObject)
-    {
-        uiObject.mesh.scale.x = uiObject.mesh.scale.y = 1;
-        FixedSpeedActive = true;
-        targetRotation = 0.05;
-    }
-
-    function AutoSpinL(event, uiObject)
-    {
-        uiObject.mesh.scale.x = uiObject.mesh.scale.y = 1;
-        FixedSpeedActive = true;
-        targetRotation = -0.05;
-    }
-}
-
-
-
-//Debug Functions
-function ClearDome(event, uiObject)
-{
-    uiObject.mesh.scale.x = uiObject.mesh.scale.y = 1;
-    ClearLights();
-    SequenceManager.Events = [];
-}
-
-function SubmitSequence(event, uiObject)
-{
-    uiObject.mesh.scale.x = uiObject.mesh.scale.y = 1;
-    EnableDomeEventHandles(false);
-    DisplaySubmit();
-}
 
 
 

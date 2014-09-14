@@ -9,19 +9,24 @@ UI = function(projector, raycaster, camera, mouse)
     var mCamera = camera;
 
     //Helper Objects
-    var UpdateEvent = function()
-    {
+    var UpdateEvent = function(){
+
         this.type = "uiupdate"
     };
 
-    var MouseEnterEvent = function()
-    {
+    var MouseEnterEvent = function(){
+
         this.type = "mouseenter"
     };
 
-    var MouseExitEvent = function()
-    {
+    var MouseExitEvent = function(){
+
         this.type = "mouseexit"
+    };
+
+    var ColorUpdatedEvent = function(){
+
+        this.type = "colorUpdated"
     };
 
 
@@ -35,8 +40,8 @@ UI = function(projector, raycaster, camera, mouse)
     });
 
     //Check all UI for Collision Events
-    this.Update = function(event)
-    {
+    this.Update = function(event){
+
         //console.log(event);
         var hitUI = [];
 
@@ -90,25 +95,34 @@ UI = function(projector, raycaster, camera, mouse)
 
             }
         }
+
+        //Catch Mouse Up and clear all mouse down flags.
+        if(event.type == "mouseup" && hitUI.length == 0)
+        {
+            for (var i = 0; i < mUIObjects.length; i++)
+            {
+                if(mUIObjects[i].isMouseDown == true)
+                {
+                    mUIObjects[i].isMouseDown = false;
+                    CallEvent(event, mUIObjects[i]);
+                }
+            }
+        }
     };
 
     //Call update on UI Objects
-    this.UpdateUI = function()
-    {
+    this.UpdateUI = function(){
        for (var i = 0; i < mUIObjects.length; i++) {CallEvent(new UpdateEvent(),mUIObjects[i]);}
     };
 
-    this.AddUIObject = function(uiObject)
-    {
+    this.AddUIObject = function(uiObject){
+
         uiObject.index = mUIObjects.length;
         mUIObjects.push(uiObject);
-    }
+    };
 
     //Helper Functions
-    function CallEvent(event, uiObject)
-    {
-       //console.log(uiObject);
-        //console.log(">>: " + event.type);
+    function CallEvent(event, uiObject){
 
         if(event.type == "uiupdate")
         {
@@ -136,26 +150,7 @@ UI = function(projector, raycaster, camera, mouse)
         }
     };
 
-    //    this.Convert3DtoUISpace = function(pos, camera)
-    //    {
-    //        camera = typeof camera !== 'undefined' ? camera : mCamera;
-    //    }
-    //    this.getFrustumDimensions = function(camera)
-    //    {
-    //        camera = typeof camera !== 'undefined' ? camera : mCamera;
-    //        // Near Plane dimensions
-    //        var hNear = 2 * Math.tan(camera.fov / 2) * camera.near; // height
-    //        var wNear = hNear * camera.aspect; // width
-    //
-    //        var ntr = new THREE.Vector3( wNear / 2, hNear / 2, -camera.near );
-    //        camera.updateMatrixWorld();
-    //        ntr.applyMatrix4( camera.matrixWorld );
-    //
-    //        console.log(ntr);
-    //    }
-
-    this.init = function()
-    {
+    this.init = function(){
         this.EnableEventHandles(true);
 
         //We only need to enable these if there is no touch interface
@@ -177,31 +172,9 @@ UI = function(projector, raycaster, camera, mouse)
             document.removeEventListener( 'mousedown', this.Update, false );
             document.removeEventListener( 'mousemove', this.Update, false );
         }
-    }
-
-
-    this.BaseUIObject = function(texture, mPos, mSize, groupID, tabID)
-    {
-        this.index = null;
-        this.onMouseUp = null;
-        this.onMouseDown = null;
-        this.onMouseMove = null;
-        this.onMouseEnter = null;
-        this.onMouseExit = null;
-        this.onUIUpdate = null;
-        this.MouseOver = false;
-        this.mesh = null;
-        this.material = null;
-        this.map = null;
-        this.tag = null;
-        this.name = "";
-        this.GroupID = groupID || 0;
-        this.TabID = tabID || 0;
     };
 
-    this.Button = function(texture, mPos, mSize, groupID, tabID)
-    {
-        //this.prototype = new self.BaseUIObject(texture, mPos, mSize, groupID);
+    this.BaseUIObject = function(){
         this.index = null;
         this.onMouseUp = null;
         this.onMouseDown = null;
@@ -214,7 +187,27 @@ UI = function(projector, raycaster, camera, mouse)
         this.material = null;
         this.map = null;
         this.tag = null;
-        this.name = "";
+        this.name = "#NO_NAME#";
+        this.GroupID = 0;
+        this.TabID = 0;
+        this.isMouseDown = false;
+        //Todo: Make Visible wrap .mesh.visible and update references
+//        var visible = true;
+//
+//        this.__defineGetter__("Visible", function(){
+//            return visible;
+//        });
+//
+//        this.__defineSetter__("Visible", function(val){
+//            visible = val;
+//        });
+
+
+
+        return this;
+    };
+
+    this.Button = function(texture, mPos, mSize, groupID, tabID){
         this.GroupID = groupID || 0;
         this.TabID = tabID || 0;
 
@@ -236,50 +229,40 @@ UI = function(projector, raycaster, camera, mouse)
         };
         this.init();
     };
+    this.Button.Prototype = Object.create(this.BaseUIObject());
 
-    this.Tab = function(texture, mPos, mSize, groupID, tabID)
-    {
-       //this.prototype = new self.BaseUIObject(texture, mPos, mSize, groupID);
-        this.index = null;
-        this.onMouseUp = null;
-        this.onMouseDown = null;
-        this.onMouseMove = null;
-        this.onMouseEnter = null;
-        this.onMouseExit = null;
-        this.MouseOver = false;
-        this.mesh = null;
-        this.material = null;
-        this.map = null;
-        this.tag = null;
-        this.name = "";
+    this.Tab = function(texture, mPos, mSize, tabGroupID, groupID, tabID) {
         this.GroupID = groupID || 0;
         this.TabID = tabID || 0;
+        this.TabGroupID = tabGroupID || 0;
 
-        this.onSwitchTabs = function()
-        {
+        this.onInactiveTab = null;
+        this.onActiveTab = null;
+
+        this.onSwitchTabs = function () {
             for (var i = 0; i < mUIObjects.length; i++) {
 
-                //Skip if self
-                if(i == this.index){i++;}
-
-                //console.log(mUIObjects[i].name + " : " + mUIObjects[i].TabID);
                 //Only operate on same Group ID Items
-                if(this.GroupID == mUIObjects[i].GroupID )
-                {
+                if (this.GroupID == mUIObjects[i].GroupID) {
                     //Toggle visibility on active Tab Items
-                    if(this.TabID == mUIObjects[i].TabID)
-                    {
-                        mUIObjects[i].mesh.visible = false;
+                    if (mUIObjects[i].TabGroupID == 0) {
+                        if (i == this.index) {
+                            if(mUIObjects[i].onActiveTab != null){mUIObjects[i].onActiveTab(mUIObjects[i]);}
+                        }
+                        else {
+                            if(mUIObjects[i].onInactiveTab != null){mUIObjects[i].onInactiveTab(mUIObjects[i]);}
+                        }
                     }
-                    else
-                    {
+                    else if (this.TabID == mUIObjects[i].TabID) {
                         mUIObjects[i].mesh.visible = true;
                     }
+                    else {
+                        mUIObjects[i].mesh.visible = false;
+                    }
+
                 }
-
-
             }
-        };
+        }
 
         this.init = function() {
 
@@ -299,23 +282,9 @@ UI = function(projector, raycaster, camera, mouse)
         };
         this.init();
     };
+    this.Tab.Prototype = Object.create(this.BaseUIObject());
 
-    this.Timeline = function(texture, mPos, mSize, groupID, tabID)
-    {
-        //this.prototype = new self.BaseUIObject(texture, mPos, mSize, groupID);
-        this.index = null;
-        this.onMouseUp = null;
-        this.onMouseDown = null;
-        this.onMouseMove = null;
-        this.onMouseEnter = null;
-        this.onMouseExit = null;
-        this.onUIUpdate = null;
-        this.MouseOver = false;
-        this.mesh = null;
-        this.material = null;
-        this.map = null;
-        this.tag = null;
-        this.name = "";
+    this.Timeline = function(texture, mPos, mSize, groupID, tabID){
         this.GroupID = groupID || 0;
         this.TabID = tabID || 0;
 
@@ -344,15 +313,15 @@ UI = function(projector, raycaster, camera, mouse)
         {
             var yPos = this.Position.y + (this.Size.y / 2);
 
-            DrawLine(
+            self.DrawLine(
                 new THREE.Vector3(this.Position.x, yPos,0 ),
                 new THREE.Vector3(this.Position.x + this.Size.x, yPos,0)
             );
-            DrawLine(
+            self.DrawLine(
                 new THREE.Vector3(this.Position.x, this.Position.y + (this.Size.y * 0.25),0 ),
                 new THREE.Vector3(this.Position.x, this.Position.y + (this.Size.y * 0.75),0)
             );
-            DrawLine(
+            self.DrawLine(
                 new THREE.Vector3(this.Position.x + this.Size.x, this.Position.y + (this.Size.y * 0.25),0 ),
                 new THREE.Vector3(this.Position.x + this.Size.x, this.Position.y + (this.Size.y * 0.75),0)
             );
@@ -371,69 +340,69 @@ UI = function(projector, raycaster, camera, mouse)
         };
         this.init();
     };
+    this.Timeline.Prototype = Object.create(this.BaseUIObject());
 
-    this.ColorRing = function(mPos, mSize, groupID, tabID)
-    {
-        //this.prototype = new self.BaseUIObject(texture, mPos, mSize, groupID);
-        this.index = null;
-        this.onMouseUp = null;
-        this.onMouseDown = null;
-        this.onMouseMove = null;
-        this.onMouseEnter = null;
-        this.onMouseExit = null;
-        this.onUIUpdate = null;
-        this.MouseOver = false;
-        this.mesh = null;
-        this.material = null;
-        this.map = null;
-        this.tag = null;
-        this.name = "";
+    this.HueRing = function(mPos, mSize, groupID, tabID){
         this.GroupID = groupID || 0;
         this.TabID = tabID || 0;
 
-        this.Hue = 0;
-        this.HueHandle = new THREE.Object3D;
-        this.OnColorUpdated = null;
+        var mHue = 0;
+        this.__defineGetter__("Hue", function(){
+            return mHue;
+        });
 
-        this.UpdateHuePosition = function(event)
+        this.__defineSetter__("Hue", function(val){
+            mHue = val;
+            this.HueHandle.rotation.z = ((mHue + 0.5) * 2) * Math.PI;
+            if(this.OnHueUpdated != null){this.OnHueUpdated(mHue);}
+        });
+
+        this.HueHandle = new THREE.Object3D;
+        this.OnHueUpdated = null;
+
+        this.UpdatePosition = function(event)
         {
             //Get Hit Point from event and make a vector
             var vec = new THREE.Vector2(this.HueHandle.position.x - event.intersection[0].point.x,
                                         event.intersection[0].point.y - this.HueHandle.position.y);
             vec.normalize();
             //convert the vector to radians
-            this.Hue =  this.HueHandle.rotation.z = Math.atan2( vec.x, vec.y );
-            this.Hue = (this.HueHandle.rotation.z / Math.PI)/2 + 0.5;
+            this.HueHandle.rotation.z = Math.atan2( vec.x, vec.y );
+            mHue = (this.HueHandle.rotation.z / Math.PI)/2 + 0.5;
 
-            this.OnColorUpdated(this.Hue);
+            if(this.OnHueUpdated != null){this.OnHueUpdated(mHue);}
         };
 
         this.init = function()
         {
-            this.map = THREE.ImageUtils.loadTexture( 'textures/ui/ColorWheel.png' );
+            this.map = THREE.ImageUtils.loadTexture( 'textures/UI/ColorWheel.png' );
 
             this.material = new THREE.MeshBasicMaterial({
                 color:0xffffff, shading: THREE.FlatShading,
                 map:  this.map
             });
 
-            this.HueHandle.position.set(mPos.x, mPos.y, 0);
+            this.HueHandle.position.set(mPos.x - 0.5, mPos.y, 0);
 
+            //Color selection ring foreground
             var object = new THREE.Mesh( new THREE.RingGeometry( 2.3, 3.3, 20, 0, 0, Math.PI * 2 ), new THREE.MeshBasicMaterial({color:0xFFFFFF, shading: THREE.FlatShading}));
-            object.position.set(0 , 27.5, 1 );
+            object.position.set(0 , 28.3, 1 );
             this.HueHandle.add( object );
 
+            //Color selection ring background
             object = new THREE.Mesh( new THREE.RingGeometry( 2, 3.6, 20, 0, 0, Math.PI * 2 ), new THREE.MeshBasicMaterial({color:0x000000, shading: THREE.FlatShading}));
-            object.position.set(0 , 27.7, 1 );
+            object.position.set(0 , 28.3, 1 );
             this.HueHandle.add( object );
 
             scene.add(this.HueHandle);
 
-            object = new THREE.Mesh( new THREE.RingGeometry( 25, 30, 40, 0, 0, Math.PI * 2 ), this.material );
+            //Color Wheel Background Ring
+            object = new THREE.Mesh( new THREE.RingGeometry( 24, 33, 40, 0, 0, Math.PI * 2 ), this.material );
             object.position.set( mPos.x, mPos.y, 0 );
             scene.add( object );
 
-            this.mesh = new THREE.Mesh( new THREE.RingGeometry( 20, 35, 40, 0, 0, Math.PI * 2 ), new THREE.MeshBasicMaterial({color:0x000000, shading: THREE.FlatShading}) );
+            //Color Wheel Collision Mesh Ring
+            this.mesh = new THREE.Mesh( new THREE.RingGeometry( 24, 35, 40, 0, 0, Math.PI * 2 ), new THREE.MeshBasicMaterial({color:0x000000, shading: THREE.FlatShading}) );
             this.mesh.position.set( mPos.x, mPos.y, -1);
             scene.add( this.mesh );
 
@@ -442,104 +411,180 @@ UI = function(projector, raycaster, camera, mouse)
         };
         this.init();
     };
+    this.HueRing.Prototype = Object.create(this.BaseUIObject());
 
-    this.ColorPicker = function(mPos, mSize, groupID, tabID)
-    {
-        //this.prototype = new self.BaseUIObject(texture, mPos, mSize, groupID);
-        var ColorPicker = this;
-        this.index = null;
-        this.onMouseUp = null;
-        this.onMouseDown = null;
-        this.onMouseMove = null;
-        this.onMouseEnter = null;
-        this.onMouseExit = null;
-        this.onUIUpdate = null;
-        this.MouseOver = false;
-        this.mesh = null;
-        this.material = null;
-        this.map = null;
-        this.tag = null;
-        this.name = "";
+    this.ColorPicker = function(mPos, mSize, groupID, tabID){
+        var mColorPicker = this;
         this.GroupID = groupID || 0;
         this.TabID = tabID || 0;
 
+        var ColorPicker = this;
         this.HueRing = null;
+        this.ColorHandle = new THREE.Object3D;
+        this.onColorUpdated = null;
 
-        this.UpdateColor = function(Hue)
+        var SwatchScale = new THREE.Vector2(29,29);
+
+        this.__defineGetter__("Hue", function(){
+            return this.HueRing.Hue;
+        });
+
+        this.__defineSetter__("Hue", function(val){
+
+            if(val > 1){val = 1;}
+            if(val < 0){val = 0;}
+
+            this.HueRing.Hue = val;
+            if(mColorPicker.onColorUpdated != null){mColorPicker.onColorUpdated(new ColorUpdatedEvent(), mColorPicker)}
+        });
+
+        this.__defineGetter__("Sat", function(){
+            return 1 - this.ColorHandle.position.x;
+        });
+
+        this.__defineSetter__("Sat", function(val){
+
+            if(val > 1){val = 1;}
+            if(val < 0){val = 0;}
+
+            this.ColorHandle.position.x = 1 - val;
+            if(mColorPicker.onColorUpdated != null){mColorPicker.onColorUpdated(new ColorUpdatedEvent(), mColorPicker)}
+        });
+
+        this.__defineGetter__("Light", function(){
+            return this.ColorHandle.position.y;
+        });
+
+        this.__defineSetter__("Light", function(val){
+
+            if(val > 1){val = 1;}
+            if(val < 0){val = 0;}
+
+            this.ColorHandle.position.y = val;
+            if(mColorPicker.onColorUpdated != null){mColorPicker.onColorUpdated(new ColorUpdatedEvent(), mColorPicker)}
+        });
+
+        this.SetColor = function(color)
         {
-            ColorPicker.material.color.setHSL(Hue, 1, 0.5);
+            this.Hue = color.h;
+            this.Sat = color.s;
+            this.Light = color.l;
+
+            mColorUpdated(this.Hue);
+        };
+
+        var mColorUpdated = function(hue)
+        {
+            UpdateSwatchColor(hue);
+            if(mColorPicker.onColorUpdated != null){mColorPicker.onColorUpdated(new ColorUpdatedEvent(), mColorPicker)}
+        }
+
+        var UpdateSwatchColor = function(hue)
+        {
+            ColorPicker.mesh.geometry.faces[0].vertexColors[0] = new THREE.Color().setHSL(hue,1,1);
+            ColorPicker.mesh.geometry.faces[0].vertexColors[1] = new THREE.Color().setHSL(hue,1,0.5);
+            ColorPicker.mesh.geometry.faces[0].vertexColors[2] = new THREE.Color().setHSL(hue,0,1);
+
+            ColorPicker.mesh.geometry.faces[1].vertexColors[0] = new THREE.Color().setHSL(hue,1,0.5);
+            ColorPicker.mesh.geometry.faces[1].vertexColors[1] = new THREE.Color().setHSL(hue,0,0.5);
+            ColorPicker.mesh.geometry.faces[1].vertexColors[2] = new THREE.Color().setHSL(hue,0,1);
+
+            ColorPicker.mesh.geometry.colorsNeedUpdate = true;
+        };
+
+        this.UpdatePosition = function(event)
+        {
+            var color = new THREE.Color();
+            color.h = this.HueRing.Hue;
+            color.s = 1 - ((event.intersection[0].point.x - (this.mesh.position.x - SwatchScale.x /2)) / SwatchScale.x);
+            color.l = (event.intersection[0].point.y - (this.mesh.position.y - SwatchScale.y /2)) / SwatchScale.y;
+
+            this.SetColor(color);
         };
 
         this.init = function()
         {
+            this.map = THREE.ImageUtils.loadTexture( 'textures/UI/LightToDark.png' );
 
-            this.material = new THREE.MeshBasicMaterial({
-                color:0xffffff, shading: THREE.FlatShading,
-                map:  this.map
+            this.material = new THREE.MeshLambertMaterial({
+                color:0xFFFFFF,
+                shading: THREE.FlatShading,
+                vertexColors: THREE.VertexColors,
+                emissive:0xFFFFFF,
+                map: this.map
             });
 
-            this.mesh = new THREE.Mesh( new THREE.PlaneGeometry( 31, 31, 0, 0 ), this.material);
+
+            var ColorHandleGroup = new THREE.Object3D;
+
+            ColorHandleGroup.position.set(mPos.x-(SwatchScale.x/2), mPos.y-(SwatchScale.y/2), 0);
+            ColorHandleGroup.scale.set(SwatchScale.x,SwatchScale.y,1);
+
+            //Color selection ring foreground
+            var object = new THREE.Mesh( new THREE.RingGeometry( 1.3/SwatchScale.x, 2.3/SwatchScale.y, 20, 0, 0, Math.PI * 2 ), new THREE.MeshBasicMaterial({color:0xFFFFFF, shading: THREE.FlatShading}));
+            object.position.set(0 , 0, 1 );
+            this.ColorHandle.add( object );
+
+            //Color selection ring background
+            object = new THREE.Mesh( new THREE.RingGeometry( 1/SwatchScale.x, 2.6/SwatchScale.y, 20, 0, 0, Math.PI * 2 ), new THREE.MeshBasicMaterial({color:0x000000, shading: THREE.FlatShading}));
+            object.position.set(0 , 0, 1 );
+            this.ColorHandle.add( object );
+
+            ColorHandleGroup.add(this.ColorHandle);
+
+            scene.add(ColorHandleGroup);
+
+            //ColorSwatch Border
+            var Outline = new THREE.Mesh( new THREE.PlaneGeometry( SwatchScale.x +1, SwatchScale.y+1, 0, 0 ), new THREE.MeshBasicMaterial({color:0xFFFFFF, shading: THREE.FlatShading}));
+            Outline.position.set( mPos.x, mPos.y, 0.90 );
+            scene.add( Outline );
+
+            //ColorSwatch
+            this.mesh = new THREE.Mesh( new THREE.PlaneGeometry( SwatchScale.x, SwatchScale.y, 1, 1 ), this.material);
             this.mesh.position.set( mPos.x, mPos.y, 1 );
             scene.add( this.mesh );
 
-            //this.mesh.position.set(  mPos.x,  mPos.y, 0 );
-            //scene.add(  this.mesh );
-            this.HueRing = new self.ColorRing(mPos, mSize, groupID, tabID);
+            //Hue Ring Object
+            this.HueRing = new self.HueRing(mPos, mSize, groupID, tabID);
             this.HueRing.name = "HueRing";
-            this.HueRing.OnColorUpdated = this.UpdateColor;
+            this.HueRing.OnHueUpdated = mColorUpdated;
 
             self.AddUIObject(this);
+
             return this;
         };
         this.init();
     };
+    this.ColorPicker.Prototype = Object.create(this.BaseUIObject());
 
-    function DrawLine(Pos1, Pos2)
-    {
-//        //for (var i = 0; i < 300; i++) {
-//
-//            var geometry = new THREE.BufferGeometry();
-//            var material = new THREE.LineBasicMaterial({ vertexColors: THREE.VertexColors });
-//
-//            var positions = new Float32Array(6);
-//            positions = [300,300,300,-300,-300,-300];
-//
-//            var colors = new Float32Array(6);
-//            colors= [1,1,1,1,1,1];
-//
-//            geometry.addAttribute( 'position', new THREE.BufferAttribute( positions, 3 ) );
-//            geometry.addAttribute( 'color', new THREE.BufferAttribute( colors, 3 ) );
-//
-//            geometry.computeBoundingSphere();
-//
-//            mesh = new THREE.Line( geometry, material );
+    this.DrawLine = function(Pos1, Pos2, color1, color2){
+
+        var mColor1 = color1 || new THREE.Color(1,1,1);
+        var mColor2 = color2 || new THREE.Color(1,1,1);
+
         var geometry = new THREE.BufferGeometry();
         var material = new THREE.LineBasicMaterial({ vertexColors: THREE.VertexColors, linewidth: 5 });
 
         var positions = new Float32Array( 6 );
         var colors = new Float32Array( 6 );
 
-        //for ( var i = 0; i < segments; i ++ ) {
+        // positions
+        positions[0] = Pos1.x;
+        positions[1] = Pos1.y;
+        positions[2] = Pos1.z;
 
-            // positions
-            positions[0] = Pos1.x;
-            positions[1] = Pos1.y;
-            positions[2] = Pos1.z;
+        positions[3] = Pos2.x;
+        positions[4] = Pos2.y;
+        positions[5] = Pos2.z;
 
-            positions[3] = Pos2.x;
-            positions[4] = Pos2.y;
-            positions[5] = Pos2.z;
-
-            // colors
-            colors[0] =  1.0;
-            colors[1] =  1.0;
-            colors[2] =  1.0;
-            // colors
-            colors[3] =  1.0;
-            colors[4] =  1.0;
-            colors[5] =  1.0;
-
-        //}
+        // colors
+        colors[0] =  mColor1.r;
+        colors[1] =  mColor1.g;
+        colors[2] =  mColor1.b;
+        // colors
+        colors[3] =  mColor2.r;
+        colors[4] =  mColor2.g;
+        colors[5] =  mColor2.b;
 
         geometry.addAttribute( 'position', new THREE.BufferAttribute( positions, 3 ) );
         geometry.addAttribute( 'color', new THREE.BufferAttribute( colors, 3 ) );
@@ -548,9 +593,7 @@ UI = function(projector, raycaster, camera, mouse)
 
         var mesh = new THREE.Line( geometry, material );
         scene.add(mesh);
-        //}
-    }
-
+    };
 
     this.init();
 };

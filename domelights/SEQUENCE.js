@@ -96,12 +96,14 @@ SEQUENCE = function() {
 
     this.AddEvent = function(event)
     {
-      //We need to sort this on addition based on time as we could be adding in an event at any point in time.
-      //eg. During playback of other events.
+        //We need to sort this on addition based on time as we could be adding in an event at any point in time.
+        //eg. During playback of other events.
+        this.Events.push(event);
 
-      //TODO insert based on time.
-      this.Events.push(event);
-
+        //Now we've added another event, sort to ensure they are in the correct order
+        this.Events.sort(function(a,b){
+            return a.StartTime - b.StartTime;
+        });
     };
 
     this.RemoveEvent = function(atIndex)
@@ -174,11 +176,11 @@ SEQUENCE = function() {
         //Add all the Events
         for(var index = 0; index < SequenceConstructionFile.Events.length; index++) {
 
-            var newEvent1 = new EVENT(SequenceConstructionFile.Events[index].StartTime,
+            var newEvent = new EVENT(SequenceConstructionFile.Events[index].StartTime,
                                       SequenceConstructionFile.Events[index].OriginLight,
                                       Brushes[SequenceConstructionFile.Events[index].BrushID],
                                       RebuildBrushData(SequenceConstructionFile.Events[index].BrushData));
-            this.AddEvent(newEvent1);
+            this.AddEvent(newEvent);
         }
 
         console.log("--- File Loaded ---");
@@ -191,7 +193,7 @@ var EVENT = function(time, originLight, brush, brushData)
     this.StartTime = time; //Offset from the start of the sequence in frames.
     this.OriginLight = originLight; // The Light that the animation is based from.
     this.Brush = brush; // The brush that should be applied.
-    this.BrushData = jQuery.extend(false,brushData) || []; //Store Data that is used by the brush
+    this.BrushData = Clone(brushData); //The current brush data
 
     this.PrePaint = function()
     {

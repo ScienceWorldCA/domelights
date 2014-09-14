@@ -42,6 +42,8 @@ if( ! window ) {
 
     var timer = 0.0;
 
+    var UseStubLights = true;
+
 
     //Used for Debug Purposes
     var manager = new THREE.LoadingManager();

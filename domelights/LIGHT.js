@@ -50,7 +50,15 @@ var DomeLights = function(localScene)
 
         this.init = function() {
             // Add Light
-            var Light = new THREE.PointLight( lightColor, 0.5, 2 );
+            if(UseStubLights) // This is used if the video card can't handle the number of lights.
+            {
+                var Light = new THREE.Object3D();
+                Light.color = new THREE.Color(lightColor.r,lightColor.g,lightColor.b);
+            }
+            else
+            {
+                var Light = new THREE.PointLight( lightColor, 0.5, 2 );
+            }
             Light.position.set( mPos.x, mPos.y, mPos.z );
             mScene.add( Light );
             mLights.push(Light);

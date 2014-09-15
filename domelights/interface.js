@@ -91,19 +91,20 @@ function buildInterface() {
         swipeMesh.position.set(0, -70, 0);
         scene.add(swipeMesh);
 
-        var SpinR = new UIObjectManager.Button('textures/UI/SpinR.png', new THREE.Vector2(50, -60), new THREE.Vector2(19, 19));
+        var SpinR = new UIObjectManager.Button('textures/UI/SpinR.png', new THREE.Vector2(50, -60), new THREE.Vector2(19, 19), 0, 0);
         SpinR.onMouseDown = ButtonDownClick;
         SpinR.onMouseUp = AutoSpinR;
         SpinR.material.color.setRGB(1, 1, 1);
         SpinR.tag = 1;
         SpinR.name = "SpinRight";
 
-        var SpinL = new UIObjectManager.Button('textures/UI/SpinL.png', new THREE.Vector2(-50, -60), new THREE.Vector2(19, 19));
+        var SpinL = new UIObjectManager.Button('textures/UI/SpinL.png', new THREE.Vector2(-50, -60), new THREE.Vector2(19, 19), 0, 0);
         SpinL.onMouseUp = AutoSpinL;
         SpinL.onMouseDown = ButtonDownClick;
         SpinL.material.color.setRGB(1, 1, 1);
         SpinL.tag = 1;
         SpinL.name = "SpinLeft";
+
 
     }
 
@@ -202,21 +203,23 @@ function buildInterface() {
             uiObject.mesh.rotation.z += uiObject.spin;
         }
 
-        var bbutton1 = new UIObjectManager.Button('textures/UI/Gradient.png', new THREE.Vector2(-180, 60), new THREE.Vector2(20, 20));
+        var bbutton1 = new UIObjectManager.Button('textures/UI/Gradient.png', new THREE.Vector2(-180, 60), new THREE.Vector2(20, 20),0,0,true);
         bbutton1.onMouseDown = ButtonDownClick;
         bbutton1.onMouseUp = SetBackground;
         bbutton1.material.color.setRGB(1, 1, 1);
         bbutton1.tag = 2;
         bbutton1.name = "Background 1";
+        bbutton1.Label.Text = "Rainbow";
 
-        var bbutton2 = new UIObjectManager.Button('textures/UI/SunnyDay.png', new THREE.Vector2(-180, 30), new THREE.Vector2(20, 20));
+        var bbutton2 = new UIObjectManager.Button('textures/UI/SunnyDay.png', new THREE.Vector2(-180, 30), new THREE.Vector2(20, 20),0,0,true);
         bbutton2.onMouseDown = ButtonDownClick;
         bbutton2.onMouseUp = SetBackground;
         bbutton2.material.color.setRGB(1, 1, 1);
         bbutton2.tag = 3;
         bbutton2.name = "Background 2";
+        bbutton2.Label.Text = "Rainbow Wipe";
 
-        var bbutton3 = new UIObjectManager.Button('textures/UI/smiley-face.png', new THREE.Vector2(-180, 0), new THREE.Vector2(20, 20));
+        var bbutton3 = new UIObjectManager.Button('textures/UI/smiley-face.png', new THREE.Vector2(-180, 0), new THREE.Vector2(20, 20),0,0,true);
         bbutton3.onMouseDown = ButtonDownClick;
         bbutton3.onMouseUp = SetForeground;
         bbutton3.onUIUpdate = spinUpdate;
@@ -224,7 +227,7 @@ function buildInterface() {
         bbutton3.tag = 4;
         bbutton3.name = "Background 3";
         bbutton3.spin = -0.1;
-
+        bbutton3.Label.Text = "Green Flash";
     }
 
     var timeline = new UIObjectManager.Timeline('textures/UI/smiley-face.png', new THREE.Vector2(-90, -105), new THREE.Vector2(180, 20));
@@ -402,6 +405,24 @@ function buildInterface() {
 
         var Line1 = new UIObjectManager.DrawLine(new THREE.Vector3(210, 89,0 ), new THREE.Vector3(120, 89,0), new THREE.Color(0.8,0.8,0.8), new THREE.Color(0.8,0.8,0.8));
         //tabButton2.UIObjectsList = UIObjectManager.UIObjectsList;
+
+    }
+
+    var myText = new UIObjectManager.Text(new THREE.Vector3(86, -88, 2 ), new THREE.Color(1,0,0), "Welcome", "right");
+    {
+        function UpdateTimeText(event, uiObject)
+        {
+            var sequenceCurrentTime = Math.floor(SequenceManager.GetSequenceTime() / FPS);
+
+            if(sequenceCurrentTime != uiObject.currentime) {
+                uiObject.Text = (sequenceCurrentTime + 1) + " Seconds";
+                uiObject.currentime = sequenceCurrentTime;
+            }
+        }
+
+        myText.Text = "Carla is a Cutie";
+        myText.TextAlignment = "right";
+        myText.onUIUpdate = UpdateTimeText;
     }
 
     //Debug UI

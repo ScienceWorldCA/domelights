@@ -4,24 +4,24 @@
  * The DomeController class controls the DomeController daemon
  */
 class DomeController {
-
+	
 	private $dbconn;
 	private $schedule_instance = null;
-
+	
 	public function __construct() {
 		$this->dbconn = ColoreDBConnector::getInstance();
 	}
-
-	/* _GetScheduleInstance
+	
+	/**
 	 * Gets an instance of the Scheduler, maintaining a single instance. (Faux Singleton)
 	 */
-	private function _GetScheduleInstance() {
+	private function GetSchedulerInstance() {
 		if( $this->schedule_instance == null )
 			$this->schedule_instance = new CSchedule();
-
+	
 		return $this->schedule_instance;
 	}
-	
+		
 	public function AuthenticateController( ColoreRequestHelper &$cro ) {
 		// Bail if authenticated
 		if( $cro->getSessionProperty( 'authenticated' ) )
@@ -171,7 +171,7 @@ class DomeController {
 	
 	public function GetEvent() {
 		// Simple query
-		$query = "SELECT id, type, options FROM events WHERE start < now() AND end > now() AND active = 1";
+		$query = "SELECT id, type, options FROM events WHERE now() BETWEEN start AND end AND active = 1 ORDER BY start ASC";
 		
 		// Do query
 		$res = $this->dbconn->query( $query );

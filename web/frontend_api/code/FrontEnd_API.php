@@ -198,7 +198,7 @@ class FrontEnd_API {
 	public function EmailSchedule( ColoreRequestHelper &$cro ) {
 		global $config;
 
-		$mail_result = mail(
+		$mail_result = @mail(
 				$cro->useremail, // Recipient
 				$config['email']['subject']['animation_shedule_confirmation'], // Subject
 				sprintf( $config['email']['body']['animation_shedule_confirmation'], $cro->userrealname, $cro->animationStartTime ), // Message

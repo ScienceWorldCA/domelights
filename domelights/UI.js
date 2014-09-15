@@ -207,9 +207,10 @@ UI = function(projector, raycaster, camera, mouse)
         return this;
     };
 
-    this.Button = function(texture, mPos, mSize, groupID, tabID){
+    this.Button = function(texture, mPos, mSize, groupID, tabID, mShowLabel){
         this.GroupID = groupID || 0;
         this.TabID = tabID || 0;
+        this.ShowLabel = mShowLabel || false;
 
         this.init = function()
         {
@@ -219,6 +220,10 @@ UI = function(projector, raycaster, camera, mouse)
                 color:0xffffff, shading: THREE.FlatShading,
                 map:  this.map
             });
+
+            if(this.ShowLabel == true) {
+                this.Label = new self.Text(new THREE.Vector3(mPos.x, mPos.y - (mSize.y * 0.75), 2), "Button", "center");
+            }
 
             this.mesh = new THREE.Mesh( new THREE.PlaneGeometry( mSize.x, mSize.y, 0, 0 ), this.material );
             this.mesh.position.set(  mPos.x,  mPos.y, 0 );
@@ -594,6 +599,87 @@ UI = function(projector, raycaster, camera, mouse)
         var mesh = new THREE.Line( geometry, material );
         scene.add(mesh);
     };
+
+    this.Text = function(pos, text, textAlignment)
+    {
+        var mTextAlignment = textAlignment || "center";
+        var mText = text || "BASE";
+        var text3d = null;
+        var textMesh = THREE.Geometry();
+        var mat = null;
+        var position = pos;
+
+        var mTextOptions =
+        {
+            size: 5,
+            height: 0,
+            curveSegments: 0,
+            font: "helvetiker",
+            bevelThickness: 0,
+            amount: 0
+        };
+
+        var mRebuildText = function(text)
+        {
+            if(text != null && text3d != null) {
+                scene.remove(textMesh);
+                text3d = new THREE.TextGeometry(text, mTextOptions);
+                text3d.computeBoundingBox();
+                textMesh = new THREE.Mesh(text3d, mat); // = text3d;
+                mUpdateTextAlignement();
+                scene.add(textMesh);
+            }
+        };
+
+        this.__defineGetter__("TextAlignment", function(){
+            return mTextAlignment;
+        });
+
+        this.__defineSetter__("TextAlignment", function(val){
+            mTextAlignment = val.toLowerCase();
+            mUpdateTextAlignement();
+        });
+
+        this.__defineGetter__("Text", function(){
+            return mText;
+        });
+
+        this.__defineSetter__("Text", function(val){
+            mText = val;
+            mRebuildText(mText);
+        });
+
+        var mUpdateTextAlignement = function()
+        {
+            var textWidth = textMesh.geometry.boundingBox.max.x - textMesh.geometry.boundingBox.min.x;
+
+            var TextAlignmentPos = position.x;
+
+            if(mTextAlignment == "center"){TextAlignmentPos = position.x - (textWidth/2);}
+            else if(mTextAlignment == "right"){TextAlignmentPos = position.x - textWidth;}
+
+            textMesh.position.set(TextAlignmentPos, position.y, position.z);
+        }
+
+        this.init = function()
+        {
+            mat = new THREE.MeshBasicMaterial( { color: 0xffffff } );
+            text3d = new THREE.TextGeometry( mText, mTextOptions);
+            text3d.computeBoundingBox();
+            textMesh = new THREE.Mesh( text3d, mat );
+            mUpdateTextAlignement();
+            scene.add( textMesh );
+        };
+
+        this.init();
+
+        self.AddUIObject(this);
+
+        return this;
+        //var centerOffset = -0.5 * ( text3d.boundingBox.max.x - text3d.boundingBox.min.x );
+
+    };
+    this.Text.Prototype = Object.create(this.BaseUIObject());
 
     this.init();
 };

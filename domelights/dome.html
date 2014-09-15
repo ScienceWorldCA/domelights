@@ -109,6 +109,10 @@
             function CloseSubmit() {
             	document.getElementById('userinput').style.visibility = 'hidden';
             	document.getElementById('blockout').style.visibility = 'hidden';
+            	if( document.getElementById('storeResult').disabled == true ) {
+            		// If we successfully submitted the animation, then reload the canvas (hard reload for now)
+            		location.reload();
+            	}
 				EnableDomeEventHandles(true);
             }
 		</script>

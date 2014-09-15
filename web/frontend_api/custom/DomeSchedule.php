@@ -13,8 +13,8 @@ class CSchedule
 		global $config ; 
 
 		// Create connection
-		$this->db = mysql_connect( $config['db']['host'], $config['db']['user'], $config['db']['pass']);
-		mysql_select_db($config['db']['name'], $this->db);
+		$this->db = mysqli_connect( $config['db']['host'], $config['db']['user'], $config['db']['pass']);
+		mysqli_select_db($config['db']['name'], $this->db);
 
 		// ToDo: check to see if we failed to connect to the database 
 	} 
@@ -52,12 +52,12 @@ class CSchedule
 		LIMIT 1";
 
 		if( $this->DEBUG ) echo $sql_query . "\n\n"; 
-		$result = mysql_query( $sql_query , $this->db );
-		$num_rows = mysql_num_rows($result);
+		$result = mysqli_query( $sql_query , $this->db );
+		$num_rows = mysqli_num_rows($result);
 		if( $num_rows <= 0 ) {
 			return false ; 
 		} else {
-			return mysql_fetch_assoc( $result ) ; 
+			return mysqli_fetch_assoc( $result ) ; 
 		}
 	}
 
@@ -70,14 +70,14 @@ class CSchedule
 		LIMIT 1";
 
 		if( $this->DEBUG ) echo $sql_query . "\n"; 
-		$result = mysql_query( $sql_query, $this->db );
-		if( mysql_num_rows($result) <= 0 ) {
+		$result = mysqli_query( $sql_query, $this->db );
+		if( mysqli_num_rows($result) <= 0 ) {
 			// This is not an error. This means that there is currently NO animation ahead of this animation. 
 			// Start this animation now. 
 			return date ( "Y-m-d H:i:s", time() + 60 ) ; 
 		} else {
 			// We found at lest one animation ahead of us. 
-			$row = mysql_fetch_assoc( $result ) ;
+			$row = mysqli_fetch_assoc( $result ) ;
 			return $row['end'] ;
 		}
 	}
@@ -92,10 +92,10 @@ class CSchedule
 		SELECT * FROM events
 		WHERE TIMESTAMP( '". $startTime ."' ) BETWEEN events.start AND events.end "; 
 		if( $this->DEBUG ) echo $sql_query . "\n"; 
-		$result = mysql_query( $sql_query, $this->db );
-		if( mysql_num_rows($result) > 0 ) {
+		$result = mysqli_query( $sql_query, $this->db );
+		if( mysqli_num_rows($result) > 0 ) {
 			// There is a schedual at this time. We need to fine another time to run the animation. 
-			return mysql_fetch_assoc( $result ); 
+			return mysqli_fetch_assoc( $result ); 
 		}
 
 		return true; 
@@ -125,8 +125,8 @@ class CSchedule
 		LIMIT 1 ";
 
 		if( $this->DEBUG ) echo $sql_query . "\n"; 
-		$result = mysql_query( $sql_query, $this->db );
-		if( mysql_num_rows($result) > 0 ) {
+		$result = mysqli_query( $sql_query, $this->db );
+		if( mysqli_num_rows($result) > 0 ) {
 			return true ; // This is a good time 
 		} else 
 			if( $this->DEBUG ) echo "FYI. No schedule at this current time. Find the next avaliable schedule. \n";
@@ -153,13 +153,13 @@ class CSchedule
 			LIMIT 1 ";
 			if( $this->DEBUG ) echo $sql_query . "\n"; 
 
-			$result = mysql_query( $sql_query, $this->db );
-			if( mysql_num_rows($result) <= 0 ) {				
+			$result = mysqli_query( $sql_query, $this->db );
+			if( mysqli_num_rows($result) <= 0 ) {				
 				if( $this->DEBUG ) echo 'Error: Are there any schedules at all ?' ; 
 				return false;
 			}
 			
-			return mysql_fetch_assoc( $result );
+			return mysqli_fetch_assoc( $result );
 	}
 
 	/**
@@ -224,7 +224,7 @@ class CSchedule
 
 		$sql_query = "UPDATE animations SET start = '". $scheduleTimeStart ."', end = '". $scheduleTimeEnd ."' WHERE animations.id =". $id .";"; 
 		if( $this->DEBUG ) echo $sql_query . "\n"; 
-		$result = mysql_query( $sql_query, $this->db );
+		$result = mysqli_query( $sql_query, $this->db );
 		if( $result == NULL ) {
 			return false ;
 		}
@@ -250,11 +250,11 @@ class CSchedule
 		echo '<h3>Adding in test animations</h3>' ; 
 		$sql_query = "INSERT INTO animations (user_id) VALUES ('1');"; 
 		echo $sql_query . "\n"; 
-		$result = mysql_query( $sql_query, $this->db );
+		$result = mysqli_query( $sql_query, $this->db );
 		if( $result == NULL ) {
 			return false ;
 		}
-		$id = mysql_insert_id( $this->db ) ; 
+		$id = mysqli_insert_id( $this->db ) ; 
 		echo "\n\n"; 
 
 

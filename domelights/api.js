@@ -38,7 +38,7 @@ function FrontEnd_API() {
 					console.log( data );
 					alert( data.message );
 					if( data.result ) {
-						document.getElementById('storeResult').enabled = false;
+						document.getElementById('storeResult').disabled = true;
 						document.getElementById('storeResult').value = 'Scheduled';
 					} else {
 						document.getElementById('storeResult').value = 'Retry';

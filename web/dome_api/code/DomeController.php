@@ -124,6 +124,7 @@ class DomeController {
 	}
 
 	public function GetControllerTask( ColoreRequestHelper &$cro ) {
+		error_log( sprintf( "%s: %s", __METHOD__, __LINE__ ) );
 		// Get controller info
 		$controller_info = $cro->getSessionProperty( 'controller_info' );
 
@@ -147,11 +148,15 @@ class DomeController {
 			}
 		}
 
+		error_log( sprintf( "%s: %s", __METHOD__, __LINE__ ) );
+
 		// If in animation playback mode, then lookup the current animation
 		if( $cro->getRenderProperty( 'mode' ) == 1 ) {
+			error_log( sprintf( "%s: Checking for animation", __METHOD__ ) );
 			$scheduler = $this->GetSchedulerInstance();
 			$animation_info = $scheduler->GetNextScheduleAnimation();
 			if( $animation_info && is_array( $animation_info ) && isset( $animation_info['source'] ) ) {
+				error_log( sprintf( "%s: Found animation", __METHOD__ ) );
 
 				// Render the animation data
 				$animation_data = $this->GetRenderedAnimation( $animation_info['source'] );
@@ -163,9 +168,15 @@ class DomeController {
 					$cro->setRenderProperty( 'id', $animation_info['id'] );
 					$cro->setRenderProperty( 'data', $animation_data );
 					return;
+				} else {
+					error_log( sprintf( "%s: Animation render failed", __METHOD__ ) );
 				}
+			} else {
+				error_log( sprintf( "%s: No animation found", __METHOD__ ) );
 			}
 		}
+
+		error_log( sprintf( "%s: %s", __METHOD__, __LINE__ ) );
 
 		// If not blacked out and a script was not set, then get the current controller's default script
 		if( $cro->getRenderProperty( 'mode' ) != 0 && ! $cro->getRenderProperty( 'script_name' ) ) {
@@ -191,9 +202,13 @@ class DomeController {
 				$cro->setRenderProperty( 'script_name', "gradient.py" );
 			}
 		}
+
+		error_log( sprintf( "%s: %s", __METHOD__, __LINE__ ) );
+
 	}
 
 	private function GetRenderedAnimation( $source ) {
+		error_log( sprintf( "%s: Executing for: %s", __METHOD__, $source ) );
 		global $config;
 
 		$curl_obj = curl_init( $config['renderd']['url'] );
@@ -201,27 +216,23 @@ class DomeController {
 		if( ! $curl_obj )
 			return false;
 
-		curl_setopt_array(
-				$curl_obj,
-				array(
-						CURLOPT_POST => TRUE,
-						CURLOPT_RETURNTRANSFER => TRUE,
-						CURLOPT_POSTFIELDS => json_encode(
-								array(
-										'sequence' => $source
-								)
-						)
-				)
+		$post_fields = array(
+				'sequence' => $source
 		);
 
+		curl_setopt( $curl_obj, CURLOPT_POST, 1);
+		curl_setopt( $curl_obj, CURLOPT_POSTFIELDS, sprintf( 'sequence=%s', $source ) );
+
 		$response = curl_exec( $curl_obj );
+		curl_close( $curl_obj );
+
 		if( $response === FALSE ){
-			error_log( curl_error( $ch ) );
+			error_log( curl_error( $curl_obj ) );
 			return false;
 		}
-		
+
 		$responseData = json_decode($response, TRUE);
-		
+
 		if( $responseData && is_array( $responseData ) && isset( $responseData['sequence'] ) ) {
 			return $responseData['sequence'];
 		} else {

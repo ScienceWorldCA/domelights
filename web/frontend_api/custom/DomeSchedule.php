@@ -53,6 +53,7 @@ class CSchedule
 		$sql_query[] = "LIMIT 1";
 
 		if( $this->DEBUG ) echo join( ' ', $sql_query ) . "\n\n"; 
+		error_log( sprintf( "%s: Executing for: %s", __METHOD__, join( ' ', $sql_query ) ) );
 		$result = mysqli_query( $this->db, join( ' ', $sql_query ) );
 		$num_rows = mysqli_num_rows($result);
 		if( $num_rows <= 0 ) {

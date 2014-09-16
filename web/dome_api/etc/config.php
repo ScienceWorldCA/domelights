@@ -12,4 +12,6 @@ $config['db']['name'] = 'domelights';
 
 $config['db']['dsn'] = sprintf( "%s:host=%s;dbname=%s", $config['db']['type'], $config['db']['host'], $config['db']['name'] );
 
+$config['renderd']['url'] = 'http://localhost:1337/render';
+
 ?>

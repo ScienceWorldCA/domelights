@@ -29,7 +29,11 @@ class DomeController:
 		self._runningFile = open('running', 'w')
 		self._runningFile.write("STOP")
 		self._runningFile.close()
-		time.sleep(3)
+		time.sleep(5)
+		Debug("Clearing STOP signal")
+		self._runningFile = open('running', 'w')
+		self._runningFile.write("")
+		self._runningFile.close()
 		
 	def api_call(self, remote_method, data):
 		message_hash = self._controller_name + str(int(time.time())) + self._controller_key
@@ -41,14 +45,14 @@ class DomeController:
 		request_url = self._master_url + remote_method
 
 		s = self._httpClient
-		
+		 
 		try:
 			r = s.post(request_url, data)
 		except requests.exceptions.ConnectionError as e:
 			r = s.post(request_url, data)
 			pass
 	   
-		Debug(str(r.text))
+# 		Debug(str(r.text))
 
 		return r.json()
 
@@ -60,9 +64,9 @@ class DomeController:
 		
 		return request_result['mode']
 		
-	def GetTask(self):
+	def GetControllerTask(self):
 		data = {}
-		request_result = self.api_call('GetTask', data)
+		request_result = self.api_call('GetControllerTask', data)
 		
 		return request_result
 		
@@ -113,7 +117,7 @@ class DomeController:
 				
 			elif controller_state == '1':
 				# Fetch next animation
-				task_info = self.GetTask()
+				task_info = self.GetControllerTask()
 
 				if task_info['mode'] == '0':
 					Debug( "Scheduled down time, sleeping for 60 seconds" )

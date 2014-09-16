@@ -43,7 +43,6 @@ app.post('/render', function(req, res) {
 	if( ! req.body.sequence ) {
 		res.send( '{ "result": "ERROR" }' );
 	} else {
-		var SequenceStream = SequenceManager.RenderSequence( req.body.sequence ).toString( 'base64' );
 		var result_set = {
 				result: "OK",
 		};

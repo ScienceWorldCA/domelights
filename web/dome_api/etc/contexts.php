@@ -17,42 +17,13 @@ $config['contexts']['GetControllerState'] = array(
 	),
 );
 
-$config['contexts']['GetAnimation'] = array(
+$config['contexts']['GetControllerTask'] = array(
 	'properties' => array(
 	),
 	'logic' => array(
 		array( 'class' => 'DomeController', 'method' => 'AuthenticateController' ),
-		array( 'class' => 'DomeController', 'method' => 'GetAnimation' ),
-	),
-	'render' => array(
-		'engine' => 'Render_JSON',
-		'path' => '',
-		'properties' => array(
-		),
-	),
-);
-
-$config['contexts']['GetScheduledAnimationScript'] = array(
-	'properties' => array(
-	),
-	'logic' => array(
-		array( 'class' => 'DomeController', 'method' => 'AuthenticateController' ),
-		array( 'class' => 'DomeController', 'method' => 'GetScheduledAnimationScript' ),
-	),
-	'render' => array(
-		'engine' => 'Render_JSON',
-		'path' => '',
-		'properties' => array(
-		),
-	),
-);
-
-$config['contexts']['GetScheduledShow'] = array(
-	'properties' => array(
-	),
-	'logic' => array(
-		array( 'class' => 'DomeController', 'method' => 'AuthenticateController' ),
-		array( 'class' => 'DomeController', 'method' => 'GetScheduledShow' ),
+		array( 'class' => 'DomeController', 'method' => 'GetControllerState' ),
+		array( 'class' => 'DomeController', 'method' => 'GetControllerTask' ),
 	),
 	'render' => array(
 		'engine' => 'Render_JSON',

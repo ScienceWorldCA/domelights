@@ -21,7 +21,6 @@ class CSchedule
 		// ToDo: check to see if we failed to connect to the database 
 	} 
 
-
 	/**
 	 * Check the animation table and find the next scheduled animation. 
 	 *
@@ -146,7 +145,6 @@ class CSchedule
 				$dayOfTheWeek = 1 ; // Loop around from Saturday to Sunday. 
 			}
 
-
 			$sql_query = "
 			SELECT * FROM schedule WHERE 
 			schedule.day >= ". $dayOfTheWeek ." AND 
@@ -185,7 +183,6 @@ class CSchedule
 		$timeOfLastScheduledAnimation = $this->GetTimeOfLastScheduledAnimation()  ; 
 		if( $this->DEBUG ) echo 'Last schedule animation time: '. $timeOfLastScheduledAnimation . "\n\n\n"; 
 
-
 		$scheduleTimeStart = $timeOfLastScheduledAnimation  ; 
 		for( $attemps = 3 ; $attemps > 0 ; $attemps-- ) 
 		{
@@ -195,7 +192,7 @@ class CSchedule
 			if( $blackOutScheduleCheck != true ) {
 				// There is a black out schedule for this time. We can't use this time. 
 				// Set the time for 1 mins past the current black out period then test the schedule 
-				var_dump( $blackOutScheduleCheck ) ; 
+				if( $this->DEBUG ) var_dump( $blackOutScheduleCheck ) ; 
 				$scheduleTimeStart = $blackOutScheduleCheck[ 'end' ] ; 
 				$schedulePeriod    = false ; // We changed the time. We have to recheck the schedule. 
 			} else {
@@ -211,7 +208,6 @@ class CSchedule
 			} else {
 				if( $this->DEBUG ) echo "Good: Time inside a schedulle\n" ; 
 			}
-
 
 			if( $blackOutScheduleCheck === true && $schedulePeriodCheck === true ) {
 				if( $this->DEBUG ) echo "Good: we found a good time.\n"; 
@@ -259,8 +255,6 @@ class CSchedule
 		$id = mysqli_insert_id( $this->db ) ; 
 		echo "\n\n"; 
 
-
-
 		echo '<h3>Check to see what the next animation is</h3>';
 		$nextScheduleAnimation = $this->GetNextScheduleAnimation() ; 
 		if( $nextScheduleAnimation === false ) {
@@ -269,12 +263,10 @@ class CSchedule
 		var_dump ( $nextScheduleAnimation ) ;
 		echo "\n\n\n" ; 
 
-
 		echo '<h3>Insert a new animations</h3>';
 		$ret = $this->UpdateAnimationScheduleTime( $id, 60 ) ; 
 		var_dump ( $ret ) ;
 		echo "\n\n\n" ; 
-
 
 		echo '</pre>'; 
 	} 

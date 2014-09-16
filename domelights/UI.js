@@ -191,16 +191,7 @@ UI = function(projector, raycaster, camera, mouse)
         this.GroupID = 0;
         this.TabID = 0;
         this.isMouseDown = false;
-        //Todo: Make Visible wrap .mesh.visible and update references
-//        var visible = true;
-//
-//        this.__defineGetter__("Visible", function(){
-//            return visible;
-//        });
-//
-//        this.__defineSetter__("Visible", function(val){
-//            visible = val;
-//        });
+
 
 
 
@@ -211,6 +202,17 @@ UI = function(projector, raycaster, camera, mouse)
         this.GroupID = groupID || 0;
         this.TabID = tabID || 0;
         this.ShowLabel = mShowLabel || false;
+        var mVisible = true;
+
+        this.__defineGetter__("Visible", function(){
+            return mVisible;
+        });
+
+        this.__defineSetter__("Visible", function(val){
+            mVisible = val;
+            if(this.mesh != null){this.mesh.visible = val;}
+            if(this.Label != null){this.Label.Visible = val;}
+        });
 
         this.init = function()
         {
@@ -258,11 +260,19 @@ UI = function(projector, raycaster, camera, mouse)
                             if(mUIObjects[i].onInactiveTab != null){mUIObjects[i].onInactiveTab(mUIObjects[i]);}
                         }
                     }
-                    else if (this.TabID == mUIObjects[i].TabID) {
-                        mUIObjects[i].mesh.visible = true;
+                    else if (this.TabID == mUIObjects[i].TabID)
+                    {
+                        if(mUIObjects[i].Visible != null)
+                        {
+                            mUIObjects[i].Visible = true;
+                        }
                     }
-                    else {
-                        mUIObjects[i].mesh.visible = false;
+                    else
+                    {
+                        if(mUIObjects[i].Visible != null)
+                        {
+                            mUIObjects[i].Visible = false;
+                        }
                     }
 
                 }
@@ -602,13 +612,14 @@ UI = function(projector, raycaster, camera, mouse)
 
     this.Text = function(pos, text, textAlignment)
     {
+        var Self = this;
         var mTextAlignment = textAlignment || "center";
         var mText = text || "BASE";
         var text3d = null;
         var textMesh = THREE.Geometry();
         var mat = null;
         var position = pos;
-
+        var mVisible = true;
         var mTextOptions =
         {
             size: 5,
@@ -626,10 +637,29 @@ UI = function(projector, raycaster, camera, mouse)
                 text3d = new THREE.TextGeometry(text, mTextOptions);
                 text3d.computeBoundingBox();
                 textMesh = new THREE.Mesh(text3d, mat); // = text3d;
-                mUpdateTextAlignement();
+                Self.UpdateTextPosition();
                 scene.add(textMesh);
             }
         };
+
+        this.__defineGetter__("Visible", function(){
+            return mVisible;
+        });
+
+        this.__defineSetter__("Visible", function(val){
+            mVisible = val;
+            if(textMesh != null){textMesh.visible = val;}
+        });
+
+        this.__defineGetter__("Position", function(){
+            return position;
+        });
+
+        this.__defineSetter__("Position", function(val){
+            console.log("pos");
+            position = val;
+            this.UpdateTextPosition();
+        });
 
         this.__defineGetter__("TextAlignment", function(){
             return mTextAlignment;
@@ -637,7 +667,7 @@ UI = function(projector, raycaster, camera, mouse)
 
         this.__defineSetter__("TextAlignment", function(val){
             mTextAlignment = val.toLowerCase();
-            mUpdateTextAlignement();
+            this.UpdateTextPosition();
         });
 
         this.__defineGetter__("Text", function(){
@@ -649,7 +679,7 @@ UI = function(projector, raycaster, camera, mouse)
             mRebuildText(mText);
         });
 
-        var mUpdateTextAlignement = function()
+        this.UpdateTextPosition = function()
         {
             var textWidth = textMesh.geometry.boundingBox.max.x - textMesh.geometry.boundingBox.min.x;
 
@@ -667,7 +697,7 @@ UI = function(projector, raycaster, camera, mouse)
             text3d = new THREE.TextGeometry( mText, mTextOptions);
             text3d.computeBoundingBox();
             textMesh = new THREE.Mesh( text3d, mat );
-            mUpdateTextAlignement();
+            this.UpdateTextPosition();
             scene.add( textMesh );
         };
 

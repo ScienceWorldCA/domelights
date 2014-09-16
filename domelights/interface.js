@@ -57,7 +57,7 @@ function buildInterface() {
         {
             uiObject.mesh.scale.x = uiObject.mesh.scale.y = 1;
 
-            var newEvent = new EVENT(0, 0, Brushes[uiObject.tag]);
+            var newEvent = new EVENT(SequenceManager.SequenceTime, 0, Brushes[uiObject.tag]);
             newEvent.IsBackground = true;
             SequenceManager.AddEvent(newEvent);
         }
@@ -176,13 +176,16 @@ function buildInterface() {
         button2.name = "button2";
         button2.tag = 1;
 
-        var button3 = new UIObjectManager.Button('textures/sprites/circle.png', new THREE.Vector2(150, 60), new THREE.Vector2(40, 40), 1, 3);
+        var button3 = new UIObjectManager.Button('textures/sprites/circle.png', new THREE.Vector2(150, 60), new THREE.Vector2(40, 40), 1, 3, true);
         button3.onMouseDown = ButtonDownClick;
         button3.onMouseUp = SetBrush;
         button3.onUIUpdate = updateBrushColor;
         button3.material.color.setRGB(1, 1, 0);
         button3.name = "button3";
         button3.tag = 1;
+        button3.Label.Text = "Ring Fade";
+        button3.Label.Position.y += 10;
+        button3.Label.UpdateTextPosition();
     }
 
     // Add Background Solid Brushes
@@ -203,6 +206,14 @@ function buildInterface() {
             uiObject.mesh.rotation.z += uiObject.spin;
         }
 
+        function animateImage(event, uiObject)
+        {
+            uiObject.timer += 0.1;
+            var increment = 1/uiObject.frames * Math.floor(uiObject.timer);
+            if(increment > (1/uiObject.frames)*(uiObject.frames-2) ){uiObject.timer = 0;}
+            uiObject.map.offset.x = increment;
+        }
+
         var bbutton1 = new UIObjectManager.Button('textures/UI/Gradient.png', new THREE.Vector2(-180, 60), new THREE.Vector2(20, 20),0,0,true);
         bbutton1.onMouseDown = ButtonDownClick;
         bbutton1.onMouseUp = SetBackground;
@@ -211,13 +222,17 @@ function buildInterface() {
         bbutton1.name = "Background 1";
         bbutton1.Label.Text = "Rainbow";
 
-        var bbutton2 = new UIObjectManager.Button('textures/UI/SunnyDay.png', new THREE.Vector2(-180, 30), new THREE.Vector2(20, 20),0,0,true);
+        var bbutton2 = new UIObjectManager.Button('textures/UI/rainbowwipe.png', new THREE.Vector2(-180, 30), new THREE.Vector2(20, 20),0,0,false);
         bbutton2.onMouseDown = ButtonDownClick;
         bbutton2.onMouseUp = SetBackground;
+        bbutton2.onUIUpdate = animateImage;
         bbutton2.material.color.setRGB(1, 1, 1);
+        bbutton2.map.repeat.x = 1/7;
         bbutton2.tag = 3;
         bbutton2.name = "Background 2";
-        bbutton2.Label.Text = "Rainbow Wipe";
+        //bbutton2.Label.Text = "Rainbow Wipe";
+        bbutton2.timer = 0;
+        bbutton2.frames = 7;
 
         var bbutton3 = new UIObjectManager.Button('textures/UI/smiley-face.png', new THREE.Vector2(-180, 0), new THREE.Vector2(20, 20),0,0,true);
         bbutton3.onMouseDown = ButtonDownClick;

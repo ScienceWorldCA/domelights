@@ -19,6 +19,8 @@ class Render_JSON implements ColoreRenderHelper {
 
 		header( 'Content-Type: application/json' );
 		
+		if( LOGLEVEL & LOG_DEBUG ) @error_log( sprintf( "%s: Sending output: %s", __METHOD__, json_encode( $outputProperties ) ) );
+		
 		echo json_encode( $outputProperties );
 	}
 

@@ -127,12 +127,14 @@ SEQUENCE = function() {
     {
       var CleanData = [];
 
-      for(var x =0; x < Object.keys(Data).length; x++)
-      {
-          if(Data[x].r != undefined && Data[x].g != undefined && Data[x].b != undefined)
-              CleanData[x] = new THREE.Color(Data[x].r,Data[x].g,Data[x].b);
-          else
-              CleanData[x] = Data[x];
+      if( Data ) {
+	      for(var x =0; x < Object.keys(Data).length; x++)
+	      {
+	          if(Data[x].r != undefined && Data[x].g != undefined && Data[x].b != undefined)
+	              CleanData[x] = new THREE.Color(Data[x].r,Data[x].g,Data[x].b);
+	          else
+	              CleanData[x] = Data[x];
+	      }
       }
       return CleanData;
     }

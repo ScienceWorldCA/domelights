@@ -25,8 +25,8 @@ class FrontEnd_API {
 	 * @return boolean
 	 */
 	public function CheckUserInfo( ColoreRequestHelper &$cro ) {
-		$userrealname = $cro->getRequestProperties( 'userrealname' );
-		$useremail = $cro->getRequestProperties( 'useremail' );
+		$userrealname = $cro->getRequestProperty( 'userrealname' );
+		$useremail = $cro->getRequestProperty( 'useremail' );
 
 		// Check input
 		if( ! $useremail ) {

@@ -52,7 +52,7 @@ class DomeController:
 			r = s.post(request_url, data)
 			pass
 	   
-# 		Debug(str(r.text))
+		Debug(str(r.text))
 
 		return r.json()
 
@@ -67,7 +67,7 @@ class DomeController:
 	def GetControllerTask(self):
 		data = {}
 		request_result = self.api_call('GetControllerTask', data)
-		
+                
 		return request_result
 		
 	def stopScript(self):

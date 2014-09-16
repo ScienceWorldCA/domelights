@@ -233,7 +233,7 @@ class DomeController {
 
 		$responseData = json_decode($response, TRUE);
 
-		if( $responseData && is_array( $responseData ) && isset( $responseData['sequence'] ) ) {
+		if( $responseData && is_array( $responseData ) && isset( $responseData['sequence'] ) && isset( $responseData['result'] ) && $responseData['sequence'] == "OK" ) {
 			return $responseData['sequence'];
 		} else {
 			return false;

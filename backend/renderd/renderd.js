@@ -16479,12 +16479,14 @@ SEQUENCE = function() {
     {
       var CleanData = [];
 
-      for(var x =0; x < Object.keys(Data).length; x++)
-      {
-          if(Data[x].r != undefined && Data[x].g != undefined && Data[x].b != undefined)
-              CleanData[x] = new THREE.Color(Data[x].r,Data[x].g,Data[x].b);
-          else
-              CleanData[x] = Data[x];
+      if( Data ) {
+	      for(var x =0; x < Object.keys(Data).length; x++)
+	      {
+	          if(Data[x].r != undefined && Data[x].g != undefined && Data[x].b != undefined)
+	              CleanData[x] = new THREE.Color(Data[x].r,Data[x].g,Data[x].b);
+	          else
+	              CleanData[x] = Data[x];
+	      }
       }
       return CleanData;
     }
@@ -16580,8 +16582,7 @@ var $ = jQuery = require('./jquery.js')(window);
 
 var debug = fs.existsSync('debug');
 
-if (debug)
-	console.log('Starting in debug mode');
+if (debug) console.log('Starting in debug mode');
 
 var epoch = function() {
 	return Math.round(+new Date()/1000);
@@ -16609,20 +16610,19 @@ var server = app.listen(1337, function() {
 
 app.post('/render', function(req, res) {
 	timestamp = epoch();
-	console.log( timestamp );
+	if (debug) console.log( timestamp,": Processing render request" );
 //	console.log(CryptoJS.HmacSHA1("Message", "Key").toString());
 //	res.send()
-	console.log( req.body.sequence );
-	if( ! req.body.sequence ) {
-		res.send( '{ "result": "ERROR" }' );
-	} else {
-		var result_set = {
-				result: "OK",
-		};
+	if (debug) console.log( req.body.sequence );
+	var result_set = {
+			result: "ERROR",
+	};
+	if( req.body.sequence ) {
+		result_set['result'] = "OK";
 		result_set['sequence'] = SequenceManager.RenderSequence( req.body.sequence ).toString( 'base64' );
-		console.log( result_set['sequence'] );
-		res.send( JSON.stringify( result_set ) );
+		if (debug) console.log( result_set['sequence'] );
 	}
+	res.send( JSON.stringify( result_set ) );
 });
 
 //var BinarySequenceStream = SequenceManager.RenderSequence(JSONSequenceConstructionFile);

@@ -45,7 +45,7 @@ app.post('/render', function(req, res) {
 	if( req.body.sequence ) {
 		result_set['result'] = "OK";
 		result_set['sequence'] = SequenceManager.RenderSequence( req.body.sequence ).toString( 'base64' );
-		if (debug) console.log( result_set['sequence'] );
+		if (debug) console.log( 'sequence: ' + result_set['sequence'] );
 	}
 	res.send( JSON.stringify( result_set ) );
 });

@@ -50,7 +50,8 @@ class CSchedule
 		$sql_query = array();
 		$sql_query[] = "SELECT *"; 
 		$sql_query[] = "FROM  animations"; 
-		$sql_query[] = "WHERE TIMESTAMP( '" . $start . "' ) BETWEEN animations.start AND animations.end "; 
+		$sql_query[] = "WHERE TIMESTAMP( '" . $start . "' ) BETWEEN animations.start AND animations.end";
+		$sql_query[] = "AND state = 0"; 
 		$sql_query[] = "LIMIT 1";
 
 		if( $this->DEBUG ) echo join( ' ', $sql_query ) . "\n\n"; 

@@ -33,6 +33,21 @@ $config['contexts']['GetControllerTask'] = array(
 	),
 );
 
+$config['contexts']['SetAnimationPlayed'] = array(
+	'properties' => array(
+	),
+	'logic' => array(
+		array( 'class' => 'DomeController', 'method' => 'AuthenticateController' ),
+		array( 'class' => 'DomeController', 'method' => 'SetAnimationPlayed' ),
+	),
+	'render' => array(
+		'engine' => 'Render_JSON',
+		'path' => '',
+		'properties' => array(
+		),
+	),
+);
+
 $config['contexts']['Ping'] = array(
 		'properties' => array(
 		),

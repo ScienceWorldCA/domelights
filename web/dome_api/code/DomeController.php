@@ -222,6 +222,7 @@ class DomeController {
 
 		curl_setopt( $curl_obj, CURLOPT_POST, 1);
 		curl_setopt( $curl_obj, CURLOPT_POSTFIELDS, sprintf( 'sequence=%s', $source ) );
+		curl_setopt( $curl_obj, CURLOPT_RETURNTRANSFER, true );
 
 		$response = curl_exec( $curl_obj );
 		curl_close( $curl_obj );
@@ -231,9 +232,13 @@ class DomeController {
 			return false;
 		}
 
+		error_log( sprintf( "%s: Received: %s", __METHOD__, $response ) );
+
 		$responseData = json_decode($response, TRUE);
 
-		if( $responseData && is_array( $responseData ) && isset( $responseData['sequence'] ) && isset( $responseData['result'] ) && $responseData['sequence'] == "OK" ) {
+		error_log( sprintf( "%s: Received: %s", __METHOD__, print_r( $responseData, 1 ) ) );
+
+		if( $responseData && is_array( $responseData ) && isset( $responseData['sequence'] ) && isset( $responseData['result'] ) && $responseData['result'] == "OK" ) {
 			return $responseData['sequence'];
 		} else {
 			return false;
@@ -259,6 +264,27 @@ class DomeController {
 	public function GetScheduledShow( ColoreRequestHelper &$cro ) {
 		$cro->setRenderProperty( 'hasNewShow', false );
 		$scheduler = $this->GetSchedulerInstance();
+	}
+
+	public function SetAnimationPlayed( ColoreRequestHelper &$cro ) {
+		$animation_id = $cro->getRequestProperty( 'animation_id' );
+		if( ! $animation_id || ! is_numeric( $animation_id ) )
+			return;
+
+		// Make query
+		$query = array(
+				'action' => 'update',
+				'table' => 'animations',
+				'fields' => array(
+						'state' => 1,
+				),
+				'criteria' => array(
+						'id' => $animation_id
+				),
+		);
+
+		// Do query
+		$res = $this->dbconn->mappedQuery( $query );
 	}
 
 }

@@ -52,7 +52,7 @@ class DomeController:
 			r = s.post(request_url, data)
 			pass
 	   
-		Debug(str(r.text))
+		Debug('api_call:'+str(r.text))
 
 		return r.json()
 
@@ -67,6 +67,13 @@ class DomeController:
 	def GetControllerTask(self):
 		data = {}
 		request_result = self.api_call('GetControllerTask', data)
+                
+		return request_result
+		
+	def SetAnimationPlayed(self, animation_id ):
+		data = {}
+		data['animation_id'] = animation_id
+		request_result = self.api_call('SetAnimationPlayed', data)
                 
 		return request_result
 		
@@ -141,7 +148,7 @@ class DomeController:
         						# Run animation
         						self.runAnimation()
         						# Set animation as played
-        						self.setAnimationPlayed( task_info['id'] )
+        						self.SetAnimationPlayed( task_info['id'] )
         						
         						Debug( "Done!" )
         				

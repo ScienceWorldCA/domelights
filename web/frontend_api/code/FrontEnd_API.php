@@ -39,7 +39,7 @@ class FrontEnd_API {
 			$cro->setRenderProperty( 'result', false );
 			return false;
 		}
-		if( filter_var( $useremail, FILTER_VALIDATE_EMAIL ) ) {
+		if( ! filter_var( $useremail, FILTER_VALIDATE_EMAIL ) ) {
 			$cro->setRenderProperty( 'message', 'Invalid email address' );
 			$cro->setRenderProperty( 'result', false );
 			return false;

@@ -1,4 +1,4 @@
-import json, requests, time, hmac, hashlib, math, socket
+import json, requests, time, hmac, hashlib, math, socket, platform
 import socket
 import sys
 import time
@@ -15,7 +15,10 @@ PLAYER_KEY = 'Qm9nZF0ouU7A'
 
 BRIDGE_IP, BRIDGE_PORT = '127.0.0.1', 9999
 
-PYTHON_PATH = "/usr/bin/python"
+if platform.system() == "Windows":
+	PYTHON_PATH = "D:\Python27\Python.exe"
+else:
+	PYTHON_PATH = "/usr/bin/python"
 
 def Debug( message ):
 	if Debug: print message

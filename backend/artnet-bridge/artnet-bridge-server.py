@@ -38,7 +38,7 @@ artnetsock = socket.socket( socket.AF_INET, socket.SOCK_DGRAM )
 
 ### CueServer control
 CUESERVER_IP = socket.gethostbyname( args.cueserver_address )
-CUESERVER__PORT = 52737
+CUESERVER_PORT = 52737
 
 print "CueServer Destination:", ARTNET_IP
 

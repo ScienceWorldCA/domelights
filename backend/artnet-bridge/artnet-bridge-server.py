@@ -21,15 +21,15 @@ U2_BYTES = int(U2_SIZE*3)
 HOST, PORT = '', 9999
 
 parser = argparse.ArgumentParser(description='Bridge from a TCP socket to ArtNet.')
-parser.add_argument( 'ip_address', help='The ArtNet destination IP address.')
+parser.add_argument( 'artnet_address', help='The ArtNet destination IP address.')
 parser.add_argument( 'cueserver_address', help='The CueServer destination IP address.')
 args = parser.parse_args()
-if args.ip_address == None or args.cueserver_address == None:
+if args.artnet_address == None or args.cueserver_address == None:
 	parser.print_help()
 	sys.exit()
 
 ### ArtNet bridge device
-ARTNET_IP = socket.gethostbyname( args.ip_address )
+ARTNET_IP = socket.gethostbyname( args.artnet_address )
 ARTNET_PORT = 6454
 
 print "ArtNet Destination:", ARTNET_IP
@@ -40,7 +40,7 @@ artnetsock = socket.socket( socket.AF_INET, socket.SOCK_DGRAM )
 CUESERVER_IP = socket.gethostbyname( args.cueserver_address )
 CUESERVER_PORT = 52737
 
-print "CueServer Destination:", ARTNET_IP
+print "CueServer Destination:", CUESERVER_IP
 
 cueserversock = socket.socket( socket.AF_INET, socket.SOCK_DGRAM )
 

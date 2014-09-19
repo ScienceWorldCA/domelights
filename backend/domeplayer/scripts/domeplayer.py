@@ -6,6 +6,9 @@ import random
 import base64
 # from domelights import *
 
+FIXTURES = 260
+DATA_SIZE = FIXTURES * 6
+
 DEBUG = True
 
 MASTER_URL = 'http://localhost/dome_api/'

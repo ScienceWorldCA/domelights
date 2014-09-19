@@ -37,9 +37,7 @@ while running:
         	canvas[b_pixel] = random.randint(0,255)
 			
 		data = ''
-		for j in range(0,FIXTURES):
-			data = data + chr(canvas[j]) ## Red
-			data = data + chr(canvas[j]) ## Green
+		for j in range(0,len(canvas)):
 			data = data + chr(canvas[j]) ## Blue
 	
 		try:

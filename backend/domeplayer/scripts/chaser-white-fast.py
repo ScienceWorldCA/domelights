@@ -11,10 +11,16 @@ FIXTURES = 260
 
 print "FIXTURES:",FIXTURES
 
+fp = open( 'running', 'w' )
+fp.write( '' )
+fp.close()
+
 sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 sock.connect((HOST, PORT))
 
-while True:
+running = True
+
+while running:
 	for light in range( 0, FIXTURES ):
 		data = ''
 		for j in range(0,light):
@@ -38,4 +44,12 @@ while True:
 			break
 		time.sleep(0.0225)
 
+	## Check if we can still run
+	fp = open( 'running', 'r' )
+	inp = fp.read().strip()
+	if inp == "STOP":
+		running = False
+	fp.close()
+
+# Close socket
 sock.close()

@@ -31,7 +31,8 @@ function initGraphicMode()
     SequenceManager = new SEQUENCE(DomeLightManager);
 
     //TEMP SEQUENCE
-      SequenceManager.SequenceLength = 15*FPS;
+      // SequenceManager.SequenceLength = 15*FPS;
+      SequenceManager.SequenceLength = 30*FPS;
     //    var newEvent1 = new EVENT(5*FPS, 22, DomeLightManager, null, Brushes[1]);
     //    SequenceManager.AddEvent(newEvent1);
     //    var newEvent2 = new EVENT(3*FPS, 29, DomeLightManager, null, Brushes[1]);

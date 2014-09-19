@@ -16417,7 +16417,10 @@ SEQUENCE = function() {
                 var color = new THREE.Color();
                 color = DomeLightManager.Lights[i].color;
 
-                binaryFrame += color.getHexString();
+                // binaryFrame += color.getHexString();
+                binaryFrame += String.fromCharCode( color.r );
+                binaryFrame += String.fromCharCode( color.g );
+                binaryFrame += String.fromCharCode( color.b );
             }
 
             return binaryFrame;
@@ -16570,6 +16573,7 @@ var EVENT = function(time, originLight, brush, brushData)
     };
     this.init();
 };
+
 
 // End of includes
 

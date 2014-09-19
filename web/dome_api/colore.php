@@ -3,8 +3,8 @@
 /**
  * Define debug and LOGLEVEL.
  */
-define( 'DEBUG', true );
-define( 'LOGLEVEL', LOG_DEBUG );
+define( 'DEBUG', false );
+define( 'LOGLEVEL', LOG_INFO );
 
 define( 'BASEDIR', realpath( dirname( __FILE__ ) ) );
 

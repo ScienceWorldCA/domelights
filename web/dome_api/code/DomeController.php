@@ -166,7 +166,7 @@ class DomeController {
 					// Set script_name to domeplayer
 					$cro->setRenderProperty( 'script_name', "domeplayer.py" );
 					$cro->setRenderProperty( 'id', $animation_info['id'] );
-					$cro->setRenderProperty( 'data', $animation_data );
+					$cro->setRenderProperty( 'data', base64_encode( $animation_data ) );
 					return;
 				} else {
 					error_log( sprintf( "%s: Animation render failed", __METHOD__ ) );

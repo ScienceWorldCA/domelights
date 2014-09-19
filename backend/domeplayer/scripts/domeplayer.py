@@ -6,21 +6,6 @@ import random
 import base64
 # from domelights import *
 
-FIXTURES = 260
-HEX_BYTE_SIZE = 3*2
-DATA_SIZE = FIXTURES * HEX_BYTE_SIZE
-
-def convertToBytes( data ):
-	outp = ''
-	for i in range(0,FIXTURES):
-		r_base = i*HEX_BYTE_SIZE
-		r = int(data[r_base:(r_base+1)],16)
-		g_base = r_base+2
-		g = int(data[g_base:(g_base+1)],16)
-		b_base = g_base+2
-		b = int(data[b_base:(b_base+1)],16)
-		outp = outp + r + g + b
-
 DEBUG = True
 
 MASTER_URL = 'http://localhost/dome_api/'
@@ -64,13 +49,13 @@ if len( sys.argv ) == 2:
 
 	data = f.read(DATA_SIZE)
     
-	_sock.send(convertToBytes(data))
+	_sock.send(data.decode('hex'))
         
 	while data != "":
 		time.sleep(0.0225)
 		# Do stuff with data.
 		data = f.read(DATA_SIZE)
-		_sock.send(convertToBytes(data))
+		_sock.send(data.decode('hex'))
 	
 	f.close()
 	

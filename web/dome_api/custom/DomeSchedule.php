@@ -137,7 +137,7 @@ class CSchedule
 		if( mysqli_num_rows($result) > 0 ) {
 			return true ; // This is a good time 
 		} else 
-			if( $this->DEBUG ) error_log( sprintf( "%s/%s: %s", __METHOD__, __LINE__,  "FYI. No schedule at this current time. Find the next avaliable schedule" ) );
+			if( $this->DEBUG ) error_log( sprintf( "%s/%s: %s", __METHOD__, __LINE__,  "FYI. No schedule at this current time. Find the next available schedule" ) );
 			// No schedule at the current time of day. 
 			// Search the next avaliable schedule. 
 
@@ -148,10 +148,7 @@ class CSchedule
 			$dayOfTheWeek = date( 'w', strtotime( $startTime ) ) ; 
 			$dayOfTheWeek ++ ; // To change it from PHP version of the day of the week to MySQL version of day of the week. 
 			$dayOfTheWeek ++ ; // Add one day to find the next schedule for the next day
-			if( $dayOfTheWeek > 7) {
-				$dayOfTheWeek = 1 ; // Loop around from Saturday to Sunday. 
-			}
-
+			$dayOfTheWeek = $dayOfTheWeek % 6; // Loop around from Saturday to Sunday. 
 
 			$sql_query = array();
 			$sql_query[] = "SELECT * FROM schedule WHERE ";

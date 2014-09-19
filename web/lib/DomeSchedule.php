@@ -56,7 +56,7 @@ class CSchedule
 		$sql_query = join( ' ', $sql_query );
 
 		if( $this->DEBUG ) error_log( sprintf( "%s/%s: %s", __METHOD__, __LINE__, $sql_query ) ); 
-		$result = mysqli_query( $this->db, join( ' ', $sql_query ) );
+		$result = mysqli_query( $this->db, $sql_query );
 		$num_rows = mysqli_num_rows($result);
 		if( $num_rows <= 0 ) {
 			return false ; 

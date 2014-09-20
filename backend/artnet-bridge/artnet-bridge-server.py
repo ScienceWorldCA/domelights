@@ -86,6 +86,7 @@ while sock:
 		break
 	
 	cueserversock.sendto( 'm122', (CUESERVER_IP,CUESERVER_PORT) )
+	cueserversock.sendto( '"!1>2;input enable" *', (CUESERVER_IP,CUESERVER_PORT) )
 	
 	while True:
 		data = conn.recv( MAX_BYTES )
@@ -104,6 +105,7 @@ while sock:
 			artnetsock.sendto( p1.encode(), (ARTNET_IP, ARTNET_PORT) )
 			artnetsock.sendto( p2.encode(), (ARTNET_IP, ARTNET_PORT) )
 
+	cueserversock.sendto( '"!1>2;input disable" *', (CUESERVER_IP,CUESERVER_PORT) )
 	cueserversock.sendto( 'm121', (CUESERVER_IP,CUESERVER_PORT) )
 	
 	conn.close()

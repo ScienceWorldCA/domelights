@@ -21,6 +21,12 @@ SEQUENCE = function() {
         this.SequenceTime = time;
     }
 
+    this.ClearSequence = function()
+    {
+        ClearLights();
+        this.Events = [];
+    }
+
     this.GetSequenceLength = function()
     {
         return this.SequenceLength;

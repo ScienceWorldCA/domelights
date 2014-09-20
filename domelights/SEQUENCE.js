@@ -69,7 +69,10 @@ SEQUENCE = function() {
             for (var i = 0; i < 260; i++) {
 
                 var color = new THREE.Color();
-                color = DomeLightManager.Lights[i].color;
+
+                var lightIndex = DomeLightOrder[i];
+
+                color = DomeLightManager.Lights[lightIndex].color;
 
                 binaryFrame += color.getHexString();
                 // binaryFrame += String.fromCharCode( color.r );

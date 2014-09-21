@@ -21,6 +21,12 @@ SEQUENCE = function() {
         this.SequenceTime = time;
     }
 
+    this.ClearSequence = function()
+    {
+        ClearLights();
+        this.Events = [];
+    }
+
     this.GetSequenceLength = function()
     {
         return this.SequenceLength;
@@ -63,9 +69,15 @@ SEQUENCE = function() {
             for (var i = 0; i < 260; i++) {
 
                 var color = new THREE.Color();
-                color = DomeLightManager.Lights[i].color;
+
+                var lightIndex = DomeLightOrder[i];
+
+                color = DomeLightManager.Lights[lightIndex].color;
 
                 binaryFrame += color.getHexString();
+                // binaryFrame += String.fromCharCode( color.r );
+                // binaryFrame += String.fromCharCode( color.g );
+                // binaryFrame += String.fromCharCode( color.b );
             }
 
             return binaryFrame;

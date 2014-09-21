@@ -6,6 +6,12 @@ import sys
 import time
 import random
 import base64
+import platform
+
+if platform.system() == "Windows":
+	PYTHON_PATH = "D:\Python27\Python.exe"
+else:
+	PYTHON_PATH = "/usr/bin/python"
 
 class DomeController:
 	"""DomeLights Controller class"""
@@ -203,7 +209,7 @@ class DomeController:
 		 Debug( "Playing animation" )
 		 self._subprocess = None
 		# Start animation
-		 self._subprocess = subprocess.Popen([ "/usr/bin/python", "scripts/domeplayer.py", "LightData.dat" ], stdout=PIPE, stdin=PIPE, stderr=PIPE)
+		 self._subprocess = subprocess.Popen([ PYTHON_PATH, "scripts/domeplayer.py", "LightData.dat" ], stdout=PIPE, stdin=PIPE, stderr=PIPE)
 		 # Wait for animation to be done playing
 		 self._subprocess.wait()
 
@@ -212,7 +218,7 @@ class DomeController:
 		script_file = "scripts/" + script_name
 		Debug("Spawning scripted animation: " + script_file)
 		self._subprocess = None
-		self._subprocess = subprocess.Popen([ "/usr/bin/python", script_file ], stdout=PIPE, stdin=PIPE, stderr=PIPE)
+		self._subprocess = subprocess.Popen([ PYTHON_PATH, script_file ], stdout=PIPE, stdin=PIPE, stderr=PIPE)
 
 def Debug(message):
 	if Debug: print datetime.datetime.now(), message

@@ -10,3 +10,4 @@ node_modules/*
 *.xml
 .idea/domelights.iml
 .idea/.name
+config_local.php

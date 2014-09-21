@@ -1,10 +1,13 @@
-import json, requests, time, hmac, hashlib, math, socket
+import json, requests, time, hmac, hashlib, math, socket, platform
 import socket
 import sys
 import time
 import random
 import base64
 # from domelights import *
+
+FIXTURES = 260
+DATA_SIZE = FIXTURES * 6
 
 DEBUG = True
 
@@ -15,7 +18,10 @@ PLAYER_KEY = 'Qm9nZF0ouU7A'
 
 BRIDGE_IP, BRIDGE_PORT = '127.0.0.1', 9999
 
-PYTHON_PATH = "/usr/bin/python"
+if platform.system() == "Windows":
+	PYTHON_PATH = "D:\Python27\Python.exe"
+else:
+	PYTHON_PATH = "/usr/bin/python"
 
 def Debug( message ):
 	if Debug: print message
@@ -44,15 +50,15 @@ if len( sys.argv ) == 2:
 	
 	f = open( data_file, "rb" )
 
-	data = f.read(780)
+	data = f.read(DATA_SIZE)
     
-	_sock.send(data)
+	_sock.send(data.decode('hex'))
         
 	while data != "":
 		time.sleep(0.0225)
 		# Do stuff with data.
-		data = f.read(780)
-		_sock.send(data)
+		data = f.read(DATA_SIZE)
+		_sock.send(data.decode('hex'))
 	
 	f.close()
 	

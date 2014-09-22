@@ -411,4 +411,13 @@ function BuildLightGlows()
         return {x: -1, y: -1};
     }
 
+    function RenderDebugSequence()
+    {
+        for(x=0; x < 260; x++)
+        {
+            var newEvent = new EVENT(x*4, DomeLightOrder[x], Brushes[ActiveBrushID], ActiveBrushData);
+            SequenceManager.AddEvent(newEvent);
+        }
+    }
+
 }

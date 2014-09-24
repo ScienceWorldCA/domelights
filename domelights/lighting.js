@@ -10,7 +10,7 @@ function addLights()
 	light.position.set( .75, .75, .75 );
     scene.add( light );
 
-    var ambientLight = new THREE.AmbientLight( 0x101022 ); // soft white light scene.add( light );
+    var ambientLight = new THREE.AmbientLight( 0x081015 ); // soft white light scene.add( light );
     scene.add(ambientLight);
 
     BuildLights();
@@ -23,8 +23,10 @@ function setLightColor(newColor, index)
 {
     newColor = newColor || new THREE.Color(1,1,1);
     //Set Light Color
+    if(index < 0 || index > 260){console.log("Light out of range");}
     DomeLightManager.Lights[index].color.setRGB( newColor.r, newColor.g, newColor.b );
 
+    DomeLightManager.LightBulbMeshes[index].material.color.setRGB(newColor.r, newColor.g, newColor.b);
     // Increase the size of the Particle based on it's color brightness
     var myCol = newColor.getHSL();
     attributes.size.value[ index ] = 40 * (2 * myCol.l);

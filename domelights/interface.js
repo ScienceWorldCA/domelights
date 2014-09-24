@@ -160,21 +160,29 @@ function buildInterface() {
 
     // Add Solid Color Brushes
     {
-        var button1 = new UIObjectManager.Button('textures/sprites/circle.png', new THREE.Vector2(150, 60), new THREE.Vector2(40, 40), 1, 1);
+        var button1 = new UIObjectManager.Button('textures/sprites/circle.png', new THREE.Vector2(150, 60), new THREE.Vector2(40, 40), 1, 1, true);
         button1.onMouseDown = ButtonDownClick;
         button1.onMouseUp = SetBrush;
         button1.onUIUpdate = updateBrushColor;
         button1.material.color.setRGB(0, 1, 0);
         button1.name = "button1";
-        button1.tag = 1;
+        button1.tag = 9;
+        button1.name = "button2";
+        button1.Label.Text = "FireWorks";
+        button1.Label.Position.y += 10;
+        button1.Label.UpdateTextPosition();
 
-        var button2 = new UIObjectManager.Button('textures/sprites/circle.png', new THREE.Vector2(150, 60), new THREE.Vector2(30, 30), 1, 2);
+        var button2 = new UIObjectManager.Button('textures/sprites/circle.png', new THREE.Vector2(150, 60), new THREE.Vector2(30, 30), 1, 2, true);
         button2.onMouseDown = ButtonDownClick;
         button2.onMouseUp = SetBrush;
         button2.onUIUpdate = updateBrushColor;
         button2.material.color.setRGB(0, 1, 1);
+        button2.tag = 6;
         button2.name = "button2";
-        button2.tag = 1;
+        button2.Label.Text = "Loop Fade";
+        button2.Label.Position.y += 10;
+        button2.Label.UpdateTextPosition();
+
 
         var button3 = new UIObjectManager.Button('textures/sprites/circle.png', new THREE.Vector2(150, 60), new THREE.Vector2(40, 40), 1, 3, true);
         button3.onMouseDown = ButtonDownClick;
@@ -182,7 +190,7 @@ function buildInterface() {
         button3.onUIUpdate = updateBrushColor;
         button3.material.color.setRGB(1, 1, 0);
         button3.name = "button3";
-        button3.tag = 1;
+        button3.tag = 5;
         button3.Label.Text = "Ring Fade";
         button3.Label.Position.y += 10;
         button3.Label.UpdateTextPosition();

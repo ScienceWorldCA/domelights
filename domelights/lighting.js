@@ -6,11 +6,12 @@ function setLighting()
 function addLights()
 {
 	// Add Sun Light
-    light = new THREE.DirectionalLight( 0x211111 );
+    light = new THREE.DirectionalLight( 0x111115 );
 	light.position.set( .75, .75, .75 );
     scene.add( light );
 
-    var ambientLight = new THREE.AmbientLight( 0x081015 ); // soft white light scene.add( light );
+    //var ambientLight = new THREE.AmbientLight( 0x181820 );
+    var ambientLight = new THREE.AmbientLight( 0x080810 ); // soft white light scene.add( light );
     scene.add(ambientLight);
 
     BuildLights();
@@ -19,17 +20,33 @@ function addLights()
     //console.log(attributes.customColor.value[0].g);
 }
 
-function setLightColor(newColor, index)
+function setLightColor(newColor, Alpha, index)
 {
-    newColor = newColor || new THREE.Color(1,1,1);
-    //Set Light Color
-    if(index < 0 || index > 260){console.log("Light out of range");}
-    DomeLightManager.Lights[index].color.setRGB( newColor.r, newColor.g, newColor.b );
+    var alpha = Alpha || 1.0;
 
-    DomeLightManager.LightBulbMeshes[index].material.color.setRGB(newColor.r, newColor.g, newColor.b);
+    newColor = new THREE.Color().setRGB(newColor.r, newColor.g, newColor.b) || new THREE.Color(1,1,1);
+
+    if(index < 0 || index > 260){console.log("Light out of range");}
+
+    //Get the Current color
+    var currentColor = DomeLightManager.Lights[index].color;
+
+    currentColor.r = currentColor.r * (1 - alpha);
+    currentColor.g = currentColor.g * (1 - alpha);
+    currentColor.b = currentColor.b * (1 - alpha);
+
+    newColor.r = (newColor.r * alpha) + currentColor.r;
+    newColor.g = (newColor.g * alpha) + currentColor.g;
+    newColor.b = (newColor.b * alpha) + currentColor.b;
+
+    DomeLightManager.Lights[index].color.setRGB(newColor.r, newColor.g, newColor.b );
+
+    var lightbulbColorOffset = 0;
+    DomeLightManager.LightBulbMeshes[index].material.color.setRGB(newColor.r + lightbulbColorOffset, newColor.g + lightbulbColorOffset, newColor.b + lightbulbColorOffset);
+
     // Increase the size of the Particle based on it's color brightness
     var myCol = newColor.getHSL();
-    attributes.size.value[ index ] = 40 * (2 * myCol.l);
+    attributes.size.value[ index ] = Math.min(50 * (2 * myCol.l), 50);
 
     attributes.customColor.value[index].r = newColor.r;
     attributes.customColor.value[index].g = newColor.g;
@@ -341,7 +358,7 @@ function BuildLightGlows()
 {
     function ClearLights() {
         for (var i = 0; i < DomeLightManager.Lights.length; i++) {
-            setLightColor(new THREE.Color(0, 0, 0), i);
+            setLightColor(new THREE.Color(0, 0, 0), 1.0, i);
         }
     }
 
@@ -364,7 +381,7 @@ function BuildLightGlows()
                 color.b -= mFadeAmount;
             }
 
-            setLightColor(color, i);
+            setLightColor(color, 1.0, i);
         }
     }
 
@@ -375,7 +392,7 @@ function BuildLightGlows()
         for (var y = 0; y < LightMatrixHeight; y++) {
             var lightIndex = LightMappingMatrix[y][index];
             if (lightIndex != -1) {
-                setLightColor(color, lightIndex);
+                setLightColor(color, 1.0, lightIndex);
             }
         }
     }
@@ -387,16 +404,16 @@ function BuildLightGlows()
         for (var x = 0; x < LightMatrixWidth; x++) {
             var lightIndex = LightMappingMatrix[index][x];
             if (lightIndex != -1) {
-                setLightColor(color, lightIndex);
+                setLightColor(color, 1.0, lightIndex);
             }
         }
     }
 
-    function SetAllLights(color)
+    function SetAllLights(color, alpha)
     {
-        for (i = 0; i < 260; i++)
+        for (var i = 0; i < 260; i++)
         {
-            setLightColor(color, i);
+            setLightColor(color, alpha, i);
         }
     }
 

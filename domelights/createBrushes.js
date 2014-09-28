@@ -24,17 +24,15 @@ function CreateBrushes() {
         ColorBrush.Duration = 50;
         ColorBrush.Render = function (frame, originLight, brushData) {
 
-            var fadeMultipler = 1 - (1 / this.Duration) * frame;
+            var fadeMultiplier = 1 - (1 / this.Duration) * frame;
 
             var col = new THREE.Color();
 
             var myCol = brushData[0].getHSL();
-            col.setHSL(myCol.h, myCol.s, myCol.l * fadeMultipler);
-
-            //TODO Implement Alpha using fadeMultipler
+            col.setHSL(myCol.h, myCol.s, myCol.l * fadeMultiplier);
 
             //console.log(frame + " = " + col.r + "," + col.g +  "," + col.b);
-            setLightColor(col, originLight);
+            setLightColor(col, fadeMultiplier, originLight);
         };
         Brushes.push(ColorBrush);
     }
@@ -90,7 +88,7 @@ function CreateBrushes() {
             var col = new THREE.Color();
             col.setHSL(myColour.h, myColour.s, myColour.l * fadeMultiplier);
 
-            SetAllLights(col);
+            SetAllLights(col, fadeMultiplier);
 
         };
         Brushes.push(DomeFlashBrush);
@@ -169,7 +167,7 @@ function CreateBrushes() {
             var lightIndex = LightMappingMatrix[(originPosition.y - offset)][originPosition.x];
 
             col.setHSL(myColour.h, myColour.s, myColour.l*fadeMultiplier);
-            if(lightIndex != -1 ){setLightColor(col, lightIndex);}
+            if(lightIndex != -1 ){setLightColor(col, fadeMultiplier, lightIndex);}
 
             //lightIndex = LightMappingMatrix[(originPosition.y - offset)% LightMatrixHeight][originPosition.x+1];
             //col.setHSL(myColour.h, myColour.s, myColour.l * (0.75*fadeMultiplier));
@@ -226,7 +224,7 @@ function CreateBrushes() {
                     var lightIndex = LightMappingMatrix[xLight][yLight];
 
                     col.setHSL(myColour.h, myColour.s, (myColour.l * fadeMultiplier) * (Math.random() * 0.5 + 0.5));
-                    if(lightIndex != -1 ){setLightColor(col, lightIndex);}
+                    if(lightIndex != -1 ){setLightColor(col, fadeMultiplier, lightIndex);}
                 }
             }
             //HorizontalWipeTime(col, column);
@@ -260,7 +258,7 @@ function CreateBrushes() {
             SequenceManager.AddEvent(newEvent);
 
             return false;
-        }
+        };
         Brushes.push(FireWorkBurstBrush);
     }
 

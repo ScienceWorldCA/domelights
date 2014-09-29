@@ -14162,11 +14162,12 @@ function setLighting()
 function addLights()
 {
 	// Add Sun Light
-    light = new THREE.DirectionalLight( 0x211111 );
+    light = new THREE.DirectionalLight( 0x111115 );
 	light.position.set( .75, .75, .75 );
     scene.add( light );
 
-    var ambientLight = new THREE.AmbientLight( 0x101022 ); // soft white light scene.add( light );
+    //var ambientLight = new THREE.AmbientLight( 0x181820 );
+    var ambientLight = new THREE.AmbientLight( 0x080810 ); // soft white light scene.add( light );
     scene.add(ambientLight);
 
     BuildLights();
@@ -14175,15 +14176,33 @@ function addLights()
     //console.log(attributes.customColor.value[0].g);
 }
 
-function setLightColor(newColor, index)
+function setLightColor(newColor, Alpha, index)
 {
-    newColor = newColor || new THREE.Color(1,1,1);
-    //Set Light Color
-    DomeLightManager.Lights[index].color.setRGB( newColor.r, newColor.g, newColor.b );
+    var alpha = Alpha || 1.0;
+
+    newColor = new THREE.Color().setRGB(newColor.r, newColor.g, newColor.b) || new THREE.Color(1,1,1);
+
+    if(index < 0 || index > 260){console.log("Light out of range");}
+
+    //Get the Current color
+    var currentColor = DomeLightManager.Lights[index].color;
+
+    currentColor.r = currentColor.r * (1 - alpha);
+    currentColor.g = currentColor.g * (1 - alpha);
+    currentColor.b = currentColor.b * (1 - alpha);
+
+    newColor.r = (newColor.r * alpha) + currentColor.r;
+    newColor.g = (newColor.g * alpha) + currentColor.g;
+    newColor.b = (newColor.b * alpha) + currentColor.b;
+
+    DomeLightManager.Lights[index].color.setRGB(newColor.r, newColor.g, newColor.b );
+
+    var lightbulbColorOffset = 0;
+    DomeLightManager.LightBulbMeshes[index].material.color.setRGB(newColor.r + lightbulbColorOffset, newColor.g + lightbulbColorOffset, newColor.b + lightbulbColorOffset);
 
     // Increase the size of the Particle based on it's color brightness
     var myCol = newColor.getHSL();
-    attributes.size.value[ index ] = 40 * (2 * myCol.l);
+    attributes.size.value[ index ] = Math.min(50 * (2 * myCol.l), 50);
 
     attributes.customColor.value[index].r = newColor.r;
     attributes.customColor.value[index].g = newColor.g;
@@ -14495,7 +14514,7 @@ function BuildLightGlows()
 {
     function ClearLights() {
         for (var i = 0; i < DomeLightManager.Lights.length; i++) {
-            setLightColor(new THREE.Color(0, 0, 0), i);
+            setLightColor(new THREE.Color(0, 0, 0), 1.0, i);
         }
     }
 
@@ -14518,7 +14537,7 @@ function BuildLightGlows()
                 color.b -= mFadeAmount;
             }
 
-            setLightColor(color, i);
+            setLightColor(color, 1.0, i);
         }
     }
 
@@ -14529,7 +14548,7 @@ function BuildLightGlows()
         for (var y = 0; y < LightMatrixHeight; y++) {
             var lightIndex = LightMappingMatrix[y][index];
             if (lightIndex != -1) {
-                setLightColor(color, lightIndex);
+                setLightColor(color, 1.0, lightIndex);
             }
         }
     }
@@ -14541,16 +14560,16 @@ function BuildLightGlows()
         for (var x = 0; x < LightMatrixWidth; x++) {
             var lightIndex = LightMappingMatrix[index][x];
             if (lightIndex != -1) {
-                setLightColor(color, lightIndex);
+                setLightColor(color, 1.0, lightIndex);
             }
         }
     }
 
-    function SetAllLights(color)
+    function SetAllLights(color, alpha)
     {
-        for (i = 0; i < 260; i++)
+        for (var i = 0; i < 260; i++)
         {
-            setLightColor(color, i);
+            setLightColor(color, alpha, i);
         }
     }
 
@@ -14582,26 +14601,85 @@ function BuildLightGlows()
 
 function createGeometries() {
 
+
+    var path = 'file://../../domelights/textures/cube/SwedishRoyalCastle/';
+    var format = '.jpg';
+    var urls = [
+            path + 'px' + format, path + 'nx' + format,
+            path + 'py' + format, path + 'ny' + format,
+            path + 'pz' + format, path + 'nz' + format
+    ];
+
+    var reflectionCube = THREE.ImageUtils.loadTextureCube( urls );
+    reflectionCube.format = THREE.RGBFormat;
+
+    var refractionCube = new THREE.CubeTexture( reflectionCube.image, new THREE.CubeRefractionMapping() );
+    refractionCube.format = THREE.RGBFormat;
+
+    //var cubeMaterial3 = new THREE.MeshPhongMaterial( { color: 0x000000, specular:0xaa0000, envMap: reflectionCube, combine: THREE.MixOperation, reflectivity: 0.25 } );
+//    var cubeMaterial3 = new THREE.MeshLambertMaterial( { color: 0xff6600, ambient: 0x993300, envMap: reflectionCube, combine: THREE.MixOperation, reflectivity: 0.3 } );
+//    var cubeMaterial2 = new THREE.MeshLambertMaterial( { color: 0xffee00, ambient: 0x996600, envMap: refractionCube, refractionRatio: 0.15 } );
+//    var cubeMaterial1 = new THREE.MeshLambertMaterial( { color: 0xffffff, ambient: 0xaaaaaa, envMap: reflectionCube } )
+
+//    var shader = THREE.ShaderLib[ "cube" ];
+//    shader.uniforms[ "tCube" ].value = reflectionCube;
+//
+//    var material = new THREE.ShaderMaterial( {
+//
+//            fragmentShader: shader.fragmentShader,
+//            vertexShader: shader.vertexShader,
+//            uniforms: shader.uniforms,
+//            depthWrite: false,
+//            side: THREE.BackSide
+//
+//        } ),
+//
+//        mesh = new THREE.Mesh( new THREE.CylinderGeometry( 900, 900, 900 ), material );
+//    DomeGroup.add( mesh );
+
+
+    var mapHeight = THREE.ImageUtils.loadTexture( 'file://../../domelights/textures/dome/panel_bump.png' );
+
+    mapHeight.anisotropy = 16;
+    mapHeight.repeat.set( 1, 1);
+    mapHeight.offset.set( 0, 0 )
+    mapHeight.wrapS = mapHeight.wrapT = THREE.RepeatWrapping;
+    mapHeight.format = THREE.RGBFormat;
+
+    var domeMaterial = new THREE.MeshPhongMaterial( {bumpMap: mapHeight, color: 0xFFFFFF, ambient: 0x000000, envMap: reflectionCube, combine: THREE.MixOperation, reflectivity: 0.2, refractionRatio: 0.75 } );
+    var domeStructureMaterial = new THREE.MeshPhongMaterial( {color: 0xFFFFFF, ambient: 0xFFFFFF, envMap: reflectionCube, combine: THREE.MixOperation, reflectivity: 0.2, refractionRatio: 0.55 } );
+
+
+
     var loader;
     //Create ScienceWorld Dome
     loader = new THREE.OBJLoader( manager );
     loader.load( 'file://../../domelights/obj/scienceworld/dome.obj', function ( object ) {
         object.name = "DomeCollision";
+        object.traverse( function ( child ) {
+
+            if ( child instanceof THREE.Mesh ) {
+
+                child.material = domeMaterial;
+
+            }
+
+        } );
         DomeGroup.add( object );
     } );
 
     //Create ScienceWorld Light Structure
     loader = new THREE.OBJLoader( manager );
     loader.load( 'file://../../domelights/obj/scienceworld/Dome_Structure.obj', function ( object ) {
-//        object.traverse( function ( child ) {
-//
-//            if ( child instanceof THREE.Mesh ) {
-//
-//                child.material = materialLines;
-//
-//            }
-//
-//        } );
+        object.traverse( function ( child ) {
+
+            if ( child instanceof THREE.Mesh ) {
+
+                child.material = domeStructureMaterial;
+
+            }
+
+        } );
         DomeGroup.add( object );
 
     } );
@@ -14674,17 +14752,15 @@ function CreateBrushes() {
         ColorBrush.Duration = 50;
         ColorBrush.Render = function (frame, originLight, brushData) {
 
-            var fadeMultipler = 1 - (1 / this.Duration) * frame;
+            var fadeMultiplier = 1 - (1 / this.Duration) * frame;
 
             var col = new THREE.Color();
 
             var myCol = brushData[0].getHSL();
-            col.setHSL(myCol.h, myCol.s, myCol.l * fadeMultipler);
-
-            //TODO Implement Alpha using fadeMultipler
+            col.setHSL(myCol.h, myCol.s, myCol.l * fadeMultiplier);
 
             //console.log(frame + " = " + col.r + "," + col.g +  "," + col.b);
-            setLightColor(col, originLight);
+            setLightColor(col, fadeMultiplier, originLight);
         };
         Brushes.push(ColorBrush);
     }
@@ -14740,12 +14816,236 @@ function CreateBrushes() {
             var col = new THREE.Color();
             col.setHSL(myColour.h, myColour.s, myColour.l * fadeMultiplier);
 
-            SetAllLights(col, 1.0);
+            SetAllLights(col, fadeMultiplier);
 
         };
         Brushes.push(DomeFlashBrush);
     }
+
+    var HorizontalRingBrush = new Brush();
+    {
+        HorizontalRingBrush.Index = 5;
+        HorizontalRingBrush.Duration = 30;
+        HorizontalRingBrush.Render = function (frame, originLight, brushData) {
+
+            //TODO: Add nice fade in and fade out + do alpha blend
+            var pulseColour = new THREE.Color(0,1,0);
+            var fadeMultiplier = 1 - (1 / this.Duration) * frame;
+            var myColour = pulseColour.getHSL();
+
+            var col = new THREE.Color();
+            col.setHSL(myColour.h, myColour.s, myColour.l * fadeMultiplier);
+
+            var row = GetLightInMatrix(originLight).y;
+
+            VerticalWipeTime(col, row);
+
+        };
+        Brushes.push(HorizontalRingBrush);
+    }
+
+    var  VerticalRingBrush = new Brush();
+    {
+        VerticalRingBrush.Index = 6;
+        VerticalRingBrush.Duration = 30;
+        VerticalRingBrush.Render = function (frame, originLight, brushData) {
+
+            //TODO: Add nice fade in and fade out + do alpha blend
+            var pulseColour = new THREE.Color(0,1,0);
+            var fadeMultiplier = 1 - (1 / this.Duration) * frame;
+            var myColour = pulseColour.getHSL();
+
+            var col = new THREE.Color();
+            col.setHSL(myColour.h, myColour.s, myColour.l * fadeMultiplier);
+
+            var column = GetLightInMatrix(originLight).x;
+
+            HorizontalWipeTime(col, column);
+
+        };
+        Brushes.push(VerticalRingBrush);
+    }
+
+    var LaunchBrush = new Brush();
+    {
+        //Base section to the Firework Brush
+        LaunchBrush.Index = 7;
+        LaunchBrush.Duration = 30;
+        LaunchBrush.Render = function (frame, originLight, brushData) {
+
+            //TODO: Add nice fade in and fade out + do alpha blend
+            var pulseColour = new THREE.Color(0.5, 0.5, 0.5);
+            var fadeMultiplier = ((1 / this.Duration) * frame) + 0.5;
+            var myColour = pulseColour.getHSL();
+            var rippleDistance = brushData[2];
+
+
+            var col = new THREE.Color();
+            //col.setHSL(myColour.h, myColour.s, myColour.l * fadeMultiplier);
+
+            var originPosition = GetLightInMatrix(originLight);
+            //console.log(originLight + " : " + originPosition.x + " - " + originPosition.y);
+
+            var offset = Math.floor(((1 / this.Duration) * frame) * rippleDistance);
+
+            //var lightIndex = LightMappingMatrix[(originPosition.y - offset)% LightMatrixHeight][originPosition.x-1];
+            //col.setHSL(myColour.h, myColour.s, myColour.l * (0.75*fadeMultiplier));
+            //if(lightIndex != -1 ){setLightColor(col, lightIndex);}
+
+            var lightIndex = LightMappingMatrix[(originPosition.y - offset)][originPosition.x];
+
+            col.setHSL(myColour.h, myColour.s, myColour.l*fadeMultiplier);
+            if(lightIndex != -1 ){setLightColor(col, fadeMultiplier, lightIndex);}
+
+            //lightIndex = LightMappingMatrix[(originPosition.y - offset)% LightMatrixHeight][originPosition.x+1];
+            //col.setHSL(myColour.h, myColour.s, myColour.l * (0.75*fadeMultiplier));
+            //if(lightIndex != -1 ){setLightColor(col, lightIndex);}
+
+            //HorizontalWipeTime(col, column);
+
+        };
+        Brushes.push(LaunchBrush);
+    }
+
+    var  FireWorkBurstBrush = new Brush();
+    {
+        FireWorkBurstBrush.Index = 8;
+        FireWorkBurstBrush.Duration = 30;
+        FireWorkBurstBrush.Render = function (frame, originLight, brushData) {
+
+            //TODO: Add nice fade in and fade out + do alpha blend
+            var pulseColour = new THREE.Color(1,0,0);
+            var fadeMultiplier = 1 - (1 / this.Duration) * frame;
+            var myColour = brushData[0].getHSL();
+            var rippleDistance = 5;
+
+            var col = new THREE.Color();
+            col.setHSL(myColour.h, myColour.s, myColour.l * fadeMultiplier);
+
+            var originPosition = GetLightInMatrix(originLight);
+
+            var offset = Math.floor(((1 / this.Duration) * frame) * rippleDistance);
+
+            var step = 2*Math.PI/30;  // see note 1
+            var r = offset;
+
+            for(var trail = 1; trail < rippleDistance; trail++)
+            {
+                r = r - trail;
+                if(r < 0){r=0;}
+
+                //fadeMultiplier = fadeMultiplier / (trail+1);
+
+                for(var theta=0;  theta < 2*Math.PI;  theta+=step)
+                { var x = r*Math.cos(theta);
+                    var y = r*Math.sin(theta);    //note 2.
+                    //ctx.lineTo(x,y);
+                    //console.log("X: " + Math.floor(x) + " Y: " + Math.floor(y));
+                    var xLight = Math.floor(originPosition.y - x) % LightMatrixHeight;
+                    if(xLight < 0){continue;}
+
+                    var yLight = Math.floor(originPosition.x - y) % LightMatrixWidth;
+                    if(yLight < 0){continue;}
+
+                    //console.log("X: " + Math.floor(originPosition.y - x)% LightMatrixHeight + "Y: " + Math.floor(originPosition.x + y) % LightMatrixWidth);
+
+                    var lightIndex = LightMappingMatrix[xLight][yLight];
+
+                    col.setHSL(myColour.h, myColour.s, (myColour.l * fadeMultiplier) * (Math.random() * 0.5 + 0.5));
+                    if(lightIndex != -1 ){setLightColor(col, fadeMultiplier, lightIndex);}
+                }
+            }
+            //HorizontalWipeTime(col, column);
+
+        };
+        Brushes.push(FireWorkBurstBrush);
+    }
+
+    var  FireWorkBurstBrush = new Brush();
+    {
+        FireWorkBurstBrush.Index = 9;
+        FireWorkBurstBrush.Duration = 0;
+        FireWorkBurstBrush.PrePaint = function(LightIndex)
+        {
+            //Create a Burst at this light
+            var newEvent = new EVENT(SequenceManager.SequenceTime, LightIndex, Brushes[8], ActiveBrushData);
+            SequenceManager.AddEvent(newEvent);
+
+            var originPosition = GetLightInMatrix(LightIndex);
+
+           // console.log(LightMatrixHeight + " : " + originPosition.x);
+
+            var launchIndex = LightMappingMatrix[LightMatrixHeight-1][originPosition.x];
+            if(launchIndex == -1){launchIndex = LightMappingMatrix[LightMatrixHeight-1][originPosition.x+1];}
+
+            //console.log("INDEX: " + launchIndex);
+
+            ActiveBrushData[2] = (LightMatrixHeight-1) - originPosition.y;
+
+            newEvent = new EVENT(SequenceManager.SequenceTime-30, launchIndex, Brushes[7], ActiveBrushData);
+            SequenceManager.AddEvent(newEvent);
+
+            return false;
+        };
+        Brushes.push(FireWorkBurstBrush);
+    }
+
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 // Include: ../../domelights/events.js
 
 function onWindowResize() {
@@ -15321,21 +15621,29 @@ function buildInterface() {
 
     // Add Solid Color Brushes
     {
-        var button1 = new UIObjectManager.Button('file://../../domelights/textures/sprites/circle.png', new THREE.Vector2(150, 60), new THREE.Vector2(40, 40), 1, 1);
+        var button1 = new UIObjectManager.Button('file://../../domelights/textures/sprites/circle.png', new THREE.Vector2(150, 60), new THREE.Vector2(40, 40), 1, 1, true);
         button1.onMouseDown = ButtonDownClick;
         button1.onMouseUp = SetBrush;
         button1.onUIUpdate = updateBrushColor;
         button1.material.color.setRGB(0, 1, 0);
         button1.name = "button1";
-        button1.tag = 1;
+        button1.tag = 9;
+        button1.name = "button2";
+        button1.Label.Text = "FireWorks";
+        button1.Label.Position.y += 10;
+        button1.Label.UpdateTextPosition();
 
-        var button2 = new UIObjectManager.Button('file://../../domelights/textures/sprites/circle.png', new THREE.Vector2(150, 60), new THREE.Vector2(30, 30), 1, 2);
+        var button2 = new UIObjectManager.Button('file://../../domelights/textures/sprites/circle.png', new THREE.Vector2(150, 60), new THREE.Vector2(30, 30), 1, 2, true);
         button2.onMouseDown = ButtonDownClick;
         button2.onMouseUp = SetBrush;
         button2.onUIUpdate = updateBrushColor;
         button2.material.color.setRGB(0, 1, 1);
+        button2.tag = 6;
         button2.name = "button2";
-        button2.tag = 1;
+        button2.Label.Text = "Loop Fade";
+        button2.Label.Position.y += 10;
+        button2.Label.UpdateTextPosition();
+
 
         var button3 = new UIObjectManager.Button('file://../../domelights/textures/sprites/circle.png', new THREE.Vector2(150, 60), new THREE.Vector2(40, 40), 1, 3, true);
         button3.onMouseDown = ButtonDownClick;
@@ -15343,7 +15651,7 @@ function buildInterface() {
         button3.onUIUpdate = updateBrushColor;
         button3.material.color.setRGB(1, 1, 0);
         button3.name = "button3";
-        button3.tag = 1;
+        button3.tag = 5;
         button3.Label.Text = "Ring Fade";
         button3.Label.Position.y += 10;
         button3.Label.UpdateTextPosition();
@@ -16384,6 +16692,7 @@ var DomeLights = function(localScene)
 {
     var mScene = localScene;
     var mLightMeshes= [];
+    var mLightBulbMeshes= [];
     var mLights= [];
     var mLightMeta = [];
 
@@ -16396,6 +16705,13 @@ var DomeLights = function(localScene)
     });
     this.__defineSetter__("LightMeshes", function(val){
         mLightMeshes = val;
+    });
+
+    this.__defineGetter__("LightBulbMeshes", function(){
+        return mLightBulbMeshes;
+    });
+    this.__defineSetter__("LightBulbMeshes", function(val){
+        mLightBulbMeshes = val;
     });
 
     this.__defineGetter__("Lights", function(){
@@ -16442,11 +16758,26 @@ var DomeLights = function(localScene)
             mLights.push(Light);
 
             // Collision Spheres
-            var sphere = new THREE.SphereGeometry( 8, 4, 4 );
+            var sphere = new THREE.SphereGeometry( 6, 4, 4 );
             var LightMesh = new THREE.Mesh( sphere, new THREE.MeshBasicMaterial( { color: 0x0000ff, opacity:0, transparent: true } ) );
             LightMesh.position.set(mPos.x, mPos.y, mPos.z);
             mScene.add( LightMesh );
             mLightMeshes.push(LightMesh);
+
+            var sphere = new THREE.SphereGeometry( 1, 4, 4 );
+            var LightBulbMesh = new THREE.Mesh( sphere, new THREE.MeshBasicMaterial( {color: 0x0000ff, opacity:0.4, transparent: false } ) );
+            LightBulbMesh.position.set(mPos.x, mPos.y, mPos.z);
+            mScene.add( LightBulbMesh );
+            mLightBulbMeshes.push(LightBulbMesh);
+
+            var sphere = new THREE.SphereGeometry( 1.2, 4, 4 );
+            var LightBulbHilightMaterial = new THREE.MeshBasicMaterial( {color: 0xFFFFFF, opacity:0.5, transparent: true } );
+            LightBulbHilightMaterial.side = THREE.BackSide;
+            var LightBulbHilightMesh = new THREE.Mesh( sphere, LightBulbHilightMaterial );
+            LightBulbHilightMesh.position.set(mPos.x, mPos.y, mPos.z);
+            mScene.add( LightBulbHilightMesh );
+            //mLightBulbMeshes.push(LightBulbMesh);
+
 
             mLightMeta.push(this);
         }

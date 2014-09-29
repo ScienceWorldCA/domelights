@@ -39,13 +39,13 @@ function createGeometries() {
 
     var mapHeight = THREE.ImageUtils.loadTexture( 'textures/dome/panel_bump.png' );
 
-    mapHeight.anisotropy = 16;
+    mapHeight.anisotropy = 1;
     mapHeight.repeat.set( 1, 1);
-    mapHeight.offset.set( 0, 0 )
+    mapHeight.offset.set( 0, 0 );
     mapHeight.wrapS = mapHeight.wrapT = THREE.RepeatWrapping;
     mapHeight.format = THREE.RGBFormat;
 
-    var domeMaterial = new THREE.MeshPhongMaterial( {bumpMap: mapHeight, color: 0xFFFFFF, ambient: 0x000000, envMap: reflectionCube, combine: THREE.MixOperation, reflectivity: 0.2, refractionRatio: 0.75 } );
+    var domeMaterial = new THREE.MeshPhongMaterial( {bumpMap: mapHeight, color: 0xFFFFFF, ambient: 0x000000, envMap: reflectionCube, combine: THREE.MixOperation, reflectivity: 0.15, refractionRatio: 0.75 } );
     var domeStructureMaterial = new THREE.MeshPhongMaterial( {color: 0xFFFFFF, ambient: 0xFFFFFF, envMap: reflectionCube, combine: THREE.MixOperation, reflectivity: 0.2, refractionRatio: 0.55 } );
 
 

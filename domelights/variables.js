@@ -1,20 +1,20 @@
 if( ! window ) {
 
 	var window = function() {
-		innerWidth = 1024;
-		innerHeight = 768;
+		var innerWidth = 1920;
+		var innerHeight = 1080;
 	}
 
 }
 
-	var GraphicMode = true;
-
     var renderer, composer, scene, camera, stats;
+    var videoTexture, videoFile;
     var DomeGroup, swipeMesh;
 
     var projector, raycaster, intersects;
     var windowHalfX = window.innerWidth / 2;
     var windowHalfY = window.innerHeight / 2;
+
     var mouse = { x: 1, y: 1 }, INTERSECTED;
     var mouseX = 0;
     var mouseXOnMouseDown = 0;
@@ -22,13 +22,10 @@ if( ! window ) {
     var isMouseDown = false;
     var targetRotation = 0;
     var targetRotationOnMouseDown = 0;
+    var FixedSpeedActive = false;
 
     // These are the sprites used to create the glow effects.
     var LightGlowSprites;
-
-    var FPS = 40;
-
-    var FixedSpeedActive = false;
     var DomeLightManager;
     var UIObjectManager;
     var SequenceManager;
@@ -36,14 +33,13 @@ if( ! window ) {
     var ActiveBrushID = 1;
     var ActiveBrushData = [new THREE.Color(1, 1, 1), new THREE.Color(1, 0, 0)];
 
-    var Aspect = [16, 8];
-
-    var videoTexture, videoFile;
-
     var timer = 0.0;
 
+    //Setup Settings
     var UseStubLights = true;
-
+    var GraphicMode = true;
+    var Aspect = [16, 9];
+    var FPS = 40;
 
     //Used for Debug Purposes
     var manager = new THREE.LoadingManager();
@@ -141,7 +137,6 @@ if( ! window ) {
         ["2a","20a","1","12","28","31","51","54","77","79","101","104","120","123","101a","100a","83a","80a","45a","42a"],
         ["1a","21a","22a","31a","29","30","52","53","144","78","102","103","121","122","141","142","82a","81a","44a","43a"]];
 
-
     function convertArrayMapping()
     {
         var lightRenderOrder = [];
@@ -184,7 +179,7 @@ if( ! window ) {
         }
         console.log("FinalArraySize: " + lightRenderOrder.length);
         return lightRenderOrder;
-    };
+    }
 
     function GetLightInDome(lightIndex)
     {

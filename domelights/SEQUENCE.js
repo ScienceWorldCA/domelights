@@ -10,6 +10,8 @@ SEQUENCE = function() {
     this.Events = [];
     this.Play = true;
 
+    var previousTime = new Date().getTime();
+
     this.GetSequenceTime = function()
     {
         return this.SequenceTime;
@@ -127,11 +129,25 @@ SEQUENCE = function() {
     {
         if(this.Play == true)
         {
-            timer += 0.8;
+            timer += getFrameDelta();
             if (timer > this.SequenceLength) timer = 0.0;
 
             this.SequenceTime = Math.floor(timer);
         }
+    };
+
+    function getFrameDelta()
+    {
+        var frameDelta = 0;
+
+        var currentTime = new Date().getTime();
+        var delta = currentTime - previousTime;
+        previousTime = currentTime;
+
+        //console.log(delta);
+        frameDelta = delta / (1000/FPS);
+
+        return frameDelta;
     }
 
     //Used to load Objects with the right types

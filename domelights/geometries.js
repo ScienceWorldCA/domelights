@@ -16,9 +16,9 @@ function createGeometries() {
     refractionCube.format = THREE.RGBFormat;
 
     //var cubeMaterial3 = new THREE.MeshPhongMaterial( { color: 0x000000, specular:0xaa0000, envMap: reflectionCube, combine: THREE.MixOperation, reflectivity: 0.25 } );
-//    var cubeMaterial3 = new THREE.MeshLambertMaterial( { color: 0xff6600, ambient: 0x993300, envMap: reflectionCube, combine: THREE.MixOperation, reflectivity: 0.3 } );
-//    var cubeMaterial2 = new THREE.MeshLambertMaterial( { color: 0xffee00, ambient: 0x996600, envMap: refractionCube, refractionRatio: 0.15 } );
-//    var cubeMaterial1 = new THREE.MeshLambertMaterial( { color: 0xffffff, ambient: 0xaaaaaa, envMap: reflectionCube } )
+    //var cubeMaterial3 = new THREE.MeshLambertMaterial( { color: 0xff6600, ambient: 0x993300, envMap: reflectionCube, combine: THREE.MixOperation, reflectivity: 0.3 } );
+    //var cubeMaterial2 = new THREE.MeshLambertMaterial( { color: 0xffee00, ambient: 0x996600, envMap: refractionCube, refractionRatio: 0.15 } );
+    //var cubeMaterial1 = new THREE.MeshLambertMaterial( { color: 0xffffff, ambient: 0xaaaaaa, envMap: reflectionCube } )
 
 //    var shader = THREE.ShaderLib[ "cube" ];
 //    shader.uniforms[ "tCube" ].value = reflectionCube;
@@ -39,13 +39,13 @@ function createGeometries() {
 
     var mapHeight = THREE.ImageUtils.loadTexture( 'textures/dome/panel_bump.png' );
 
-    mapHeight.anisotropy = 1;
+    mapHeight.anisotropy = 16;
     mapHeight.repeat.set( 1, 1);
-    mapHeight.offset.set( 0, 0 );
+    mapHeight.offset.set( 0, 0 )
     mapHeight.wrapS = mapHeight.wrapT = THREE.RepeatWrapping;
     mapHeight.format = THREE.RGBFormat;
 
-    var domeMaterial = new THREE.MeshPhongMaterial( {bumpMap: mapHeight, color: 0xFFFFFF, ambient: 0x000000, envMap: reflectionCube, combine: THREE.MixOperation, reflectivity: 0.15, refractionRatio: 0.75 } );
+    var domeMaterial = new THREE.MeshPhongMaterial( {bumpMap: mapHeight, color: 0x888888, ambient: 0x222222, envMap: reflectionCube, combine: THREE.MixOperation, reflectivity: 0.1, refractionRatio: 0.95 } );
     var domeStructureMaterial = new THREE.MeshPhongMaterial( {color: 0xFFFFFF, ambient: 0xFFFFFF, envMap: reflectionCube, combine: THREE.MixOperation, reflectivity: 0.2, refractionRatio: 0.55 } );
 
 

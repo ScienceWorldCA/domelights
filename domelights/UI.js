@@ -192,6 +192,7 @@ UI = function(projector, raycaster, camera, mouse)
         this.TabID = 0;
         this.isMouseDown = false;
 
+        this.Transform = null;
 
 
 
@@ -216,6 +217,9 @@ UI = function(projector, raycaster, camera, mouse)
 
         this.init = function()
         {
+            this.Transform = new THREE.Object3D;
+            scene.add(  this.Transform );
+
             this.map = THREE.ImageUtils.loadTexture( texture );
 
             this.material = new THREE.MeshBasicMaterial({
@@ -225,11 +229,12 @@ UI = function(projector, raycaster, camera, mouse)
 
             if(this.ShowLabel == true) {
                 this.Label = new self.Text(new THREE.Vector3(mPos.x, mPos.y - (mSize.y * 0.75), 2), "Button", "center");
+                this.Label.Transform.parent = this.Transform;
             }
 
             this.mesh = new THREE.Mesh( new THREE.PlaneGeometry( mSize.x, mSize.y, 0, 0 ), this.material );
             this.mesh.position.set(  mPos.x,  mPos.y, 0 );
-            scene.add(  this.mesh );
+            this.Transform.add(  this.mesh );
 
             self.AddUIObject(this);
             return this;
@@ -279,7 +284,11 @@ UI = function(projector, raycaster, camera, mouse)
             }
         }
 
-        this.init = function() {
+        this.init = function()
+        {
+
+            this.Transform = new THREE.Object3D;
+            scene.add(  this.Transform );
 
             this.map = THREE.ImageUtils.loadTexture( texture );
 
@@ -290,7 +299,7 @@ UI = function(projector, raycaster, camera, mouse)
 
             this.mesh = new THREE.Mesh( new THREE.PlaneGeometry( mSize.x, mSize.y, 0, 0 ), this.material );
             this.mesh.position.set(  mPos.x,  mPos.y, 0 );
-            scene.add(  this.mesh );
+            this.Transform.add(  this.mesh );
 
             self.AddUIObject(this);
             return this;
@@ -572,6 +581,33 @@ UI = function(projector, raycaster, camera, mouse)
     };
     this.ColorPicker.Prototype = Object.create(this.BaseUIObject());
 
+
+    this.Panel = function(mPos, mSize, groupID, tabID)
+    {
+        this.GroupID = groupID || 0;
+        this.TabID = tabID || 0;
+
+        this.__defineGetter__("Visible", function(){
+            return this.Transform.visible;
+        });
+
+        this.__defineSetter__("Visible", function(val){
+            this.Transform.visible = val;
+        });
+
+        this.init = function()
+        {
+            this.Transform = new THREE.Object3D;
+            scene.add(  this.Transform );
+
+            self.AddUIObject(this);
+            return this;
+        };
+        this.init();
+    };
+
+    this.Panel.Prototype = Object.create(this.BaseUIObject());
+
     this.DrawLine = function(Pos1, Pos2, color1, color2){
 
         var mColor1 = color1 || new THREE.Color(1,1,1);
@@ -639,6 +675,7 @@ UI = function(projector, raycaster, camera, mouse)
                 textMesh = new THREE.Mesh(text3d, mat); // = text3d;
                 Self.UpdateTextPosition();
                 scene.add(textMesh);
+                //this.Transform.add(textMesh);
             }
         };
 
@@ -656,7 +693,6 @@ UI = function(projector, raycaster, camera, mouse)
         });
 
         this.__defineSetter__("Position", function(val){
-            console.log("pos");
             position = val;
             this.UpdateTextPosition();
         });
@@ -683,22 +719,26 @@ UI = function(projector, raycaster, camera, mouse)
         {
             var textWidth = textMesh.geometry.boundingBox.max.x - textMesh.geometry.boundingBox.min.x;
 
-            var TextAlignmentPos = position.x;
+            var TextAlignmentPos =  this.Transform.position.x;
 
             if(mTextAlignment == "center"){TextAlignmentPos = position.x - (textWidth/2);}
             else if(mTextAlignment == "right"){TextAlignmentPos = position.x - textWidth;}
 
-            textMesh.position.set(TextAlignmentPos, position.y, position.z);
+            textMesh.position.set(TextAlignmentPos,  position.y,  position.z);
         }
 
         this.init = function()
         {
+            this.Transform = new THREE.Object3D;
+            scene.add(  this.Transform );
+
             mat = new THREE.MeshBasicMaterial( { color: 0xffffff } );
             text3d = new THREE.TextGeometry( mText, mTextOptions);
             text3d.computeBoundingBox();
             textMesh = new THREE.Mesh( text3d, mat );
             this.UpdateTextPosition();
             scene.add( textMesh );
+            //this.Transform.children.push(textMesh);
         };
 
         this.init();

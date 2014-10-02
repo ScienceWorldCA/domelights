@@ -129,7 +129,7 @@ SEQUENCE = function() {
     {
         if(this.Play == true)
         {
-            timer += getFrameDelta();
+            timer += 0.8; //getFrameDelta();
             if (timer > this.SequenceLength) timer = 0.0;
 
             this.SequenceTime = Math.floor(timer);

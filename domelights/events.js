@@ -1,15 +1,39 @@
 function onWindowResize() {
 
+
 	camera.aspect = Aspect[0]/Aspect[1];
 	camera.updateProjectionMatrix();
 
     var renderHeight = (window.innerWidth/Aspect[0]) * Aspect[1];
 	renderer.setSize( window.innerWidth, renderHeight );
 
+
     windowHalfX = window.innerWidth / 2;
     windowHalfY = window.innerHeight / 2;
 
+    //renderer.setViewport( 0, -120, window.innerWidth, renderHeight );
+
+    //UpdateDockedPanels();
+
 }
+
+function UpdateDockedPanels()
+{
+    var vector = new THREE.Vector3( window.innerWidth, windowHalfY, 0.5);
+    projector.unprojectVector( vector, camera );
+    raycaster.ray.set( camera.position, vector.sub( camera.position ).normalize() );
+    var usermesh = new THREE.Mesh( new THREE.PlaneGeometry( 1000, 1000, 0, 0 ), new THREE.MeshBasicMaterial({color:0xFFFFFF}) );
+    usermesh.rotation.x = 90;
+
+    var intersects = raycaster.intersectObject( usermesh );
+
+    console.log("recalc");
+
+    if ( intersects.length > 0 ) {
+        console.log(intersects[0].point.y);
+    }
+}
+
 
 function isMouseOverBar() {
 

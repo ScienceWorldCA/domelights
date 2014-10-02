@@ -80,8 +80,8 @@ function CreateBrushes() {
         DomeFlashBrush.Duration = 50;
         DomeFlashBrush.Render = function (frame, originLight, brushData) {
 
-            //TODO: Add nice fade in and fade out + do alpha blend
-            var pulseColour = new THREE.Color(0,1,0);
+
+            var pulseColour = brushData[0];
             var fadeMultiplier = 1 - (1 / this.Duration) * frame;
             var myColour = pulseColour.getHSL();
 

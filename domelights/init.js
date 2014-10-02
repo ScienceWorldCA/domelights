@@ -6,9 +6,10 @@ function initGraphicMode()
 
 	scene = new THREE.Scene();
 
-	camera = new THREE.PerspectiveCamera( 37, Aspect[0] / Aspect[1], 1, 1000 );
-	camera.position.z = 350;
-    camera.far = 353; //We force the far plane in as an optimisation to cull back of the dome FX, eg.un-depth tested
+	camera = new THREE.PerspectiveCamera( 10, Aspect[0] / Aspect[1], 1, 1000 );
+	camera.position.z = 1200;
+    camera.position.x = 60;
+    camera.far = 1203; //We force the far plane in as an optimisation to cull back of the dome FX, eg.un-depth tested
 
     //Create interaction casters
     projector = new THREE.Projector();
@@ -16,10 +17,10 @@ function initGraphicMode()
 
     //Init 3D Groups
     DomeGroup = new THREE.Object3D;
-    DomeGroup.scale.x = 1;
-    DomeGroup.scale.y = 1;
-    DomeGroup.scale.z = 1;
-    DomeGroup.position.y = 10;
+    DomeGroup.scale.x = 1.2;
+    DomeGroup.scale.y = 1.2;
+    DomeGroup.scale.z = 1.2;
+    DomeGroup.position.y = 0;
     //DomeGroup.position.z = -130;
     DomeGroup.rotation.x = 0.4; //Rotation appears to be in Radians
 

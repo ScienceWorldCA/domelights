@@ -48,7 +48,7 @@ function setLightColor(newColor, Alpha, index)
 
         // Increase the size of the Particle based on it's color brightness
         var myCol = newColor.getHSL();
-        attributes.size.value[ index ] = Math.min(50 * (2 * myCol.l), 50);
+        attributes.size.value[ index ] = Math.min(200 * (2 * myCol.l), 200);
 
         attributes.customColor.value[index].r = newColor.r;
         attributes.customColor.value[index].g = newColor.g;

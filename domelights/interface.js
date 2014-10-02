@@ -19,6 +19,8 @@ function buildInterface() {
         DisplaySubmit();
     }
 
+    var leftPanel = new UIObjectManager.Panel(new THREE.Vector2(0,0),new THREE.Vector2(1,1),0,0);
+
     //Brush Functions
     {
         function updateBrushColor(event, uiObject)
@@ -49,7 +51,7 @@ function buildInterface() {
         {
             uiObject.mesh.scale.x = uiObject.mesh.scale.y = 1;
 
-            var newEvent = new EVENT(SequenceManager.SequenceTime, 0, Brushes[uiObject.tag]);
+            var newEvent = new EVENT(SequenceManager.SequenceTime, 0, Brushes[uiObject.tag], ActiveBrushData);
             SequenceManager.AddEvent(newEvent);
         }
 
@@ -88,17 +90,17 @@ function buildInterface() {
         });
 
         swipeMesh = new THREE.Mesh(new THREE.PlaneGeometry(80, 15, 0, 0), swipeMaterial);
-        swipeMesh.position.set(0, -70, 0);
+        swipeMesh.position.set(0, -80, 0);
         scene.add(swipeMesh);
 
-        var SpinR = new UIObjectManager.Button('textures/UI/SpinR.png', new THREE.Vector2(50, -60), new THREE.Vector2(19, 19), 0, 0);
+        var SpinR = new UIObjectManager.Button('textures/UI/SpinR.png', new THREE.Vector2(80, -60), new THREE.Vector2(19, 19), 0, 0);
         SpinR.onMouseDown = ButtonDownClick;
         SpinR.onMouseUp = AutoSpinR;
         SpinR.material.color.setRGB(1, 1, 1);
         SpinR.tag = 1;
         SpinR.name = "SpinRight";
 
-        var SpinL = new UIObjectManager.Button('textures/UI/SpinL.png', new THREE.Vector2(-50, -60), new THREE.Vector2(19, 19), 0, 0);
+        var SpinL = new UIObjectManager.Button('textures/UI/SpinL.png', new THREE.Vector2(-80, -60), new THREE.Vector2(19, 19), 0, 0);
         SpinL.onMouseUp = AutoSpinL;
         SpinL.onMouseDown = ButtonDownClick;
         SpinL.material.color.setRGB(1, 1, 1);
@@ -140,7 +142,7 @@ function buildInterface() {
             }
         }
 
-        var Pause = new UIObjectManager.Button('textures/UI/Pause.png', new THREE.Vector2(-5, -85), new THREE.Vector2(10, 10));
+        var Pause = new UIObjectManager.Button('textures/UI/Pause.png', new THREE.Vector2(-85, -85), new THREE.Vector2(10, 10));
         Pause.onMouseDown = ButtonDownClick;
         Pause.onMouseUp = PlaySequence;
         Pause.onUIUpdate = PauseUpdateUI;
@@ -148,7 +150,7 @@ function buildInterface() {
         Pause.tag = false;
         Pause.name = "Pause";
 
-        var Play = new UIObjectManager.Button('textures/UI/Play.png', new THREE.Vector2(5, -85), new THREE.Vector2(10, 10));
+        var Play = new UIObjectManager.Button('textures/UI/Play.png', new THREE.Vector2(-75, -85), new THREE.Vector2(10, 10));
         Play.onMouseDown = ButtonDownClick;
         Play.onMouseUp = PlaySequence;
         Play.onUIUpdate = PlayUpdateUI;
@@ -171,6 +173,7 @@ function buildInterface() {
         button1.Label.Text = "FireWorks";
         button1.Label.Position.y += 10;
         button1.Label.UpdateTextPosition();
+        button1.Transform.parent =  leftPanel.Transform;
 
         var button2 = new UIObjectManager.Button('textures/sprites/circle.png', new THREE.Vector2(150, 60), new THREE.Vector2(30, 30), 1, 2, true);
         button2.onMouseDown = ButtonDownClick;
@@ -182,6 +185,7 @@ function buildInterface() {
         button2.Label.Text = "Loop Fade";
         button2.Label.Position.y += 10;
         button2.Label.UpdateTextPosition();
+        button2.Transform.parent =  leftPanel.Transform;
 
 
         var button3 = new UIObjectManager.Button('textures/sprites/circle.png', new THREE.Vector2(150, 60), new THREE.Vector2(40, 40), 1, 3, true);
@@ -194,6 +198,7 @@ function buildInterface() {
         button3.Label.Text = "Ring Fade";
         button3.Label.Position.y += 10;
         button3.Label.UpdateTextPosition();
+        button3.Transform.parent =  leftPanel.Transform;
     }
 
     // Add Background Solid Brushes
@@ -222,38 +227,45 @@ function buildInterface() {
             uiObject.map.offset.x = increment;
         }
 
-        var bbutton1 = new UIObjectManager.Button('textures/UI/Gradient.png', new THREE.Vector2(-180, 60), new THREE.Vector2(20, 20),0,0,true);
+        var bbutton1 = new UIObjectManager.Button('textures/UI/rainbowgradient.png', new THREE.Vector2(150, 70), new THREE.Vector2(30, 30),1,4,false);
         bbutton1.onMouseDown = ButtonDownClick;
         bbutton1.onMouseUp = SetBackground;
+        bbutton1.onUIUpdate = animateImage;
         bbutton1.material.color.setRGB(1, 1, 1);
         bbutton1.tag = 2;
         bbutton1.name = "Background 1";
-        bbutton1.Label.Text = "Rainbow";
+        bbutton1.map.repeat.x = 1/5;
+        bbutton1.timer = 0;
+        bbutton1.frames = 5;
+        //bbutton1.Label.Text = "Rainbow";
 
-        var bbutton2 = new UIObjectManager.Button('textures/UI/rainbowwipe.png', new THREE.Vector2(-180, 30), new THREE.Vector2(20, 20),0,0,false);
+        var bbutton2 = new UIObjectManager.Button('textures/UI/rainbowwipe.png', new THREE.Vector2(180, 70), new THREE.Vector2(30, 30),1,4,false);
         bbutton2.onMouseDown = ButtonDownClick;
         bbutton2.onMouseUp = SetBackground;
         bbutton2.onUIUpdate = animateImage;
         bbutton2.material.color.setRGB(1, 1, 1);
-        bbutton2.map.repeat.x = 1/7;
+        bbutton2.map.repeat.x = 1/6;
         bbutton2.tag = 3;
         bbutton2.name = "Background 2";
         //bbutton2.Label.Text = "Rainbow Wipe";
         bbutton2.timer = 0;
-        bbutton2.frames = 7;
+        bbutton2.frames = 6;
 
-        var bbutton3 = new UIObjectManager.Button('textures/UI/smiley-face.png', new THREE.Vector2(-180, 0), new THREE.Vector2(20, 20),0,0,true);
+        var bbutton3 = new UIObjectManager.Button('textures/UI/fulldomeflash.png', new THREE.Vector2(210, 70), new THREE.Vector2(30, 30),1,4,false);
         bbutton3.onMouseDown = ButtonDownClick;
         bbutton3.onMouseUp = SetForeground;
-        bbutton3.onUIUpdate = spinUpdate;
+        bbutton3.onUIUpdate = animateImage;
         bbutton3.material.color.setRGB(1, 1, 1);
         bbutton3.tag = 4;
         bbutton3.name = "Background 3";
-        bbutton3.spin = -0.1;
-        bbutton3.Label.Text = "Green Flash";
+        //bbutton3.spin = -0.1;
+       // bbutton3.Label.Text = "Green Flash";
+        bbutton3.map.repeat.x = 1/6;
+        bbutton3.timer = 0;
+        bbutton3.frames = 6;
     }
 
-    var timeline = new UIObjectManager.Timeline('textures/UI/smiley-face.png', new THREE.Vector2(-90, -105), new THREE.Vector2(180, 20));
+    var timeline = new UIObjectManager.Timeline('textures/UI/smiley-face.png', new THREE.Vector2(-90, -110), new THREE.Vector2(180, 20));
     {
         function onTimeHandleMouseDown(event, uiObject)
         {
@@ -405,6 +417,7 @@ function buildInterface() {
         tabButton1.onInactiveTab = onInactiveTab;
         tabButton1.onActiveTab = onActiveTab;
         //tabButton1.UIObjectsList = UIObjectManager.UIObjectsList;
+        tabButton1.Transform.parent =  leftPanel.Transform;
 
         var tabButton2 = new UIObjectManager.Tab('textures/UI/SolidTab.png', new THREE.Vector2(165, 95), new THREE.Vector2(25, 10), 0, 1, 2);
         tabButton2.onMouseUp = SetTabIndex;
@@ -414,6 +427,7 @@ function buildInterface() {
         tabButton2.tag = 1;
         tabButton2.onInactiveTab = onInactiveTab;
         tabButton2.onActiveTab = onActiveTab;
+        tabButton2.Transform.parent =  leftPanel.Transform;
 
         var tabButton3 = new UIObjectManager.Tab('textures/UI/FXTab.png', new THREE.Vector2(192, 95), new THREE.Vector2(25, 10), 0, 1, 3);
         tabButton3.onMouseUp = SetTabIndex;
@@ -423,10 +437,22 @@ function buildInterface() {
         tabButton3.tag = 1;
         tabButton3.onInactiveTab = onInactiveTab;
         tabButton3.onActiveTab = onActiveTab;
+        tabButton3.Transform.parent =  leftPanel.Transform;
+
+
+        var tabButton4 = new UIObjectManager.Tab('textures/UI/BackgroundTab.png', new THREE.Vector2(219, 95), new THREE.Vector2(25, 10), 0, 1, 4);
+        tabButton4.onMouseUp = SetTabIndex;
+        tabButton4.onMouseDown = SelectTab;
+        tabButton4.material.color.setRGB(0.4, 0.4, 0.4);
+        tabButton4.name = "Background Brushes";
+        tabButton4.tag = 1;
+        tabButton4.onInactiveTab = onInactiveTab;
+        tabButton4.onActiveTab = onActiveTab;
+        tabButton4.Transform.parent =  leftPanel.Transform;
 
         tabButton1.onSwitchTabs();
 
-        var Line1 = new UIObjectManager.DrawLine(new THREE.Vector3(210, 89,0 ), new THREE.Vector3(120, 89,0), new THREE.Color(0.8,0.8,0.8), new THREE.Color(0.8,0.8,0.8));
+        var Line1 = new UIObjectManager.DrawLine(new THREE.Vector3(280, 89,0 ), new THREE.Vector3(120, 89,0), new THREE.Color(0.8,0.8,0.8), new THREE.Color(0.8,0.8,0.8));
         //tabButton2.UIObjectsList = UIObjectManager.UIObjectsList;
 
     }
@@ -451,7 +477,7 @@ function buildInterface() {
     //Debug UI
     {
         //Clear Dome
-        var clearDome = new UIObjectManager.Button('textures/UI/clear.png', new THREE.Vector2(-190, -95), new THREE.Vector2(20, 8));
+        var clearDome = new UIObjectManager.Button('textures/UI/clear.png', new THREE.Vector2(115, -100), new THREE.Vector2(20, 8));
         clearDome.onMouseUp = ClearDome;
         clearDome.onMouseDown = ButtonDownClick;
         clearDome.onMouseEnter = ButtonDownClick;
@@ -461,7 +487,7 @@ function buildInterface() {
         clearDome.name = "ClearDome";
 
         //Submit Sequence
-        var submitSequence = new UIObjectManager.Button('textures/UI/Submit.png', new THREE.Vector2(190, -95), new THREE.Vector2(20, 8));
+        var submitSequence = new UIObjectManager.Button('textures/UI/Submit.png', new THREE.Vector2(230, -100), new THREE.Vector2(20, 8));
         submitSequence.onMouseUp = SubmitSequence;
         submitSequence.onMouseDown = ButtonDownClick;
         submitSequence.onMouseEnter = ButtonDownClick;

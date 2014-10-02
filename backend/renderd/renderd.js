@@ -15646,7 +15646,7 @@ function buildInterface() {
 
     // Add Solid Color Brushes
     {
-        var button1 = new UIObjectManager.Button('file://../../domelights/textures/sprites/circle.png', new THREE.Vector2(150, 60), new THREE.Vector2(40, 40), 1, 1, true);
+        var button1 = new UIObjectManager.Button('file://../../domelights/textures/UI/dome.png', new THREE.Vector2(150, 60), new THREE.Vector2(40, 40), 1, 1, true);
         button1.onMouseDown = ButtonDownClick;
         button1.onMouseUp = SetBrush;
         button1.onUIUpdate = updateBrushColor;
@@ -15659,7 +15659,7 @@ function buildInterface() {
         button1.Label.UpdateTextPosition();
         button1.Transform.parent =  leftPanel.Transform;
 
-        var button2 = new UIObjectManager.Button('file://../../domelights/textures/sprites/circle.png', new THREE.Vector2(150, 60), new THREE.Vector2(30, 30), 1, 2, true);
+        var button2 = new UIObjectManager.Button('file://../../domelights/textures/UI/dome.png', new THREE.Vector2(150, 60), new THREE.Vector2(30, 30), 1, 2, true);
         button2.onMouseDown = ButtonDownClick;
         button2.onMouseUp = SetBrush;
         button2.onUIUpdate = updateBrushColor;
@@ -15672,7 +15672,7 @@ function buildInterface() {
         button2.Transform.parent =  leftPanel.Transform;
 
 
-        var button3 = new UIObjectManager.Button('file://../../domelights/textures/sprites/circle.png', new THREE.Vector2(150, 60), new THREE.Vector2(40, 40), 1, 3, true);
+        var button3 = new UIObjectManager.Button('file://../../domelights/textures/UI/ringdome.png', new THREE.Vector2(150, 60), new THREE.Vector2(40, 40), 1, 3, true);
         button3.onMouseDown = ButtonDownClick;
         button3.onMouseUp = SetBrush;
         button3.onUIUpdate = updateBrushColor;

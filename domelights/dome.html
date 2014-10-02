@@ -141,8 +141,8 @@ A.closebutton {
 		document.getElementById('userinput').style.visibility = 'hidden';
 		document.getElementById('blockout').style.visibility = 'hidden';
 		if (document.getElementById('storeResult').disabled == true) {
-			// If we successfully submitted the animation, then reload the canvas (hard reload for now)
-			location.reload();
+			// If we successfully submitted the animation, then clear the canvas (hard reload for now)
+			SequenceManager.ClearSequence();
 		}
 		EnableDomeEventHandles(true);
 	}

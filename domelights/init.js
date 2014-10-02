@@ -6,9 +6,9 @@ function initGraphicMode()
 
 	scene = new THREE.Scene();
 
-	camera = new THREE.PerspectiveCamera( 45, Aspect[0] / Aspect[1], 1, 1000 );
-	camera.position.z = 250;
-    camera.far = 253; //We force the far plane in as an optimisation to cull back of the dome FX, eg.un-depth tested
+	camera = new THREE.PerspectiveCamera( 37, Aspect[0] / Aspect[1], 1, 1000 );
+	camera.position.z = 350;
+    camera.far = 353; //We force the far plane in as an optimisation to cull back of the dome FX, eg.un-depth tested
 
     //Create interaction casters
     projector = new THREE.Projector();

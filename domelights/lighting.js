@@ -41,19 +41,22 @@ function setLightColor(newColor, Alpha, index)
 
     DomeLightManager.Lights[index].color.setRGB(newColor.r, newColor.g, newColor.b );
 
-    var lightbulbColorOffset = 0;
-    DomeLightManager.LightBulbMeshes[index].material.color.setRGB(newColor.r + lightbulbColorOffset, newColor.g + lightbulbColorOffset, newColor.b + lightbulbColorOffset);
+    if(GraphicMode == true)
+    {
+        var lightbulbColorOffset = 0;
+        DomeLightManager.LightBulbMeshes[index].material.color.setRGB(newColor.r + lightbulbColorOffset, newColor.g + lightbulbColorOffset, newColor.b + lightbulbColorOffset);
 
-    // Increase the size of the Particle based on it's color brightness
-    var myCol = newColor.getHSL();
-    attributes.size.value[ index ] = Math.min(50 * (2 * myCol.l), 50);
+        // Increase the size of the Particle based on it's color brightness
+        var myCol = newColor.getHSL();
+        attributes.size.value[ index ] = Math.min(50 * (2 * myCol.l), 50);
 
-    attributes.customColor.value[index].r = newColor.r;
-    attributes.customColor.value[index].g = newColor.g;
-    attributes.customColor.value[index].b = newColor.b;
+        attributes.customColor.value[index].r = newColor.r;
+        attributes.customColor.value[index].g = newColor.g;
+        attributes.customColor.value[index].b = newColor.b;
 
-    attributes.size.needsUpdate = true;
-    attributes.customColor.needsUpdate = true;
+        attributes.size.needsUpdate = true;
+        attributes.customColor.needsUpdate = true;
+    }
 }
 
 function BuildLights()

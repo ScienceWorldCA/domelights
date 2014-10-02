@@ -24,17 +24,15 @@ function CreateBrushes() {
         ColorBrush.Duration = 50;
         ColorBrush.Render = function (frame, originLight, brushData) {
 
-            var fadeMultipler = 1 - (1 / this.Duration) * frame;
+            var fadeMultiplier = 1 - (1 / this.Duration) * frame;
 
             var col = new THREE.Color();
 
             var myCol = brushData[0].getHSL();
-            col.setHSL(myCol.h, myCol.s, myCol.l * fadeMultipler);
-
-            //TODO Implement Alpha using fadeMultipler
+            col.setHSL(myCol.h, myCol.s, myCol.l * fadeMultiplier);
 
             //console.log(frame + " = " + col.r + "," + col.g +  "," + col.b);
-            setLightColor(col, originLight);
+            setLightColor(col, fadeMultiplier, originLight);
         };
         Brushes.push(ColorBrush);
     }
@@ -90,9 +88,232 @@ function CreateBrushes() {
             var col = new THREE.Color();
             col.setHSL(myColour.h, myColour.s, myColour.l * fadeMultiplier);
 
-            SetAllLights(col);
+            SetAllLights(col, fadeMultiplier);
 
         };
         Brushes.push(DomeFlashBrush);
     }
+
+    var HorizontalRingBrush = new Brush();
+    {
+        HorizontalRingBrush.Index = 5;
+        HorizontalRingBrush.Duration = 30;
+        HorizontalRingBrush.Render = function (frame, originLight, brushData) {
+
+            //TODO: Add nice fade in and fade out + do alpha blend
+            var pulseColour = new THREE.Color(0,1,0);
+            var fadeMultiplier = 1 - (1 / this.Duration) * frame;
+            var myColour = pulseColour.getHSL();
+
+            var col = new THREE.Color();
+            col.setHSL(myColour.h, myColour.s, myColour.l * fadeMultiplier);
+
+            var row = GetLightInMatrix(originLight).y;
+
+            VerticalWipeTime(col, row);
+
+        };
+        Brushes.push(HorizontalRingBrush);
+    }
+
+    var  VerticalRingBrush = new Brush();
+    {
+        VerticalRingBrush.Index = 6;
+        VerticalRingBrush.Duration = 30;
+        VerticalRingBrush.Render = function (frame, originLight, brushData) {
+
+            //TODO: Add nice fade in and fade out + do alpha blend
+            var pulseColour = new THREE.Color(0,1,0);
+            var fadeMultiplier = 1 - (1 / this.Duration) * frame;
+            var myColour = pulseColour.getHSL();
+
+            var col = new THREE.Color();
+            col.setHSL(myColour.h, myColour.s, myColour.l * fadeMultiplier);
+
+            var column = GetLightInMatrix(originLight).x;
+
+            HorizontalWipeTime(col, column);
+
+        };
+        Brushes.push(VerticalRingBrush);
+    }
+
+    var LaunchBrush = new Brush();
+    {
+        //Base section to the Firework Brush
+        LaunchBrush.Index = 7;
+        LaunchBrush.Duration = 30;
+        LaunchBrush.Render = function (frame, originLight, brushData) {
+
+            //TODO: Add nice fade in and fade out + do alpha blend
+            var pulseColour = new THREE.Color(0.5, 0.5, 0.5);
+            var fadeMultiplier = ((1 / this.Duration) * frame) + 0.5;
+            var myColour = pulseColour.getHSL();
+            var rippleDistance = brushData[2];
+
+
+            var col = new THREE.Color();
+            //col.setHSL(myColour.h, myColour.s, myColour.l * fadeMultiplier);
+
+            var originPosition = GetLightInMatrix(originLight);
+            //console.log(originLight + " : " + originPosition.x + " - " + originPosition.y);
+
+            var offset = Math.floor(((1 / this.Duration) * frame) * rippleDistance);
+
+            //var lightIndex = LightMappingMatrix[(originPosition.y - offset)% LightMatrixHeight][originPosition.x-1];
+            //col.setHSL(myColour.h, myColour.s, myColour.l * (0.75*fadeMultiplier));
+            //if(lightIndex != -1 ){setLightColor(col, lightIndex);}
+
+            var lightIndex = LightMappingMatrix[(originPosition.y - offset)][originPosition.x];
+
+            col.setHSL(myColour.h, myColour.s, myColour.l*fadeMultiplier);
+            if(lightIndex != -1 ){setLightColor(col, fadeMultiplier, lightIndex);}
+
+            //lightIndex = LightMappingMatrix[(originPosition.y - offset)% LightMatrixHeight][originPosition.x+1];
+            //col.setHSL(myColour.h, myColour.s, myColour.l * (0.75*fadeMultiplier));
+            //if(lightIndex != -1 ){setLightColor(col, lightIndex);}
+
+            //HorizontalWipeTime(col, column);
+
+        };
+        Brushes.push(LaunchBrush);
+    }
+
+    var  FireWorkBurstBrush = new Brush();
+    {
+        FireWorkBurstBrush.Index = 8;
+        FireWorkBurstBrush.Duration = 30;
+        FireWorkBurstBrush.Render = function (frame, originLight, brushData) {
+
+            //TODO: Add nice fade in and fade out + do alpha blend
+            var pulseColour = new THREE.Color(1,0,0);
+            var fadeMultiplier = 1 - (1 / this.Duration) * frame;
+            var myColour = brushData[0].getHSL();
+            var rippleDistance = 5;
+
+            var col = new THREE.Color();
+            col.setHSL(myColour.h, myColour.s, myColour.l * fadeMultiplier);
+
+            var originPosition = GetLightInMatrix(originLight);
+
+            var offset = Math.floor(((1 / this.Duration) * frame) * rippleDistance);
+
+            var step = 2*Math.PI/30;  // see note 1
+            var r = offset;
+
+            for(var trail = 1; trail < rippleDistance; trail++)
+            {
+                r = r - trail;
+                if(r < 0){r=0;}
+
+                //fadeMultiplier = fadeMultiplier / (trail+1);
+
+                for(var theta=0;  theta < 2*Math.PI;  theta+=step)
+                { var x = r*Math.cos(theta);
+                    var y = r*Math.sin(theta);    //note 2.
+                    //ctx.lineTo(x,y);
+                    //console.log("X: " + Math.floor(x) + " Y: " + Math.floor(y));
+                    var xLight = Math.floor(originPosition.y - x) % LightMatrixHeight;
+                    if(xLight < 0){continue;}
+
+                    var yLight = Math.floor(originPosition.x - y) % LightMatrixWidth;
+                    if(yLight < 0){continue;}
+
+                    //console.log("X: " + Math.floor(originPosition.y - x)% LightMatrixHeight + "Y: " + Math.floor(originPosition.x + y) % LightMatrixWidth);
+
+                    var lightIndex = LightMappingMatrix[xLight][yLight];
+
+                    col.setHSL(myColour.h, myColour.s, (myColour.l * fadeMultiplier) * (Math.random() * 0.5 + 0.5));
+                    if(lightIndex != -1 ){setLightColor(col, fadeMultiplier, lightIndex);}
+                }
+            }
+            //HorizontalWipeTime(col, column);
+
+        };
+        Brushes.push(FireWorkBurstBrush);
+    }
+
+    var  FireWorkBurstBrush = new Brush();
+    {
+        FireWorkBurstBrush.Index = 9;
+        FireWorkBurstBrush.Duration = 0;
+        FireWorkBurstBrush.PrePaint = function(LightIndex)
+        {
+            //Create a Burst at this light
+            var newEvent = new EVENT(SequenceManager.SequenceTime, LightIndex, Brushes[8], ActiveBrushData);
+            SequenceManager.AddEvent(newEvent);
+
+            var originPosition = GetLightInMatrix(LightIndex);
+
+           // console.log(LightMatrixHeight + " : " + originPosition.x);
+
+            var launchIndex = LightMappingMatrix[LightMatrixHeight-1][originPosition.x];
+            if(launchIndex == -1){launchIndex = LightMappingMatrix[LightMatrixHeight-1][originPosition.x+1];}
+
+            //console.log("INDEX: " + launchIndex);
+
+            ActiveBrushData[2] = (LightMatrixHeight-1) - originPosition.y;
+
+            newEvent = new EVENT(SequenceManager.SequenceTime-30, launchIndex, Brushes[7], ActiveBrushData);
+            SequenceManager.AddEvent(newEvent);
+
+            return false;
+        };
+        Brushes.push(FireWorkBurstBrush);
+    }
+
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

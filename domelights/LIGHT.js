@@ -6,6 +6,7 @@ var DomeLights = function(localScene)
 {
     var mScene = localScene;
     var mLightMeshes= [];
+    var mLightBulbMeshes= [];
     var mLights= [];
     var mLightMeta = [];
 
@@ -18,6 +19,13 @@ var DomeLights = function(localScene)
     });
     this.__defineSetter__("LightMeshes", function(val){
         mLightMeshes = val;
+    });
+
+    this.__defineGetter__("LightBulbMeshes", function(){
+        return mLightBulbMeshes;
+    });
+    this.__defineSetter__("LightBulbMeshes", function(val){
+        mLightBulbMeshes = val;
     });
 
     this.__defineGetter__("Lights", function(){
@@ -59,16 +67,33 @@ var DomeLights = function(localScene)
             {
                 var Light = new THREE.PointLight( lightColor, 0.5, 2 );
             }
+
             Light.position.set( mPos.x, mPos.y, mPos.z );
             mScene.add( Light );
             mLights.push(Light);
 
-            // Collision Spheres
-            var sphere = new THREE.SphereGeometry( 8, 4, 4 );
-            var LightMesh = new THREE.Mesh( sphere, new THREE.MeshBasicMaterial( { color: 0x0000ff, opacity:0, transparent: true } ) );
-            LightMesh.position.set(mPos.x, mPos.y, mPos.z);
-            mScene.add( LightMesh );
-            mLightMeshes.push(LightMesh);
+            if(GraphicMode == true) {
+                // Collision Spheres
+                var sphere = new THREE.SphereGeometry(6, 4, 4);
+                var LightMesh = new THREE.Mesh(sphere, new THREE.MeshBasicMaterial({ color: 0x0000ff, opacity: 0, transparent: true }));
+                LightMesh.position.set(mPos.x, mPos.y, mPos.z);
+                mScene.add(LightMesh);
+                mLightMeshes.push(LightMesh);
+
+                sphere = new THREE.SphereGeometry(1, 4, 4);
+                var LightBulbMesh = new THREE.Mesh(sphere, new THREE.MeshBasicMaterial({color: 0x0000ff, opacity: 0.4, transparent: false }));
+                LightBulbMesh.position.set(mPos.x, mPos.y, mPos.z);
+                mScene.add(LightBulbMesh);
+                mLightBulbMeshes.push(LightBulbMesh);
+
+                sphere = new THREE.SphereGeometry(1.5, 4, 4);
+                var LightBulbHighlightMaterial = new THREE.MeshBasicMaterial({color: 0xFFFFFF, opacity: 0.1, transparent: true });
+                LightBulbHighlightMaterial.side = THREE.BackSide;
+                var LightBulbHighlightMesh = new THREE.Mesh(sphere, LightBulbHighlightMaterial);
+                LightBulbHighlightMesh.position.set(mPos.x, mPos.y, mPos.z);
+                mScene.add(LightBulbHighlightMesh);
+                //mLightBulbMeshes.push(LightBulbMesh);
+            }
 
             mLightMeta.push(this);
         }

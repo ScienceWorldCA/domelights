@@ -13914,20 +13914,20 @@ THREE.BloomPass.blurY = new THREE.Vector2( 0.0, 0.001953125 );
 if( ! window ) {
 
 	var window = function() {
-		innerWidth = 1024;
-		innerHeight = 768;
+		var innerWidth = 1920;
+		var innerHeight = 1080;
 	}
 
 }
 
-	var GraphicMode = true;
-
     var renderer, composer, scene, camera, stats;
+    var videoTexture, videoFile;
     var DomeGroup, swipeMesh;
 
     var projector, raycaster, intersects;
     var windowHalfX = window.innerWidth / 2;
     var windowHalfY = window.innerHeight / 2;
+
     var mouse = { x: 1, y: 1 }, INTERSECTED;
     var mouseX = 0;
     var mouseXOnMouseDown = 0;
@@ -13935,13 +13935,10 @@ if( ! window ) {
     var isMouseDown = false;
     var targetRotation = 0;
     var targetRotationOnMouseDown = 0;
+    var FixedSpeedActive = false;
 
     // These are the sprites used to create the glow effects.
     var LightGlowSprites;
-
-    var FPS = 40;
-
-    var FixedSpeedActive = false;
     var DomeLightManager;
     var UIObjectManager;
     var SequenceManager;
@@ -13949,14 +13946,13 @@ if( ! window ) {
     var ActiveBrushID = 1;
     var ActiveBrushData = [new THREE.Color(1, 1, 1), new THREE.Color(1, 0, 0)];
 
-    var Aspect = [16, 8];
-
-    var videoTexture, videoFile;
-
     var timer = 0.0;
 
+    //Setup Settings
     var UseStubLights = true;
-
+    var GraphicMode = true;
+    var Aspect = [16, 9];
+    var FPS = 40;
 
     //Used for Debug Purposes
     var manager = new THREE.LoadingManager();
@@ -14054,7 +14050,6 @@ if( ! window ) {
         ["2a","20a","1","12","28","31","51","54","77","79","101","104","120","123","101a","100a","83a","80a","45a","42a"],
         ["1a","21a","22a","31a","29","30","52","53","144","78","102","103","121","122","141","142","82a","81a","44a","43a"]];
 
-
     function convertArrayMapping()
     {
         var lightRenderOrder = [];
@@ -14097,7 +14092,7 @@ if( ! window ) {
         }
         console.log("FinalArraySize: " + lightRenderOrder.length);
         return lightRenderOrder;
-    };
+    }
 
     function GetLightInDome(lightIndex)
     {
@@ -14197,19 +14192,22 @@ function setLightColor(newColor, Alpha, index)
 
     DomeLightManager.Lights[index].color.setRGB(newColor.r, newColor.g, newColor.b );
 
-    var lightbulbColorOffset = 0;
-    DomeLightManager.LightBulbMeshes[index].material.color.setRGB(newColor.r + lightbulbColorOffset, newColor.g + lightbulbColorOffset, newColor.b + lightbulbColorOffset);
+    if(GraphicMode == true)
+    {
+        var lightbulbColorOffset = 0;
+        DomeLightManager.LightBulbMeshes[index].material.color.setRGB(newColor.r + lightbulbColorOffset, newColor.g + lightbulbColorOffset, newColor.b + lightbulbColorOffset);
 
-    // Increase the size of the Particle based on it's color brightness
-    var myCol = newColor.getHSL();
-    attributes.size.value[ index ] = Math.min(50 * (2 * myCol.l), 50);
+        // Increase the size of the Particle based on it's color brightness
+        var myCol = newColor.getHSL();
+        attributes.size.value[ index ] = Math.min(50 * (2 * myCol.l), 50);
 
-    attributes.customColor.value[index].r = newColor.r;
-    attributes.customColor.value[index].g = newColor.g;
-    attributes.customColor.value[index].b = newColor.b;
+        attributes.customColor.value[index].r = newColor.r;
+        attributes.customColor.value[index].g = newColor.g;
+        attributes.customColor.value[index].b = newColor.b;
 
-    attributes.size.needsUpdate = true;
-    attributes.customColor.needsUpdate = true;
+        attributes.size.needsUpdate = true;
+        attributes.customColor.needsUpdate = true;
+    }
 }
 
 function BuildLights()
@@ -14640,13 +14638,13 @@ function createGeometries() {
 
     var mapHeight = THREE.ImageUtils.loadTexture( 'file://../../domelights/textures/dome/panel_bump.png' );
 
-    mapHeight.anisotropy = 16;
+    mapHeight.anisotropy = 1;
     mapHeight.repeat.set( 1, 1);
-    mapHeight.offset.set( 0, 0 )
+    mapHeight.offset.set( 0, 0 );
     mapHeight.wrapS = mapHeight.wrapT = THREE.RepeatWrapping;
     mapHeight.format = THREE.RGBFormat;
 
-    var domeMaterial = new THREE.MeshPhongMaterial( {bumpMap: mapHeight, color: 0xFFFFFF, ambient: 0x000000, envMap: reflectionCube, combine: THREE.MixOperation, reflectivity: 0.2, refractionRatio: 0.75 } );
+    var domeMaterial = new THREE.MeshPhongMaterial( {bumpMap: mapHeight, color: 0xFFFFFF, ambient: 0x000000, envMap: reflectionCube, combine: THREE.MixOperation, reflectivity: 0.15, refractionRatio: 0.75 } );
     var domeStructureMaterial = new THREE.MeshPhongMaterial( {color: 0xFFFFFF, ambient: 0xFFFFFF, envMap: reflectionCube, combine: THREE.MixOperation, reflectivity: 0.2, refractionRatio: 0.55 } );
 
 
@@ -15179,9 +15177,9 @@ function initGraphicMode()
 
 	scene = new THREE.Scene();
 
-	camera = new THREE.PerspectiveCamera( 45, Aspect[0] / Aspect[1], 1, 1000 );
-	camera.position.z = 250;
-    camera.far = 253; //We force the far plane in as an optimisation to cull back of the dome FX, eg.un-depth tested
+	camera = new THREE.PerspectiveCamera( 37, Aspect[0] / Aspect[1], 1, 1000 );
+	camera.position.z = 350;
+    camera.far = 353; //We force the far plane in as an optimisation to cull back of the dome FX, eg.un-depth tested
 
     //Create interaction casters
     projector = new THREE.Projector();
@@ -16753,31 +16751,33 @@ var DomeLights = function(localScene)
             {
                 var Light = new THREE.PointLight( lightColor, 0.5, 2 );
             }
+
             Light.position.set( mPos.x, mPos.y, mPos.z );
             mScene.add( Light );
             mLights.push(Light);
 
-            // Collision Spheres
-            var sphere = new THREE.SphereGeometry( 6, 4, 4 );
-            var LightMesh = new THREE.Mesh( sphere, new THREE.MeshBasicMaterial( { color: 0x0000ff, opacity:0, transparent: true } ) );
-            LightMesh.position.set(mPos.x, mPos.y, mPos.z);
-            mScene.add( LightMesh );
-            mLightMeshes.push(LightMesh);
+            if(GraphicMode == true) {
+                // Collision Spheres
+                var sphere = new THREE.SphereGeometry(6, 4, 4);
+                var LightMesh = new THREE.Mesh(sphere, new THREE.MeshBasicMaterial({ color: 0x0000ff, opacity: 0, transparent: true }));
+                LightMesh.position.set(mPos.x, mPos.y, mPos.z);
+                mScene.add(LightMesh);
+                mLightMeshes.push(LightMesh);
 
-            var sphere = new THREE.SphereGeometry( 1, 4, 4 );
-            var LightBulbMesh = new THREE.Mesh( sphere, new THREE.MeshBasicMaterial( {color: 0x0000ff, opacity:0.4, transparent: false } ) );
-            LightBulbMesh.position.set(mPos.x, mPos.y, mPos.z);
-            mScene.add( LightBulbMesh );
-            mLightBulbMeshes.push(LightBulbMesh);
+                sphere = new THREE.SphereGeometry(1, 4, 4);
+                var LightBulbMesh = new THREE.Mesh(sphere, new THREE.MeshBasicMaterial({color: 0x0000ff, opacity: 0.4, transparent: false }));
+                LightBulbMesh.position.set(mPos.x, mPos.y, mPos.z);
+                mScene.add(LightBulbMesh);
+                mLightBulbMeshes.push(LightBulbMesh);
 
-            var sphere = new THREE.SphereGeometry( 1.2, 4, 4 );
-            var LightBulbHilightMaterial = new THREE.MeshBasicMaterial( {color: 0xFFFFFF, opacity:0.5, transparent: true } );
-            LightBulbHilightMaterial.side = THREE.BackSide;
-            var LightBulbHilightMesh = new THREE.Mesh( sphere, LightBulbHilightMaterial );
-            LightBulbHilightMesh.position.set(mPos.x, mPos.y, mPos.z);
-            mScene.add( LightBulbHilightMesh );
-            //mLightBulbMeshes.push(LightBulbMesh);
-
+                sphere = new THREE.SphereGeometry(1.5, 4, 4);
+                var LightBulbHighlightMaterial = new THREE.MeshBasicMaterial({color: 0xFFFFFF, opacity: 0.1, transparent: true });
+                LightBulbHighlightMaterial.side = THREE.BackSide;
+                var LightBulbHighlightMesh = new THREE.Mesh(sphere, LightBulbHighlightMaterial);
+                LightBulbHighlightMesh.position.set(mPos.x, mPos.y, mPos.z);
+                mScene.add(LightBulbHighlightMesh);
+                //mLightBulbMeshes.push(LightBulbMesh);
+            }
 
             mLightMeta.push(this);
         }
@@ -16799,6 +16799,8 @@ SEQUENCE = function() {
     this.Version = 1;
     this.Events = [];
     this.Play = true;
+
+    var previousTime = new Date().getTime();
 
     this.GetSequenceTime = function()
     {
@@ -16917,11 +16919,25 @@ SEQUENCE = function() {
     {
         if(this.Play == true)
         {
-            timer += 0.8;
+            timer += getFrameDelta();
             if (timer > this.SequenceLength) timer = 0.0;
 
             this.SequenceTime = Math.floor(timer);
         }
+    };
+
+    function getFrameDelta()
+    {
+        var frameDelta = 0;
+
+        var currentTime = new Date().getTime();
+        var delta = currentTime - previousTime;
+        previousTime = currentTime;
+
+        //console.log(delta);
+        frameDelta = delta / (1000/FPS);
+
+        return frameDelta;
     }
 
     //Used to load Objects with the right types

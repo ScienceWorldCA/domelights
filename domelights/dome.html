@@ -1,164 +1,193 @@
 <!doctype html>
 <html lang="en">
-	<head>
-		<title>Science World - Dome Lights</title>
-		<meta charset="utf-8">
-		<meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
-		<style>
-		body {
-			color: #ffffff;
-			background-color: #111111;
-			margin: 0px;
-			overflow: hidden;
+<head>
+<title>Science World - Dome Lights</title>
+<meta charset="utf-8">
+<meta name="viewport"
+	content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
+<style>
+body {
+	color: #ffffff;
+	background-color: #111111;
+	margin: 0px;
+	overflow: hidden;
+}
+
+#info {
+	position: absolute;
+	top: 0px;
+	width: 100%;
+	padding: 5px;
+	font-family: Monospace;
+	font-size: 13px;
+	text-align: center;
+	font-weight: bold;
+}
+
+#blockout {
+	position: absolute;
+	margin: auto;
+	bottom: 0px;
+	left: 0px;
+	top: 0px;
+	right: 0px;
+	font-family: Monospace;
+	font-size: 13px;
+	text-align: center;
+	font-weight: bold;
+	background: grey;
+	opacity: 0.5;
+	width: 100%;
+	height: 100%;
+	float: inherit;
+	visibility: hidden;
+}
+
+#userinput {
+	position: absolute;
+	margin: auto;
+	bottom: 0px;
+	left: 0px;
+	top: 0px;
+	right: 0px;
+	font-family: "proxima-nova",calibri,sans-serif;
+	font-size: 13px;
+	text-align: center;
+	font-weight: bold;
+	background: black;
+	width: 350px;
+	height: 325px;
+	border-radius: 5px;
+	border: 0px;
+	z-index: 10;
+	float: inherit;
+	opacity: 1;
+	// visibility: hidden;
+	background: #ffffff;
+	color: #000000;
+}
+
+a {
+	text-decoration: none;
+}
+
+.popuptitle {
+	border-top-left-radius: 5px;
+	border-top-right-radius: 5px;
+	width: 100%;
+	clear: both;
+	height: 20px;
+	margin: auto;
+	text-align: center;
+	padding-top: 2px;
+	background: #2ECC71;
+	color: #ffffff;
+}
+
+A.closebutton {
+	float: right;
+	text-decoration: none;
+	padding-right: 5px;
+	color: #ffffff;
+}
+
+#lineout {
+	width: 100%;
+	clear: both;
+}
+
+#storeResult {
+	background: #2ECC71;
+	color: #ffffff;
+	border: 0px;
+	border-radius: 5px;
+	padding: 5px;
+}
+
+#submitdesc {
+	padding: 3px;
+}
+</style>
+<script src="api.js"></script>
+<script language="javascript">
+	function DoStoreAnimation() {
+
+		document.getElementById('storeResult').innerHTML = "Saving...";
+
+		// Verify input
+		if (document.getElementById('userrealname').value == ''
+				|| document.getElementById('userrealname').value == '<name>') {
+			alert("Missing user name!");
+			return false;
+		} else if (document.getElementById('useremail').value == ''
+				|| document.getElementById('useremail').value == '<email>') {
+			alert("Missing email address!");
+			return false;
+		} else {
+			api.DoStoreAnimation();
+			// EnableDomeEventHandles(true);
 		}
-		#info {
-			position: absolute;
-			top: 0px;
-			width: 100%;
-			padding: 5px;
-			font-family: Monospace;
-			font-size: 13px;
-			text-align: center;
-			font-weight: bold;
+
+		return false;
+	}
+
+	function DisplaySubmit() {
+		document.getElementById('blockout').style.visibility = 'visible';
+		document.getElementById('userinput').style.visibility = 'visible';
+		console.log("Showing Submit Dialog");
+		EnableDomeEventHandles(false);
+	}
+
+	function CloseSubmit() {
+		document.getElementById('userinput').style.visibility = 'hidden';
+		document.getElementById('blockout').style.visibility = 'hidden';
+		if (document.getElementById('storeResult').disabled == true) {
+			// If we successfully submitted the animation, then reload the canvas (hard reload for now)
+			location.reload();
 		}
-		
-		#blockout {
-			position: absolute;
-			margin: auto;
-			bottom: 0px;
-			left: 0px;
-			top: 0px;
-			right: 0px;
-			font-family: Monospace;
-			font-size: 13px;
-			text-align: center;
-			font-weight: bold;
-			background: grey;
-			opacity: 0.5;
-			width: 100%;
-			height: 100%;
-			float: inherit;
-			visibility: hidden;
-		}
-		
-		#userinput {
-			position: absolute;
-			margin: auto;
-			bottom: 0px;
-			left: 0px;
-			top: 0px;
-			right: 0px;
-			font-family: Monospace;
-			font-size: 13px;
-			text-align: center;
-			font-weight: bold;
-			background: black;
-			width: 350px;
-			height: 325px;
-			border: solid 1px white;
-			z-index: 10;
-			float: inherit;
-			opacity: 1;
-			visibility: hidden;
-		}
-		
-		a {
-			color: #fff;
-		}
-		
-		.popuptitle {
-			width: 100%;
-			clear: both;
-			height: 25px;
-			border: solid 1px white;
-			margin: auto;
-		}
-		
-		.closebutton {
-			float: right;
-		}
-		</style>
-		<script src="api.js"></script>
-		<script language="javascript">
-			function DoStoreAnimation() {
-		
-				document.getElementById('storeResult').innerHTML = "Saving...";
-				
-				// Verify input
-				if( document.getElementById( 'userrealname' ).value == '' || document.getElementById( 'userrealname' ).value == '<name>') {
-					alert( "Missing user name!" );
-					return false;
-				} else if( document.getElementById( 'useremail' ).value == '' || document.getElementById( 'useremail' ).value == '<email>' ) {
-					alert( "Missing email address!" );
-					return false;
-				} else {
-					api.DoStoreAnimation();
-                    // EnableDomeEventHandles(true);
-				}
-		
-				return false;
-			}
-			
-            function DisplaySubmit() {
-            	document.getElementById('blockout').style.visibility = 'visible';
-            	document.getElementById('userinput').style.visibility = 'visible';
-                console.log("Showing Submit Dialog");
-				EnableDomeEventHandles(false);
-            }
-            
-            function CloseSubmit() {
-            	document.getElementById('userinput').style.visibility = 'hidden';
-            	document.getElementById('blockout').style.visibility = 'hidden';
-            	if( document.getElementById('storeResult').disabled == true ) {
-            		// If we successfully submitted the animation, then reload the canvas (hard reload for now)
-            		location.reload();
-            	}
-				EnableDomeEventHandles(true);
-            }
-		</script>
-	</head>
-	
-	<body>
-		<div id="container">
-		</div>
-		<div id="blockout" onclick="CloseSubmit();">&nbsp;</div>
-		<div id="userinput">
-			<div class="popuptitle">Submit Animation<a class="closebutton" href="#" onclick="CloseSubmit();return false;">X</a></div>
-			<div>Placeholder submit explanation</div>
-			<form id="userinputform" name="userinputform" action='#' method='post'>
-				<label>Name:</label><input id='userrealname' name='userrealname'
-					type='text' placeholder='<name>' size='32' value='Ty' /><label>Email
-					Address:</label><input id='useremail' name='useremail' type='text' size='32'
-					placeholder='<email>' value='tycho.eggen@gmail.com' /><input
-					type='submit' id='storeResult'
-					onClick="DoStoreAnimation(); return false;" value='Publish'>
-			</form>
-		</div>
+		EnableDomeEventHandles(true);
+	}
+</script>
+</head>
+
+<body>
+	<div id="container"></div>
+	<div id="blockout" onclick="CloseSubmit();">&nbsp;</div>
+	<div id="userinput">
+		<div class="popuptitle">Submit Animation<a class="closebutton" href="#"	onclick="CloseSubmit();return false;">X</a></div>
+		<div id="submitdesc" class="lineout">Praesent eleifend, magna ac dictum imperdiet, augue leo cursus nibh, vel elementum risus ex ac felis. Praesent euismod elementum libero ut condimentum. Curabitur tristique nulla ultrices sapien tempor dignissim. Aliquam lobortis nunc vulputate dolor tempor, a elementum metus vulputate. Nulla at fringilla nunc. Ut laoreet, augue vel faucibus iaculis, risus nisi iaculis eros, eu malesuada massa ex non elit. Aliquam consequat vitae turpis eget bibendum. Praesent dignissim leo vitae feugiat efficitur. Proin iaculis scelerisque elit, pretium molestie elit fermentum quis. Morbi nunc arcu, elementum a orci id, euismod finibus nulla. Nulla vestibulum, ligula sed euismod venenatis, odio neque rutrum mi, ac tincidunt leo magna quis nisi.</div>
+		<form id="userinputform" name="userinputform" action='#' method='post'>
+			<div class="lineout"><label>Name:</label><input id='userrealname' name='userrealname' type='text' placeholder='<name>' size='32' /></div>
+			<div class="lineout"><label>Email Address:</label><input id='useremail' name='useremail' type='text' size='32' placeholder='<email>' /></div>
+			<div class="lineout"><input id='useragrees' name='useragrees' type='checkbox' /><label>I agree to the <a href="terms.html">Terms of Use</a>.</label></div>
+			<div class="lineout"><button id='storeResult' onClick="DoStoreAnimation(); return false;">Publish</button></div>
+		</form>
+	</div>
 
 
 	<script src="includes/three.min.js"></script>
-		<script src="includes/jquery.min.js"></script>
-		<script src="includes/js/loaders/OBJLoader.js"></script>
-		<script src="includes/js/Detector.js"></script>
-		<script src="includes/js/libs/stats.min.js"></script>
-	
-		<script src="includes/js/renderers/WebGLDeferredRenderer.js"></script>
-		<script src="includes/js/ShaderDeferred.js"></script>
-		<script src="includes/js/shaders/VignetteShader.js"></script>
-		<script src="includes/js/shaders/CopyShader.js"></script>
-		<script src="includes/js/postprocessing/EffectComposer.js"></script>
-		<script src="includes/js/shaders/FXAAShader.js"></script>
-	
-		<script src="includes/js/postprocessing/EffectComposer.js"></script>
-		<script src="includes/js/postprocessing/RenderPass.js"></script>
-		<script src="includes/js/postprocessing/MaskPass.js"></script>
-		<script src="includes/js/postprocessing/ShaderPass.js"></script>
-		<script src="includes/js/shaders/ConvolutionShader.js"></script>
-		<script src="includes/js/postprocessing/BloomPass.js"></script>
+	<script src="includes/jquery.min.js"></script>
+	<script src="includes/js/loaders/OBJLoader.js"></script>
+	<script src="includes/js/Detector.js"></script>
+	<script src="includes/js/libs/stats.min.js"></script>
 
-        <script src="fonts/helvetiker_regular.typeface.js"></script>
-	
-		<script type="x-shader/x-vertex" id="vertexshader">
+	<script src="includes/js/renderers/WebGLDeferredRenderer.js"></script>
+	<script src="includes/js/ShaderDeferred.js"></script>
+	<script src="includes/js/shaders/VignetteShader.js"></script>
+	<script src="includes/js/shaders/CopyShader.js"></script>
+	<script src="includes/js/postprocessing/EffectComposer.js"></script>
+	<script src="includes/js/shaders/FXAAShader.js"></script>
+
+	<script src="includes/js/postprocessing/EffectComposer.js"></script>
+	<script src="includes/js/postprocessing/RenderPass.js"></script>
+	<script src="includes/js/postprocessing/MaskPass.js"></script>
+	<script src="includes/js/postprocessing/ShaderPass.js"></script>
+	<script src="includes/js/shaders/ConvolutionShader.js"></script>
+	<script src="includes/js/postprocessing/BloomPass.js"></script>
+
+	<script src="fonts/helvetiker_regular.typeface.js"></script>
+
+	<script type="x-shader/x-vertex" id="vertexshader">
 
 			attribute float size;
 			attribute vec3 customColor;
@@ -178,8 +207,8 @@
 			}
 
 		</script>
-	
-		<script type="x-shader/x-fragment" id="fragmentshader">
+
+	<script type="x-shader/x-fragment" id="fragmentshader">
 
 			uniform vec3 color;
 			uniform sampler2D texture;
@@ -196,35 +225,35 @@
 			}
 
 		</script>
-	
-		<script src="variables.js"></script>
-		<script src="lighting.js"></script>
-		<script src="geometries.js"></script>
-		<script src="createBrushes.js"></script>
-		<script src="events.js"></script>
-		<script src="init.js"></script>
-		<script src="render.js"></script>
-		<script src="renderPassSetup.js"></script>
-		<script src="interface.js"></script>
-		<script src="api.js"></script>
-	
-		<script src="UI.js"></script>
-		<script src="BRUSH.js"></script>
-		<script src="LIGHT.js"></script>
-		<script src="SEQUENCE.js"></script>
-	
-		<script>
-			if (!Detector.webgl)
-				Detector.addGetWebGLMessage();
-	
-			//init.js
-			initGraphicMode();
-			//initRendermode();
-	
-			//render.js
-			if (GraphicMode == true)
-				animate();
-		</script>
-	</body>
+
+	<script src="variables.js"></script>
+	<script src="lighting.js"></script>
+	<script src="geometries.js"></script>
+	<script src="createBrushes.js"></script>
+	<script src="events.js"></script>
+	<script src="init.js"></script>
+	<script src="render.js"></script>
+	<script src="renderPassSetup.js"></script>
+	<script src="interface.js"></script>
+	<script src="api.js"></script>
+
+	<script src="UI.js"></script>
+	<script src="BRUSH.js"></script>
+	<script src="LIGHT.js"></script>
+	<script src="SEQUENCE.js"></script>
+
+	<script>
+		if (!Detector.webgl)
+			Detector.addGetWebGLMessage();
+
+		//init.js
+		initGraphicMode();
+		//initRendermode();
+
+		//render.js
+		if (GraphicMode == true)
+			animate();
+	</script>
+</body>
 
 </html>

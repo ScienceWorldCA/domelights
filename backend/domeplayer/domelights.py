@@ -157,6 +157,8 @@ class DomeController:
         						self.SetAnimationPlayed( task_info['id'] )
         						
         						Debug( "Done!" )
+        						
+        						sleep = 0
         				
         				elif self._script_name != script_name:
         					# Send stop

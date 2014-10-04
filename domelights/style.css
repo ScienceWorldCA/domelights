@@ -1,0 +1,88 @@
+/*---------------------------------
+	IMPORTS
+-----------------------------------*/
+@import url(http://fonts.googleapis.com/css?family=Abel);
+
+/*---------------------------------
+	OVERRIDES
+-----------------------------------*/
+h1,h2,h3,h4,h5,h6{
+font-family: 'Abel', sans-serif;
+font-weight:normal;
+}
+
+thead th,
+tbody th{
+font-family: 'Abel', sans-serif;
+}
+
+button,
+a.btn,
+input[type="submit"],
+input[type="reset"],
+input[type="button"]{
+font-family: 'Abel', sans-serif;
+}
+
+/*---------------------------------
+	LAYOUT
+-----------------------------------*/
+html {height: 100%;}
+
+body{
+margin:0;
+height: 100%;
+padding:0 0 0 0;
+background-color: #000;;
+font:normal 0.9em/150% 'Abel', sans-serif;
+}
+
+div.topic {display: none;} 
+
+i {color: #fff;}
+
+
+.dome {position: absolute; top: 120px; right: 700px;}
+.controls_wrapper {width: 500px; float: right; border-left: solid 10px #0082c8; height: 100%;}
+.controls {padding-top: 10px;}
+
+#icon {padding-top: 20px;}
+.icon-dome {width: 55px;}
+
+#box {
+    width: 150px; 
+    height: 150px; 
+    float: left; 
+    margin-left: 10px;
+    margin-bottom: 10px
+}
+
+#box a:link {
+    width: 150px; 
+    height: 150px; 
+    display: block;
+    text-align: center;
+    color: #fff;
+    font-size: 25px;
+    line-height: 30px;
+}
+
+#box a:active {
+    opacity: 0.5;
+}
+
+.panel_wrapper {background-color: #fff; width: 470px; margin: 0px auto; }
+.panel {padding: 0px;}
+
+.row {}
+
+.white {background-color: #fff;}
+.blue {background-color: #0082c8;}
+.red {background-color: #ee3a43;}
+.orange {background-color: #f9a451;}
+.light_blue {background-color: #00bce4;}
+.dark_green {background-color: #004f39;}
+.green {background-color: #1fb25a;}
+.pink {background-color: #ec519d;}
+.dark_blue {background-color: #083a81;}
+.teal {background-color: #009590;}

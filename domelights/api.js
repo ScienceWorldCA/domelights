@@ -19,35 +19,37 @@ function FrontEnd_API() {
 	this.DoStoreAnimation = function() {
 		// Input
 		var sequence = SequenceManager.SaveSequence();
-		var emailInputAddress = document.getElementById( 'useremail' ).value;
+		var emailInputAddress = $('#useremail').val();
 		
 		// Verify input
-		if( document.getElementById( 'userrealname' ).value == '') {
+		if( $( '#userrealname' ).val() == '') {
 			alert( "Missing user name!" );
 			return false;
-		} else if( document.getElementById( 'useremail' ).value == '') {
+		} else if( $( '#useremail' ).val() == '') {
 			alert( "Missing email address!" );
 			return false;
-		} else if( ! this.validateEmail( document.getElementById( 'useremail' ).value ) ) {
+		} else if( ! this.validateEmail( $('#useremail').val() ) ) {
 			alert( "Invalid email address!" );
 			return false;
 		} else {
 			var params = {};
 			params['sequence'] = sequence;
-			params['useremail'] = document.getElementById( 'useremail' ).value;
-			params['userrealname'] = document.getElementById( 'userrealname' ).value;
+			params['useremail'] = $('useremail').val();
+			params['userrealname'] = $('userrealname').val();
 	
 			this.api_call(
 				'storesequence',
 				params,
 				function(data) {
 					console.log( data );
-					alert( data.message );
 					if( data.result ) {
-						document.getElementById('storeResult').disabled = true;
-						document.getElementById('storeResult').value = 'Scheduled';
+						$('#storeResult').prop( 'disabled', true );
+						$('#storeResult').val( 'Scheduled' );
+						$('#userinput').css( 'visibility', 'hidden' );
+						showPopupMessage( 'Amination submission successful', data.message );
 					} else {
-						document.getElementById('storeResult').value = 'Retry';
+						alert( data.message );
+						$('#storeResult').val( 'Retry' );
 					}
 				}
 			);

@@ -4,194 +4,102 @@
 <title>Science World - Dome Lights</title>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
-<style>
-body {
-	color: #ffffff;
-	background-color: #000000;
-	margin: 0px;
-	overflow: hidden;
-}
-
-#info {
-	position: absolute;
-	top: 0px;
-	width: 100%;
-	padding: 5px;
-	font-family: Monospace;
-	font-size: 13px;
-	text-align: center;
-	font-weight: bold;
-}
-
-#blockout {
-	position: absolute;
-	margin: auto;
-	bottom: 0px;
-	left: 0px;
-	top: 0px;
-	right: 0px;
-	font-family: Monospace;
-	font-size: 13px;
-	text-align: center;
-	font-weight: bold;
-	background: grey;
-	opacity: 0.5;
-	width: 100%;
-	height: 100%;
-	float: inherit;
-	visibility: hidden;
-}
-
-#userinput {
-	position: absolute;
-	margin: auto;
-	bottom: 0px;
-	left: 0px;
-	top: 0px;
-	right: 0px;
-	font-family: "proxima-nova", calibri, sans-serif;
-	font-size: 13px;
-	text-align: center;
-	font-weight: bold;
-	background: black;
-	width: 350px;
-	height: 325px;
-	border-radius: 5px;
-	border: 0px;
-	z-index: 10;
-	float: inherit;
-	opacity: 1;
-	visibility: hidden;
-	background: #ffffff;
-	color: #000000;
-}
-
-a {
-	text-decoration: none;
-}
-
-.popuptitle {
-	border-top-left-radius: 5px;
-	border-top-right-radius: 5px;
-	width: 100%;
-	clear: both;
-	height: 20px;
-	margin: auto;
-	text-align: center;
-	padding-top: 2px;
-	background: #2ECC71;
-	color: #ffffff;
-}
-
-A.closebutton {
-	float: right;
-	text-decoration: none;
-	padding-right: 5px;
-	color: #ffffff;
-}
-
-#lineout {
-	width: 100%;
-	clear: both;
-}
-
-#storeResult {
-	background: #2ECC71;
-	color: #ffffff;
-	border: 0px;
-	border-radius: 5px;
-	padding: 5px;
-}
-
-#submitdesc {
-	padding: 3px;
-}
-</style>
-<script src="api.js"></script>
-<script language="javascript">
-	function DoStoreAnimation() {
-
-		document.getElementById('storeResult').innerHTML = "Saving...";
-
-		// Verify input
-		if (document.getElementById('userrealname').value == ''
-				|| document.getElementById('userrealname').value == '<name>') {
-			alert("Missing user name!");
-			return false;
-		} else if (document.getElementById('useremail').value == ''
-				|| document.getElementById('useremail').value == '<email>') {
-			alert("Missing email address!");
-			return false;
-		} else {
-			api.DoStoreAnimation();
-			EnableDomeEventHandles(true);
-		}
-
-		return false;
-	}
-
-	function DisplaySubmit() {
-		document.getElementById('blockout').style.visibility = 'visible';
-		document.getElementById('userinput').style.visibility = 'visible';
-		console.log("Showing Submit Dialog");
-		EnableDomeEventHandles(false);
-	}
-
-	function CloseSubmit() {
-		document.getElementById('userinput').style.visibility = 'hidden';
-		document.getElementById('blockout').style.visibility = 'hidden';
-		if (document.getElementById('storeResult').disabled == true) {
-			// If we successfully submitted the animation, then clear the canvas (hard reload for now)
-			SequenceManager.ClearSequence();
-		}
-		EnableDomeEventHandles(true);
-	}
+<link rel="stylesheet" type="text/css" href="css/kickstart.css" media="all" />
+<link rel="stylesheet" type="text/css" href="style.css" media="all" />
+<link rel="stylesheet" type="text/css" href="domelights.css" media="all" />
+<script type="text/javascript" src="api.js"></script>
+<script type="text/javascript" src="includes/jquery.min.js"></script>
+<script type="text/javascript" src="js/kickstart.js"></script>
+<script language="javascript" src="js/domelights.js"></script>
+<script>
+	$(document).ready(function() {
+		$('a').click(function() {
+			var divname = this.name;
+			$("#" + divname).show("slow").siblings().hide("slow");
+		});
+	});
 </script>
 </head>
 
 <body>
 	<div id="container"></div>
 	<div id="blockout" onclick="CloseSubmit();">&nbsp;</div>
+	<div id="popupwindow">
+		<div class="popuptitle">
+			<span id="popupwindowtitle">Title</span><a class="closebutton"
+				href="#" onclick="closePopupMessage();return false;">X</a>
+		</div>
+		<div id="popupmessage" class="lineout-full">Cras eu odio
+			vestibulum, hendrerit arcu quis, commodo nunc. Vestibulum molestie
+			mauris ut dui venenatis consectetur. Duis rutrum, nunc eget
+			pellentesque ornare, enim neque congue odio, ut tempor sem libero
+			vitae purus. Curabitur cursus nunc quis fringilla egestas. Donec ex
+			orci, bibendum nec felis vitae, luctus hendrerit nisl. Fusce quis
+			faucibus justo. Vivamus sagittis vitae nibh ac dictum.</div>
+		<div class="lineout-full">
+			<button class="btn-popup"
+				onClick="closePopupMessage(); return false;">Okay</button>
+		</div>
+	</div>
 	<div id="userinput">
 		<div class="popuptitle">
 			Submit Animation<a class="closebutton" href="#"
 				onclick="CloseSubmit();return false;">X</a>
 		</div>
-		<div id="submitdesc" class="lineout">Praesent eleifend, magna ac
-			dictum imperdiet, augue leo cursus nibh, vel elementum risus ex ac
-			felis. Praesent euismod elementum libero ut condimentum. Curabitur
-			tristique nulla ultrices sapien tempor dignissim. Aliquam lobortis
-			nunc vulputate dolor tempor, a elementum metus vulputate. Nulla at
-			fringilla nunc. Ut laoreet, augue vel faucibus iaculis, risus nisi
-			iaculis eros, eu malesuada massa ex non elit. Aliquam consequat vitae
-			turpis eget bibendum. Praesent dignissim leo vitae feugiat efficitur.
-			Proin iaculis scelerisque elit, pretium molestie elit fermentum quis.
-			Morbi nunc arcu, elementum a orci id, euismod finibus nulla. Nulla
-			vestibulum, ligula sed euismod venenatis, odio neque rutrum mi, ac
-			tincidunt leo magna quis nisi.</div>
+		<div id="submitdesc" class="lineout-full">Praesent eleifend,
+			magna acdictum imperdiet, augue leo cursus nibh, vel elementum risus
+			ex ac felis. Praesent euismod elementum libero ut condimentum.
+			Curabitur tristique nulla ultrices sapien tempor dignissim. Aliquam
+			lobortis nunc vulputate dolor tempor, a elementum metus vulputate.
+			Nulla at fringilla nunc. Ut laoreet, augue vel faucibus iaculis,
+			risus nisi iaculis eros, eu malesuada massa ex non elit. Aliquam
+			consequat vitae turpis eget bibendum. Praesent dignissim leo vitae
+			feugiat efficitur. Proin iaculis scelerisque elit, pretium molestie
+			elit fermentum quis. Morbi nunc arcu, elementum a orci id, euismod
+			finibus nulla. Nulla vestibulum, ligula sed euismod venenatis, odio
+			neque rutrum mi, actincidunt leo magna quis nisi.</div>
 		<form id="userinputform" name="userinputform" action='#' method='post'>
-			<div class="lineout">
+			<div class="lineout-full">
 				<label>Name:</label><input id='userrealname' name='userrealname'
 					type='text' placeholder='<name>' size='32' />
 			</div>
-			<div class="lineout">
+			<div class="lineout-full">
 				<label>Email Address:</label><input id='useremail' name='useremail'
 					type='text' size='32' placeholder='<email>' />
 			</div>
-			<div class="lineout">
+			<div class="lineout-full">
 				<input id='useragrees' name='useragrees' type='checkbox' /><label>I
 					agree to the <a href="terms.html">Terms of Use</a>.
 				</label>
 			</div>
-			<div class="lineout">
+			<div class="lineout-full">
 				<button id='storeResult' onClick="DoStoreAnimation(); return false;">Publish</button>
 			</div>
 		</form>
 	</div>
 
+<!-- <div id="drawer">
+		<div id="drawerhandle" class="blue" onclick='if( $("#drawerpane").width() > 0 ) { $("#drawerpane").animate({width: "450px"});} else {$("#drawerpane").animate({width: "0px"});}'>
+			<span>D</span>
+			<span>r</span>
+			<span>a</span>
+			<span>w</span>
+			<span>e</span>
+			<span>r</span>
+		</div>
+		<div id="drawerborder">&nbsp;
+		</div>
+		<div id="drawerpane">
+			<div id="drawershelf">&nbsp;</div></span>
+			<div id="drawerbottom">
+				<span class="btn-sw-square lineout-left">Clear</span> <span
+					class="btn-sw-square lineout-right">Submit</span>
+			</div>
+		</div>
+	</div> -->
+	
 
 	<script src="includes/three.min.js"></script>
-	<script src="includes/jquery.min.js"></script>
 	<script src="includes/js/loaders/OBJLoader.js"></script>
 	<script src="includes/js/Detector.js"></script>
 	<script src="includes/js/libs/stats.min.js"></script>
@@ -266,7 +174,7 @@ A.closebutton {
 	<script src="BRUSH.js"></script>
 	<script src="LIGHT.js"></script>
 	<script src="SEQUENCE.js"></script>
-
+<div class="dome">
 	<script>
 		if (!Detector.webgl)
 			Detector.addGetWebGLMessage();
@@ -279,6 +187,73 @@ A.closebutton {
 		if (GraphicMode == true)
 			animate();
 	</script>
+	</div>
+	 <div id="drawer" class="controls_wrapper">
+    <div class="controls">
+        <div class="row clearfix">
+            <div id="box" class="blue">
+                <a a href="#" name="div1" onClick="ActiveBrushID = 1;"><i class="icon-2x icon-magic" id="icon"></i><br>Burst<br>Selector</a>
+            </div>
+            <div id="box" class="red">
+                <a a href="#" name="div2" onClick="ActiveBrushID = 2;"><i class="icon-2x icon-resize-horizontal" id="icon"></i><br>Horizontal<br>Selector</a>
+            </div>
+            
+            <div id="box" class="orange">
+                <a a href="#" name="div3" onClick="ActiveBrushID = 3;">><i class="icon-2x icon-resize-vertical" id="icon"></i><br>Vertical<br>Selector</a>
+            </div>
+            
+            <div id="box" class="light_blue">
+                <a href="#" name="div4" onClick="ActiveBrushID = 4;">><i class="icon-2x icon-certificate" id="icon"></i><br>Burst<br>Effect</a>
+            </div>
+            <div id="box" class="dark_green">
+                <a href="#" name="div5" onClick="ActiveBrushID = 5;">><i class="icon-2x icon-spinner" id="icon"></i><br>Gradient<br>Effect</a>
+            </div>
+            <div id="box" class="green">
+                <a href="#" name="div6" onClick="ActiveBrushID = 6;">><i class="icon-2x icon-barcode" id="icon"></i><br>Rings<br>Effect</a>
+            </div>
+            
+            <div id="box" class="pink">
+                <a href="#" name="div7" onClick="ActiveBrushID = 7;">><i class="icon-2x icon-star-empty" id="icon"></i><br>Special<br>Effect</a>
+            </div>
+            <div id="box" class="dark_blue">
+                <a href="#" onClick="SequenceManager.ClearSequence(); return false;"><i class="icon-2x icon-remove-sign" id="icon"></i><br>Clear<br>All</a>
+            </div>
+            <div id="box" class="teal">
+                <a href="#" name="div8" onclick="DisplaySubmit();return false;"><i class="icon-2x icon-ok-sign" id="icon"></i><br>Submit<br>Design</a>
+            </div>
+        </div>
+        
+         <div class="panels clearfix">
+            <div class="topic panel_wrapper" id="div1" style="display: none;">
+                <div class="panel"><img src="images/controls_mock.jpg"></div>
+            </div>
+            <div class="topic panel_wrapper" id="div2" style="display: none;">
+                <div class="panel"><img src="images/controls_mock.jpg"></div>
+            </div>
+            <div class="topic panel_wrapper" id="div3" style="display: none;">
+                <div class="panel"><img src="images/controls_mock.jpg"></div>
+            </div>
+            
+            <div class="topic panel_wrapper" id="div4" style="display: none;">
+                <div class="panel"><img src="images/controls_mock.jpg"></div>
+            </div>
+            <div class="topic panel_wrapper" id="div5" style="display: none;">
+                <div class="panel"><img src="images/controls_mock.jpg"></div>
+            </div>
+            <div class="topic panel_wrapper" id="div6" style="display: none;">
+                <div class="panel"><img src="images/controls_mock.jpg"></div>
+            </div>
+             
+            <div class="topic panel_wrapper" id="div7" style="display: none;">
+                <div class="panel"><img src="images/controls_mock.jpg"></div>
+            </div>
+             
+             <div class="topic panel_wrapper" id="div8" style="display: none;">
+                <div class="panel"><img src="images/submit_design.jpg"></div>
+            </div>
+        </div>  
+    </div>
+</div>
 </body>
 
 </html>

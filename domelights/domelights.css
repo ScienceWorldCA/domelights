@@ -201,3 +201,15 @@ A.closebutton {
 	text-align: center;
 	vertical-align: middle;
 }
+
+#box {
+	width: 75px;
+	height: 75px;
+}
+
+#box a:link {
+	width: 75px;
+	height: 75px;
+	font-size: 13px;
+	line-height: auto;
+}

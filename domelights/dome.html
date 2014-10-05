@@ -78,27 +78,6 @@
 		</form>
 	</div>
 
-<!-- <div id="drawer">
-		<div id="drawerhandle" class="blue" onclick='if( $("#drawerpane").width() > 0 ) { $("#drawerpane").animate({width: "450px"});} else {$("#drawerpane").animate({width: "0px"});}'>
-			<span>D</span>
-			<span>r</span>
-			<span>a</span>
-			<span>w</span>
-			<span>e</span>
-			<span>r</span>
-		</div>
-		<div id="drawerborder">&nbsp;
-		</div>
-		<div id="drawerpane">
-			<div id="drawershelf">&nbsp;</div></span>
-			<div id="drawerbottom">
-				<span class="btn-sw-square lineout-left">Clear</span> <span
-					class="btn-sw-square lineout-right">Submit</span>
-			</div>
-		</div>
-	</div> -->
-	
-
 	<script src="includes/three.min.js"></script>
 	<script src="includes/js/loaders/OBJLoader.js"></script>
 	<script src="includes/js/Detector.js"></script>
@@ -192,34 +171,36 @@
     <div class="controls">
         <div class="row clearfix">
             <div id="box" class="blue">
-                <a a href="#" name="div1" onClick="ActiveBrushID = 1;"><i class="icon-2x icon-magic" id="icon"></i><br>Burst<br>Selector</a>
+                <a a href="#" name="div1" onClick="ActiveBrushID = 1;"><i class="icon-1x icon-magic" id="icon"></i><br>Burst<br>Selector</a>
             </div>
             <div id="box" class="red">
-                <a a href="#" name="div2" onClick="ActiveBrushID = 2;"><i class="icon-2x icon-resize-horizontal" id="icon"></i><br>Horizontal<br>Selector</a>
+                <a a href="#" name="div2" onClick="ActiveBrushID = 2;"><i class="icon-1x icon-resize-horizontal" id="icon"></i><br>Horizontal<br>Selector</a>
             </div>
             
             <div id="box" class="orange">
-                <a a href="#" name="div3" onClick="ActiveBrushID = 3;">><i class="icon-2x icon-resize-vertical" id="icon"></i><br>Vertical<br>Selector</a>
+                <a a href="#" name="div3" onClick="ActiveBrushID = 3;">><i class="icon-1x icon-resize-vertical" id="icon"></i><br>Vertical<br>Selector</a>
             </div>
             
             <div id="box" class="light_blue">
-                <a href="#" name="div4" onClick="ActiveBrushID = 4;">><i class="icon-2x icon-certificate" id="icon"></i><br>Burst<br>Effect</a>
+                <a href="#" name="div4" onClick="ActiveBrushID = 4;">><i class="icon-1x icon-certificate" id="icon"></i><br>Burst Effect</a>
             </div>
             <div id="box" class="dark_green">
-                <a href="#" name="div5" onClick="ActiveBrushID = 5;">><i class="icon-2x icon-spinner" id="icon"></i><br>Gradient<br>Effect</a>
+                <a href="#" name="div5" onClick="ActiveBrushID = 5;">><i class="icon-1x icon-spinner" id="icon"></i><br>Gradient Effect</a>
             </div>
             <div id="box" class="green">
-                <a href="#" name="div6" onClick="ActiveBrushID = 6;">><i class="icon-2x icon-barcode" id="icon"></i><br>Rings<br>Effect</a>
+                <a href="#" name="div6" onClick="ActiveBrushID = 6;">><i class="icon-1x icon-barcode" id="icon"></i><br>Rings<br>Effect</a>
             </div>
             
             <div id="box" class="pink">
-                <a href="#" name="div7" onClick="ActiveBrushID = 7;">><i class="icon-2x icon-star-empty" id="icon"></i><br>Special<br>Effect</a>
+                <a href="#" name="div7" onClick="ActiveBrushID = 7;">><i class="icon-1x icon-star-empty" id="icon"></i><br>Special<br>Effect</a>
             </div>
-            <div id="box" class="dark_blue">
-                <a href="#" onClick="SequenceManager.ClearSequence(); return false;"><i class="icon-2x icon-remove-sign" id="icon"></i><br>Clear<br>All</a>
+        </div>
+        <div class="row clearfix">
+            <div id="box" class="dark_blue lineout-left">
+                <a href="#" onClick="SequenceManager.ClearSequence(); return false;"><i class="icon-1x icon-remove-sign" id="icon"></i><br>Clear<br>All</a>
             </div>
-            <div id="box" class="teal">
-                <a href="#" name="div8" onclick="DisplaySubmit();return false;"><i class="icon-2x icon-ok-sign" id="icon"></i><br>Submit<br>Design</a>
+            <div id="box" class="teal lineout-right">
+                <a href="#" name="div8" onclick="DisplaySubmit();return false;"><i class="icon-1x icon-ok-sign" id="icon"></i><br>Submit<br>Design</a>
             </div>
         </div>
         

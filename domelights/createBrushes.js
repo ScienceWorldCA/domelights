@@ -15,6 +15,7 @@ function CreateBrushes() {
             HorizontalWipeTime(new THREE.Color(0.2, 0, 0), frame + 3);
             HorizontalWipeTime(new THREE.Color(0.0, 0, 0), frame + 4);
         };
+
         Brushes.push(WipeBrush);
     }
 
@@ -34,6 +35,14 @@ function CreateBrushes() {
             //console.log(frame + " = " + col.r + "," + col.g +  "," + col.b);
             setLightColor(col, fadeMultiplier, originLight);
         };
+
+        var htmlUI = new HTMLUI();
+
+        htmlUI.AddUI(new htmlUI.Color(new THREE.Color(1,0,1), 0));
+        htmlUI.AddUI(new htmlUI.Checkbox(true, 1));
+
+        ColorBrush.HTMLUI = htmlUI;
+
         Brushes.push(ColorBrush);
     }
 

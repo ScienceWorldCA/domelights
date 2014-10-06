@@ -24,7 +24,7 @@ HTMLUI = function() {
 
         this.GenerateHTML = function(){
 
-            var html = ("<Checkbox><a href=\"#\" OnClick=\"ActiveBrushData[" + dataIndex + "] = myValue; return false;\"></a></Checkbox>\n");
+            var html = ("\t<Checkbox><a href=\"#\" OnClick=\"ActiveBrushData[" + dataIndex + "] = myValue; return false;\"></a></Checkbox>\n");
 
             return html;
         };
@@ -44,7 +44,7 @@ HTMLUI = function() {
 
         this.GenerateHTML = function(){
 
-            var html = ("<Color><a href=\"#\" OnClick=\"ActiveBrushData[" + dataIndex + "] = myValue; return false;\"></a></Color>\n");
+            var html = ("\t<Color><a href=\"#\" OnClick=\"ActiveBrushData[" + dataIndex + "] = myValue; return false;\"></a></Color>\n");
 
             return html;
         };
@@ -64,7 +64,7 @@ HTMLUI = function() {
 
         this.GenerateHTML = function(){
 
-            var html = ("<Gradient><a href=\"#\" OnClick=\"ActiveBrushData[" + dataIndex + "] = myValue; return false;\"></a></Gradient>\n");
+            var html = ("\t<Gradient><a href=\"#\" OnClick=\"ActiveBrushData[" + dataIndex + "] = myValue; return false;\"></a></Gradient>\n");
 
             return html;
         };
@@ -84,7 +84,7 @@ HTMLUI = function() {
 
         this.GenerateHTML = function(){
 
-            var html = ("<OptionBox><a href=\"#\" OnClick=\"ActiveBrushData[" + dataIndex + "] = myValue; return false;\"></a></OptionBox>\n");
+            var html = ("\t<OptionBox><a href=\"#\" OnClick=\"ActiveBrushData[" + dataIndex + "] = myValue; return false;\"></a></OptionBox>\n");
 
             return html;
         };
@@ -104,7 +104,7 @@ HTMLUI = function() {
 
         this.GenerateHTML = function(){
 
-            var html = ("<Slider><a href=\"#\" OnClick=\"ActiveBrushData[" + dataIndex + "] = myValue; return false;\"></a></Slider>\n");
+            var html = ("\t<Slider><a href=\"#\" OnClick=\"ActiveBrushData[" + dataIndex + "] = myValue; return false;\"></a></Slider>\n");
 
             return html;
         };

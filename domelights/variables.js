@@ -32,7 +32,7 @@ if( ! window ) {
     var Brushes = [];
     var ActiveBrushID = 1;
     var ActiveBrushData = [new THREE.Color(1, 1, 1), new THREE.Color(1, 0, 0)];
-
+    
     var timer = 0.0;
 
     //Setup Settings
@@ -40,7 +40,9 @@ if( ! window ) {
     var GraphicMode = true;
     var Aspect = [16, 9];
     var FPS = 40;
-
+    
+    var DEBUG = true;
+    
     //Used for Debug Purposes
     var manager = new THREE.LoadingManager();
     manager.onProgress = function ( item, loaded, total ) {

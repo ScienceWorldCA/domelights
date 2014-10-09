@@ -7,15 +7,18 @@
 <link rel="stylesheet" type="text/css" href="css/kickstart.css" media="all" />
 <link rel="stylesheet" type="text/css" href="style.css" media="all" />
 <link rel="stylesheet" type="text/css" href="domelights.css" media="all" />
+<link rel="stylesheet" type="text/css" href="css/jquery-ui.css" media="all" />
 <script type="text/javascript" src="api.js"></script>
 <script type="text/javascript" src="includes/jquery.min.js"></script>
 <script type="text/javascript" src="js/kickstart.js"></script>
-<script language="javascript" src="js/domelights.js"></script>
+<script type="text/javascript" src="js/domelights.js"></script>
+<script type="text/javascript" src="js/jquery-ui.js"></script>
 <script>
 	$(document).ready(function() {
 		$('a').click(function() {
 			var divname = this.name;
 			$("#" + divname).show("slow").siblings().hide("slow");
+			// $("#" + divname).html(Brushes[ActiveBrushID].GeneratePropertyContents());
 		});
 	});
 </script>
@@ -154,6 +157,7 @@
 	<script src="LIGHT.js"></script>
 	<script src="SEQUENCE.js"></script>
     <script src="HTMLUI.js"></script>
+    <script src="HTMLBrushManager.js"></script>
 
 <div class="dome">
 	<script>
@@ -173,28 +177,28 @@
     <div class="controls">
         <div class="row clearfix">
             <div id="box" class="blue">
-                <a a href="#" name="div1" onClick="ActiveBrushID = 1;"><i class="icon-1x icon-magic" id="icon"></i><br>Burst<br>Selector</a>
+                <a a href="#" name="div1" onClick='HTMLBrushManager.SetActiveBrush( 1 );'><i class="icon-1x icon-magic" id="icon"></i><br>Solid<br>Brush</a>
             </div>
             <div id="box" class="red">
-                <a a href="#" name="div2" onClick="ActiveBrushID = 2;"><i class="icon-1x icon-resize-horizontal" id="icon"></i><br>Horizontal<br>Selector</a>
+                <a a href="#" name="div1" onClick="HTMLBrushManager.SetActiveBrush( 2 );"><i class="icon-1x icon-resize-horizontal" id="icon"></i><br>Horizontal<br>Selector</a>
             </div>
             
             <div id="box" class="orange">
-                <a a href="#" name="div3" onClick="ActiveBrushID = 3;">><i class="icon-1x icon-resize-vertical" id="icon"></i><br>Vertical<br>Selector</a>
+                <a a href="#" name="div1" onClick="HTMLBrushManager.SetActiveBrush( 3 )"><i class="icon-1x icon-resize-vertical" id="icon"></i><br>Vertical<br>Selector</a>
             </div>
             
             <div id="box" class="light_blue">
-                <a href="#" name="div4" onClick="ActiveBrushID = 4;">><i class="icon-1x icon-certificate" id="icon"></i><br>Burst Effect</a>
+                <a href="#" name="div1" onClick="HTMLBrushManager.SetActiveBrush( 4 )"><i class="icon-1x icon-certificate" id="icon"></i><br>Burst Effect</a>
             </div>
             <div id="box" class="dark_green">
-                <a href="#" name="div5" onClick="ActiveBrushID = 5;">><i class="icon-1x icon-spinner" id="icon"></i><br>Gradient Effect</a>
+                <a href="#" name="div1" onClick="HTMLBrushManager.SetActiveBrush( 5 )"><i class="icon-1x icon-spinner" id="icon"></i><br>Gradient Effect</a>
             </div>
             <div id="box" class="green">
-                <a href="#" name="div6" onClick="ActiveBrushID = 6;">><i class="icon-1x icon-barcode" id="icon"></i><br>Rings<br>Effect</a>
+                <a href="#" name="div1" onClick="HTMLBrushManager.SetActiveBrush( 6 )"><i class="icon-1x icon-barcode" id="icon"></i><br>Rings<br>Effect</a>
             </div>
             
             <div id="box" class="pink">
-                <a href="#" name="div7" onClick="ActiveBrushID = 7;">><i class="icon-1x icon-star-empty" id="icon"></i><br>Special<br>Effect</a>
+                <a href="#" name="div1" onClick="HTMLBrushManager.SetActiveBrush( 7 )"><i class="icon-1x icon-star-empty" id="icon"></i><br>Special<br>Effect</a>
             </div>
         </div>
         <div class="row clearfix">
@@ -205,11 +209,55 @@
                 <a href="#" name="div8" onclick="DisplaySubmit();return false;"><i class="icon-1x icon-ok-sign" id="icon"></i><br>Submit<br>Design</a>
             </div>
         </div>
-        
          <div class="panels clearfix">
             <div class="topic panel_wrapper" id="div1" style="display: none;">
-                <div class="panel"><img src="images/controls_mock.jpg"></div>
-            </div>
+					<div class="panel">
+						<div class="row"><h3 style="color: black;">Solid Brush</h3></div>
+						<div class="row">
+							<script>
+								$(function() {
+									$("#slider").slider({
+										value : 0,
+										min : 0,
+										max : 1,
+										step : 1,
+										slide : function(event, ui) {
+											$("#amount").val("$" + ui.value);
+										}
+									});
+									$("#amount").val(
+											"$" + $("#slider").slider("value"));
+								});
+							</script>
+							<p></p>
+							<div id="slider" style="width: 25px; margin: 15px;"></div><input type="text" id="amount" readonly style="border: 0; color: #f6931f; font-weight: bold;" />
+						</div>
+						<div class="row lineout-full colorselector">
+							<h4>Select color...</h4>
+							<img class="colorblock red" onclick="HTMLBrushManager.setPrimaryColor(1,0,0);this.classList.add('selected');" src="images/shim.png" />
+							<img class="colorblock green" onclick="HTMLBrushManager.setPrimaryColor(0,1,0);" src="images/shim.png" />
+							<img class="colorblock blue" onclick="HTMLBrushManager.setPrimaryColor(0,0,1);" src="images/shim.png" />
+							<img class="colorblock yellow" onclick="HTMLBrushManager.setPrimaryColor(1,1,0);" src="images/shim.png" />
+							<img class="colorblock orange" onclick="HTMLBrushManager.setPrimaryColor(1,0.4,0);" src="images/shim.png" />
+							<img class="colorblock aqua" onclick="HTMLBrushManager.setPrimaryColor(0,1,1);" src="images/shim.png" />
+							<img class="colorblock purple" onclick="HTMLBrushManager.setPrimaryColor(1,0,1);" src="images/shim.png" />
+							<img class="colorblock white" onclick="HTMLBrushManager.setPrimaryColor(1,1,1);" src="images/shim.png" />
+							<img class="colorblock lightgrey" onclick="HTMLBrushManager.setPrimaryColor(0.8,0.8,0.8);" src="images/shim.png" />
+							<img class="colorblock grey" onclick="HTMLBrushManager.setPrimaryColor(0.5,0.5,0.5);" src="images/shim.png" />
+							<img class="colorblock darkgrey" onclick="HTMLBrushManager.setPrimaryColor(0.2,0.2,0.2);" src="images/shim.png" />
+							<img class="colorblock black" onclick="HTMLBrushManager.setPrimaryColor(0,0,0);" src="images/shim.png" />
+						</div>
+						<div class="row">&nbsp;</div>
+						<div class="row">
+							<div class="lineout-left">
+								<a class="green">Reset</a>
+							</div>
+							<div class="lineout-right">
+								<a class="teal">Apply</a>
+							</div>
+						</div>
+					</div>
+				</div>
             <div class="topic panel_wrapper" id="div2" style="display: none;">
                 <div class="panel"><img src="images/controls_mock.jpg"></div>
             </div>

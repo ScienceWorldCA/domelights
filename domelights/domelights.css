@@ -174,7 +174,7 @@ A.closebutton {
 	height: 100%;
 	margin-left: 50px;
 	padding: 5px;
-	width: 440px;
+	width: 360px;
 }
 
 #drawerbottom {
@@ -203,13 +203,122 @@ A.closebutton {
 }
 
 #box {
-	width: 75px;
-	height: 75px;
+	width: 65px;
+	height: 65px;
+	margin-left: 5px;
+	margin-right: 5px;
 }
 
 #box a:link {
-	width: 75px;
-	height: 75px;
+	width: 65px;
+	height: 65px;
 	font-size: 13px;
-	line-height: auto;
+	line-height: 13px;
+}
+
+.panel {
+	background: #ffffff;
+}
+
+.panel_wrapper {
+	margin-left: 10px;
+	margin-right: 10px;
+}
+
+.colorselector {
+	padding: 5px;
+}
+
+IMG.white {
+	background-color: #ffffff;
+}
+
+IMG.blue {
+	background-color: #0000ff;
+}
+
+IMG.red {
+	background-color: #ff0000;
+}
+
+IMG.orange {
+	background-color: #FF6600;
+}
+
+IMG.light_blue {
+	background-color: #00bce4;
+}
+
+IMG.dark_green {
+	background-color: #004f39;
+}
+
+IMG.green {
+	background-color: #00ff00;
+}
+
+IMG.pink {
+	background-color: #ec519d;
+}
+
+IMG.dark_blue {
+	background-color: #083a81;
+}
+
+IMG.teal {
+	background-color: #009590;
+}
+
+IMG.purple {
+	background: #ff00ff;
+}
+
+IMG.yellow {
+	background: #ffff00;
+}
+
+IMG.aqua {
+	background: #00ffff;
+}
+
+IMG.lightgrey {
+	background: #cccccc;
+}
+
+IMG.grey {
+	background: #808080;
+}
+
+IMG.darkgrey {
+	background: #333333;
+}
+
+IMG.black {
+	background: #000000;
+}
+
+IMG.colorblock {
+	width: 50px;
+	height: 50px;
+	margin: 0px;
+	padding: 0px;
+	border-radius: 3px;
+	border: solid 1px grey;
+}
+
+IMG.selected {
+	border: solid 2px black;
+}
+
+.row {
+	margin-left: 5px;
+	margin-right: 5px;
+}
+
+.controls_wrapper {
+	max-width: 31%;
+}
+
+H4 {
+	color: #000000;
 }

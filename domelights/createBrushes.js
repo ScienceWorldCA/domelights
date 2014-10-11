@@ -23,6 +23,7 @@ function CreateBrushes() {
     {
         ColorBrush.Index = 1;
         ColorBrush.Duration = 50;
+        ColorBrush.html_name = 'Solid<br />Color';
         ColorBrush.Render = function (frame, originLight, brushData) {
 
             var fadeMultiplier = 1 - (1 / this.Duration) * frame;
@@ -72,6 +73,7 @@ function CreateBrushes() {
     {
         VerticalRainbowWipeBrush.Index = 3;
         VerticalRainbowWipeBrush.Duration = (LightMatrixHeight * 3);
+        VerticalRainbowWipeBrush.html_name = "RGB<br />Wipe"
         VerticalRainbowWipeBrush.Render = function (frame, originLight, brushData) {
             VerticalWipeTime(new THREE.Color(1, 0, 0), frame);
             if (frame < this.Duration - 2)
@@ -87,6 +89,7 @@ function CreateBrushes() {
     {
         DomeFlashBrush.Index = 4;
         DomeFlashBrush.Duration = 50;
+        DomeFlashBrush.html_name = 'Flash<br />Dome';
         DomeFlashBrush.Render = function (frame, originLight, brushData) {
 
 
@@ -107,6 +110,7 @@ function CreateBrushes() {
     {
         HorizontalRingBrush.Index = 5;
         HorizontalRingBrush.Duration = 30;
+        HorizontalRingBrush.html_name = 'Horizontal<br />Rings';
         HorizontalRingBrush.Render = function (frame, originLight, brushData) {
 
             //TODO: Add nice fade in and fade out + do alpha blend
@@ -130,6 +134,7 @@ function CreateBrushes() {
     {
         VerticalRingBrush.Index = 6;
         VerticalRingBrush.Duration = 30;
+        VerticalRingBrush.html_name = 'Vertical<br />Rings';
         VerticalRingBrush.Render = function (frame, originLight, brushData) {
 
             //TODO: Add nice fade in and fade out + do alpha blend
@@ -194,6 +199,7 @@ function CreateBrushes() {
     {
         FireWorkBurstBrush.Index = 8;
         FireWorkBurstBrush.Duration = 30;
+        FireWorkBurstBrush.html_name = "Fireworks";
         FireWorkBurstBrush.Render = function (frame, originLight, brushData) {
 
             //TODO: Add nice fade in and fade out + do alpha blend
@@ -248,6 +254,7 @@ function CreateBrushes() {
     {
         FireWorkBurstBrush.Index = 9;
         FireWorkBurstBrush.Duration = 0;
+        FireWorkBurstBrush.html_name = "Fireworks";
         FireWorkBurstBrush.PrePaint = function(LightIndex)
         {
             //Create a Burst at this light

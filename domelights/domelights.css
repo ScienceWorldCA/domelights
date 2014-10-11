@@ -316,7 +316,7 @@ IMG.selected {
 }
 
 .controls_wrapper {
-	max-width: 31%;
+	width: 320px;
 }
 
 H4 {

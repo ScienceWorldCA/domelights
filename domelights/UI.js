@@ -162,15 +162,15 @@ UI = function(projector, raycaster, camera, mouse)
 
         if(state == true) {
 
-            document.addEventListener( 'mouseup', this.Update, false );
-            document.addEventListener( 'mousedown', this.Update, false );
-            document.addEventListener( 'mousemove', this.Update, false );
+            container.addEventListener( 'mouseup', this.Update, false );
+            container.addEventListener( 'mousedown', this.Update, false );
+            container.addEventListener( 'mousemove', this.Update, false );
         }
         else
         {
-            document.removeEventListener( 'mouseup', this.Update, false );
-            document.removeEventListener( 'mousedown', this.Update, false );
-            document.removeEventListener( 'mousemove', this.Update, false );
+            container.removeEventListener( 'mouseup', this.Update, false );
+            container.removeEventListener( 'mousedown', this.Update, false );
+            container.removeEventListener( 'mousemove', this.Update, false );
         }
     };
 

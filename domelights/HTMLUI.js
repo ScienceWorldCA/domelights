@@ -3,6 +3,11 @@ HTMLUI = function() {
     this.UIProperties = [];
     var generatedHtml = null; // this is used a cache.
 
+    this.Name = "";
+    this.Class = "";
+    this.Icon = "";
+    this.Category = "default";
+
     this.__defineGetter__("GeneratedHTML", function(){
 
         if(generatedHtml == null)
@@ -101,10 +106,14 @@ HTMLUI = function() {
     this.Slider = function(minValue, maxValue, step, currentValue, dataIndex){
 
         this.DataIndex = dataIndex;
+        this.mMinValue = minValue;
+        this.mMaxValue = maxValue;
+        this.mStep = step;
+        this.mCurrentValue = currentValue;
 
         this.GenerateHTML = function(){
 
-            var html = ("\t<Slider><a href=\"#\" OnClick=\"ActiveBrushData[" + dataIndex + "] = myValue; return false;\"></a></Slider>\n");
+            var html = ("\t<input type=\"range\" min=\"" + this.mMinValue + "\" max=\"" + this.mMaxValue + "\" value=\"" + this.mCurrentValue + "\" step=\"" + this.mStep + "\" onchange=\"ActiveBrushData[" + dataIndex + "] = this.value;\">\n");
 
             return html;
         };

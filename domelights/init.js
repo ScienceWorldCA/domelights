@@ -89,15 +89,15 @@ function EnableDomeEventHandles(state){
 
     if(state == true) {
 
-        document.addEventListener('mousedown', onDocumentMouseDown, false);
-        document.addEventListener('mousemove', onDocumentMouseMove, false);
+        container.addEventListener('mousedown', onDocumentMouseDown, false);
+        container.addEventListener('mousemove', onDocumentMouseMove, false);
         //document.addEventListener('touchstart', onDocumentTouchStart, false);
         //document.addEventListener('touchmove', onDocumentTouchMove, false);
     }
     else
     {
-        document.removeEventListener('mousedown', onDocumentMouseDown, false);
-        document.removeEventListener('mousemove', onDocumentMouseMove, false);
+        container.removeEventListener('mousedown', onDocumentMouseDown, false);
+        container.removeEventListener('mousemove', onDocumentMouseMove, false);
         //document.removeEventListener('touchstart', onDocumentTouchStart, false);
         //document.removeEventListener('touchmove', onDocumentTouchMove, false);
     }

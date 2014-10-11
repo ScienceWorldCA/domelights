@@ -100,8 +100,8 @@ function onDocumentMouseUp( event ) {
 	isMouseDownOverBar = false;
 	isMouseDown = false;
 
-	document.removeEventListener( 'mouseup', onDocumentMouseUp, false );
-	document.removeEventListener( 'mouseout', onDocumentMouseOut, false );
+    container.removeEventListener( 'mouseup', onDocumentMouseUp, false );
+    container.removeEventListener( 'mouseout', onDocumentMouseOut, false );
 	//console.log('onDocumentMouseUp: ' + 'isMouseDown: ' + isMouseDown + ' mouseX:' + mouseX + ' mouseXOnMouseDown:' + mouseXOnMouseDown + ' targetRotation:' + targetRotation+ ' targetRotationOnMouseDown:' + targetRotationOnMouseDown);
 
 }
@@ -111,8 +111,8 @@ function onDocumentMouseOut( event ) {
 	isMouseDownOverBar = false;
 	isMouseDown = false;
 
-	document.removeEventListener( 'mouseup', onDocumentMouseUp, false );
-	document.removeEventListener( 'mouseout', onDocumentMouseOut, false );
+    container.removeEventListener( 'mouseup', onDocumentMouseUp, false );
+    container.removeEventListener( 'mouseout', onDocumentMouseOut, false );
 
 }
 

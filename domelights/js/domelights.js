@@ -44,3 +44,20 @@ function showPopupMessage(title, message) {
 function closePopupMessage() {
 	$("#popupwindow").css('visibility', 'hidden');
 }
+
+function buildColorSelector( div_id ) {
+	$("#"+div_id).append("<h4>Building...</h4>");
+	$.getJSON( "colors.json", function(data) {
+		$("#"+div_id).empty();
+		$("#"+div_id).append( "<h4>Select color...</h4>\n" );
+		
+		$.each( data, function( idx, row ) {
+			$("#"+div_id).append( '<img class="colorblock ' + row['class'] + '" onclick="HTMLBrushManager.setPrimaryColor(' + row['rgb'] + ');" src="images/shim.png" />' );
+		} );
+		
+		$('.colorblock').click(function() {
+			$(this).addClass("selected").siblings().removeClass("selected");
+		});
+		
+	} );
+}

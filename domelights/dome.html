@@ -230,20 +230,8 @@
 							<div id="slider" style="width: 25px; margin: 15px;"></div><input type="text" id="amount" readonly style="border: 0; color: #f6931f; font-weight: bold;" />
                             <input type="range" min="0" max="1000" value="10" step="1" onchange="SequenceManager.SequenceTime = this.value;">
 						</div>
-						<div class="row lineout-full colorselector">
-							<h4>Select color...</h4>
-							<img class="colorblock red" onclick="HTMLBrushManager.setPrimaryColor(1,0,0);this.classList.add('selected');" src="images/shim.png" />
-							<img class="colorblock green" onclick="HTMLBrushManager.setPrimaryColor(0,1,0);" src="images/shim.png" />
-							<img class="colorblock blue" onclick="HTMLBrushManager.setPrimaryColor(0,0,1);" src="images/shim.png" />
-							<img class="colorblock yellow" onclick="HTMLBrushManager.setPrimaryColor(1,1,0);" src="images/shim.png" />
-							<img class="colorblock orange" onclick="HTMLBrushManager.setPrimaryColor(1,0.4,0);" src="images/shim.png" />
-							<img class="colorblock aqua" onclick="HTMLBrushManager.setPrimaryColor(0,1,1);" src="images/shim.png" />
-							<img class="colorblock purple" onclick="HTMLBrushManager.setPrimaryColor(1,0,1);" src="images/shim.png" />
-							<img class="colorblock white" onclick="HTMLBrushManager.setPrimaryColor(1,1,1);" src="images/shim.png" />
-							<img class="colorblock lightgrey" onclick="HTMLBrushManager.setPrimaryColor(0.8,0.8,0.8);" src="images/shim.png" />
-							<img class="colorblock grey" onclick="HTMLBrushManager.setPrimaryColor(0.5,0.5,0.5);" src="images/shim.png" />
-							<img class="colorblock darkgrey" onclick="HTMLBrushManager.setPrimaryColor(0.2,0.2,0.2);" src="images/shim.png" />
-							<img class="colorblock black" onclick="HTMLBrushManager.setPrimaryColor(0,0,0);" src="images/shim.png" />
+						<div class="row lineout-full" id="colorselector">
+							<script>buildColorSelector( "colorselector" );</script>
 						</div>
 						<div class="row">&nbsp;</div>
 						<div class="row">

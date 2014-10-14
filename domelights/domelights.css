@@ -322,3 +322,24 @@ IMG.selected {
 H4 {
 	color: #000000;
 }
+
+.topic {
+	color: #000000;
+}
+
+.panel_wrapper {
+	display: none;
+}
+
+#submitmessage {
+	text-align: center;
+	padding: auto;
+}
+
+.success {
+	color: #00ff00;
+}
+
+.warning {
+	color: #ff0000;
+}

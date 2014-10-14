@@ -17,25 +17,36 @@ function FrontEnd_API() {
 	} 
 
 	this.DoStoreAnimation = function() {
+		if( scheduled ) {
+			alert( "You have already submitted a scheduled animation.\nPlease try again later!" );
+			$("#submitmessage").empty();
+			return false;
+		}
 		// Input
 		var sequence = SequenceManager.SaveSequence();
-		var emailInputAddress = $('#useremail').val();
 		
 		// Verify input
-		if( $( '#userrealname' ).val() == '') {
-			alert( "Missing user name!" );
+		if( $("#userrealname").val() == '') {
+			$("#submitmessage").html( "Missing user name!" ).addClass("warning");
+			$('#submitbutton').html( 'Retry' ).addClass("red").removeClass("blue").removeClass("green");
 			return false;
-		} else if( $( '#useremail' ).val() == '') {
-			alert( "Missing email address!" );
+		} else if( $("#useremail").val() == '') {
+			$("#submitmessage").html( "Missing email address!" ).addClass("warning");
+			$('#submitbutton').html( 'Retry' ).addClass("red").removeClass("blue").removeClass("green");
 			return false;
-		} else if( ! this.validateEmail( $('#useremail').val() ) ) {
-			alert( "Invalid email address!" );
+		} else if( ! this.validateEmail( $("#useremail").val() ) ) {
+			$("#submitmessage").html( "Invalid email address!" ).addClass("warning");
+			$('#submitbutton').html( 'Retry' ).addClass("red").removeClass("blue").removeClass("green");
+			return false;
+		} else if( ! $("#useragrees").prop( 'checked' ) ) {
+			$("#submitmessage").html( "Please agree to the terms!" ).addClass("warning");
+			$('#submitbutton').html( 'Retry' ).addClass("red").removeClass("blue").removeClass("green");
 			return false;
 		} else {
 			var params = {};
 			params['sequence'] = sequence;
-			params['useremail'] = $('useremail').val();
-			params['userrealname'] = $('userrealname').val();
+			params['useremail'] = $("#useremail").val();
+			params['userrealname'] = $("#userrealname").val();
 	
 			this.api_call(
 				'storesequence',
@@ -43,13 +54,18 @@ function FrontEnd_API() {
 				function(data) {
 					console.log( data );
 					if( data.result ) {
-						$('#storeResult').prop( 'disabled', true );
-						$('#storeResult').val( 'Scheduled' );
-						$('#userinput').css( 'visibility', 'hidden' );
-						showPopupMessage( 'Amination submission successful', data.message );
+						$("#submitmessage").html( '<pre>' + data.message + '</pre>' );
+						$('#submitbutton').prop( 'disabled', true );
+						$('#submitbutton').html( 'Scheduled' ).removeClass("red").removeClass("blue").addClass("green");
+						$("#submitmessage").removeClass("warning");
+						scheduled = true;
+						$("#submitbutton").on("click", function (e) {
+					        e.preventDefault();
+					    });
 					} else {
-						alert( data.message );
-						$('#storeResult').val( 'Retry' );
+						$("#submitmessage").html( data.message );
+						$("#submitmessage").addClass("warning");
+						$('#submitbutton').html( 'Retry' ).addClass("red").removeClass("blue").removeClass("green");
 					}
 				}
 			);

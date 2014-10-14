@@ -15,10 +15,13 @@
 <script type="text/javascript" src="js/jquery-ui.js"></script>
 <script>
 	$(document).ready(function() {
-		$('a').click(function() {
-			var divname = this.name;
-			$("#" + divname).show("slow").siblings().hide("slow");
-			// $("#" + divname).html(Brushes[ActiveBrushID].GeneratePropertyContents());
+		$('A.brushselector').click(function() {
+			EnableDomeEventHandles(true);
+			$("#brushoptions").hide().siblings().hide();
+			$("#brushoptions").html('<div id="#panel"><div class="row"><h3 style="color: black;">Loading...</h3></div></div>');
+			if( Brushes[ActiveBrushID].HTMLUI )
+				$("#brushoptions").html(Brushes[ActiveBrushID].HTMLUI.GeneratePropertyContents());
+			$("#brushoptions").show("slow").siblings().hide();
 		});
 	});
 </script>
@@ -26,60 +29,6 @@
 
 <body>
 	<div id="container"></div>
-	<div id="blockout" onclick="CloseSubmit();">&nbsp;</div>
-	<div id="popupwindow">
-		<div class="popuptitle">
-			<span id="popupwindowtitle">Title</span><a class="closebutton"
-				href="#" onclick="closePopupMessage();return false;">X</a>
-		</div>
-		<div id="popupmessage" class="lineout-full">Cras eu odio
-			vestibulum, hendrerit arcu quis, commodo nunc. Vestibulum molestie
-			mauris ut dui venenatis consectetur. Duis rutrum, nunc eget
-			pellentesque ornare, enim neque congue odio, ut tempor sem libero
-			vitae purus. Curabitur cursus nunc quis fringilla egestas. Donec ex
-			orci, bibendum nec felis vitae, luctus hendrerit nisl. Fusce quis
-			faucibus justo. Vivamus sagittis vitae nibh ac dictum.</div>
-		<div class="lineout-full">
-			<button class="btn-popup"
-				onClick="closePopupMessage(); return false;">Okay</button>
-		</div>
-	</div>
-	<div id="userinput">
-		<div class="popuptitle">
-			Submit Animation<a class="closebutton" href="#"
-				onclick="CloseSubmit();return false;">X</a>
-		</div>
-		<div id="submitdesc" class="lineout-full">Praesent eleifend,
-			magna acdictum imperdiet, augue leo cursus nibh, vel elementum risus
-			ex ac felis. Praesent euismod elementum libero ut condimentum.
-			Curabitur tristique nulla ultrices sapien tempor dignissim. Aliquam
-			lobortis nunc vulputate dolor tempor, a elementum metus vulputate.
-			Nulla at fringilla nunc. Ut laoreet, augue vel faucibus iaculis,
-			risus nisi iaculis eros, eu malesuada massa ex non elit. Aliquam
-			consequat vitae turpis eget bibendum. Praesent dignissim leo vitae
-			feugiat efficitur. Proin iaculis scelerisque elit, pretium molestie
-			elit fermentum quis. Morbi nunc arcu, elementum a orci id, euismod
-			finibus nulla. Nulla vestibulum, ligula sed euismod venenatis, odio
-			neque rutrum mi, actincidunt leo magna quis nisi.</div>
-		<form id="userinputform" name="userinputform" action='#' method='post'>
-			<div class="lineout-full">
-				<label>Name:</label><input id='userrealname' name='userrealname'
-					type='text' placeholder='<name>' size='32' />
-			</div>
-			<div class="lineout-full">
-				<label>Email Address:</label><input id='useremail' name='useremail'
-					type='text' size='32' placeholder='<email>' />
-			</div>
-			<div class="lineout-full">
-				<input id='useragrees' name='useragrees' type='checkbox' /><label>I
-					agree to the <a href="terms.html">Terms of Use</a>.
-				</label>
-			</div>
-			<div class="lineout-full">
-				<button id='storeResult' onClick="DoStoreAnimation(); return false;">Publish</button>
-			</div>
-		</form>
-	</div>
 
 	<script src="includes/three.min.js"></script>
 	<script src="includes/js/loaders/OBJLoader.js"></script>
@@ -175,27 +124,24 @@
 	</div>
 	 <div id="drawer" class="controls_wrapper">
     <div class="controls">
-        <div class="row clearfix">
+        <div class="row clearfix" id="brushes">
             <div id="box" class="blue">
-                <a a href="#" name="div1" onClick='HTMLBrushManager.SetActiveBrush( 1 );'><i class="icon-1x icon-magic" id="icon"></i><script>document.write( '<br />' + HTMLBrushManager.getHTMLBlockName(1) );</script></a>
+                <a class="brushselector" href="#" name="brushoptions" onClick='HTMLBrushManager.SetActiveBrush( 1 );'><i class="icon-1x icon-magic" id="icon"></i><script>document.write( '<br />' + HTMLBrushManager.getHTMLBlockName(1) );</script></a>
             </div>
             <div id="box" class="red">
-                <a a href="#" name="div1" onClick="HTMLBrushManager.SetActiveBrush( 9 );"><i class="icon-1x icon-resize-horizontal" id="icon"></i><script>document.write( '<br />' + HTMLBrushManager.getHTMLBlockName(9) );</script></a>
+                <a class="brushselector" href="#" name="brushoptions" onClick="HTMLBrushManager.SetActiveBrush( 9 );"><i class="icon-1x icon-resize-horizontal" id="icon"></i><script>document.write( '<br />' + HTMLBrushManager.getHTMLBlockName(9) );</script></a>
             </div>
             <div id="box" class="orange">
-                <a a href="#" name="div1" onClick="HTMLBrushManager.SetActiveBrush( 3 )"><i class="icon-1x icon-resize-vertical" id="icon"></i><script>document.write( '<br />' + HTMLBrushManager.getHTMLBlockName(3) );</script></a>
+                <a class="brushselector" href="#" name="brushoptions" onClick="HTMLBrushManager.SetActiveBrush( 3 )"><i class="icon-1x icon-resize-vertical" id="icon"></i><script>document.write( '<br />' + HTMLBrushManager.getHTMLBlockName(3) );</script></a>
             </div>
             <div id="box" class="light_blue">
-                <a href="#" name="div1" onClick="HTMLBrushManager.SetActiveBrush( 4 )"><i class="icon-1x icon-certificate" id="icon"></i><script>document.write( '<br />' + HTMLBrushManager.getHTMLBlockName(4) );</script></a>
+                <a class="brushselector" href="#" name="brushoptions" onClick="HTMLBrushManager.SetActiveBrush( 4 )"><i class="icon-1x icon-certificate" id="icon"></i><script>document.write( '<br />' + HTMLBrushManager.getHTMLBlockName(4) );</script></a>
             </div>
             <div id="box" class="dark_green">
-                <a href="#" name="div1" onClick="HTMLBrushManager.SetActiveBrush( 5 )"><i class="icon-1x icon-spinner" id="icon"></i><script>document.write( '<br />' + HTMLBrushManager.getHTMLBlockName(5) );</script></a>
+                <a class="brushselector" href="#" name="brushoptions" onClick="HTMLBrushManager.SetActiveBrush( 5 )"><i class="icon-1x icon-spinner" id="icon"></i><script>document.write( '<br />' + HTMLBrushManager.getHTMLBlockName(5) );</script></a>
             </div>
             <div id="box" class="green">
-                <a href="#" name="div1" onClick="HTMLBrushManager.SetActiveBrush( 6 )"><i class="icon-1x icon-barcode" id="icon"></i><script>document.write( '<br />' + HTMLBrushManager.getHTMLBlockName(6) );</script></a>
-            </div>
-            <div id="box" class="pink">
-                <a href="#" name="div1" onClick="HTMLBrushManager.SetActiveBrush( 7 )"><i class="icon-1x icon-star-empty" id="icon"></i><script>document.write( '<br />' + HTMLBrushManager.getHTMLBlockName(7) );</script></a>
+                <a class="brushselector" href="#" name="brushoptions" onClick="HTMLBrushManager.SetActiveBrush( 6 )"><i class="icon-1x icon-barcode" id="icon"></i><script>document.write( '<br />' + HTMLBrushManager.getHTMLBlockName(6) );</script></a>
             </div>
         </div>
         <div class="row clearfix">
@@ -203,71 +149,28 @@
                 <a href="#" onClick="SequenceManager.ClearSequence(); return false;"><i class="icon-1x icon-remove-sign" id="icon"></i><br>Clear<br>All</a>
             </div>
             <div id="box" class="teal lineout-right">
-                <a href="#" name="div8" onclick="DisplaySubmit();return false;"><i class="icon-1x icon-ok-sign" id="icon"></i><br>Submit<br>Design</a>
+                <a href="#" name="submitform" onclick="showSubmitForm(); return false;"><i class="icon-1x icon-ok-sign" id="icon"></i><br>Submit<br>Design</a>
             </div>
         </div>
          <div class="panels clearfix">
-            <div class="topic panel_wrapper" id="div1" style="display: none;">
+            <div class="topic panel_wrapper" id="brushoptions"></div>
+             <div class="topic panel_wrapper" id="submitform">
 					<div class="panel">
-						<div class="row"><h3 style="color: black;">Solid Brush</h3></div>
 						<div class="row">
-							<script>
-								$(function() {
-									$("#slider").slider({
-										value : 0,
-										min : 0,
-										max : 1,
-										step : 1,
-										slide : function(event, ui) {
-											$("#amount").val("$" + ui.value);
-										}
-									});
-									$("#amount").val(
-											"$" + $("#slider").slider("value"));
-								});
-							</script>
-							<p></p>
-							<div id="slider" style="width: 25px; margin: 15px;"></div><input type="text" id="amount" readonly style="border: 0; color: #f6931f; font-weight: bold;" />
-                            <input type="range" min="0" max="1000" value="10" step="1" onchange="SequenceManager.SequenceTime = this.value;">
+							<h3>Submit Animation</h3>
 						</div>
-						<div class="row lineout-full" id="colorselector">
-							<script>buildColorSelector( "colorselector" );</script>
-						</div>
-						<div class="row">&nbsp;</div>
+						<div class="row"><p>Boudin short ribs turducken pork loin, tenderloin meatball shank. Venison porchetta andouille tongue kielbasa swine. Short ribs short loin kielbasa tail, frankfurter andouille turkey beef jowl pig bacon turducken ribeye. Beef ribs ham shank frankfurter doner shankle ham hock. Jerky beef hamburger chuck ham sirloin pork belly turkey strip steak venison porchetta kevin. Pancetta pork loin prosciutto, pastrami jerky kevin beef sirloin shoulder pig shank.</p></div>
 						<div class="row">
-							<div class="lineout-left">
-								<a class="green">Reset</a>
-							</div>
-							<div class="lineout-right">
-								<a class="teal">Apply</a>
-							</div>
+							<div class="lineout-full"><label>Name:</label><input id='userrealname' name='userrealname' type='text' placeholder='<name>' size='32'/></div>
+							<div class="lineout-full"><label>Email Address:</label><input id='useremail' name='useremail' type='text' size='32' placeholder='<email>'/></div>
+							<div class="lineout-full black"><input id='useragrees' name='useragrees' type='checkbox' /><label>I agree to the <a class="blue" href="terms.html">Terms of Use</a>.</label></div>
+						</div>
+						<div class="row" id="submitmessage"></div>
+						<div class="row lineout-full" style="text-align: center;">
+							<a id="submitbutton" class="blue lineout-full" onclick="DoStoreAnimation(); return false;">Submit</a>
 						</div>
 					</div>
 				</div>
-            <div class="topic panel_wrapper" id="div2" style="display: none;">
-                <div class="panel"><img src="images/controls_mock.jpg"></div>
-            </div>
-            <div class="topic panel_wrapper" id="div3" style="display: none;">
-                <div class="panel"><img src="images/controls_mock.jpg"></div>
-            </div>
-            
-            <div class="topic panel_wrapper" id="div4" style="display: none;">
-                <div class="panel"><img src="images/controls_mock.jpg"></div>
-            </div>
-            <div class="topic panel_wrapper" id="div5" style="display: none;">
-                <div class="panel"><img src="images/controls_mock.jpg"></div>
-            </div>
-            <div class="topic panel_wrapper" id="div6" style="display: none;">
-                <div class="panel"><img src="images/controls_mock.jpg"></div>
-            </div>
-             
-            <div class="topic panel_wrapper" id="div7" style="display: none;">
-                <div class="panel"><img src="images/controls_mock.jpg"></div>
-            </div>
-             
-             <div class="topic panel_wrapper" id="div8" style="display: none;">
-                <div class="panel"><img src="images/submit_design.jpg"></div>
-            </div>
         </div>  
     </div>
 </div>

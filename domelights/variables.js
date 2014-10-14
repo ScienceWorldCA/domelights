@@ -43,6 +43,8 @@ if( ! window ) {
     
     var DEBUG = true;
     
+    var scheduled = false;
+    
     //Used for Debug Purposes
     var manager = new THREE.LoadingManager();
     manager.onProgress = function ( item, loaded, total ) {

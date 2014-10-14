@@ -12,11 +12,13 @@ class ColoreApachePHPRequestHelper extends ColoreRequest implements ColoreReques
 		} else {
 			$context = str_replace( $baseURL, '', $_SERVER['REQUEST_URI'] );
 		}
-
+		
 		$context = addslashes( $context );
 		
 		if( substr( $context, 0, 1 ) == '/' )
 			$context = substr( $context, 1 );
+		
+		@error_log( sprintf( "%s: Context: [%s]", __METHOD__, $context ) );
 
 		return $context;
 	}

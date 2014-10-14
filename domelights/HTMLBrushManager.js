@@ -16,15 +16,21 @@ var HTMLBrushManager = function() {
 			ActiveBrushID = id;
 		}
 	}
-
-	this.setPrimaryColor = function(red, green, blue) {
-		ActiveBrushData[0] = new THREE.Color(red, green, blue);
+	
+	this.setActiveColor = function( dataIndex, red, green, blue) {
+		ActiveBrushData[dataIndex] = new THREE.Color(red, green, blue);
 	}
 
-	this.getHTMLBlockName = function(id)
+	this.setColorByDataIndex = function( BrushDataIndex, red, green, blue) {
+		ActiveBrushData[BrushDataIndex] = new THREE.Color(red, green, blue);
+	}
+
+	this.getHTMLBlockName = function( id )
 	{
-		if( Brushes[id].html_name != undefined )
-			return Brushes[id].html_name;
+		if( Brushes[id].HTMLUI.Name ) {
+			var brush_name = Brushes[id].HTMLUI.Name;
+			return brush_name.replace( " ", "<br />" );
+		}
 	}
 
 	// INIT

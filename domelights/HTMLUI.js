@@ -3,12 +3,13 @@ HTMLUI = function() {
     this.UIProperties = [];
     var generatedHtml = null; // this is used a cache.
 
+    this.ID = 0;
     this.Name = "";
     this.Class = "";
     this.Icon = "";
     this.Category = "default";
 
-    this.__defineGetter__("GeneratedHTML", function(){
+    this.__defineGetter__( "GeneratedHTML", function() {
 
         if(generatedHtml == null)
         {
@@ -43,13 +44,15 @@ HTMLUI = function() {
     this.Checkbox.Prototype = Object.create(this.BaseHTMLUIObject());
 
     //Color UI
-    this.Color = function(color, dataIndex){
+    this.Colors = function(dataIndex){
 
         this.DataIndex = dataIndex;
 
         this.GenerateHTML = function(){
 
-            var html = ("\t<Color><a href=\"#\" OnClick=\"ActiveBrushData[" + dataIndex + "] = myValue; return false;\"></a></Color>\n");
+        	var html = ( '<div class="row lineout-full" id="colorselector' + dataIndex + '" dataIndex="' + dataIndex + '">' +
+        			'<script>buildColorSelector( "colorselector' + dataIndex + '" );</script>' +
+        			'</div>' );
 
             return html;
         };
@@ -60,7 +63,7 @@ HTMLUI = function() {
         };
         this.init();
     };
-    this.Color.Prototype = Object.create(this.BaseHTMLUIObject());
+    this.Colors.Prototype = Object.create(this.BaseHTMLUIObject());
 
     //Gradient UI
     this.Gradient = function(startColor, endColor, dataIndex){
@@ -138,14 +141,16 @@ HTMLUI = function() {
     {
         console.log("Build UI");
 
-        generatedHtml = "<BRUSH_UI>\n";
+        generatedHtml = '<div class="panel">\n';
+        generatedHtml = '<div class="row"><h3 style="color: black;">' + this.Name + '</h3></div>\n';
 
         for(var index = 0; index < self.UIProperties.length; index++)
         {
             generatedHtml += self.UIProperties[index].GenerateHTML();
         }
 
-        generatedHtml += "</BRUSH_UI>";
+        generatedHtml += '<div class="row"><div class="lineout-left"><a class="colorblock green">Reset</a></div><div class="lineout-right"><a class="colorblock teal">Apply</a></div></div>';
+        generatedHtml += "</div>\n";
 
         return generatedHtml;
 

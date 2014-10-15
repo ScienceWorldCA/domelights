@@ -6,3 +6,7 @@ RewriteCond %{REQUEST_FILENAME}	!-d
 RewriteRule .* index.php [L]
 
 Options FollowSymLinks
+
+Order deny,allow
+Deny from all
+Allow from 172.16.0.0/12 10.0.0.0/8 192.168.0.0/16

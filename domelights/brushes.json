@@ -1,0 +1,37 @@
+[
+	{
+		"id": 1,
+		"class": "blue",
+		"icon": "icon-magic"
+	},
+
+	{
+		"id": 9,
+		"class": "red",
+		"icon": "icon-resize-horizontal"
+	},
+
+	{
+		"id": 3,
+		"class": "orange",
+		"icon": "icon-resize-vertical"
+	},
+
+	{
+		"id": 4,
+		"class": "light_blue",
+		"icon": "icon-certificate"
+	},
+
+	{
+		"id": 5,
+		"class": "dark_green",
+		"icon": "icon-spinner"
+	},
+
+	{
+		"id": 6,
+		"class": "green",
+		"icon": "icon-barcode"
+	}
+]

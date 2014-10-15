@@ -116,7 +116,7 @@ HTMLUI = function() {
 
         this.GenerateHTML = function(){
 
-            var html = ("\t<input type=\"range\" min=\"" + this.mMinValue + "\" max=\"" + this.mMaxValue + "\" value=\"" + this.mCurrentValue + "\" step=\"" + this.mStep + "\" onchange=\"ActiveBrushData[" + dataIndex + "] = this.value;\">\n");
+            var html = ("\t<input type=\"range\" min=\"" + this.mMinValue + "\" max=\"" + this.mMaxValue + "\" value=\"" + this.mCurrentValue + "\" step=\"" + this.mStep + "\" onchange=\"ActiveBrushData['" + dataIndex + "'] = this.value;\">\n");
 
             return html;
         };

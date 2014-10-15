@@ -36,22 +36,42 @@ function closePopupMessage() {
 	$("#popupwindow").css('visibility', 'hidden');
 }
 
-function buildColorSelector( div_id ) {
-	var selector_element = "#"+div_id;
+function buildBrushes() {
+	$("#brushcontainer").html("Loading...");
+	$.getJSON( "brushes.json", function( data ) {
+		$("#brushcontainer").empty();
+		$.each( data, function( idx, row ) {
+			var brushButton = "";
+			brushButton += '<div id="box" class="' + row['class'] + '">';
+			brushButton += '<a class="brushselector" href="#" name="brushoptions" onClick="HTMLBrushManager.SetActiveBrush( ' + row['id'] + ' );"><i class="icon-1x icon-magic" id="icon"></i><br />' + HTMLBrushManager.getHTMLBlockName( row['id'] ) + '</a>';
+			brushButton += '</div>';
+			$("#brushcontainer").append( brushButton );
+		});
+		$('A.brushselector').click(function() {
+			EnableDomeEventHandles(true);
+			$("#brushoptions").hide().siblings().hide();
+			$("#brushoptions").html('<div id="#panel"><div class="row"><h3 style="color: black;">Loading...</h3></div></div>');
+			if( Brushes[ActiveBrushID].HTMLUI )
+				$("#brushoptions").html(Brushes[ActiveBrushID].HTMLUI.GeneratePropertyContents());
+			$("#brushoptions").show("slow").siblings().hide();
+		});
+	});
+}
+
+function buildColorSelector(div_id) {
+	var selector_element = "#" + div_id;
 	var dataIndex = $(selector_element).attr('dataIndex');
 	$(selector_element).html("<h4>Building...</h4>");
-	$.getJSON( "colors.json", function(data) {
+	$.getJSON( "colors.json", function( data ) {
 		var colorblock = "colorblock_" + dataIndex;
 		$(selector_element).empty();
-		$(selector_element).append( "<h4>Select color...</h4>\n" );
-		
+		$(selector_element).append("<h4>Select color...</h4>\n");
 		$.each( data, function( idx, row ) {
 			$(selector_element).append( '<img class="colorblock ' + colorblock + ' ' + row['class'] + '" onclick="HTMLBrushManager.setColorByDataIndex(' + dataIndex + ',' + row['rgb'] + ');" src="images/shim.png" />' );
-		} );
-		
-		$("." + colorblock).click(function() {
+		});
+
+		$("." + colorblock).click( function() {
 			$(this).addClass("selected").siblings().removeClass("selected");
 		});
-		
-	} );
+	});
 }

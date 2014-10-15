@@ -215,26 +215,26 @@ function CreateBrushes() {
 	{
 		FireWorkBurstBrush.Index = 8;
 		FireWorkBurstBrush.Duration = 30;
-		FireWorkBurstBrush.html_name = "Fireworks";
 		FireWorkBurstBrush.Render = function(frame, originLight, brushData) {
 
 			// TODO: Add nice fade in and fade out + do alpha blend
-			var pulseColour = new THREE.Color(1, 0, 0);
 			var fadeMultiplier = 1 - (1 / this.Duration) * frame;
 			var myColour = brushData[0].getHSL();
-			var rippleDistance = 5;
+			if( undefined === ActiveBrushData["rippelDistance"] ) {
+				ActiveBrushData["rippelDistance"] = 5;
+			}
 
 			var col = new THREE.Color();
 			col.setHSL(myColour.h, myColour.s, myColour.l * fadeMultiplier);
 
 			var originPosition = GetLightInMatrix(originLight);
 
-			var offset = Math.floor(((1 / this.Duration) * frame) * rippleDistance);
+			var offset = Math.floor(((1 / this.Duration) * frame) * ActiveBrushData["rippelDistance"]);
 
 			var step = 2 * Math.PI / 30; // see note 1
 			var r = offset;
 
-			for ( var trail = 1; trail < rippleDistance; trail++) {
+			for ( var trail = 1; trail < ActiveBrushData["rippelDistance"]; trail++) {
 				r = r - trail;
 				if (r < 0) {
 					r = 0;
@@ -280,7 +280,6 @@ function CreateBrushes() {
 	{
 		FireWorkBurstBrush.Index = 9;
 		FireWorkBurstBrush.Duration = 0;
-		FireWorkBurstBrush.html_name = "";
 		FireWorkBurstBrush.PrePaint = function(LightIndex) {
 			// Create a Burst at this light
 			var newEvent = new EVENT(SequenceManager.SequenceTime, LightIndex, Brushes[8], ActiveBrushData);
@@ -308,6 +307,7 @@ function CreateBrushes() {
 		var htmlUI = new HTMLUI();
 		htmlUI.Name = "Fireworks";
 		htmlUI.AddUI(new htmlUI.Colors(0));
+		htmlUI.AddUI(new htmlUI.Slider(1, 10, 1, 5, "rippleDistance" ));
 		FireWorkBurstBrush.HTMLUI = htmlUI;
 
 		Brushes.push(FireWorkBurstBrush);

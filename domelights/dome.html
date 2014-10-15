@@ -14,16 +14,7 @@
 <script type="text/javascript" src="js/domelights.js"></script>
 <script type="text/javascript" src="js/jquery-ui.js"></script>
 <script>
-	$(document).ready(function() {
-		$('A.brushselector').click(function() {
-			EnableDomeEventHandles(true);
-			$("#brushoptions").hide().siblings().hide();
-			$("#brushoptions").html('<div id="#panel"><div class="row"><h3 style="color: black;">Loading...</h3></div></div>');
-			if( Brushes[ActiveBrushID].HTMLUI )
-				$("#brushoptions").html(Brushes[ActiveBrushID].HTMLUI.GeneratePropertyContents());
-			$("#brushoptions").show("slow").siblings().hide();
-		});
-	});
+	
 </script>
 </head>
 
@@ -124,25 +115,8 @@
 	</div>
 	 <div id="drawer" class="controls_wrapper">
     <div class="controls">
-        <div class="row clearfix" id="brushes">
-            <div id="box" class="blue">
-                <a class="brushselector" href="#" name="brushoptions" onClick='HTMLBrushManager.SetActiveBrush( 1 );'><i class="icon-1x icon-magic" id="icon"></i><script>document.write( '<br />' + HTMLBrushManager.getHTMLBlockName(1) );</script></a>
-            </div>
-            <div id="box" class="red">
-                <a class="brushselector" href="#" name="brushoptions" onClick="HTMLBrushManager.SetActiveBrush( 9 );"><i class="icon-1x icon-resize-horizontal" id="icon"></i><script>document.write( '<br />' + HTMLBrushManager.getHTMLBlockName(9) );</script></a>
-            </div>
-            <div id="box" class="orange">
-                <a class="brushselector" href="#" name="brushoptions" onClick="HTMLBrushManager.SetActiveBrush( 3 )"><i class="icon-1x icon-resize-vertical" id="icon"></i><script>document.write( '<br />' + HTMLBrushManager.getHTMLBlockName(3) );</script></a>
-            </div>
-            <div id="box" class="light_blue">
-                <a class="brushselector" href="#" name="brushoptions" onClick="HTMLBrushManager.SetActiveBrush( 4 )"><i class="icon-1x icon-certificate" id="icon"></i><script>document.write( '<br />' + HTMLBrushManager.getHTMLBlockName(4) );</script></a>
-            </div>
-            <div id="box" class="dark_green">
-                <a class="brushselector" href="#" name="brushoptions" onClick="HTMLBrushManager.SetActiveBrush( 5 )"><i class="icon-1x icon-spinner" id="icon"></i><script>document.write( '<br />' + HTMLBrushManager.getHTMLBlockName(5) );</script></a>
-            </div>
-            <div id="box" class="green">
-                <a class="brushselector" href="#" name="brushoptions" onClick="HTMLBrushManager.SetActiveBrush( 6 )"><i class="icon-1x icon-barcode" id="icon"></i><script>document.write( '<br />' + HTMLBrushManager.getHTMLBlockName(6) );</script></a>
-            </div>
+        <div class="row clearfix" id="brushcontainer">
+            <script>buildBrushes();</script>
         </div>
         <div class="row clearfix">
             <div id="box" class="dark_blue lineout-left">

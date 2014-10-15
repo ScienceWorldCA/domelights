@@ -1,5 +1,11 @@
 [
-	{
+    {
+        "id": 0,
+        "class": "green",
+        "icon": "icon-magic"
+    },
+
+    {
 		"id": 1,
 		"class": "blue",
 		"icon": "icon-magic"

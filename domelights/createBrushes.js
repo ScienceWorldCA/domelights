@@ -9,12 +9,21 @@ function CreateBrushes() {
 		WipeBrush.Index = 0;
 		WipeBrush.Duration = 40;
 		WipeBrush.Render = function(frame, originLight, brushData) {
-			HorizontalWipeTime(new THREE.Color(1.0, 0, 0), frame);
-			HorizontalWipeTime(new THREE.Color(0.7, 0, 0), frame + 1);
-			HorizontalWipeTime(new THREE.Color(0.5, 0, 0), frame + 2);
-			HorizontalWipeTime(new THREE.Color(0.2, 0, 0), frame + 3);
-			HorizontalWipeTime(new THREE.Color(0.0, 0, 0), frame + 4);
+            //WipeBrush.Duration = brushData[1];
+            //HorizontalWipeTime(brushData[0], frame);
+            var width = brushData[1] || 3;
+
+            for(var x=0; x < width; x++)
+            {
+                HorizontalWipeTime(brushData[0], frame + x);
+            }
 		};
+
+        var htmlUI = new HTMLUI();
+        htmlUI.Name = "Wipe Color";
+        htmlUI.AddUI(new htmlUI.Colors(0));
+        htmlUI.AddUI(new htmlUI.Slider(1,20,1,5,1));
+        WipeBrush.HTMLUI = htmlUI;
 
 		Brushes.push(WipeBrush);
 	}

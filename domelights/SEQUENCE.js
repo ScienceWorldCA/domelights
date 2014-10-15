@@ -223,7 +223,12 @@ var EVENT = function(time, originLight, brush, brushData)
     this.StartTime = time; //Offset from the start of the sequence in frames.
     this.OriginLight = originLight; // The Light that the animation is based from.
     this.Brush = brush; // The brush that should be applied.
-    this.BrushData = Clone(brushData); //The current brush data
+    this.BrushData = brushData; //The current brush data
+
+    this.ApplyData = function()
+    {
+        this.BrushData = Clone(this.BrushData);
+    };
 
     this.PrePaint = function()
     {

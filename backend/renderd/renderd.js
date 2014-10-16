@@ -13945,7 +13945,7 @@ if( ! window ) {
     var Brushes = [];
     var ActiveBrushID = 1;
     var ActiveBrushData = [new THREE.Color(1, 1, 1), new THREE.Color(1, 0, 0)];
-
+    
     var timer = 0.0;
 
     //Setup Settings
@@ -13953,7 +13953,11 @@ if( ! window ) {
     var GraphicMode = true;
     var Aspect = [16, 9];
     var FPS = 40;
-
+    
+    var DEBUG = true;
+    
+    var scheduled = false;
+    
     //Used for Debug Purposes
     var manager = new THREE.LoadingManager();
     manager.onProgress = function ( item, loaded, total ) {
@@ -14730,320 +14734,316 @@ function createGeometries() {
 
 function CreateBrushes() {
 
-    var WipeBrush = new Brush();
-    {
-        WipeBrush.Index = 0;
-        WipeBrush.Duration = 40;
-        WipeBrush.Render = function (frame, originLight, brushData) {
-            HorizontalWipeTime(new THREE.Color(1.0, 0, 0), frame);
-            HorizontalWipeTime(new THREE.Color(0.7, 0, 0), frame + 1);
-            HorizontalWipeTime(new THREE.Color(0.5, 0, 0), frame + 2);
-            HorizontalWipeTime(new THREE.Color(0.2, 0, 0), frame + 3);
-            HorizontalWipeTime(new THREE.Color(0.0, 0, 0), frame + 4);
-        };
-        Brushes.push(WipeBrush);
-    }
+	var WipeBrush = new Brush();
+	{
+		WipeBrush.Index = 0;
+		WipeBrush.Duration = 40;
+		WipeBrush.Render = function(frame, originLight, brushData) {
+			HorizontalWipeTime(new THREE.Color(1.0, 0, 0), frame);
+			HorizontalWipeTime(new THREE.Color(0.7, 0, 0), frame + 1);
+			HorizontalWipeTime(new THREE.Color(0.5, 0, 0), frame + 2);
+			HorizontalWipeTime(new THREE.Color(0.2, 0, 0), frame + 3);
+			HorizontalWipeTime(new THREE.Color(0.0, 0, 0), frame + 4);
+		};
 
-    var ColorBrush = new Brush();
-    {
-        ColorBrush.Index = 1;
-        ColorBrush.Duration = 50;
-        ColorBrush.Render = function (frame, originLight, brushData) {
+		Brushes.push(WipeBrush);
+	}
 
-            var fadeMultiplier = 1 - (1 / this.Duration) * frame;
+	var ColorBrush = new Brush();
+	{
+		ColorBrush.Index = 1;
+		ColorBrush.Duration = 50;
+		ColorBrush.Render = function(frame, originLight, brushData) {
 
-            var col = new THREE.Color();
+			var fadeMultiplier = 1 - (1 / this.Duration) * frame;
 
-            var myCol = brushData[0].getHSL();
-            col.setHSL(myCol.h, myCol.s, myCol.l * fadeMultiplier);
+			var col = new THREE.Color();
 
-            //console.log(frame + " = " + col.r + "," + col.g +  "," + col.b);
-            setLightColor(col, fadeMultiplier, originLight);
-        };
-        Brushes.push(ColorBrush);
-    }
+			var myCol = brushData[0].getHSL();
+			col.setHSL(myCol.h, myCol.s, myCol.l * fadeMultiplier);
 
-    var GradientBackgroundBrush = new Brush();
-    {
-        GradientBackgroundBrush.Index = 2;
-        GradientBackgroundBrush.Duration = SequenceManager.SequenceLength;
-        GradientBackgroundBrush.IsBackground = true;
-        GradientBackgroundBrush.PrePaint = function () {return false;};
-        GradientBackgroundBrush.Render = function (frame, originLight, brushData) {
-            var col = new THREE.Color();
+			// console.log(frame + " = " + col.r + "," + col.g + "," + col.b);
+			setLightColor(col, fadeMultiplier, originLight);
+		};
 
-            var step = 1 / LightMatrixWidth;
+		var htmlUI = new HTMLUI();
+		htmlUI.Name = "Solid Color";
+		htmlUI.AddUI(new htmlUI.Colors(0));
+		htmlUI.AddUI(new htmlUI.Colors(1));
+		htmlUI.AddUI(new htmlUI.Checkbox(true, 1));
+		ColorBrush.HTMLUI = htmlUI;
 
-            //frame = frame*0.25;
-            for (var y = 0; y < LightMatrixWidth; y++) {
-                col.setHSL(y * step, 1, 0.2);
-                HorizontalWipeTime(col, frame + y);
-            }
+		Brushes.push(ColorBrush);
+	}
 
+	var GradientBackgroundBrush = new Brush();
+	{
+		GradientBackgroundBrush.Index = 2;
+		GradientBackgroundBrush.Duration = SequenceManager.SequenceLength;
+		GradientBackgroundBrush.IsBackground = true;
+		GradientBackgroundBrush.PrePaint = function() {
+			return false;
+		};
+		GradientBackgroundBrush.Render = function(frame, originLight, brushData) {
+			var col = new THREE.Color();
 
-        };
-        Brushes.push(GradientBackgroundBrush);
-    }
+			var step = 1 / LightMatrixWidth;
 
-    var VerticalRainbowWipeBrush = new Brush();
-    {
-        VerticalRainbowWipeBrush.Index = 3;
-        VerticalRainbowWipeBrush.Duration = (LightMatrixHeight * 3);
-        VerticalRainbowWipeBrush.Render = function (frame, originLight, brushData) {
-            VerticalWipeTime(new THREE.Color(1, 0, 0), frame);
-            if (frame < this.Duration - 2)
-            {
-                VerticalWipeTime(new THREE.Color(0, 1, 0), frame + 1);
-                VerticalWipeTime(new THREE.Color(0, 0, 1), frame + 2);
-            }
-        };
-        Brushes.push(VerticalRainbowWipeBrush);
-    }
+			// frame = frame*0.25;
+			for ( var y = 0; y < LightMatrixWidth; y++) {
+				col.setHSL(y * step, 1, 0.2);
+				HorizontalWipeTime(col, frame + y);
+			}
 
-    var DomeFlashBrush = new Brush();
-    {
-        DomeFlashBrush.Index = 4;
-        DomeFlashBrush.Duration = 50;
-        DomeFlashBrush.Render = function (frame, originLight, brushData) {
+		};
+		Brushes.push(GradientBackgroundBrush);
+	}
 
+	var VerticalRainbowWipeBrush = new Brush();
+	{
+		VerticalRainbowWipeBrush.Index = 3;
+		VerticalRainbowWipeBrush.Duration = (LightMatrixHeight * 3);
+		VerticalRainbowWipeBrush.Render = function(frame, originLight, brushData) {
+			VerticalWipeTime(new THREE.Color(1, 0, 0), frame);
+			if (frame < this.Duration - 2) {
+				VerticalWipeTime(new THREE.Color(0, 1, 0), frame + 1);
+				VerticalWipeTime(new THREE.Color(0, 0, 1), frame + 2);
+			}
+		};
+		var htmlUI = new HTMLUI();
+		htmlUI.Name = "RGB Wipe";
+		htmlUI.AddUI(new htmlUI.Colors(0));
+		VerticalRainbowWipeBrush.HTMLUI = htmlUI;
+		Brushes.push(VerticalRainbowWipeBrush);
+	}
 
-            var pulseColour = brushData[0];
-            var fadeMultiplier = 1 - (1 / this.Duration) * frame;
-            var myColour = pulseColour.getHSL();
+	var DomeFlashBrush = new Brush();
+	{
+		DomeFlashBrush.Index = 4;
+		DomeFlashBrush.Duration = 50;
+		DomeFlashBrush.Render = function(frame, originLight, brushData) {
 
-            var col = new THREE.Color();
-            col.setHSL(myColour.h, myColour.s, myColour.l * fadeMultiplier);
+			var pulseColour = brushData[0];
+			var fadeMultiplier = 1 - (1 / this.Duration) * frame;
+			var myColour = pulseColour.getHSL();
 
-            SetAllLights(col, fadeMultiplier);
+			var col = new THREE.Color();
+			col.setHSL(myColour.h, myColour.s, myColour.l * fadeMultiplier);
 
-        };
-        Brushes.push(DomeFlashBrush);
-    }
+			SetAllLights(col, fadeMultiplier);
 
-    var HorizontalRingBrush = new Brush();
-    {
-        HorizontalRingBrush.Index = 5;
-        HorizontalRingBrush.Duration = 30;
-        HorizontalRingBrush.Render = function (frame, originLight, brushData) {
+		};
+		var htmlUI = new HTMLUI();
+		htmlUI.Name = "Flash Dome";
+		htmlUI.AddUI(new htmlUI.Colors(0));
+		DomeFlashBrush.HTMLUI = htmlUI;
+		Brushes.push(DomeFlashBrush);
+	}
 
-            //TODO: Add nice fade in and fade out + do alpha blend
-            var pulseColour = new THREE.Color(0,1,0);
-            var fadeMultiplier = 1 - (1 / this.Duration) * frame;
-            var myColour = pulseColour.getHSL();
+	var HorizontalRingBrush = new Brush();
+	{
+		HorizontalRingBrush.Index = 5;
+		HorizontalRingBrush.Duration = 30;
+		HorizontalRingBrush.Render = function(frame, originLight, brushData) {
 
-            var col = new THREE.Color();
-            col.setHSL(myColour.h, myColour.s, myColour.l * fadeMultiplier);
+			// TODO: Add nice fade in and fade out + do alpha blend
+			// var pulseColour = new THREE.Color(0,1,0);
+			var pulseColour = brushData[0];
+			var fadeMultiplier = 1 - (1 / this.Duration) * frame;
+			var myColour = pulseColour.getHSL();
 
-            var row = GetLightInMatrix(originLight).y;
+			var col = new THREE.Color();
+			col.setHSL(myColour.h, myColour.s, myColour.l * fadeMultiplier);
 
-            VerticalWipeTime(col, row);
+			var row = GetLightInMatrix(originLight).y;
 
-        };
-        Brushes.push(HorizontalRingBrush);
-    }
+			VerticalWipeTime(col, row);
 
-    var  VerticalRingBrush = new Brush();
-    {
-        VerticalRingBrush.Index = 6;
-        VerticalRingBrush.Duration = 30;
-        VerticalRingBrush.Render = function (frame, originLight, brushData) {
+		};
+		var htmlUI = new HTMLUI();
+		htmlUI.Name = "Horizontal Rings";
+		htmlUI.AddUI(new htmlUI.Colors(0));
+		HorizontalRingBrush.HTMLUI = htmlUI;
+		Brushes.push(HorizontalRingBrush);
+	}
 
-            //TODO: Add nice fade in and fade out + do alpha blend
-            var pulseColour = new THREE.Color(0,1,0);
-            var fadeMultiplier = 1 - (1 / this.Duration) * frame;
-            var myColour = pulseColour.getHSL();
+	var VerticalRingBrush = new Brush();
+	{
+		VerticalRingBrush.Index = 6;
+		VerticalRingBrush.Duration = 30;
+		VerticalRingBrush.Render = function(frame, originLight, brushData) {
 
-            var col = new THREE.Color();
-            col.setHSL(myColour.h, myColour.s, myColour.l * fadeMultiplier);
+			// TODO: Add nice fade in and fade out + do alpha blend
+			// var pulseColour = new THREE.Color(0,1,0);
+			var pulseColour = brushData[0];
+			var fadeMultiplier = 1 - (1 / this.Duration) * frame;
+			var myColour = pulseColour.getHSL();
 
-            var column = GetLightInMatrix(originLight).x;
+			var col = new THREE.Color();
+			col.setHSL(myColour.h, myColour.s, myColour.l * fadeMultiplier);
 
-            HorizontalWipeTime(col, column);
+			var column = GetLightInMatrix(originLight).x;
 
-        };
-        Brushes.push(VerticalRingBrush);
-    }
+			HorizontalWipeTime(col, column);
 
-    var LaunchBrush = new Brush();
-    {
-        //Base section to the Firework Brush
-        LaunchBrush.Index = 7;
-        LaunchBrush.Duration = 30;
-        LaunchBrush.Render = function (frame, originLight, brushData) {
+		};
+		var htmlUI = new HTMLUI();
+		htmlUI.Name = "Vertical Rings";
+		htmlUI.AddUI(new htmlUI.Colors(0));
+		VerticalRingBrush.HTMLUI = htmlUI;
+		Brushes.push(VerticalRingBrush);
+	}
 
-            //TODO: Add nice fade in and fade out + do alpha blend
-            var pulseColour = new THREE.Color(0.5, 0.5, 0.5);
-            var fadeMultiplier = ((1 / this.Duration) * frame) + 0.5;
-            var myColour = pulseColour.getHSL();
-            var rippleDistance = brushData[2];
+	var LaunchBrush = new Brush();
+	{
+		// Base section to the Firework Brush
+		LaunchBrush.Index = 7;
+		LaunchBrush.Duration = 30;
+		LaunchBrush.Render = function(frame, originLight, brushData) {
 
+			// TODO: Add nice fade in and fade out + do alpha blend
+			var pulseColour = new THREE.Color(0.5, 0.5, 0.5);
+			var fadeMultiplier = ((1 / this.Duration) * frame) + 0.5;
+			var myColour = pulseColour.getHSL();
+			var rippleDistance = brushData[2];
 
-            var col = new THREE.Color();
-            //col.setHSL(myColour.h, myColour.s, myColour.l * fadeMultiplier);
+			var col = new THREE.Color();
+			// col.setHSL(myColour.h, myColour.s, myColour.l * fadeMultiplier);
 
-            var originPosition = GetLightInMatrix(originLight);
-            //console.log(originLight + " : " + originPosition.x + " - " + originPosition.y);
+			var originPosition = GetLightInMatrix(originLight);
+			// console.log(originLight + " : " + originPosition.x + " - " +
+			// originPosition.y);
 
-            var offset = Math.floor(((1 / this.Duration) * frame) * rippleDistance);
+			var offset = Math.floor(((1 / this.Duration) * frame) * rippleDistance);
 
-            //var lightIndex = LightMappingMatrix[(originPosition.y - offset)% LightMatrixHeight][originPosition.x-1];
-            //col.setHSL(myColour.h, myColour.s, myColour.l * (0.75*fadeMultiplier));
-            //if(lightIndex != -1 ){setLightColor(col, lightIndex);}
+			// var lightIndex = LightMappingMatrix[(originPosition.y - offset)%
+			// LightMatrixHeight][originPosition.x-1];
+			// col.setHSL(myColour.h, myColour.s, myColour.l *
+			// (0.75*fadeMultiplier));
+			// if(lightIndex != -1 ){setLightColor(col, lightIndex);}
 
-            var lightIndex = LightMappingMatrix[(originPosition.y - offset)][originPosition.x];
+			var lightIndex = LightMappingMatrix[(originPosition.y - offset)][originPosition.x];
 
-            col.setHSL(myColour.h, myColour.s, myColour.l*fadeMultiplier);
-            if(lightIndex != -1 ){setLightColor(col, fadeMultiplier, lightIndex);}
+			col.setHSL(myColour.h, myColour.s, myColour.l * fadeMultiplier);
+			if (lightIndex != -1) {
+				setLightColor(col, fadeMultiplier, lightIndex);
+			}
 
-            //lightIndex = LightMappingMatrix[(originPosition.y - offset)% LightMatrixHeight][originPosition.x+1];
-            //col.setHSL(myColour.h, myColour.s, myColour.l * (0.75*fadeMultiplier));
-            //if(lightIndex != -1 ){setLightColor(col, lightIndex);}
+			// lightIndex = LightMappingMatrix[(originPosition.y - offset)%
+			// LightMatrixHeight][originPosition.x+1];
+			// col.setHSL(myColour.h, myColour.s, myColour.l *
+			// (0.75*fadeMultiplier));
+			// if(lightIndex != -1 ){setLightColor(col, lightIndex);}
 
-            //HorizontalWipeTime(col, column);
+			// HorizontalWipeTime(col, column);
 
-        };
-        Brushes.push(LaunchBrush);
-    }
+		};
+		Brushes.push(LaunchBrush);
+	}
 
-    var  FireWorkBurstBrush = new Brush();
-    {
-        FireWorkBurstBrush.Index = 8;
-        FireWorkBurstBrush.Duration = 30;
-        FireWorkBurstBrush.Render = function (frame, originLight, brushData) {
+	var FireWorkBurstBrush = new Brush();
+	{
+		FireWorkBurstBrush.Index = 8;
+		FireWorkBurstBrush.Duration = 30;
+		FireWorkBurstBrush.html_name = "Fireworks";
+		FireWorkBurstBrush.Render = function(frame, originLight, brushData) {
 
-            //TODO: Add nice fade in and fade out + do alpha blend
-            var pulseColour = new THREE.Color(1,0,0);
-            var fadeMultiplier = 1 - (1 / this.Duration) * frame;
-            var myColour = brushData[0].getHSL();
-            var rippleDistance = 5;
+			// TODO: Add nice fade in and fade out + do alpha blend
+			var pulseColour = new THREE.Color(1, 0, 0);
+			var fadeMultiplier = 1 - (1 / this.Duration) * frame;
+			var myColour = brushData[0].getHSL();
+			var rippleDistance = 5;
 
-            var col = new THREE.Color();
-            col.setHSL(myColour.h, myColour.s, myColour.l * fadeMultiplier);
+			var col = new THREE.Color();
+			col.setHSL(myColour.h, myColour.s, myColour.l * fadeMultiplier);
 
-            var originPosition = GetLightInMatrix(originLight);
+			var originPosition = GetLightInMatrix(originLight);
 
-            var offset = Math.floor(((1 / this.Duration) * frame) * rippleDistance);
+			var offset = Math.floor(((1 / this.Duration) * frame) * rippleDistance);
 
-            var step = 2*Math.PI/30;  // see note 1
-            var r = offset;
+			var step = 2 * Math.PI / 30; // see note 1
+			var r = offset;
 
-            for(var trail = 1; trail < rippleDistance; trail++)
-            {
-                r = r - trail;
-                if(r < 0){r=0;}
+			for ( var trail = 1; trail < rippleDistance; trail++) {
+				r = r - trail;
+				if (r < 0) {
+					r = 0;
+				}
 
-                //fadeMultiplier = fadeMultiplier / (trail+1);
+				// fadeMultiplier = fadeMultiplier / (trail+1);
 
-                for(var theta=0;  theta < 2*Math.PI;  theta+=step)
-                { var x = r*Math.cos(theta);
-                    var y = r*Math.sin(theta);    //note 2.
-                    //ctx.lineTo(x,y);
-                    //console.log("X: " + Math.floor(x) + " Y: " + Math.floor(y));
-                    var xLight = Math.floor(originPosition.y - x) % LightMatrixHeight;
-                    if(xLight < 0){continue;}
+				for ( var theta = 0; theta < 2 * Math.PI; theta += step) {
+					var x = r * Math.cos(theta);
+					var y = r * Math.sin(theta); // note 2.
+					// ctx.lineTo(x,y);
+					// console.log("X: " + Math.floor(x) + " Y: " +
+					// Math.floor(y));
+					var xLight = Math.floor(originPosition.y - x) % LightMatrixHeight;
+					if (xLight < 0) {
+						continue;
+					}
 
-                    var yLight = Math.floor(originPosition.x - y) % LightMatrixWidth;
-                    if(yLight < 0){continue;}
+					var yLight = Math.floor(originPosition.x - y) % LightMatrixWidth;
+					if (yLight < 0) {
+						continue;
+					}
 
-                    //console.log("X: " + Math.floor(originPosition.y - x)% LightMatrixHeight + "Y: " + Math.floor(originPosition.x + y) % LightMatrixWidth);
+					// console.log("X: " + Math.floor(originPosition.y - x)%
+					// LightMatrixHeight + "Y: " + Math.floor(originPosition.x +
+					// y) % LightMatrixWidth);
 
-                    var lightIndex = LightMappingMatrix[xLight][yLight];
+					var lightIndex = LightMappingMatrix[xLight][yLight];
 
-                    col.setHSL(myColour.h, myColour.s, (myColour.l * fadeMultiplier) * (Math.random() * 0.5 + 0.5));
-                    if(lightIndex != -1 ){setLightColor(col, fadeMultiplier, lightIndex);}
-                }
-            }
-            //HorizontalWipeTime(col, column);
+					col.setHSL(myColour.h, myColour.s, (myColour.l * fadeMultiplier) * (Math.random() * 0.5 + 0.5));
+					if (lightIndex != -1) {
+						setLightColor(col, fadeMultiplier, lightIndex);
+					}
+				}
+			}
+			// HorizontalWipeTime(col, column);
 
-        };
-        Brushes.push(FireWorkBurstBrush);
-    }
+		};
+		Brushes.push(FireWorkBurstBrush);
+	}
 
-    var  FireWorkBurstBrush = new Brush();
-    {
-        FireWorkBurstBrush.Index = 9;
-        FireWorkBurstBrush.Duration = 0;
-        FireWorkBurstBrush.PrePaint = function(LightIndex)
-        {
-            //Create a Burst at this light
-            var newEvent = new EVENT(SequenceManager.SequenceTime, LightIndex, Brushes[8], ActiveBrushData);
-            SequenceManager.AddEvent(newEvent);
+	var FireWorkBurstBrush = new Brush();
+	{
+		FireWorkBurstBrush.Index = 9;
+		FireWorkBurstBrush.Duration = 0;
+		FireWorkBurstBrush.html_name = "";
+		FireWorkBurstBrush.PrePaint = function(LightIndex) {
+			// Create a Burst at this light
+			var newEvent = new EVENT(SequenceManager.SequenceTime, LightIndex, Brushes[8], ActiveBrushData);
+			SequenceManager.AddEvent(newEvent);
 
-            var originPosition = GetLightInMatrix(LightIndex);
+			var originPosition = GetLightInMatrix(LightIndex);
 
-           // console.log(LightMatrixHeight + " : " + originPosition.x);
+			// console.log(LightMatrixHeight + " : " + originPosition.x);
 
-            var launchIndex = LightMappingMatrix[LightMatrixHeight-1][originPosition.x];
-            if(launchIndex == -1){launchIndex = LightMappingMatrix[LightMatrixHeight-1][originPosition.x+1];}
+			var launchIndex = LightMappingMatrix[LightMatrixHeight - 1][originPosition.x];
+			if (launchIndex == -1) {
+				launchIndex = LightMappingMatrix[LightMatrixHeight - 1][originPosition.x + 1];
+			}
 
-            //console.log("INDEX: " + launchIndex);
+			// console.log("INDEX: " + launchIndex);
 
-            ActiveBrushData[2] = (LightMatrixHeight-1) - originPosition.y;
+			ActiveBrushData[2] = (LightMatrixHeight - 1) - originPosition.y;
 
-            newEvent = new EVENT(SequenceManager.SequenceTime-30, launchIndex, Brushes[7], ActiveBrushData);
-            SequenceManager.AddEvent(newEvent);
+			newEvent = new EVENT(SequenceManager.SequenceTime - 30, launchIndex, Brushes[7], ActiveBrushData);
+			SequenceManager.AddEvent(newEvent);
 
-            return false;
-        };
-        Brushes.push(FireWorkBurstBrush);
-    }
+			return false;
+		};
+
+		var htmlUI = new HTMLUI();
+		htmlUI.Name = "Fireworks";
+		htmlUI.AddUI(new htmlUI.Colors(0));
+		FireWorkBurstBrush.HTMLUI = htmlUI;
+
+		Brushes.push(FireWorkBurstBrush);
+	}
 
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 // Include: ../../domelights/events.js
 
 function onWindowResize() {
@@ -15148,8 +15148,8 @@ function onDocumentMouseUp( event ) {
 	isMouseDownOverBar = false;
 	isMouseDown = false;
 
-	document.removeEventListener( 'mouseup', onDocumentMouseUp, false );
-	document.removeEventListener( 'mouseout', onDocumentMouseOut, false );
+    container.removeEventListener( 'mouseup', onDocumentMouseUp, false );
+    container.removeEventListener( 'mouseout', onDocumentMouseOut, false );
 	//console.log('onDocumentMouseUp: ' + 'isMouseDown: ' + isMouseDown + ' mouseX:' + mouseX + ' mouseXOnMouseDown:' + mouseXOnMouseDown + ' targetRotation:' + targetRotation+ ' targetRotationOnMouseDown:' + targetRotationOnMouseDown);
 
 }
@@ -15159,8 +15159,8 @@ function onDocumentMouseOut( event ) {
 	isMouseDownOverBar = false;
 	isMouseDown = false;
 
-	document.removeEventListener( 'mouseup', onDocumentMouseUp, false );
-	document.removeEventListener( 'mouseout', onDocumentMouseOut, false );
+    container.removeEventListener( 'mouseup', onDocumentMouseUp, false );
+    container.removeEventListener( 'mouseout', onDocumentMouseOut, false );
 
 }
 
@@ -15284,15 +15284,15 @@ function EnableDomeEventHandles(state){
 
     if(state == true) {
 
-        document.addEventListener('mousedown', onDocumentMouseDown, false);
-        document.addEventListener('mousemove', onDocumentMouseMove, false);
+        container.addEventListener('mousedown', onDocumentMouseDown, false);
+        container.addEventListener('mousemove', onDocumentMouseMove, false);
         //document.addEventListener('touchstart', onDocumentTouchStart, false);
         //document.addEventListener('touchmove', onDocumentTouchMove, false);
     }
     else
     {
-        document.removeEventListener('mousedown', onDocumentMouseDown, false);
-        document.removeEventListener('mousemove', onDocumentMouseMove, false);
+        container.removeEventListener('mousedown', onDocumentMouseDown, false);
+        container.removeEventListener('mousemove', onDocumentMouseMove, false);
         //document.removeEventListener('touchstart', onDocumentTouchStart, false);
         //document.removeEventListener('touchmove', onDocumentTouchMove, false);
     }
@@ -16154,15 +16154,15 @@ UI = function(projector, raycaster, camera, mouse)
 
         if(state == true) {
 
-            document.addEventListener( 'mouseup', this.Update, false );
-            document.addEventListener( 'mousedown', this.Update, false );
-            document.addEventListener( 'mousemove', this.Update, false );
+            container.addEventListener( 'mouseup', this.Update, false );
+            container.addEventListener( 'mousedown', this.Update, false );
+            container.addEventListener( 'mousemove', this.Update, false );
         }
         else
         {
-            document.removeEventListener( 'mouseup', this.Update, false );
-            document.removeEventListener( 'mousedown', this.Update, false );
-            document.removeEventListener( 'mousemove', this.Update, false );
+            container.removeEventListener( 'mouseup', this.Update, false );
+            container.removeEventListener( 'mousedown', this.Update, false );
+            container.removeEventListener( 'mousemove', this.Update, false );
         }
     };
 
@@ -16757,20 +16757,26 @@ var Brush = function(){
     this.Index = 0; //Index of the brush
     this.Duration = 0; //Duration of the Brush in Frames
     this.Render = function(frame, originLight){}; //Write the light values to the dome given the frame
+    this.HTMLUI = null;
 
     this.Data = []; // Arbitrary data for the brush
 
     this.PrePaint =  function(){return true;}; // Called before paint is applied
     this.PostPaint =  function(){return true;}; // Called after paint is applied
 
-    //INIT
-    this.init = function(){
-
+    this.GeneratePropertyContents = function()
+    {
+        if(this.HTMLUI != null)
+        {
+            return this.HTMLUI.GeneratePropertyContents();
+        }
     };
+
+    //INIT
+    this.init = function(){};
     this.init();
 
 };
-
 // Include: ../../domelights/LIGHT.js
 
 /**

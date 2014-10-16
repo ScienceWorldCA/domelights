@@ -17,37 +17,55 @@ function FrontEnd_API() {
 	} 
 
 	this.DoStoreAnimation = function() {
+		if( scheduled ) {
+			alert( "You have already submitted a scheduled animation.\nPlease try again later!" );
+			$("#submitmessage").empty();
+			return false;
+		}
 		// Input
 		var sequence = SequenceManager.SaveSequence();
-		var emailInputAddress = document.getElementById( 'useremail' ).value;
 		
 		// Verify input
-		if( document.getElementById( 'userrealname' ).value == '') {
-			alert( "Missing user name!" );
+		if( $("#userrealname").val() == '') {
+			$("#submitmessage").html( "Missing user name!" ).addClass("warning");
+			$('#submitbutton').html( 'Retry' ).addClass("red").removeClass("blue").removeClass("green");
 			return false;
-		} else if( document.getElementById( 'useremail' ).value == '') {
-			alert( "Missing email address!" );
+		} else if( $("#useremail").val() == '') {
+			$("#submitmessage").html( "Missing email address!" ).addClass("warning");
+			$('#submitbutton').html( 'Retry' ).addClass("red").removeClass("blue").removeClass("green");
 			return false;
-		} else if( ! this.validateEmail( document.getElementById( 'useremail' ).value ) ) {
-			alert( "Invalid email address!" );
+		} else if( ! this.validateEmail( $("#useremail").val() ) ) {
+			$("#submitmessage").html( "Invalid email address!" ).addClass("warning");
+			$('#submitbutton').html( 'Retry' ).addClass("red").removeClass("blue").removeClass("green");
+			return false;
+		} else if( ! $("#useragrees").prop( 'checked' ) ) {
+			$("#submitmessage").html( "Please agree to the terms!" ).addClass("warning");
+			$('#submitbutton').html( 'Retry' ).addClass("red").removeClass("blue").removeClass("green");
 			return false;
 		} else {
 			var params = {};
 			params['sequence'] = sequence;
-			params['useremail'] = document.getElementById( 'useremail' ).value;
-			params['userrealname'] = document.getElementById( 'userrealname' ).value;
+			params['useremail'] = $("#useremail").val();
+			params['userrealname'] = $("#userrealname").val();
 	
 			this.api_call(
 				'storesequence',
 				params,
 				function(data) {
 					console.log( data );
-					alert( data.message );
 					if( data.result ) {
-						document.getElementById('storeResult').disabled = true;
-						document.getElementById('storeResult').value = 'Scheduled';
+						$("#submitmessage").html( '<pre>' + data.message + '</pre>' );
+						$('#submitbutton').prop( 'disabled', true );
+						$('#submitbutton').html( 'Scheduled' ).removeClass("red").removeClass("blue").addClass("green");
+						$("#submitmessage").removeClass("warning");
+						scheduled = true;
+						$("#submitbutton").on("click", function (e) {
+					        e.preventDefault();
+					    });
 					} else {
-						document.getElementById('storeResult').value = 'Retry';
+						$("#submitmessage").html( data.message );
+						$("#submitmessage").addClass("warning");
+						$('#submitbutton').html( 'Retry' ).addClass("red").removeClass("blue").removeClass("green");
 					}
 				}
 			);

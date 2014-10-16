@@ -160,6 +160,7 @@ function buildInterface() {
 
     }
 
+    /*
     // Add Solid Color Brushes
     {
         var button1 = new UIObjectManager.Button('textures/UI/dome.png', new THREE.Vector2(150, 60), new THREE.Vector2(40, 40), 1, 1, true);
@@ -264,6 +265,7 @@ function buildInterface() {
         bbutton3.timer = 0;
         bbutton3.frames = 6;
     }
+    */
 
     var timeline = new UIObjectManager.Timeline('textures/UI/smiley-face.png', new THREE.Vector2(-90, -110), new THREE.Vector2(180, 20));
     {
@@ -341,6 +343,7 @@ function buildInterface() {
         timeline.onMouseExit = onTimelineMouseExit;
     }
 
+    /*
     var ColorPicker = new UIObjectManager.ColorPicker(new THREE.Vector2(170, -40), new THREE.Vector2(50, 50));
     {
         function onColorPickerColorUpdated(event, uiObject)
@@ -456,6 +459,7 @@ function buildInterface() {
         //tabButton2.UIObjectsList = UIObjectManager.UIObjectsList;
 
     }
+    */
 
     var myText = new UIObjectManager.Text(new THREE.Vector3(86, -88, 2 ), new THREE.Color(1,0,0), "Welcome", "right");
     {
@@ -474,6 +478,7 @@ function buildInterface() {
         myText.onUIUpdate = UpdateTimeText;
     }
 
+    /*
     //Debug UI
     {
         //Clear Dome
@@ -496,6 +501,7 @@ function buildInterface() {
         submitSequence.tag = 0;
         submitSequence.name = "SubmitSequence";
     }
+    */
 }
 
 

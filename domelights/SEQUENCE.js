@@ -30,6 +30,8 @@ SEQUENCE = function() {
     {
         ClearLights();
         this.Events = [];
+        mUndoIndex = 0;
+        mMaxUndoIndex = 0;
     }
 
     this.GetSequenceLength = function()
@@ -45,7 +47,7 @@ SEQUENCE = function() {
 
         if(val > mMaxUndoIndex){val = mMaxUndoIndex;}
         if(val < 0){val = 0;}
-        
+
         mUndoIndex = val;
         UpdateUndoStack(false);
     });

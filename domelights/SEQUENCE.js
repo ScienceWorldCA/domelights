@@ -4,11 +4,14 @@
 
 SEQUENCE = function() {
 
+    var self = this;
     this.SequenceTime = 0; //Actual time of the Sequence.
     this.SequenceLength = 15*FPS;
     this.Version = 1;
     this.Events = [];
     this.Play = true;
+    var mUndoIndex = 0;
+    var mMaxUndoIndex = 0;
 
     var previousTime = new Date().getTime();
 
@@ -27,12 +30,28 @@ SEQUENCE = function() {
     {
         ClearLights();
         this.Events = [];
+        mUndoIndex = 0;
+        mMaxUndoIndex = 0;
     }
 
     this.GetSequenceLength = function()
     {
         return this.SequenceLength;
     };
+
+    this.__defineGetter__("UndoIndex", function(){
+        return mUndoIndex;
+    });
+
+    this.__defineSetter__("UndoIndex", function(val){
+
+        if(val > mMaxUndoIndex){val = mMaxUndoIndex;}
+        if(val < 0){val = 0;}
+
+        mUndoIndex = val;
+        UpdateUndoStack(false);
+    });
+
 
     this.RenderFrame = function(frame, returnFrame)
     {
@@ -46,8 +65,9 @@ SEQUENCE = function() {
             if((this.Events[x].StartTime <= frame)&&
                (this.Events[x].Brush.Duration + this.Events[x].StartTime > frame))
             {
-                if(this.Events[x].IsBackground == true) {
-                    this.Events[x].Render(frame - this.Events[x].StartTime);
+                if(this.Events[x].IsBackground == true && this.Events[x].Enabled == true)
+                {
+                        this.Events[x].Render(frame - this.Events[x].StartTime);
                 }
             }
         }
@@ -57,8 +77,9 @@ SEQUENCE = function() {
             if((this.Events[x].StartTime <= this.SequenceTime)&&
                (this.Events[x].Brush.Duration + this.Events[x].StartTime > frame))
             {
-                if(this.Events[x].IsBackground == false) {
-                    this.Events[x].Render(frame- this.Events[x].StartTime);
+                if(this.Events[x].IsBackground == false && this.Events[x].Enabled == true)
+                {
+                        this.Events[x].Render(frame - this.Events[x].StartTime);
                 }
             }
         }
@@ -112,7 +133,15 @@ SEQUENCE = function() {
     {
         //We need to sort this on addition based on time as we could be adding in an event at any point in time.
         //eg. During playback of other events.
+        UpdateUndoStack(true);
+
+        mUndoIndex++;
+        mMaxUndoIndex = mUndoIndex;
+
+        event.ActionID = mUndoIndex;
+
         this.Events.push(event);
+
 
         //Now we've added another event, sort to ensure they are in the correct order
         this.Events.sort(function(a,b){
@@ -215,10 +244,58 @@ SEQUENCE = function() {
 
         console.log("--- File Loaded ---");
     };
+
+    this.Undo = function()
+    {
+        if(mUndoIndex > 0)
+        {
+            mUndoIndex--;
+            UpdateUndoStack(false);
+        }
+    };
+
+    this.Redo = function()
+    {
+        if(mUndoIndex < mMaxUndoIndex)
+        {
+            mUndoIndex++;
+            UpdateUndoStack(false);
+        }
+    };
+
+    var UpdateUndoStack = function(clearPostIndex)
+    {
+        console.log("Update Stack");
+        var mClearPostIndex = clearPostIndex || false;
+
+        for(var i = 0; i < self.Events.length; i++)
+        {
+            if(self.Events[i].ActionID > mUndoIndex ){
+                if(mClearPostIndex == true)
+                {
+                    self.Events.splice(i, 1);
+                    mMaxUndoIndex = mUndoIndex;
+                }
+                else
+                {
+                    self.Events[i].Enabled = false;
+                }
+            }
+            else{
+                self.Events[i].Enabled = true;
+            }
+        }
+    };
+
+
+
+
 };
 
 var EVENT = function(time, originLight, brush, brushData)
 {
+    this.ActionID = 0;
+    this.Enabled = true;
     this.IsBackground = false;
     this.StartTime = time; //Offset from the start of the sequence in frames.
     this.OriginLight = originLight; // The Light that the animation is based from.

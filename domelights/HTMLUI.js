@@ -105,6 +105,23 @@ HTMLUI = function() {
     };
     this.OptionBox.Prototype = Object.create(this.BaseHTMLUIObject());
 
+    //Label UI
+    this.Label = function(text)
+    {
+        this.Text = text;
+        this.GenerateHTML = function(){
+
+            var html = ("\t<h4>" + this.Text + "</h4>\n");
+
+            return html;
+        };
+        this.init = function()
+        {
+            return this;
+        };
+        this.init();
+    };
+
     //Slider UI
     this.Slider = function(minValue, maxValue, step, currentValue, dataIndex){
 

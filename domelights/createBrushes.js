@@ -21,6 +21,7 @@ function CreateBrushes() {
 
         var htmlUI = new HTMLUI();
         htmlUI.Name = "Wipe Color";
+        htmlUI.AddUI(new htmlUI.Label("Select a Wipe Colour"));
         htmlUI.AddUI(new htmlUI.Colors(0));
         htmlUI.AddUI(new htmlUI.Slider(1,20,1,5,1));
         WipeBrush.HTMLUI = htmlUI;

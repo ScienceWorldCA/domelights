@@ -12,6 +12,7 @@ SEQUENCE = function() {
     this.Play = true;
     var mUndoIndex = 0;
     var mMaxUndoIndex = 0;
+    var mUndoGrouping = false;
 
     var previousTime = new Date().getTime();
 
@@ -131,11 +132,15 @@ SEQUENCE = function() {
 
     this.AddEvent = function(event)
     {
+
         //We need to sort this on addition based on time as we could be adding in an event at any point in time.
         //eg. During playback of other events.
         UpdateUndoStack(true);
 
-        mUndoIndex++;
+        if(mUndoGrouping == false) {
+           mUndoIndex++;
+        }
+
         mMaxUndoIndex = mUndoIndex;
 
         event.ActionID = mUndoIndex;
@@ -245,6 +250,15 @@ SEQUENCE = function() {
         console.log("--- File Loaded ---");
     };
 
+
+    this.StartUndoGroup = function()
+    {
+        mUndoGrouping = true;
+        UpdateUndoStack(true);
+        mUndoIndex++;
+    };
+    this.StopUndoGroup = function(){mUndoGrouping = false;};
+
     this.Undo = function()
     {
         if(mUndoIndex > 0)
@@ -265,15 +279,16 @@ SEQUENCE = function() {
 
     var UpdateUndoStack = function(clearPostIndex)
     {
-        console.log("Update Stack");
         var mClearPostIndex = clearPostIndex || false;
+        var spliceList = [];
 
+        //iterate through all events and remove/disable based on UndoIndex.
         for(var i = 0; i < self.Events.length; i++)
         {
             if(self.Events[i].ActionID > mUndoIndex ){
                 if(mClearPostIndex == true)
                 {
-                    self.Events.splice(i, 1);
+                    spliceList.push(i);
                     mMaxUndoIndex = mUndoIndex;
                 }
                 else
@@ -284,6 +299,12 @@ SEQUENCE = function() {
             else{
                 self.Events[i].Enabled = true;
             }
+        }
+
+        //Remove all tagged events
+        for(var x = 0; x < spliceList.length; x++)
+        {
+            self.Events.splice(spliceList[x], 1);
         }
     };
 

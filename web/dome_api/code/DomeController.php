@@ -112,6 +112,14 @@ class DomeController {
 		if( $controller_state_result['mode'] == 0 )
 			return;
 
+		// Check the current schedule
+		$schedule_data = $this->GetSchedule();
+		
+		if( $schedule_data && is_array( $schedule_data ) && isset( $schedule_data['type'] ) ) {
+			$cro->setRenderProperty( 'mode', $schedule_data['type'] );
+			$cro->setRenderProperty( 'script_name', $schedule_data['options'] );
+		}
+
 		// Check for current event
 		$event_data = $this->GetEvent();
 
@@ -246,6 +254,7 @@ class DomeController {
 	}
 
 	public function GetEvent() {
+		error_log( sprintf( "%s: Checking...", __METHOD__ ) );
 		// Simple query
 		$query = "SELECT id, type, options FROM events WHERE now() BETWEEN start AND end AND active = 1 ORDER BY start ASC";
 
@@ -254,8 +263,22 @@ class DomeController {
 
 		// If we have a valid result, return it.
 		if( $res && $res->rowCount() == 1 ) {
-			$event_data = $res->fetch();
-			return $event_data;
+			return $res->fetch();
+		} else {
+			return false;
+		}
+	}
+	
+	public function GetSchedule() {
+		error_log( sprintf( "%s: Checking...", __METHOD__ ) );
+		$query = strftime( "SELECT * FROM schedule WHERE day = %u AND '%T' BETWEEN TIMESTAMP( start ) AND TIMESTAMP( end ) ORDER BY day ASC, start ASC, end ASC LIMIT 1" );
+
+		// Do query
+		$res = $this->dbconn->query( $query );
+
+		// If we have a valid result, return it.
+		if( $res && $res->rowCount() == 1 ) {
+			return $res->fetch();
 		} else {
 			return false;
 		}

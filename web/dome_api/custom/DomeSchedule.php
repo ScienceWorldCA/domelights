@@ -95,7 +95,8 @@ class CSchedule
 	private function CheckForBlackOutPeriod( $startTime ) {
 		$sql_query = array();
 		$sql_query[] = "SELECT * FROM events";
-		$sql_query[] = "WHERE TIMESTAMP( '". $startTime ."' ) BETWEEN events.start AND events.end "; 
+		$sql_query[] = "WHERE TIMESTAMP( '". $startTime ."' ) BETWEEN events.start AND events.end ";
+		$sql_query[] = "AND active = 1";
 		$sql_query = join( ' ', $sql_query );
 
 		if( $this->DEBUG ) error_log( sprintf( "%s/%s: %s", __METHOD__, __LINE__, $sql_query ) );
@@ -126,7 +127,8 @@ class CSchedule
 		$sql_query[] = "SELECT * FROM `schedule` WHERE ";
 		$sql_query[] = "TIME( TIMESTAMP( '". $startTime ."' ) ) > schedule.start";
 		$sql_query[] = "AND TIME( TIMESTAMP( '". $startTime ."' ) ) < schedule.end";
-		$sql_query[] = "AND schedule.type =1";
+		$sql_query[] = "AND schedule.type = 1";
+		$sql_query[] = "AND schedule.active = 1";
 		$sql_query[] = "AND schedule.day >= dayofweek( TIMESTAMP( '". $startTime ."' ) ) ";
 		$sql_query[] = "ORDER BY  `schedule`.`day` ASC ";
 		$sql_query[] = "LIMIT 1 ";

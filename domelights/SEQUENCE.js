@@ -308,8 +308,16 @@ SEQUENCE = function() {
         }
     };
 
-
-
+    this.ApplyCurrentData = function()
+    {
+        for(var i = 0; i < self.Events.length; i++)
+        {
+            if(self.Events[i].ActionID == mUndoIndex )
+            {
+                self.Events[i].ApplyData();
+            }
+        }
+    };
 
 };
 

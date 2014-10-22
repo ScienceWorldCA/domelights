@@ -13,9 +13,6 @@
 <script type="text/javascript" src="js/kickstart.js"></script>
 <script type="text/javascript" src="js/domelights.js"></script>
 <script type="text/javascript" src="js/jquery-ui.js"></script>
-<script>
-	
-</script>
 </head>
 
 <body>
@@ -96,48 +93,60 @@
 	<script src="BRUSH.js"></script>
 	<script src="LIGHT.js"></script>
 	<script src="SEQUENCE.js"></script>
-    <script src="HTMLUI.js"></script>
-    <script src="HTMLBrushManager.js"></script>
+	<script src="HTMLUI.js"></script>
+	<script src="HTMLBrushManager.js"></script>
 
-<div class="dome">
-	<script>
-		if (!Detector.webgl)
-			Detector.addGetWebGLMessage();
+	<div class="dome">
+		<script>
+			if (!Detector.webgl)
+				Detector.addGetWebGLMessage();
 
-		//init.js
-		initGraphicMode();
-		//initRendermode();
+			//init.js
+			initGraphicMode();
+			//initRendermode();
 
-		//render.js
-		if (GraphicMode == true)
-			animate();
-	</script>
+			//render.js
+			if (GraphicMode == true)
+				animate();
+		</script>
 	</div>
-	 <div id="drawer" class="controls_wrapper">
-    <div class="controls">
-        <div class="row clearfix" id="brushcontainer">
-            <script>buildBrushes();</script>
-        </div>
-        <div class="row clearfix">
-            <div id="box" class="dark_blue lineout-left">
-                <a href="#" onClick="SequenceManager.ClearSequence(); return false;"><i class="icon-1x icon-remove-sign" id="icon"></i><br>Clear<br>All</a>
-            </div>
-            <div id="box" class="teal lineout-right">
-                <a href="#" name="submitform" onclick="showSubmitForm(); return false;"><i class="icon-1x icon-ok-sign" id="icon"></i><br>Submit<br>Design</a>
-            </div>
-        </div>
-         <div class="panels clearfix">
-            <div class="topic panel_wrapper" id="brushoptions"></div>
-             <div class="topic panel_wrapper" id="submitform">
+	<div id="drawer" class="controls_wrapper">
+		<div class="controls">
+			<div class="row clearfix" id="instructions"></div>
+			<div class="row clearfix" id="brushcontainer">
+				<script>
+					buildBrushes();
+				</script>
+			</div>
+			<div class="row clearfix">
+				<div id="box" class="dark_blue lineout-left">
+					<a href="#" onClick="SequenceManager.ClearSequence(); return false;"><i class="icon-1x icon-remove-sign" id="icon"></i><br>Clear<br>All</a>
+				</div>
+				<div id="box" class="teal lineout-right">
+					<a href="#" name="submitform" onclick="showSubmitForm(); return false;"><i class="icon-1x icon-ok-sign" id="icon"></i><br>Submit<br>Design</a>
+				</div>
+			</div>
+			<div class="panels clearfix">
+				<div class="topic panel_wrapper" id="brushoptions"></div>
+				<div class="topic panel_wrapper" id="submitform">
 					<div class="panel">
 						<div class="row">
 							<h3>Submit Animation</h3>
 						</div>
-						<div class="row"><p>Boudin short ribs turducken pork loin, tenderloin meatball shank. Venison porchetta andouille tongue kielbasa swine. Short ribs short loin kielbasa tail, frankfurter andouille turkey beef jowl pig bacon turducken ribeye. Beef ribs ham shank frankfurter doner shankle ham hock. Jerky beef hamburger chuck ham sirloin pork belly turkey strip steak venison porchetta kevin. Pancetta pork loin prosciutto, pastrami jerky kevin beef sirloin shoulder pig shank.</p></div>
 						<div class="row">
-							<div class="lineout-full"><label>Name:</label><input id='userrealname' name='userrealname' type='text' placeholder='<name>' size='32'/></div>
-							<div class="lineout-full"><label>Email Address:</label><input id='useremail' name='useremail' type='text' size='32' placeholder='<email>'/></div>
-							<div class="lineout-full black"><input id='useragrees' name='useragrees' type='checkbox' /><label>I agree to the <a class="blue" href="terms.html">Terms of Use</a>.</label></div>
+							<p>Boudin short ribs turducken pork loin, tenderloin meatball shank. Venison porchetta andouille tongue kielbasa swine. Short ribs short loin kielbasa tail, frankfurter andouille turkey beef jowl pig bacon turducken ribeye. Beef ribs ham shank frankfurter doner shankle ham hock. Jerky beef hamburger chuck ham sirloin pork belly turkey strip steak venison porchetta kevin. Pancetta pork loin prosciutto, pastrami jerky kevin beef sirloin shoulder pig shank.</p>
+						</div>
+						<div class="row">
+							<div class="lineout-full">
+								<label>Name:</label><input id='userrealname' name='userrealname' type='text' placeholder='<name>' size='32' />
+							</div>
+							<div class="lineout-full">
+								<label>Email Address:</label><input id='useremail' name='useremail' type='text' size='32' placeholder='<email>' />
+							</div>
+							<div class="lineout-full black">
+								<input id='useragrees' name='useragrees' type='checkbox' /><label>I agree to the <a class="blue" href="terms.html">Terms of Use</a>.
+								</label>
+							</div>
 						</div>
 						<div class="row" id="submitmessage"></div>
 						<div class="row lineout-full" style="text-align: center;">
@@ -145,9 +154,9 @@
 						</div>
 					</div>
 				</div>
-        </div>  
-    </div>
-</div>
+			</div>
+		</div>
+	</div>
 </body>
 
 </html>

@@ -14,14 +14,31 @@ var HTMLBrushManager = function() {
 			console.log("SetActiveBrush: " + id);
 		if (Brushes[id] != undefined) {
 			ActiveBrushID = id;
+			SequenceManager.StartUndoGroup();
 		}
 	}
 	
+	this.ApplyBrushes = function() {
+		SequenceManager.StopUndoGroup();
+		SequenceManager.ApplyCurrentData();
+		SequenceManager.StartUndoGroup();
+	}
+	
 	this.setActiveColor = function( dataIndex, red, green, blue) {
+		// Stop the undo group
+		SequenceManager.StopUndoGroup();
+		SequenceManager.ApplyCurrentData();
+		// Start the undo group again and set the new brush data
+		SequenceManager.StartUndoGroup();
 		ActiveBrushData[dataIndex] = new THREE.Color(red, green, blue);
 	}
 
 	this.setColorByDataIndex = function( BrushDataIndex, red, green, blue) {
+		// Stop the undo group
+		SequenceManager.StopUndoGroup();
+		SequenceManager.ApplyCurrentData();
+		// Start the undo group again and set the new brush data
+		SequenceManager.StartUndoGroup();
 		ActiveBrushData[BrushDataIndex] = new THREE.Color(red, green, blue);
 	}
 

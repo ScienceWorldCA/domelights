@@ -48,7 +48,9 @@ function CreateBrushes() {
 
 		var htmlUI = new HTMLUI();
 		htmlUI.Name = "Solid Color";
+		htmlUI.AddUI(new htmlUI.Label("Foreground Colour:"));
 		htmlUI.AddUI(new htmlUI.Colors(0));
+		htmlUI.AddUI(new htmlUI.Label("Background Colour:"));
 		htmlUI.AddUI(new htmlUI.Colors(1));
 		htmlUI.AddUI(new htmlUI.Checkbox(true, 1));
 		ColorBrush.HTMLUI = htmlUI;

@@ -65,7 +65,6 @@ function buildColorSelector(div_id) {
 	$.getJSON( "colors.json", function( data ) {
 		var colorblock = "colorblock_" + dataIndex;
 		$(selector_element).empty();
-		$(selector_element).append("<h4>Select color...</h4>\n");
 		$.each( data, function( idx, row ) {
 			$(selector_element).append( '<img class="colorblock ' + colorblock + ' ' + row['class'] + '" onclick="HTMLBrushManager.setColorByDataIndex(' + dataIndex + ',' + row['rgb'] + ');" src="images/shim.png" />' );
 		});

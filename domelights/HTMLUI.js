@@ -24,13 +24,20 @@ HTMLUI = function() {
     };
 
     //CheckBox UI
-    this.Checkbox = function(checked, dataIndex){
+    this.Checkbox = function(checked, dataIndex, label){
 
+    	this.checked = checked;
         this.DataIndex = dataIndex;
 
         this.GenerateHTML = function(){
+        	
+        	checked = "";
+        	
+        	if( this.checked == true ) {
+        		checked = " checked"; 
+        	}
 
-            var html = ("\t<Checkbox><a href=\"#\" OnClick=\"ActiveBrushData[" + dataIndex + "] = myValue; return false;\"></a></Checkbox>\n");
+            var html = ("<div class=\"row lineout-full\"><input type=\"checkbox\"" + checked + " oninput=\"ActiveBrushData['" + dataIndex + "'] = this.value;\" />" + label + "</div>\n");
 
             return html;
         };
@@ -86,13 +93,21 @@ HTMLUI = function() {
     this.Gradient.Prototype = Object.create(this.BaseHTMLUIObject());
 
     //OptionBox UI
-    this.OptionBox = function(optionGroup, checked, dataIndex){
+    this.OptionBox = function(dataIndex, selected, options ){
 
+    	this.options = options;
+    	this.selected = selected;
         this.DataIndex = dataIndex;
 
         this.GenerateHTML = function(){
+        	console.log( "options: " + this.options.length );
 
-            var html = ("\t<OptionBox><a href=\"#\" OnClick=\"ActiveBrushData[" + dataIndex + "] = myValue; return false;\"></a></OptionBox>\n");
+        	var html = "<div class=\"row lineout-full\"><select>\n";
+            for(var index = 0; index < this.options.length; index++) {
+            	html += "\t<option OnClick=\"ActiveBrushData[" + dataIndex + "] = " + this.options[index]['value'] + ";\">" + this.options[index]['name'] + "</option>\n";
+            }
+            console.log( this.options );
+            html += "</select></div>\n";
 
             return html;
         };
@@ -111,7 +126,7 @@ HTMLUI = function() {
         this.Text = text;
         this.GenerateHTML = function(){
 
-            var html = ("\t<h4>" + this.Text + "</h4>\n");
+            var html = ("<div class=\"row lineout-full\"><h4>" + this.Text + "</h4></div>\n");
 
             return html;
         };
@@ -133,7 +148,7 @@ HTMLUI = function() {
 
         this.GenerateHTML = function(){
 
-            var html = ("\t<input type=\"range\" min=\"" + this.mMinValue + "\" max=\"" + this.mMaxValue + "\" value=\"" + this.mCurrentValue + "\" step=\"" + this.mStep + "\" oninput=\"ActiveBrushData['" + dataIndex + "'] = this.value;\">\n");
+            var html = ("\t<input class=\"lineout-full\" type=\"range\" min=\"" + this.mMinValue + "\" max=\"" + this.mMaxValue + "\" value=\"" + this.mCurrentValue + "\" step=\"" + this.mStep + "\" oninput=\"ActiveBrushData['" + dataIndex + "'] = this.value;\">\n");
 
             return html;
         };
@@ -166,11 +181,9 @@ HTMLUI = function() {
             generatedHtml += self.UIProperties[index].GenerateHTML();
         }
 
-        generatedHtml += '<div class="row"><div class="lineout-left">';
-        generatedHtml += '<a class="colorblock green">Reset</a>';
-        generatedHtml += '</div><div class="lineout-right">';
-        generatedHtml += '<a class="colorblock teal" onclick="HTMLBrushManager.ApplyBrushes();">Apply</a>';
-        generatedHtml += '</div></div>';
+        generatedHtml += '<div class="row">';
+        generatedHtml += '<div id="box" class="lineout-left"><a class="brushselector green"><br />Reset<br /></a></div>';
+        generatedHtml += '<div id="box" class="lineout-right"><a class="brushselector teal" onclick="HTMLBrushManager.ApplyBrushes();"><br />Apply<br /></a></div>';
         generatedHtml += "</div>\n";
 
         return generatedHtml;

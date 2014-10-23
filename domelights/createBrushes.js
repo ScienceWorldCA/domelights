@@ -48,11 +48,10 @@ function CreateBrushes() {
 
 		var htmlUI = new HTMLUI();
 		htmlUI.Name = "Solid Color";
-		htmlUI.AddUI(new htmlUI.Label("Foreground Colour:"));
+		htmlUI.AddUI(new htmlUI.Label("Brush Colour:"));
 		htmlUI.AddUI(new htmlUI.Colors(0));
-		htmlUI.AddUI(new htmlUI.Label("Background Colour:"));
-		htmlUI.AddUI(new htmlUI.Colors(1));
-		htmlUI.AddUI(new htmlUI.Checkbox(true, 1));
+		htmlUI.AddUI(new htmlUI.Label("Example Button:"));
+		htmlUI.AddUI(new htmlUI.OptionBox( 1, 0, [{ "name":"test","value":"test"}]));
 		ColorBrush.HTMLUI = htmlUI;
 
 		Brushes.push(ColorBrush);
@@ -94,7 +93,7 @@ function CreateBrushes() {
 		};
 		var htmlUI = new HTMLUI();
 		htmlUI.Name = "RGB Wipe";
-		htmlUI.AddUI(new htmlUI.Colors(0));
+		htmlUI.AddUI(new htmlUI.Label("No options available."));
 		VerticalRainbowWipeBrush.HTMLUI = htmlUI;
 		Brushes.push(VerticalRainbowWipeBrush);
 	}
@@ -117,6 +116,7 @@ function CreateBrushes() {
 		};
 		var htmlUI = new HTMLUI();
 		htmlUI.Name = "Flash Dome";
+		htmlUI.AddUI(new htmlUI.Label("Colour:"));
 		htmlUI.AddUI(new htmlUI.Colors(0));
 		DomeFlashBrush.HTMLUI = htmlUI;
 		Brushes.push(DomeFlashBrush);
@@ -144,6 +144,7 @@ function CreateBrushes() {
 		};
 		var htmlUI = new HTMLUI();
 		htmlUI.Name = "Horizontal Rings";
+		htmlUI.AddUI(new htmlUI.Label("Foreground Colour:"));
 		htmlUI.AddUI(new htmlUI.Colors(0));
 		HorizontalRingBrush.HTMLUI = htmlUI;
 		Brushes.push(HorizontalRingBrush);
@@ -171,6 +172,7 @@ function CreateBrushes() {
 		};
 		var htmlUI = new HTMLUI();
 		htmlUI.Name = "Vertical Rings";
+		htmlUI.AddUI(new htmlUI.Label("Foreground Colour:"));
 		htmlUI.AddUI(new htmlUI.Colors(0));
 		VerticalRingBrush.HTMLUI = htmlUI;
 		Brushes.push(VerticalRingBrush);
@@ -317,8 +319,10 @@ function CreateBrushes() {
 
 		var htmlUI = new HTMLUI();
 		htmlUI.Name = "Fireworks";
+		htmlUI.AddUI(new htmlUI.Label("Fireworks Colour:"));
 		htmlUI.AddUI(new htmlUI.Colors(0));
-		htmlUI.AddUI(new htmlUI.Slider(1, 10, 1, 5, 3 ));
+		htmlUI.AddUI(new htmlUI.Label("Select explosion size:"));
+		htmlUI.AddUI(new htmlUI.Slider(1, 10, 1, 5, 3));
 		FireWorkBurstBrush.HTMLUI = htmlUI;
 
 		Brushes.push(FireWorkBurstBrush);

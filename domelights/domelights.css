@@ -202,6 +202,26 @@ A.closebutton {
 	vertical-align: middle;
 }
 
+.box {
+	width: 65px;
+	height: 65px;
+	margin-left: 5px;
+	margin-right: 5px;
+	background-image: url( "images/shim.png" );
+}
+
+.box a:link {
+	width: 65px;
+	height: 65px;
+	font-size: 13px;
+	line-height: 13px;
+	text-align: center;
+}
+
+.box a:active {
+	opacity: 0.5;
+}
+
 #box {
 	width: 65px;
 	height: 65px;
@@ -214,6 +234,11 @@ A.closebutton {
 	height: 65px;
 	font-size: 13px;
 	line-height: 13px;
+	text-align: center;
+}
+
+#box a:active {
+	opacity: 0.5;
 }
 
 .panel {

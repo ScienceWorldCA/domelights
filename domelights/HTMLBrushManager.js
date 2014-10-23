@@ -13,8 +13,13 @@ var HTMLBrushManager = function() {
 		if (DEBUG)
 			console.log("SetActiveBrush: " + id);
 		if (Brushes[id] != undefined) {
-			ActiveBrushID = id;
+			// Stop the undo group
+			SequenceManager.StopUndoGroup();
+			SequenceManager.ApplyCurrentData();
+			// Start the undo group again and set the new brush data
 			SequenceManager.StartUndoGroup();
+			// Set the active brush id
+			ActiveBrushID = id;
 		}
 	}
 	

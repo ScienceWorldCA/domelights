@@ -181,9 +181,10 @@ HTMLUI = function() {
             generatedHtml += self.UIProperties[index].GenerateHTML();
         }
 
+        generatedHtml += '<div class="row">&nbsp;</div>';
         generatedHtml += '<div class="row">';
-        generatedHtml += '<div id="box" class="lineout-left"><a class="brushselector green"><br />Reset<br /></a></div>';
-        generatedHtml += '<div id="box" class="lineout-right"><a class="brushselector teal" onclick="HTMLBrushManager.ApplyBrushes();"><br />Apply<br /></a></div>';
+        generatedHtml += '<div class="box lineout-left green"><a class="brushselector"><br /><br />Reset<br /></a></div>';
+        generatedHtml += '<div class="box lineout-right teal"><a class="brushselector" onclick="HTMLBrushManager.ApplyBrushes();"><br /><br />Apply<br /></a></div>';
         generatedHtml += "</div>\n";
 
         return generatedHtml;

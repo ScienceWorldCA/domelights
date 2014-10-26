@@ -42,7 +42,7 @@ function buildBrushes() {
 		$("#brushcontainer").empty();
 		$.each( data, function( idx, row ) {
 			var brushButton = "";
-			brushButton += '<div id="box" class="' + row['class'] + '">';
+			brushButton += '<div class="box ' + row['class'] + '">';
 			brushButton += '<a class="brushselector" href="#" name="brushoptions" onClick="HTMLBrushManager.SetActiveBrush( ' + row['id'] + ' );"><i class="icon-1x icon-magic" id="icon"></i><br />' + HTMLBrushManager.getHTMLBlockName( row['id'] ) + '</a>';
 			brushButton += '</div>';
 			$("#brushcontainer").append( brushButton );
@@ -50,7 +50,7 @@ function buildBrushes() {
 		$('A.brushselector').click(function() {
 			EnableDomeEventHandles(true);
 			$("#brushoptions").hide().siblings().hide();
-			$("#brushoptions").html('<div id="#panel"><div class="row"><h3 style="color: black;">Loading...</h3></div></div>');
+			$("#brushoptions").html('<div id="panel"><div class="row"><h3 style="color: black;">Loading...</h3></div></div>');
 			if( Brushes[ActiveBrushID].HTMLUI )
 				$("#brushoptions").html(Brushes[ActiveBrushID].HTMLUI.GeneratePropertyContents());
 			$("#brushoptions").show("slow").siblings().hide();

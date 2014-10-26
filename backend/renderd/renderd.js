@@ -14739,12 +14739,22 @@ function CreateBrushes() {
 		WipeBrush.Index = 0;
 		WipeBrush.Duration = 40;
 		WipeBrush.Render = function(frame, originLight, brushData) {
-			HorizontalWipeTime(new THREE.Color(1.0, 0, 0), frame);
-			HorizontalWipeTime(new THREE.Color(0.7, 0, 0), frame + 1);
-			HorizontalWipeTime(new THREE.Color(0.5, 0, 0), frame + 2);
-			HorizontalWipeTime(new THREE.Color(0.2, 0, 0), frame + 3);
-			HorizontalWipeTime(new THREE.Color(0.0, 0, 0), frame + 4);
+            //WipeBrush.Duration = brushData[1];
+            //HorizontalWipeTime(brushData[0], frame);
+            var width = brushData[1] || 3;
+
+            for(var x=0; x < width; x++)
+            {
+                HorizontalWipeTime(brushData[0], frame + x);
+            }
 		};
+
+        var htmlUI = new HTMLUI();
+        htmlUI.Name = "Wipe Color";
+        htmlUI.AddUI(new htmlUI.Label("Select a Wipe Colour"));
+        htmlUI.AddUI(new htmlUI.Colors(0));
+        htmlUI.AddUI(new htmlUI.Slider(1,20,1,5,1));
+        WipeBrush.HTMLUI = htmlUI;
 
 		Brushes.push(WipeBrush);
 	}
@@ -14768,9 +14778,10 @@ function CreateBrushes() {
 
 		var htmlUI = new HTMLUI();
 		htmlUI.Name = "Solid Color";
+		htmlUI.AddUI(new htmlUI.Label("Brush Colour:"));
 		htmlUI.AddUI(new htmlUI.Colors(0));
-		htmlUI.AddUI(new htmlUI.Colors(1));
-		htmlUI.AddUI(new htmlUI.Checkbox(true, 1));
+		htmlUI.AddUI(new htmlUI.Label("Example Button:"));
+		htmlUI.AddUI(new htmlUI.OptionBox( 1, 0, [{ "name":"test","value":"test"}]));
 		ColorBrush.HTMLUI = htmlUI;
 
 		Brushes.push(ColorBrush);
@@ -14812,7 +14823,7 @@ function CreateBrushes() {
 		};
 		var htmlUI = new HTMLUI();
 		htmlUI.Name = "RGB Wipe";
-		htmlUI.AddUI(new htmlUI.Colors(0));
+		htmlUI.AddUI(new htmlUI.Label("No options available."));
 		VerticalRainbowWipeBrush.HTMLUI = htmlUI;
 		Brushes.push(VerticalRainbowWipeBrush);
 	}
@@ -14835,6 +14846,7 @@ function CreateBrushes() {
 		};
 		var htmlUI = new HTMLUI();
 		htmlUI.Name = "Flash Dome";
+		htmlUI.AddUI(new htmlUI.Label("Colour:"));
 		htmlUI.AddUI(new htmlUI.Colors(0));
 		DomeFlashBrush.HTMLUI = htmlUI;
 		Brushes.push(DomeFlashBrush);
@@ -14862,6 +14874,7 @@ function CreateBrushes() {
 		};
 		var htmlUI = new HTMLUI();
 		htmlUI.Name = "Horizontal Rings";
+		htmlUI.AddUI(new htmlUI.Label("Foreground Colour:"));
 		htmlUI.AddUI(new htmlUI.Colors(0));
 		HorizontalRingBrush.HTMLUI = htmlUI;
 		Brushes.push(HorizontalRingBrush);
@@ -14889,6 +14902,7 @@ function CreateBrushes() {
 		};
 		var htmlUI = new HTMLUI();
 		htmlUI.Name = "Vertical Rings";
+		htmlUI.AddUI(new htmlUI.Label("Foreground Colour:"));
 		htmlUI.AddUI(new htmlUI.Colors(0));
 		VerticalRingBrush.HTMLUI = htmlUI;
 		Brushes.push(VerticalRingBrush);
@@ -14945,7 +14959,6 @@ function CreateBrushes() {
 	{
 		FireWorkBurstBrush.Index = 8;
 		FireWorkBurstBrush.Duration = 30;
-		FireWorkBurstBrush.html_name = "Fireworks";
 		FireWorkBurstBrush.Render = function(frame, originLight, brushData) {
 
 			// TODO: Add nice fade in and fade out + do alpha blend
@@ -15010,7 +15023,6 @@ function CreateBrushes() {
 	{
 		FireWorkBurstBrush.Index = 9;
 		FireWorkBurstBrush.Duration = 0;
-		FireWorkBurstBrush.html_name = "";
 		FireWorkBurstBrush.PrePaint = function(LightIndex) {
 			// Create a Burst at this light
 			var newEvent = new EVENT(SequenceManager.SequenceTime, LightIndex, Brushes[8], ActiveBrushData);
@@ -15037,7 +15049,10 @@ function CreateBrushes() {
 
 		var htmlUI = new HTMLUI();
 		htmlUI.Name = "Fireworks";
+		htmlUI.AddUI(new htmlUI.Label("Fireworks Colour:"));
 		htmlUI.AddUI(new htmlUI.Colors(0));
+		htmlUI.AddUI(new htmlUI.Label("Select explosion size:"));
+		htmlUI.AddUI(new htmlUI.Slider(1, 10, 1, 5, 3));
 		FireWorkBurstBrush.HTMLUI = htmlUI;
 
 		Brushes.push(FireWorkBurstBrush);
@@ -15644,6 +15659,7 @@ function buildInterface() {
 
     }
 
+    /*
     // Add Solid Color Brushes
     {
         var button1 = new UIObjectManager.Button('file://../../domelights/textures/UI/dome.png', new THREE.Vector2(150, 60), new THREE.Vector2(40, 40), 1, 1, true);
@@ -15748,6 +15764,7 @@ function buildInterface() {
         bbutton3.timer = 0;
         bbutton3.frames = 6;
     }
+    */
 
     var timeline = new UIObjectManager.Timeline('file://../../domelights/textures/UI/smiley-face.png', new THREE.Vector2(-90, -110), new THREE.Vector2(180, 20));
     {
@@ -15825,6 +15842,7 @@ function buildInterface() {
         timeline.onMouseExit = onTimelineMouseExit;
     }
 
+    /*
     var ColorPicker = new UIObjectManager.ColorPicker(new THREE.Vector2(170, -40), new THREE.Vector2(50, 50));
     {
         function onColorPickerColorUpdated(event, uiObject)
@@ -15940,6 +15958,7 @@ function buildInterface() {
         //tabButton2.UIObjectsList = UIObjectManager.UIObjectsList;
 
     }
+    */
 
     var myText = new UIObjectManager.Text(new THREE.Vector3(86, -88, 2 ), new THREE.Color(1,0,0), "Welcome", "right");
     {
@@ -15958,6 +15977,7 @@ function buildInterface() {
         myText.onUIUpdate = UpdateTimeText;
     }
 
+    /*
     //Debug UI
     {
         //Clear Dome
@@ -15980,6 +16000,7 @@ function buildInterface() {
         submitSequence.tag = 0;
         submitSequence.name = "SubmitSequence";
     }
+    */
 }
 
 
@@ -15987,6 +16008,273 @@ function buildInterface() {
 
 
 
+
+// Include: ../../domelights/HTMLUI.js
+
+HTMLUI = function() {
+    var self = this;
+    this.UIProperties = [];
+    var generatedHtml = null; // this is used a cache.
+
+    this.ID = 0;
+    this.Name = "";
+    this.Class = "";
+    this.Icon = "";
+    this.Category = "default";
+
+    this.__defineGetter__( "GeneratedHTML", function() {
+
+        if(generatedHtml == null)
+        {
+            this.GeneratePropertyContents();
+        }
+        return generatedHtml;
+    });
+
+    //Base Class
+    this.BaseHTMLUIObject = function(){
+        return this;
+    };
+
+    //CheckBox UI
+    this.Checkbox = function(checked, dataIndex, label){
+
+    	this.checked = checked;
+        this.DataIndex = dataIndex;
+
+        this.GenerateHTML = function(){
+        	
+        	checked = "";
+        	
+        	if( this.checked == true ) {
+        		checked = " checked"; 
+        	}
+
+            var html = ("<div class=\"row lineout-full\"><input type=\"checkbox\"" + checked + " oninput=\"ActiveBrushData['" + dataIndex + "'] = this.value;\" />" + label + "</div>\n");
+
+            return html;
+        };
+
+        this.init = function()
+        {
+            return this;
+        };
+        this.init();
+    };
+    this.Checkbox.Prototype = Object.create(this.BaseHTMLUIObject());
+
+    //Color UI
+    this.Colors = function(dataIndex){
+
+        this.DataIndex = dataIndex;
+
+        this.GenerateHTML = function(){
+
+        	var html = ( '<div class="row lineout-full" id="colorselector' + dataIndex + '" dataIndex="' + dataIndex + '">' +
+        			'<script>buildColorSelector( "colorselector' + dataIndex + '" );</script>' +
+        			'</div>' );
+
+            return html;
+        };
+
+        this.init = function()
+        {
+            return this;
+        };
+        this.init();
+    };
+    this.Colors.Prototype = Object.create(this.BaseHTMLUIObject());
+
+    //Gradient UI
+    this.Gradient = function(startColor, endColor, dataIndex){
+
+        this.DataIndex = dataIndex;
+
+        this.GenerateHTML = function(){
+
+            var html = ("\t<Gradient><a href=\"#\" OnClick=\"ActiveBrushData[" + dataIndex + "] = myValue; return false;\"></a></Gradient>\n");
+
+            return html;
+        };
+
+        this.init = function()
+        {
+            return this;
+        };
+        this.init();
+    };
+    this.Gradient.Prototype = Object.create(this.BaseHTMLUIObject());
+
+    //OptionBox UI
+    this.OptionBox = function(dataIndex, selected, options ){
+
+    	this.options = options;
+    	this.selected = selected;
+        this.DataIndex = dataIndex;
+
+        this.GenerateHTML = function(){
+        	console.log( "options: " + this.options.length );
+
+        	var html = "<div class=\"row lineout-full\"><select>\n";
+            for(var index = 0; index < this.options.length; index++) {
+            	html += "\t<option OnClick=\"ActiveBrushData[" + dataIndex + "] = " + this.options[index]['value'] + ";\">" + this.options[index]['name'] + "</option>\n";
+            }
+            console.log( this.options );
+            html += "</select></div>\n";
+
+            return html;
+        };
+
+        this.init = function()
+        {
+            return this;
+        };
+        this.init();
+    };
+    this.OptionBox.Prototype = Object.create(this.BaseHTMLUIObject());
+
+    //Label UI
+    this.Label = function(text)
+    {
+        this.Text = text;
+        this.GenerateHTML = function(){
+
+            var html = ("<div class=\"row lineout-full\"><h4>" + this.Text + "</h4></div>\n");
+
+            return html;
+        };
+        this.init = function()
+        {
+            return this;
+        };
+        this.init();
+    };
+
+    //Slider UI
+    this.Slider = function(minValue, maxValue, step, currentValue, dataIndex){
+
+        this.DataIndex = dataIndex;
+        this.mMinValue = minValue;
+        this.mMaxValue = maxValue;
+        this.mStep = step;
+        this.mCurrentValue = currentValue;
+
+        this.GenerateHTML = function(){
+
+            var html = ("\t<input class=\"lineout-full\" type=\"range\" min=\"" + this.mMinValue + "\" max=\"" + this.mMaxValue + "\" value=\"" + this.mCurrentValue + "\" step=\"" + this.mStep + "\" oninput=\"ActiveBrushData['" + dataIndex + "'] = this.value;\">\n");
+
+            return html;
+        };
+
+        this.init = function()
+        {
+            return this;
+        };
+        this.init();
+    };
+    this.Slider.Prototype = Object.create(this.BaseHTMLUIObject());
+
+
+    this.AddUI = function(uiItem)
+    {
+        self.UIProperties.push(uiItem);
+    };
+
+
+    //Render the UIProperties to the generatedHtml
+    this.GeneratePropertyContents = function()
+    {
+        console.log("Build UI");
+
+        generatedHtml = '<div class="panel">\n';
+        generatedHtml = '<div class="row"><h3 style="color: black;">' + this.Name + '</h3></div>\n';
+
+        for(var index = 0; index < self.UIProperties.length; index++)
+        {
+            generatedHtml += self.UIProperties[index].GenerateHTML();
+        }
+
+        generatedHtml += '<div class="row">';
+        generatedHtml += '<div id="box" class="lineout-left"><a class="brushselector green"><br />Reset<br /></a></div>';
+        generatedHtml += '<div id="box" class="lineout-right"><a class="brushselector teal" onclick="HTMLBrushManager.ApplyBrushes();"><br />Apply<br /></a></div>';
+        generatedHtml += "</div>\n";
+
+        return generatedHtml;
+
+    };
+
+    //INIT
+    this.init = function(){};
+    this.init();
+
+};
+// Include: ../../domelights/HTMLBrushManager.js
+
+var HTMLBrushManager = function() {
+
+	// Get the active brush id, else return 1
+	this.GetActiveBrush = function() {
+		if (Brushes[ActiveBrushID] != undefined)
+			return ActiveBrushID;
+
+		return 1;
+	}
+
+	// If id is a valid brush, then return the
+	this.SetActiveBrush = function(id) {
+		if (DEBUG)
+			console.log("SetActiveBrush: " + id);
+		if (Brushes[id] != undefined) {
+			// Stop the undo group
+			SequenceManager.StopUndoGroup();
+			SequenceManager.ApplyCurrentData();
+			// Start the undo group again and set the new brush data
+			SequenceManager.StartUndoGroup();
+			// Set the active brush id
+			ActiveBrushID = id;
+		}
+	}
+	
+	this.ApplyBrushes = function() {
+		SequenceManager.StopUndoGroup();
+		SequenceManager.ApplyCurrentData();
+		SequenceManager.StartUndoGroup();
+	}
+	
+	this.setActiveColor = function( dataIndex, red, green, blue) {
+		// Stop the undo group
+		SequenceManager.StopUndoGroup();
+		SequenceManager.ApplyCurrentData();
+		// Start the undo group again and set the new brush data
+		SequenceManager.StartUndoGroup();
+		ActiveBrushData[dataIndex] = new THREE.Color(red, green, blue);
+	}
+
+	this.setColorByDataIndex = function( BrushDataIndex, red, green, blue) {
+		// Stop the undo group
+		SequenceManager.StopUndoGroup();
+		SequenceManager.ApplyCurrentData();
+		// Start the undo group again and set the new brush data
+		SequenceManager.StartUndoGroup();
+		ActiveBrushData[BrushDataIndex] = new THREE.Color(red, green, blue);
+	}
+
+	this.getHTMLBlockName = function( id )
+	{
+		if( Brushes[id].HTMLUI.Name ) {
+			var brush_name = Brushes[id].HTMLUI.Name;
+			return brush_name.replace( " ", "<br />" );
+		}
+	}
+
+	// INIT
+	this.init = function() {
+	};
+	this.init();
+
+};
+
+var HTMLBrushManager = new HTMLBrushManager();
 
 // Include: ../../domelights/UI.js
 
@@ -16891,11 +17179,15 @@ var DomeLights = function(localScene)
 
 SEQUENCE = function() {
 
+    var self = this;
     this.SequenceTime = 0; //Actual time of the Sequence.
     this.SequenceLength = 15*FPS;
     this.Version = 1;
     this.Events = [];
     this.Play = true;
+    var mUndoIndex = 0;
+    var mMaxUndoIndex = 0;
+    var mUndoGrouping = false;
 
     var previousTime = new Date().getTime();
 
@@ -16914,12 +17206,28 @@ SEQUENCE = function() {
     {
         ClearLights();
         this.Events = [];
+        mUndoIndex = 0;
+        mMaxUndoIndex = 0;
     }
 
     this.GetSequenceLength = function()
     {
         return this.SequenceLength;
     };
+
+    this.__defineGetter__("UndoIndex", function(){
+        return mUndoIndex;
+    });
+
+    this.__defineSetter__("UndoIndex", function(val){
+
+        if(val > mMaxUndoIndex){val = mMaxUndoIndex;}
+        if(val < 0){val = 0;}
+
+        mUndoIndex = val;
+        UpdateUndoStack(false);
+    });
+
 
     this.RenderFrame = function(frame, returnFrame)
     {
@@ -16933,8 +17241,9 @@ SEQUENCE = function() {
             if((this.Events[x].StartTime <= frame)&&
                (this.Events[x].Brush.Duration + this.Events[x].StartTime > frame))
             {
-                if(this.Events[x].IsBackground == true) {
-                    this.Events[x].Render(frame - this.Events[x].StartTime);
+                if(this.Events[x].IsBackground == true && this.Events[x].Enabled == true)
+                {
+                        this.Events[x].Render(frame - this.Events[x].StartTime);
                 }
             }
         }
@@ -16944,8 +17253,9 @@ SEQUENCE = function() {
             if((this.Events[x].StartTime <= this.SequenceTime)&&
                (this.Events[x].Brush.Duration + this.Events[x].StartTime > frame))
             {
-                if(this.Events[x].IsBackground == false) {
-                    this.Events[x].Render(frame- this.Events[x].StartTime);
+                if(this.Events[x].IsBackground == false && this.Events[x].Enabled == true)
+                {
+                        this.Events[x].Render(frame - this.Events[x].StartTime);
                 }
             }
         }
@@ -16997,9 +17307,21 @@ SEQUENCE = function() {
 
     this.AddEvent = function(event)
     {
+
         //We need to sort this on addition based on time as we could be adding in an event at any point in time.
         //eg. During playback of other events.
+        UpdateUndoStack(true);
+
+        if(mUndoGrouping == false) {
+           mUndoIndex++;
+        }
+
+        mMaxUndoIndex = mUndoIndex;
+
+        event.ActionID = mUndoIndex;
+
         this.Events.push(event);
+
 
         //Now we've added another event, sort to ensure they are in the correct order
         this.Events.sort(function(a,b){
@@ -17102,15 +17424,92 @@ SEQUENCE = function() {
 
         console.log("--- File Loaded ---");
     };
+
+
+    this.StartUndoGroup = function()
+    {
+        mUndoGrouping = true;
+        UpdateUndoStack(true);
+        mUndoIndex++;
+    };
+    this.StopUndoGroup = function(){mUndoGrouping = false;};
+
+    this.Undo = function()
+    {
+        if(mUndoIndex > 0)
+        {
+            mUndoIndex--;
+            UpdateUndoStack(false);
+        }
+    };
+
+    this.Redo = function()
+    {
+        if(mUndoIndex < mMaxUndoIndex)
+        {
+            mUndoIndex++;
+            UpdateUndoStack(false);
+        }
+    };
+
+    var UpdateUndoStack = function(clearPostIndex)
+    {
+        var mClearPostIndex = clearPostIndex || false;
+        var spliceList = [];
+
+        //iterate through all events and remove/disable based on UndoIndex.
+        for(var i = 0; i < self.Events.length; i++)
+        {
+            if(self.Events[i].ActionID > mUndoIndex ){
+                if(mClearPostIndex == true)
+                {
+                    spliceList.push(i);
+                    mMaxUndoIndex = mUndoIndex;
+                }
+                else
+                {
+                    self.Events[i].Enabled = false;
+                }
+            }
+            else{
+                self.Events[i].Enabled = true;
+            }
+        }
+
+        //Remove all tagged events
+        for(var x = 0; x < spliceList.length; x++)
+        {
+            self.Events.splice(spliceList[x], 1);
+        }
+    };
+
+    this.ApplyCurrentData = function()
+    {
+        for(var i = 0; i < self.Events.length; i++)
+        {
+            if(self.Events[i].ActionID == mUndoIndex )
+            {
+                self.Events[i].ApplyData();
+            }
+        }
+    };
+
 };
 
 var EVENT = function(time, originLight, brush, brushData)
 {
+    this.ActionID = 0;
+    this.Enabled = true;
     this.IsBackground = false;
     this.StartTime = time; //Offset from the start of the sequence in frames.
     this.OriginLight = originLight; // The Light that the animation is based from.
     this.Brush = brush; // The brush that should be applied.
-    this.BrushData = Clone(brushData); //The current brush data
+    this.BrushData = brushData; //The current brush data
+
+    this.ApplyData = function()
+    {
+        this.BrushData = Clone(this.BrushData);
+    };
 
     this.PrePaint = function()
     {

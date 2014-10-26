@@ -207,7 +207,11 @@ A.closebutton {
 	height: 65px;
 	margin-left: 5px;
 	margin-right: 5px;
-	background-image: url( "images/shim.png" );
+	display: block;
+	text-align: center;
+	float: left;
+	margin-bottom: 10px;
+	line-height: 13px;
 }
 
 .box a:link {

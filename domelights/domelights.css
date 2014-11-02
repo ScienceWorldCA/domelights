@@ -373,3 +373,7 @@ H4 {
 .warning {
 	color: #ff0000;
 }
+
+.selected {
+	border: dashed 1px yellow;
+}

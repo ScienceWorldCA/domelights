@@ -60,13 +60,13 @@ function CreateBrushes() {
         };
 
         var htmlUI = new HTMLUI();
-        htmlUI.Name = "Solid Color";
+        htmlUI.Name = "Finger Paint";
         htmlUI.AddUI(new htmlUI.Label("Brush Colour:"));
         htmlUI.AddUI(new htmlUI.Colors(0));
-        htmlUI.AddUI(new htmlUI.Label("Example Button:"));
-        htmlUI.AddUI(new htmlUI.OptionBox(1, 0, [
-            { "name": "Test", "value": "1"}
-        ]));
+        // htmlUI.AddUI(new htmlUI.Label("Example Button:"));
+        // htmlUI.AddUI(new htmlUI.OptionBox(1, 0, [
+            // { "name": "Test", "value": "1"}
+        // ]));
         ColorBrush.HTMLUI = htmlUI;
 
         Brushes.push(ColorBrush);

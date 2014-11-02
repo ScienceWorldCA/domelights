@@ -1,11 +1,16 @@
 [
-    {
-        "id": 0,
-        "class": "green",
-        "icon": "icon-magic"
-    },
+	{
+		"id": 0,
+		"class": "green",
+		"icon": "icon-magic"
+	},
+	{
+		"id": 1,
+		"class": "green",
+		"icon": "icon-magic"
+	},
 
-    {
+	{
 		"id": 11,
 		"class": "blue",
 		"icon": "icon-magic"
@@ -23,11 +28,11 @@
 		"icon": "icon-certificate"
 	},
 
-    {
-        "id": 2,
-        "class": "light_blue",
-        "icon": "icon-certificate"
-    },
+	{
+		"id": 2,
+		"class": "light_blue",
+		"icon": "icon-certificate"
+	},
 
 	{
 		"id": 5,
@@ -41,9 +46,9 @@
 		"icon": "icon-barcode"
 	},
 
-    {
-        "id": 10,
-        "class": "blue",
-        "icon": "icon-barcode"
-    }
+	{
+		"id": 10,
+		"class": "blue",
+		"icon": "icon-barcode"
+	}
 ]

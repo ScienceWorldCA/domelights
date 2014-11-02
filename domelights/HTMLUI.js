@@ -184,7 +184,7 @@ HTMLUI = function() {
         generatedHtml += '<div class="row">&nbsp;</div>';
         generatedHtml += '<div class="row">';
         generatedHtml += '<div class="box lineout-left green"><a class="brushselector" onclick="HTMLBrushManager.Undo();"><br /><br />Undo<br /></a></div>';
-        generatedHtml += '<div class="box green"><a class="brushselector" onclick="location.reload();"><br /><br />Reload<br /></a></div>';
+        generatedHtml += '<div class="box red"><a class="brushselector" onclick="location.reload();"><br /><br />Reload<br /></a></div>';
         generatedHtml += '<div class="box lineout-right teal"><a class="brushselector" onclick="HTMLBrushManager.ApplyBrushes();"><br /><br />Apply<br /></a></div>';
         generatedHtml += "</div>\n";
 

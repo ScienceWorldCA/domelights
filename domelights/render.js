@@ -60,7 +60,7 @@ function checkDomeInteraction() {
                     SequenceManager.AddEvent(newEvent);
 
                     //Complete Post brush
-                    Brushes[ActiveBrushID].PostPaint(i);
+                    newEvent.PostPaint(newEvent);
 
                     //Only take an intersection per frame
                     break;

@@ -12,7 +12,7 @@ var Brush = function(){
     this.Data = []; // Arbitrary data for the brush
 
     this.PrePaint =  function(){return true;}; // Called before paint is applied
-    this.PostPaint =  function(){return true;}; // Called after paint is applied
+    this.PostPaint =  function(event){return true;}; // Called after paint is applied
 
     this.GeneratePropertyContents = function()
     {

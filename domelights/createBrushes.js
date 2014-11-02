@@ -178,7 +178,7 @@ function CreateBrushes() {
 
             var row = GetLightInMatrix(originLight).y;
 
-            VerticalWipeTime(col, row);
+            VerticalWipeTime(col, row, fadeMultiplier);
 
         };
         var htmlUI = new HTMLUI();
@@ -212,7 +212,7 @@ function CreateBrushes() {
 
             var column = GetLightInMatrix(originLight).x;
 
-            HorizontalWipeTime(col, column);
+            HorizontalWipeTime(col, column, fadeMultiplier);
 
         };
         var htmlUI = new HTMLUI();
@@ -428,6 +428,38 @@ function CreateBrushes() {
         Brushes.push(SequenceTwoColorCycle);
     }
 
+    var SolidColorBrush = new Brush();
+    {
+        ColorBrush.Index = 11;
+        ColorBrush.Duration = SequenceManager.SequenceLength;
+        ColorBrush.IsBackground = true;
+        ColorBrush.PrePaint = function ()
+        {
+            if(ActiveBrushData[0] != THREE.Color)
+                ActiveBrushData[0] = new THREE.Color;
+
+            return true;
+        };
+        ColorBrush.PostPaint = function (event) {
+            event.StartTime = 0;
+        };
+        ColorBrush.Render = function (frame, originLight, brushData)
+        {
+            SetAllLights(brushData[0], 1);
+        };
+
+        var htmlUI = new HTMLUI();
+        htmlUI.Name = "Solid Color";
+        htmlUI.AddUI(new htmlUI.Label("Brush Colour:"));
+        htmlUI.AddUI(new htmlUI.Colors(0));
+//        htmlUI.AddUI(new htmlUI.Label("Example Button:"));
+//        htmlUI.AddUI(new htmlUI.OptionBox(1, 0, [
+//            { "name": "Test", "value": "1"}
+//        ]));
+        ColorBrush.HTMLUI = htmlUI;
+
+        Brushes.push(ColorBrush);
+    }
 
     // Helper Brush functions
 

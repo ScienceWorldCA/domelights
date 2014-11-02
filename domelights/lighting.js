@@ -388,26 +388,26 @@ function BuildLightGlows()
         }
     }
 
-    function HorizontalWipeTime(color, indexRaw) {
+    function HorizontalWipeTime(color, indexRaw, alpha) {
         //Ensure that we are within the bounds of the Matrix (Wrap Index)
         var index = Math.floor(indexRaw % (LightMatrixWidth));
 
         for (var y = 0; y < LightMatrixHeight; y++) {
             var lightIndex = LightMappingMatrix[y][index];
             if (lightIndex != -1) {
-                setLightColor(color, 1.0, lightIndex);
+                setLightColor(color, alpha, lightIndex);
             }
         }
     }
 
-    function VerticalWipeTime(color, indexRaw) {
+    function VerticalWipeTime(color, indexRaw, alpha) {
         //Ensure that we are within the bounds of the Matrix (Wrap Index)
         var index = Math.floor(indexRaw % (LightMatrixHeight));
 
         for (var x = 0; x < LightMatrixWidth; x++) {
             var lightIndex = LightMappingMatrix[index][x];
             if (lightIndex != -1) {
-                setLightColor(color, 1.0, lightIndex);
+                setLightColor(color, alpha, lightIndex);
             }
         }
     }

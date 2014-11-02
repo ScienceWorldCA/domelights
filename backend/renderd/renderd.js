@@ -16375,7 +16375,7 @@ HTMLUI = function() {
 
         generatedHtml += '<div class="row">&nbsp;</div>';
         generatedHtml += '<div class="row">';
-        generatedHtml += '<div class="box lineout-left green"><a class="brushselector"><br /><br />Reset<br /></a></div>';
+        generatedHtml += '<div class="box lineout-left green"><a class="brushselector" onclick="HTMLBrushManager.Undo();"><br /><br />Undo<br /></a></div>';
         generatedHtml += '<div class="box lineout-right teal"><a class="brushselector" onclick="HTMLBrushManager.ApplyBrushes();"><br /><br />Apply<br /></a></div>';
         generatedHtml += "</div>\n";
 
@@ -16422,6 +16422,11 @@ var HTMLBrushManager = function() {
 		SequenceManager.StopUndoGroup();
 		SequenceManager.ApplyCurrentData();
 		SequenceManager.StartUndoGroup();
+	}
+	
+	this.Undo = function() {
+		SequenceManager.StopUndoGroup();
+		SequenceManager.Undo();
 	}
 	
 	this.setActiveColor = function( dataIndex, red, green, blue) {

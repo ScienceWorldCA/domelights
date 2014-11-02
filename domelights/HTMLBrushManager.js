@@ -32,6 +32,11 @@ var HTMLBrushManager = function() {
 		SequenceManager.StartUndoGroup();
 	}
 	
+	this.Undo = function() {
+		SequenceManager.StopUndoGroup();
+		SequenceManager.Undo();
+	}
+	
 	this.setActiveColor = function( dataIndex, red, green, blue) {
 		// Stop the undo group
 		SequenceManager.StopUndoGroup();

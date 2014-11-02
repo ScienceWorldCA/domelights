@@ -10,7 +10,7 @@ function CreateBrushes() {
         WipeBrush.Duration = 40;
         WipeBrush.PrePaint = function () {
 
-            if(ActiveBrushData[0] != THREE.Color)
+            if(! ActiveBrushData[0] instanceof THREE.Color)
                 ActiveBrushData[0] = new THREE.Color;
 
             return true;
@@ -41,7 +41,7 @@ function CreateBrushes() {
         ColorBrush.Duration = 50;
         ColorBrush.PrePaint = function () {
 
-            if(ActiveBrushData[0] != THREE.Color)
+            if(! ActiveBrushData[0] instanceof THREE.Color)
                 ActiveBrushData[0] = new THREE.Color;
 
             return true;
@@ -130,7 +130,7 @@ function CreateBrushes() {
         DomeFlashBrush.Index = 4;
         DomeFlashBrush.Duration = 50;
         DomeFlashBrush.PrePaint = function () {
-            if(ActiveBrushData[0] != THREE.Color)
+            if(! ActiveBrushData[0] instanceof THREE.Color)
                 ActiveBrushData[0] = new THREE.Color;
 
             return true;
@@ -160,7 +160,7 @@ function CreateBrushes() {
         HorizontalRingBrush.Index = 5;
         HorizontalRingBrush.Duration = 30;
         HorizontalRingBrush.PrePaint = function () {
-            if(ActiveBrushData[0] != THREE.Color)
+            if(! ActiveBrushData[0] instanceof THREE.Color)
                 ActiveBrushData[0] = new THREE.Color;
 
             return true;
@@ -194,7 +194,7 @@ function CreateBrushes() {
         VerticalRingBrush.Index = 6;
         VerticalRingBrush.Duration = 30;
         VerticalRingBrush.PrePaint = function () {
-            if(ActiveBrushData[0] != THREE.Color)
+            if(! ActiveBrushData[0] instanceof THREE.Color)
                 ActiveBrushData[0] = new THREE.Color;
 
             return true;
@@ -275,7 +275,7 @@ function CreateBrushes() {
         FireWorkBurstBrush.Index = 8;
         FireWorkBurstBrush.Duration = 30;
         FireWorkBurstBrush.PrePaint = function () {
-            if(ActiveBrushData[0] != THREE.Color)
+            if(! ActiveBrushData[0] instanceof THREE.Color)
                 ActiveBrushData[0] = new THREE.Color;
 
             if(ActiveBrushData[1] != 5)
@@ -393,10 +393,10 @@ function CreateBrushes() {
         SequenceTwoColorCycle.IsBackground = true;
         SequenceTwoColorCycle.PrePaint = function () {
 
-            if(ActiveBrushData[0] != THREE.Color)
+            if(! ActiveBrushData[0] instanceof THREE.Color)
                 ActiveBrushData[0] = new THREE.Color;
 
-            if(ActiveBrushData[1] != THREE.Color)
+            if(! ActiveBrushData[1] instanceof THREE.Color)
                 ActiveBrushData[1] = new THREE.Color;
 
 
@@ -435,7 +435,7 @@ function CreateBrushes() {
         ColorBrush.IsBackground = true;
         ColorBrush.PrePaint = function ()
         {
-            if(ActiveBrushData[0] != THREE.Color)
+            if(! ActiveBrushData[0] instanceof THREE.Color)
                 ActiveBrushData[0] = new THREE.Color;
 
             return true;

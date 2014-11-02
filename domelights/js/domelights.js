@@ -54,6 +54,7 @@ function buildBrushes() {
 			if( Brushes[ActiveBrushID].HTMLUI )
 				$("#brushoptions").html(Brushes[ActiveBrushID].HTMLUI.GeneratePropertyContents());
 			$("#brushoptions").show("slow").siblings().hide();
+			$( this ).parent().addClass( "selected" ).siblings().removeClass("selected");
 		});
 	});
 }

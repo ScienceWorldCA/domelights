@@ -16,10 +16,13 @@ var HTMLBrushManager = function() {
 			// Stop the undo group
 			SequenceManager.StopUndoGroup();
 			SequenceManager.ApplyCurrentData();
+            //Clear ActiveBrushData
+            ActiveBrushData = [];
 			// Start the undo group again and set the new brush data
 			SequenceManager.StartUndoGroup();
 			// Set the active brush id
 			ActiveBrushID = id;
+
 		}
 	}
 	
@@ -27,6 +30,11 @@ var HTMLBrushManager = function() {
 		SequenceManager.StopUndoGroup();
 		SequenceManager.ApplyCurrentData();
 		SequenceManager.StartUndoGroup();
+	}
+	
+	this.Undo = function() {
+		SequenceManager.StopUndoGroup();
+		SequenceManager.Undo();
 	}
 	
 	this.setActiveColor = function( dataIndex, red, green, blue) {
@@ -40,15 +48,17 @@ var HTMLBrushManager = function() {
 
 	this.setColorByDataIndex = function( BrushDataIndex, red, green, blue) {
 		// Stop the undo group
-		SequenceManager.StopUndoGroup();
-		SequenceManager.ApplyCurrentData();
+		//SequenceManager.StopUndoGroup();
+		//SequenceManager.ApplyCurrentData();
 		// Start the undo group again and set the new brush data
-		SequenceManager.StartUndoGroup();
+		//SequenceManager.StartUndoGroup();
 		ActiveBrushData[BrushDataIndex] = new THREE.Color(red, green, blue);
 	}
 
 	this.getHTMLBlockName = function( id )
 	{
+        console.log("BrushID: " + id);
+
 		if( Brushes[id].HTMLUI.Name ) {
 			var brush_name = Brushes[id].HTMLUI.Name;
 			return brush_name.replace( " ", "<br />" );

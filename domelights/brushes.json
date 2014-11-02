@@ -6,7 +6,7 @@
     },
 
     {
-		"id": 1,
+		"id": 11,
 		"class": "blue",
 		"icon": "icon-magic"
 	},
@@ -18,16 +18,16 @@
 	},
 
 	{
-		"id": 3,
-		"class": "orange",
-		"icon": "icon-resize-vertical"
-	},
-
-	{
 		"id": 4,
 		"class": "light_blue",
 		"icon": "icon-certificate"
 	},
+
+    {
+        "id": 2,
+        "class": "light_blue",
+        "icon": "icon-certificate"
+    },
 
 	{
 		"id": 5,
@@ -39,5 +39,11 @@
 		"id": 6,
 		"class": "green",
 		"icon": "icon-barcode"
-	}
+	},
+
+    {
+        "id": 10,
+        "class": "blue",
+        "icon": "icon-barcode"
+    }
 ]

@@ -323,6 +323,7 @@ SEQUENCE = function() {
 
 var EVENT = function(time, originLight, brush, brushData)
 {
+    this.Self = this;
     this.ActionID = 0;
     this.Enabled = true;
     this.IsBackground = false;
@@ -340,9 +341,10 @@ var EVENT = function(time, originLight, brush, brushData)
     {
       if(this.Brush.PrePaint != null) this.Brush.PrePaint();
     };
-    this.PostPaint = function()
+
+    this.PostPaint = function(event)
     {
-        if(this.Brush.PostPaint != null) this.Brush.PostPaint();
+        if(this.Brush.PostPaint != null) this.Brush.PostPaint(this.Self);
     };
     this.Render = function(CurrentFrame) // Applies brush to canvas
     {

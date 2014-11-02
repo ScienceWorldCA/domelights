@@ -220,6 +220,7 @@ A.closebutton {
 	font-size: 13px;
 	line-height: 13px;
 	text-align: center;
+    text-shadow: black 1px 1px 8px;
 }
 
 .box a:active {
@@ -371,4 +372,8 @@ H4 {
 
 .warning {
 	color: #ff0000;
+}
+
+.selected {
+	border: dashed 1px yellow;
 }

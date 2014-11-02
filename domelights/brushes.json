@@ -9,43 +9,36 @@
 		"class": "green",
 		"icon": "icon-magic"
 	},
-
 	{
 		"id": 11,
 		"class": "blue",
 		"icon": "icon-magic"
 	},
-
 	{
 		"id": 9,
 		"class": "red",
 		"icon": "icon-resize-horizontal"
 	},
-
 	{
 		"id": 4,
 		"class": "light_blue",
 		"icon": "icon-certificate"
 	},
-
 	{
 		"id": 2,
 		"class": "light_blue",
 		"icon": "icon-certificate"
 	},
-
 	{
 		"id": 5,
 		"class": "dark_green",
 		"icon": "icon-spinner"
 	},
-
 	{
 		"id": 6,
 		"class": "green",
 		"icon": "icon-barcode"
 	},
-
 	{
 		"id": 10,
 		"class": "blue",

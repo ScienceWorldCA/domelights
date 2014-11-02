@@ -430,20 +430,20 @@ function CreateBrushes() {
 
     var SolidColorBrush = new Brush();
     {
-        ColorBrush.Index = 11;
-        ColorBrush.Duration = SequenceManager.SequenceLength;
-        ColorBrush.IsBackground = true;
-        ColorBrush.PrePaint = function ()
+        SolidColorBrush.Index = 11;
+        SolidColorBrush.Duration = SequenceManager.SequenceLength;
+        SolidColorBrush.IsBackground = true;
+        SolidColorBrush.PrePaint = function ()
         {
             if(! ActiveBrushData[0] instanceof THREE.Color)
                 ActiveBrushData[0] = new THREE.Color;
 
             return true;
         };
-        ColorBrush.PostPaint = function (event) {
+        SolidColorBrush.PostPaint = function (event) {
             event.StartTime = 0;
         };
-        ColorBrush.Render = function (frame, originLight, brushData)
+        SolidColorBrush.Render = function (frame, originLight, brushData)
         {
             SetAllLights(brushData[0], 1);
         };
@@ -456,9 +456,9 @@ function CreateBrushes() {
 //        htmlUI.AddUI(new htmlUI.OptionBox(1, 0, [
 //            { "name": "Test", "value": "1"}
 //        ]));
-        ColorBrush.HTMLUI = htmlUI;
+        SolidColorBrush.HTMLUI = htmlUI;
 
-        Brushes.push(ColorBrush);
+        Brushes.push(SolidColorBrush);
     }
 
     // Helper Brush functions

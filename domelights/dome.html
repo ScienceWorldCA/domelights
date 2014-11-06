@@ -118,7 +118,7 @@
 					buildBrushes();
 				</script>
 			</div>
-			<div class="row clearfix">
+			<div class="row clearfix" id="brushpanel">
 				<div class="box dark_blue lineout-left">
 					<a href="#" onClick="SequenceManager.ClearSequence(); return false;"><i class="icon-1x icon-remove-sign" id="icon"></i><br>Clear<br>All</a>
 				</div>
@@ -150,7 +150,7 @@
 						</div>
 						<div class="row" id="submitmessage"></div>
 						<div class="row lineout-full" style="text-align: center;">
-							<a id="submitbutton" class="blue lineout-full" onclick="DoStoreAnimation(); return false;">Submit</a>
+							<a id="submitbutton" class="blue lineout-full" onclick="DoStoreAnimation(); return false;">Submit</a>&nbsp;<a class="red lineout-full" onclick="$('#submitform').hide('slow');$('#brushcontainer').show('slow');">Cancel</a>
 						</div>
 					</div>
 				</div>

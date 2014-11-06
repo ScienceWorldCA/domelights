@@ -12,6 +12,7 @@ function DoStoreAnimation() {
 function showSubmitForm() {
 	console.log("Showing Submit Dialog");
 	$("#submitform").show().siblings().hide("slow");
+	$("#brushcontainer").hide('slow');
 	EnableDomeEventHandles(false);
 }
 
@@ -74,4 +75,11 @@ function buildColorSelector(div_id) {
 			$(this).addClass("selected").siblings().removeClass("selected");
 		});
 	});
+}
+
+function resetCanvas() {
+	SequenceManager.ClearSequence();
+	$("#submitbutton").attr( 'onclick', "DoStoreAnimation(); return false;" );
+	$('#submitform').hide('slow');
+	$('#brushcontainer').show('slow');
 }

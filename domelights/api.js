@@ -56,7 +56,8 @@ function FrontEnd_API() {
 					if( data.result ) {
 						$("#submitmessage").html( '<pre>' + data.message + '</pre>' );
 						$('#submitbutton').prop( 'disabled', true );
-						$('#submitbutton').html( 'Scheduled' ).removeClass("red").removeClass("blue").addClass("green");
+						$('#submitbutton').html( 'Scheduled / Reload' ).removeClass("red").removeClass("blue").addClass("green");
+						$('#submitbutton').attr("onclick","resetCanvas()");
 						$("#submitmessage").removeClass("warning");
 						scheduled = true;
 						$("#submitbutton").on("click", function (e) {

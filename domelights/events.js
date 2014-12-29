@@ -4,8 +4,10 @@ function onWindowResize() {
 	camera.aspect = Aspect[0]/Aspect[1];
 	camera.updateProjectionMatrix();
 
-    var renderHeight = (window.innerWidth/Aspect[0]) * Aspect[1];
-	renderer.setSize( window.innerWidth, renderHeight );
+    var renderHeight = (window.innerHeight * renderZoom);
+    var renderWidth = Aspect[0] * (renderHeight / Aspect[1]);
+
+    renderer.setSize( renderWidth, renderHeight);
 
 
     windowHalfX = window.innerWidth / 2;
@@ -69,16 +71,14 @@ function onDocumentMouseDown( event ) {
 	//console.log('onDocumentMouseDown:' + ' isMouseOverBar:' + isMouseDownOverBar + ' isMouseDown:' + isMouseDown + ' mouseX:' + mouseX + ' mouseXOnMouseDown:' + mouseXOnMouseDown + ' targetRotation:' + targetRotation + ' targetRotationOnMouseDown:' + targetRotationOnMouseDown);
 }
 
-
-
-
 function onDocumentMouseMove( event ) {
 
 	event.preventDefault();
 
-    var renderHeight = (window.innerWidth/Aspect[0]) * Aspect[1];
+    var renderHeight = (window.innerHeight * renderZoom);
+    var renderWidth = Aspect[0] * (renderHeight / Aspect[1]);
 
-	mouse.x = ( event.clientX / window.innerWidth ) * 2 - 1;
+	mouse.x = ( event.clientX / renderWidth ) * 2 - 1;
 	mouse.y = - ( event.clientY / renderHeight) * 2 + 1;
 	
 	if (isMouseDownOverBar) {

@@ -12,6 +12,8 @@ if( ! window ) {
     var DomeGroup, swipeMesh;
 
     var projector, raycaster, intersects;
+
+    var renderZoom = 0.97;
     var windowHalfX = window.innerWidth / 2;
     var windowHalfY = window.innerHeight / 2;
 

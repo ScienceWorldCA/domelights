@@ -12,6 +12,8 @@ if( ! window ) {
     var DomeGroup, swipeMesh;
 
     var projector, raycaster, intersects;
+
+    var renderZoom = 0.97;
     var windowHalfX = window.innerWidth / 2;
     var windowHalfY = window.innerHeight / 2;
 
@@ -44,7 +46,12 @@ if( ! window ) {
     var DEBUG = true;
     
     var scheduled = false;
-    
+
+    //Brush Data
+    var FireEffectArray = [];
+    var FireFrame;
+    var flameArray = [new Array(40),new Array(40),new Array(40),new Array(40),new Array(40),new Array(40),new Array(40),new Array(40),new Array(40),new Array(40),new Array(40),new Array(40),new Array(40),new Array(40),new Array(40),new Array(40)];
+    var flameArrayNext = [new Array(40),new Array(40),new Array(40),new Array(40),new Array(40),new Array(40),new Array(40),new Array(40),new Array(40),new Array(40),new Array(40),new Array(40),new Array(40),new Array(40),new Array(40),new Array(40)];
     //Used for Debug Purposes
     var manager = new THREE.LoadingManager();
     manager.onProgress = function ( item, loaded, total ) {

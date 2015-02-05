@@ -267,6 +267,25 @@ function buildInterface() {
     }
     */
 
+    //var blockButton = new UIObjectManager.TimeBlockButton('textures/UI/Play.png', new THREE.Vector2(-95, -85), new THREE.Vector2(8, 8));
+
+
+
+    var blockTimeline = new UIObjectManager.BlockTimeline('textures/UI/smiley-face.png', new THREE.Vector2(-70, -100), new THREE.Vector2(8, 8));
+    {
+        function GetSequenceTime(){ return SequenceManager.GetSequenceTime();}
+        function GetSequenceLength(){ return SequenceManager.GetSequenceLength();}
+
+        //timeline.onMouseDown = ButtonDownClick;
+        //timeline.onMouseUp = SetForeground;
+        //timeline.material.color.setRGB(1, 1, 1);
+        blockTimeline.SequenceTime = GetSequenceTime;
+        blockTimeline.SequenceLength = GetSequenceLength;
+        blockTimeline.tag = 5;
+        blockTimeline.name = "MainTimeline";
+    }
+
+    /*
     var timeline = new UIObjectManager.Timeline('textures/UI/smiley-face.png', new THREE.Vector2(-90, -110), new THREE.Vector2(180, 20));
     {
         function onTimeHandleMouseDown(event, uiObject)
@@ -342,7 +361,7 @@ function buildInterface() {
         timeline.onMouseUp = onTimeHandleMouseUp;
         timeline.onMouseExit = onTimelineMouseExit;
     }
-
+    */
     /*
     var ColorPicker = new UIObjectManager.ColorPicker(new THREE.Vector2(170, -40), new THREE.Vector2(50, 50));
     {
@@ -461,22 +480,22 @@ function buildInterface() {
     }
     */
 
-    var myText = new UIObjectManager.Text(new THREE.Vector3(86, -88, 2 ), new THREE.Color(1,0,0), "Welcome", "right");
-    {
-        function UpdateTimeText(event, uiObject)
-        {
-            var sequenceCurrentTime = Math.floor(SequenceManager.GetSequenceTime() / FPS);
-
-            if(sequenceCurrentTime != uiObject.currentime) {
-                uiObject.Text = (sequenceCurrentTime + 1) + " Seconds";
-                uiObject.currentime = sequenceCurrentTime;
-            }
-        }
-
-        myText.Text = "Carla is a Cutie";
-        myText.TextAlignment = "right";
-        myText.onUIUpdate = UpdateTimeText;
-    }
+//    var myText = new UIObjectManager.Text(new THREE.Vector3(86, -88, 2 ), new THREE.Color(1,0,0), "Welcome", "right");
+//    {
+//        function UpdateTimeText(event, uiObject)
+//        {
+//            var sequenceCurrentTime = Math.floor(SequenceManager.GetSequenceTime() / FPS);
+//
+//            if(sequenceCurrentTime != uiObject.currentime) {
+//                uiObject.Text = (sequenceCurrentTime + 1) + " Seconds";
+//                uiObject.currentime = sequenceCurrentTime;
+//            }
+//        }
+//
+//        myText.Text = "Carla is a Cutie";
+//        myText.TextAlignment = "right";
+//        myText.onUIUpdate = UpdateTimeText;
+//    }
 
     /*
     //Debug UI

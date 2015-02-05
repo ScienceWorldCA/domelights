@@ -57,7 +57,7 @@ var HTMLBrushManager = function() {
 
 	this.getHTMLBlockName = function( id )
 	{
-        console.log("BrushID: " + id);
+        //console.log("BrushID: " + id);
 
 		if( Brushes[id].HTMLUI.Name ) {
 			var brush_name = Brushes[id].HTMLUI.Name;

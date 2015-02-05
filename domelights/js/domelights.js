@@ -1,12 +1,16 @@
 function DoStoreAnimation() {
-
-	$('#submitmessage').html("<img src='images/ajax-loader.gif' />").removeClass("success").removeClass("warning");
-	$("#submitbutton").val("Trying...").addClass("red").removeClass("blue");
-
-	api.DoStoreAnimation();
-	EnableDomeEventHandles(true);
-
-	return false;
+	if( scheduled == true ) {
+		location.reload();
+		resetCanvas();
+	} else {
+		$('#submitmessage').html("<img src='images/ajax-loader.gif' />").removeClass("success").removeClass("warning");
+		$("#submitbutton").val("Trying...").addClass("red").removeClass("blue");
+		
+		api.DoStoreAnimation();
+		EnableDomeEventHandles(true);
+		
+		return false;
+	}
 }
 
 function showSubmitForm() {

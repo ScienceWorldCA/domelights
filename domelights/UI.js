@@ -243,6 +243,60 @@ UI = function(projector, raycaster, camera, mouse)
     };
     this.Button.Prototype = Object.create(this.BaseUIObject());
 
+    this.TimeBlockButton = function(texture, mPos, mSize, groupID, tabID){
+        this.GroupID = groupID || 0;
+        this.TabID = tabID || 0;
+        var mVisible = true;
+
+        this.__defineGetter__("Visible", function(){
+            return mVisible;
+        });
+
+        this.__defineSetter__("Visible", function(val){
+            mVisible = val;
+            if(this.mesh1 != null){this.mesh1.visible = val;}
+            if(this.mesh2 != null){this.mesh2.visible = val;}
+        });
+
+        this.__defineGetter__("Checked", function(){
+            return mVisible;
+        });
+
+        this.__defineSetter__("Checked", function(val){
+            mVisible = val;
+            if(this.mesh2 != null){this.mesh2.visible = !val;}
+        });
+
+        this.init = function()
+        {
+            this.Transform = new THREE.Object3D;
+            scene.add(  this.Transform );
+
+            this.material1 = new THREE.MeshBasicMaterial({
+                color:0xffffff, shading: THREE.FlatShading
+            });
+            this.material2 = new THREE.MeshBasicMaterial({
+                color:0x000000, shading: THREE.FlatShading
+            });
+
+            this.mesh1 = new THREE.Mesh( new THREE.PlaneGeometry( mSize, mSize, 0, 0 ), this.material1 );
+            this.mesh1.position.set(  0,  0, 0 );
+            this.Transform.add(  this.mesh1 );
+
+            this.mesh2 = new THREE.Mesh( new THREE.PlaneGeometry( mSize-1, mSize-1, 0, 0 ), this.material2 );
+            this.mesh2.position.set(  0,  0, 0.5 );
+
+            this.Transform.position.set(  mPos.x,  mPos.y, 0.5 );
+            this.Transform.add(  this.mesh2 );
+
+            self.AddUIObject(this);
+            return this;
+        };
+        this.init();
+    };
+    this.TimeBlockButton.Prototype = Object.create(this.BaseUIObject());
+
+
     this.Tab = function(texture, mPos, mSize, tabGroupID, groupID, tabID) {
         this.GroupID = groupID || 0;
         this.TabID = tabID || 0;
@@ -308,6 +362,8 @@ UI = function(projector, raycaster, camera, mouse)
     };
     this.Tab.Prototype = Object.create(this.BaseUIObject());
 
+
+
     this.Timeline = function(texture, mPos, mSize, groupID, tabID){
         this.GroupID = groupID || 0;
         this.TabID = tabID || 0;
@@ -365,6 +421,82 @@ UI = function(projector, raycaster, camera, mouse)
         this.init();
     };
     this.Timeline.Prototype = Object.create(this.BaseUIObject());
+
+    this.BlockTimeline = function(texture, mPos, mSize, groupID, tabID, timeSteps, timeBlockSize){
+        this.GroupID = groupID || 0;
+        this.TabID = tabID || 0;
+
+        //Timeline Specific
+        this.Size = new THREE.Vector2(mSize.x,mSize.y);
+        this.Position = new THREE.Vector2(mPos.x,mPos.y);
+        this.TimeBlocks = [];
+        this.TimeSteps = 15 || timeSteps;
+        this.TimeBlockSize = 8 || timeBlockSize;
+        this.SequenceTime = null;
+        this.SequenceLength = null;
+
+        //Update Timeline with
+        this.onUIUpdate = function(event, uiObject)
+        {
+            var frameStep = this.TimeSteps / this.SequenceLength();
+
+            var blockTime = this.SequenceTime() * frameStep;
+
+            //console.log(blockTime);
+            for(var x = 0; x < this.TimeBlocks.length; x++)
+            {
+                this.TimeBlocks[x].Checked = blockTime > x ? true : false;
+            }
+
+//            if(this.TimeHandle != null)
+//            {
+//                var yPos = this.Position.y + (this.Size.y / 2);
+//
+//                var frameStep = this.Size.x / this.SequenceLength();
+//
+//                this.TimeHandle.mesh.position.set(this.Position.x + (frameStep *  this.SequenceTime()),  yPos, 1 );
+//                //this.mesh.position.set(  mPos.x,  mPos.y, 0 );
+//            }
+        };
+
+//        this.DrawTimelineLines = function()
+//        {
+//            var yPos = this.Position.y + (this.Size.y / 2);
+//
+//            self.DrawLine(
+//                new THREE.Vector3(this.Position.x, yPos,0 ),
+//                new THREE.Vector3(this.Position.x + this.Size.x, yPos,0)
+//            );
+//            self.DrawLine(
+//                new THREE.Vector3(this.Position.x, this.Position.y + (this.Size.y * 0.25),0 ),
+//                new THREE.Vector3(this.Position.x, this.Position.y + (this.Size.y * 0.75),0)
+//            );
+//            self.DrawLine(
+//                new THREE.Vector3(this.Position.x + this.Size.x, this.Position.y + (this.Size.y * 0.25),0 ),
+//                new THREE.Vector3(this.Position.x + this.Size.x, this.Position.y + (this.Size.y * 0.75),0)
+//            );
+//        };
+
+        this.init = function()
+        {
+            //var blockButton = new UIObjectManager.TimeBlockButton('textures/UI/Play.png', mPos, this.TimeBlockSize);
+
+            for(var x =0; x < this.TimeSteps; x++)
+            {
+                //console.log("Index: " + x + " - " + (this.Position.x + ((x * this.TimeBlockSize) + 5)));
+                var blockButton = new UIObjectManager.TimeBlockButton('textures/UI/Play.png', new THREE.Vector2(this.Position.x + (x * (this.TimeBlockSize + 2) ), this.Position.y), this.TimeBlockSize);
+                this.TimeBlocks.push(blockButton);
+            }
+
+            //var blockButton = new UIObjectManager.TimeBlockButton('textures/UI/Play.png', new THREE.Vector2(-95, -85), new THREE.Vector2(8, 8));
+            //this.TimeBlocks.push(blockButton);
+
+            self.AddUIObject(this);
+            return this;
+        };
+        this.init();
+    };
+    this.BlockTimeline.Prototype = Object.create(this.BaseUIObject());
 
     this.HueRing = function(mPos, mSize, groupID, tabID){
         this.GroupID = groupID || 0;

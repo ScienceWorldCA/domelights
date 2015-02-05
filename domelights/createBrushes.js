@@ -7,7 +7,7 @@ function CreateBrushes() {
     var WipeBrush = new Brush();
     {
         WipeBrush.Index = 0;
-        WipeBrush.Duration = 40;
+        WipeBrush.Duration = 120;
         WipeBrush.PrePaint = function () {
 
             if(! ActiveBrushData[0] instanceof THREE.Color)
@@ -38,7 +38,7 @@ function CreateBrushes() {
     var ColorBrush = new Brush();
     {
         ColorBrush.Index = 1;
-        ColorBrush.Duration = 50;
+        ColorBrush.Duration = 150;
         ColorBrush.PrePaint = function () {
 
             if(! ActiveBrushData[0] instanceof THREE.Color)
@@ -128,7 +128,7 @@ function CreateBrushes() {
     var DomeFlashBrush = new Brush();
     {
         DomeFlashBrush.Index = 4;
-        DomeFlashBrush.Duration = 50;
+        DomeFlashBrush.Duration = 150;
         DomeFlashBrush.PrePaint = function () {
             if(! ActiveBrushData[0] instanceof THREE.Color)
                 ActiveBrushData[0] = new THREE.Color;
@@ -158,7 +158,7 @@ function CreateBrushes() {
     var HorizontalRingBrush = new Brush();
     {
         HorizontalRingBrush.Index = 5;
-        HorizontalRingBrush.Duration = 30;
+        HorizontalRingBrush.Duration = 90;
         HorizontalRingBrush.PrePaint = function () {
             if(! ActiveBrushData[0] instanceof THREE.Color)
                 ActiveBrushData[0] = new THREE.Color;
@@ -192,7 +192,7 @@ function CreateBrushes() {
     var VerticalRingBrush = new Brush();
     {
         VerticalRingBrush.Index = 6;
-        VerticalRingBrush.Duration = 30;
+        VerticalRingBrush.Duration = 90;
         VerticalRingBrush.PrePaint = function () {
             if(! ActiveBrushData[0] instanceof THREE.Color)
                 ActiveBrushData[0] = new THREE.Color;
@@ -227,7 +227,7 @@ function CreateBrushes() {
     {
         // Base section to the Firework Brush
         LaunchBrush.Index = 7;
-        LaunchBrush.Duration = 30;
+        LaunchBrush.Duration = 90;
         LaunchBrush.Render = function (frame, originLight, brushData) {
 
             // TODO: Add nice fade in and fade out + do alpha blend
@@ -452,35 +452,172 @@ function CreateBrushes() {
         htmlUI.Name = "Solid Color";
         htmlUI.AddUI(new htmlUI.Label("Brush Colour:"));
         htmlUI.AddUI(new htmlUI.Colors(0));
-//        htmlUI.AddUI(new htmlUI.Label("Example Button:"));
-//        htmlUI.AddUI(new htmlUI.OptionBox(1, 0, [
-//            { "name": "Test", "value": "1"}
-//        ]));
+
         SolidColorBrush.HTMLUI = htmlUI;
 
         Brushes.push(SolidColorBrush);
     }
 
-    // Helper Brush functions
-
-    var RGBBlendColors = function (color1, color2, blendAmount)
+    var FireBackground = new Brush();
     {
-        var c1 = new THREE.Color();
-        var c2 = new THREE.Color();
+        FireBackground.Index = 12;
+        FireBackground.Duration = SequenceManager.SequenceLength;
+        FireBackground.IsBackground = true;
+        
+        FireBackground.PrePaint = function ()
+        {
 
-        c1.setRGB(color1.r, color1.g, color1.b );
-        c2.setRGB(color2.r, color2.g, color2.b );
+            if(! ActiveBrushData[0] instanceof THREE.Color)
+                ActiveBrushData[0] = new THREE.Color(0,0,1);
 
-        c1.r = c1.r * (1 - blendAmount);
-        c1.g = c1.g * (1 - blendAmount);
-        c1.b = c1.b * (1 - blendAmount);
+            if(! ActiveBrushData[1] instanceof THREE.Color)
+                ActiveBrushData[1] = new THREE.Color(1,0,0);
 
-        c2.r = (c2.r * blendAmount) + c1.r;
-        c2.g = (c2.g * blendAmount) + c1.g;
-        c2.b = (c2.b * blendAmount) + c1.b;
+            if(ActiveBrushData[2] == "")
+                 ActiveBrushData[2] = 6;
+            
+            if(ActiveBrushData[3] == "")
+                 ActiveBrushData[3] = 6;
 
-        return c2;
+            return true;
+        };
+        
+        FireBackground.PostPaint = function (event)
+        {
+            event.StartTime = 0;
+            
+            for (var j=0, len2=LightMatrixWidth; j<len2; j++)
+            {
+                var col = new THREE.Color(Math.random(), 0 ,0);
+                FireEffectArray[j] = col;
+            }
+        };
+        FireBackground.Render = function (frame, originLight, brushData)
+        {
+            var floatFrame = frame/brushData[3];
+            var updateFrame = Math.floor(floatFrame);
+
+            var blendframe = Math.round((floatFrame - updateFrame) * 100) / 100;
+
+            var updateFlameSource = false;
+
+            if(updateFrame != FireFrame)
+            {
+                FireFrame = updateFrame;
+                updateFlameSource = true;
+            }
+
+            fireValueCalc(updateFlameSource, brushData);
+
+            for (var i=0; i < LightMatrixHeight; i++)
+            {
+                for (var j=0; j < LightMatrixWidth; j++)
+                {
+                    var col1 = new THREE.Color(0.0, 0.0 ,1.0);
+                    var col2 = new THREE.Color(1.0, 0.0 ,0.0);
+
+                    var lightIndex = LightMappingMatrix[i][j];
+
+                    var v1 = flameArray[15-i][39-j];
+                    var v2 = flameArrayNext[15-i][39-j] || v1;
+
+                    var floatValue = LerpFloat(v1, v2, blendframe);
+
+                    col = RGBBlendColors(brushData[0], brushData[1], floatValue);
+
+                    if(lightIndex != -1)
+                    {
+                        setLightColor(col, 1.0, lightIndex);
+                    }
+                }
+            }
+
+
+            return;
+        };
+
+        var htmlUI = new HTMLUI();
+        htmlUI.Name = "Fire";
+        htmlUI.AddUI(new htmlUI.Label("Colour 1:"));
+        htmlUI.AddUI(new htmlUI.Colors(0));
+        htmlUI.AddUI(new htmlUI.Label("Colour 2:"));
+        htmlUI.AddUI(new htmlUI.Colors(1));
+        htmlUI.AddUI(new htmlUI.Label("Select size:"));
+        htmlUI.AddUI(new htmlUI.Slider(1, 10, 1, 5, 2));
+        htmlUI.AddUI(new htmlUI.Label("Select speed:"));
+        htmlUI.AddUI(new htmlUI.Slider(1, 20, 0.1, 5, 3));
+        FireBackground.HTMLUI = htmlUI;
+        Brushes.push(FireBackground);
     }
+    // Helper Brush functions
+    function fireValueCalc(updateFlameSource, brushData)
+    {
+        //Update BaseFire
+        if(updateFlameSource)
+        {
+            if(flameArrayNext[0][0] != undefined)
+            {
+                flameArray = flameArrayNext.map(function(arr) {
+                    return arr.slice();
+                });
+            }
+            else
+            {
+                flameArray = flameArrayNext;
+            }
+
+            for (var column=0, len2=LightMatrixWidth; column<len2; column++)
+            {
+                flameArrayNext[0][column] = ((Math.random()* (Math.random()*brushData[2])) + (flameArrayNext[0][column]/2)) / 2;
+                if(isNaN(flameArrayNext[0][column]))
+                {
+                    flameArrayNext[0][column] = 1;
+                }
+            }
+        
+            for (var row=1, len=LightMatrixHeight; row<len; row++)
+            {
+                for (var column=0, len2=LightMatrixWidth; column<len2; column++)
+                {
+                    var left = column-1;
+                    if(left < 0){left = 39;}
+                    var right = (column+1 % 39);
+
+                    var v1 = flameArrayNext[row][column] * 1.2;
+
+                    var v2 = flameArrayNext[row-1][left] * 0.5;
+                    var v3 = flameArrayNext[row-1][column] * 1.8;
+                    var v4 = flameArrayNext[row-1][right] * 0.5;
+
+                    var v5 = (Math.random()/8);
+
+                    if(Math.random() > 0.9)
+                    {
+                       v5 = v5 * -1;
+
+                       if(Math.random() > 0.97)
+                       {
+                            v5 = -1.45;     
+                       }
+                    }
+
+                    if(isNaN(v1)){v1=0;}
+                    if(isNaN(v2)){v2=0;}
+                    if(isNaN(v3)){v3=0;}
+                    if(isNaN(v4)){v4=0;}
+
+                    flameArrayNext[row][column] =  ((v1 + v2 + v3 + v4 - v5) / 5);
+                }
+            }
+        }
+        for (var column=0, len2=LightMatrixWidth; column<len2; column++)
+        {
+            //flameArray[0][column] = flameArray[0][column] - 0.05;
+        }
+
+    }
+
+
 }
 
 

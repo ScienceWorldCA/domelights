@@ -46,7 +46,12 @@ if( ! window ) {
     var DEBUG = true;
     
     var scheduled = false;
-    
+
+    //Brush Data
+    var FireEffectArray = [];
+    var FireFrame;
+    var flameArray = [new Array(40),new Array(40),new Array(40),new Array(40),new Array(40),new Array(40),new Array(40),new Array(40),new Array(40),new Array(40),new Array(40),new Array(40),new Array(40),new Array(40),new Array(40),new Array(40)];
+    var flameArrayNext = [new Array(40),new Array(40),new Array(40),new Array(40),new Array(40),new Array(40),new Array(40),new Array(40),new Array(40),new Array(40),new Array(40),new Array(40),new Array(40),new Array(40),new Array(40),new Array(40)];
     //Used for Debug Purposes
     var manager = new THREE.LoadingManager();
     manager.onProgress = function ( item, loaded, total ) {

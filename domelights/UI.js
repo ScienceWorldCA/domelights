@@ -476,7 +476,6 @@ UI = function(projector, raycaster, camera, mouse)
 //                new THREE.Vector3(this.Position.x + this.Size.x, this.Position.y + (this.Size.y * 0.75),0)
 //            );
 //        };
-        console.log(this.TimeBlockSize);
 
         this.init = function()
         {
@@ -484,7 +483,7 @@ UI = function(projector, raycaster, camera, mouse)
 
             for(var x =0; x < this.TimeSteps; x++)
             {
-                console.log("Index: " + x + " - " + (this.Position.x + ((x * this.TimeBlockSize) + 5)));
+                //console.log("Index: " + x + " - " + (this.Position.x + ((x * this.TimeBlockSize) + 5)));
                 var blockButton = new UIObjectManager.TimeBlockButton('textures/UI/Play.png', new THREE.Vector2(this.Position.x + (x * (this.TimeBlockSize + 2) ), this.Position.y), this.TimeBlockSize);
                 this.TimeBlocks.push(blockButton);
             }

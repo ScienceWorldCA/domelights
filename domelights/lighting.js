@@ -433,6 +433,84 @@ function BuildLightGlows()
         return {x: -1, y: -1};
     }
 
+    function GetLightColor(lightIndex)
+    {
+        if(lightIndex == -1 || lightIndex > DomeLightManager.Lights.length)
+        {
+            return new THREE.Color(1,1,0);
+        }
+
+        if(DomeLightManager.Lights[lightIndex] == undefined)
+        {
+            console.log("Undefined LightIndex: " + lightIndex);
+        }
+
+        return DomeLightManager.Lights[lightIndex].color;
+    }
+
+    function GetAverageLightColor(row, column)
+    {
+
+        var index =  LightMappingMatrix[row][column];
+
+        var color = new THREE.Color(1,0,1);
+
+        if(index == -1)
+        {
+            var Lcolumn = column-1;
+            var Rcolumn = column+1;
+
+            if(Lcolumn > 39){Lcolumn = 0};           
+            if(Rcolumn > 39){Rcolumn = 0};
+            if(Lcolumn < 0){Lcolumn = 39};           
+            if(Rcolumn < 0){Rcolumn = 39};
+
+            var color1Index = LightMappingMatrix[row][Lcolumn];
+            var color2Index = LightMappingMatrix[row][Rcolumn];
+
+            if(color1Index == -1){color1Index = 20};
+            if(color2Index == -1){color2Index = 20};
+
+            var color1 = DomeLightManager.Lights[color1Index].color;
+            var color2 = DomeLightManager.Lights[color2Index].color;
+
+            var red = (color1.r + color2.r) / 2;
+            var green = (color1.g + color2.g) / 2;
+            var blue = (color1.b + color2.b) / 2; 
+
+            return new THREE.Color(red ,green,blue);
+        }
+        return DomeLightManager.Lights[index].color;
+    }
+
+    var RGBBlendColors = function (color1, color2, blendAmount)
+    {
+        var c1 = new THREE.Color();
+        var c2 = new THREE.Color();
+
+        c1.setRGB(color1.r, color1.g, color1.b );
+        c2.setRGB(color2.r, color2.g, color2.b );
+
+        c1.r = c1.r * (1 - blendAmount);
+        c1.g = c1.g * (1 - blendAmount);
+        c1.b = c1.b * (1 - blendAmount);
+
+        c2.r = (c2.r * blendAmount) + c1.r;
+        c2.g = (c2.g * blendAmount) + c1.g;
+        c2.b = (c2.b * blendAmount) + c1.b;
+
+        return c2;
+    }
+
+    var LerpFloat = function (float1, float2, blendAmount)
+    {
+        float1 = float1 * (1 - blendAmount);
+        
+        float2 = (float2 * blendAmount) + float1;
+        
+        return float2;
+    }
+    
     function RenderDebugSequence()
     {
         for(x=0; x < 260; x++)

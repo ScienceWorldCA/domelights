@@ -58,8 +58,7 @@ display:block;
 	HEADINGS
 -----------------------------------*/
 h1,h2,h3,h4,h5,h6{
-font-weight:bold;
-line-height:140%;
+line-height: 10%;
 }
 
 h1{
@@ -79,7 +78,7 @@ line-height:130%;
 }
 
 h4{
-font-size:2em;
+font-size: 1em;
 margin:10px 0 10px 0;
 }
 

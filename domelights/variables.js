@@ -6,6 +6,7 @@ if( ! window ) {
 	}
 
 }
+    var buildVersion = "0.1.0";
 
     var renderer, composer, scene, camera, stats;
     var videoTexture, videoFile;
@@ -52,6 +53,11 @@ if( ! window ) {
     var FireFrame;
     var flameArray = [new Array(40),new Array(40),new Array(40),new Array(40),new Array(40),new Array(40),new Array(40),new Array(40),new Array(40),new Array(40),new Array(40),new Array(40),new Array(40),new Array(40),new Array(40),new Array(40)];
     var flameArrayNext = [new Array(40),new Array(40),new Array(40),new Array(40),new Array(40),new Array(40),new Array(40),new Array(40),new Array(40),new Array(40),new Array(40),new Array(40),new Array(40),new Array(40),new Array(40),new Array(40)];
+
+    //Pattern Brush Data
+    var PatternBrushesImage = './textures/patterns/grad.png';
+    var PatternBrushes = [];
+
     //Used for Debug Purposes
     var manager = new THREE.LoadingManager();
     manager.onProgress = function ( item, loaded, total ) {

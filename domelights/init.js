@@ -72,7 +72,6 @@ function initGraphicMode()
 
 	container.appendChild( renderer.domElement );
 
-
     // Display Statistical information
 	stats = new Stats();
 	stats.domElement.style.position = 'absolute';
@@ -82,7 +81,6 @@ function initGraphicMode()
 	//events.js
     EnableDomeEventHandles(true);
     window.addEventListener('resize', onWindowResize, false);
-
 }
 
 function EnableDomeEventHandles(state){

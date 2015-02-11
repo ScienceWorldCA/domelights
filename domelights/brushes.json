@@ -48,5 +48,10 @@
         "id": 12,
         "class": "green",
         "icon": "icon-barcode"
+    },
+    {
+        "id": 13,
+        "class": "blue",
+        "icon": "icon-barcode"
     }
 ]

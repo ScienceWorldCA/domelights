@@ -8,11 +8,12 @@ function CreateBrushes() {
     {
         WipeBrush.Index = 0;
         WipeBrush.Duration = 120;
-        WipeBrush.PrePaint = function () {
-
-            if(! ActiveBrushData[0] instanceof THREE.Color)
-                ActiveBrushData[0] = new THREE.Color;
-
+        WipeBrush.PrePaint = function ()
+        {
+            if(!(ActiveBrushData[0] instanceof THREE.Color))
+            {
+                ActiveBrushData[0] = new THREE.Color(1,0,0);
+            }
             return true;
         };
         WipeBrush.Render = function (frame, originLight, brushData) {
@@ -39,10 +40,13 @@ function CreateBrushes() {
     {
         ColorBrush.Index = 1;
         ColorBrush.Duration = 150;
-        ColorBrush.PrePaint = function () {
+        ColorBrush.PrePaint = function ()
+        {
 
-            if(! ActiveBrushData[0] instanceof THREE.Color)
-                ActiveBrushData[0] = new THREE.Color;
+            if(!(ActiveBrushData[0] instanceof THREE.Color))
+            {
+                ActiveBrushData[0] = new THREE.Color(1,0,0);
+            }
 
             return true;
         };
@@ -77,11 +81,9 @@ function CreateBrushes() {
         GradientBackgroundBrush.Index = 2;
         GradientBackgroundBrush.Duration = SequenceManager.SequenceLength;
         GradientBackgroundBrush.IsBackground = true;
-        GradientBackgroundBrush.PrePaint = function () {
-
-            if(ActiveBrushData[0] != 0)
-                ActiveBrushData[0] = 0;
-
+        GradientBackgroundBrush.PrePaint = function () 
+        {
+            ActiveBrushData[0] = 0;
             return true;
         };
         GradientBackgroundBrush.PostPaint = function (event) {
@@ -102,8 +104,7 @@ function CreateBrushes() {
         var htmlUI = new HTMLUI();
         htmlUI.Name = "Rainbow";
         GradientBackgroundBrush.HTMLUI = htmlUI;
-        htmlUI.AddUI(new htmlUI.Label("Animated ?:"));
-        htmlUI.AddUI(new htmlUI.Slider(0, 1 , 1, 0, 0));
+        htmlUI.AddUI(new htmlUI.Checkbox("Animated", false, 0));
         Brushes.push(GradientBackgroundBrush);
     }
 
@@ -125,14 +126,17 @@ function CreateBrushes() {
         Brushes.push(VerticalRainbowWipeBrush);
     }
 
+
     var DomeFlashBrush = new Brush();           // INDEX: 4
     {
         DomeFlashBrush.Index = 4;
         DomeFlashBrush.Duration = 150;
-        DomeFlashBrush.PrePaint = function () {
-            if(! ActiveBrushData[0] instanceof THREE.Color)
-                ActiveBrushData[0] = new THREE.Color;
-
+        DomeFlashBrush.PrePaint = function () 
+        {
+            if(!(ActiveBrushData[0] instanceof THREE.Color))
+            {
+                ActiveBrushData[0] = new THREE.Color(1,0,0);
+            }
             return true;
         };
         DomeFlashBrush.Render = function (frame, originLight, brushData) {
@@ -159,10 +163,12 @@ function CreateBrushes() {
     {
         HorizontalRingBrush.Index = 5;
         HorizontalRingBrush.Duration = 90;
-        HorizontalRingBrush.PrePaint = function () {
-            if(! ActiveBrushData[0] instanceof THREE.Color)
-                ActiveBrushData[0] = new THREE.Color;
-
+        HorizontalRingBrush.PrePaint = function () 
+        {
+            if(!(ActiveBrushData[0] instanceof THREE.Color))
+            {
+                ActiveBrushData[0] = new THREE.Color(1,0,0);
+            }
             return true;
         };
         HorizontalRingBrush.Render = function (frame, originLight, brushData) {
@@ -193,10 +199,12 @@ function CreateBrushes() {
     {
         VerticalRingBrush.Index = 6;
         VerticalRingBrush.Duration = 90;
-        VerticalRingBrush.PrePaint = function () {
-            if(! ActiveBrushData[0] instanceof THREE.Color)
-                ActiveBrushData[0] = new THREE.Color;
-
+        VerticalRingBrush.PrePaint = function ()
+        {
+            if(!(ActiveBrushData[0] instanceof THREE.Color))
+            {
+                ActiveBrushData[0] = new THREE.Color(1,0,0);
+            }
             return true;
         };
         VerticalRingBrush.Render = function (frame, originLight, brushData) {
@@ -274,13 +282,13 @@ function CreateBrushes() {
     {
         FireWorkBurstBrush.Index = 8;
         FireWorkBurstBrush.Duration = 30;
-        FireWorkBurstBrush.PrePaint = function () {
-            if(! ActiveBrushData[0] instanceof THREE.Color)
-                ActiveBrushData[0] = new THREE.Color;
-
-            if(ActiveBrushData[1] != 5)
-                ActiveBrushData[1] = 5;
-
+        FireWorkBurstBrush.PrePaint = function () 
+        {
+            if(!(ActiveBrushData[0] instanceof THREE.Color))
+            {
+                ActiveBrushData[0] = new THREE.Color(1,0,0);
+            }
+            ActiveBrushData[1] = 5;
             return true;
         };
         FireWorkBurstBrush.Render = function (frame, originLight, brushData) {
@@ -391,16 +399,17 @@ function CreateBrushes() {
         SequenceTwoColorCycle.Index = 10;
         SequenceTwoColorCycle.Duration = SequenceManager.SequenceLength;
         SequenceTwoColorCycle.IsBackground = true;
-        SequenceTwoColorCycle.PrePaint = function () {
-
-            if(! ActiveBrushData[0] instanceof THREE.Color)
-                ActiveBrushData[0] = new THREE.Color;
-
-            if(! ActiveBrushData[1] instanceof THREE.Color)
-                ActiveBrushData[1] = new THREE.Color;
-
-
-            return true;
+        SequenceTwoColorCycle.PrePaint = function () 
+        {
+           if(!(ActiveBrushData[0] instanceof THREE.Color))
+            {
+                ActiveBrushData[0] = new THREE.Color(1,0,0);
+            }
+           if(!(ActiveBrushData[1] instanceof THREE.Color))
+            {
+                ActiveBrushData[1] = new THREE.Color(0,0,1);
+            }
+           return true;
         };
         SequenceTwoColorCycle.PostPaint = function (event) {
             event.StartTime = 0;
@@ -435,9 +444,10 @@ function CreateBrushes() {
         SolidColorBrush.IsBackground = true;
         SolidColorBrush.PrePaint = function ()
         {
-            if(! ActiveBrushData[0] instanceof THREE.Color)
-                ActiveBrushData[0] = new THREE.Color;
-
+            if(!(ActiveBrushData[0] instanceof THREE.Color))
+            {
+                ActiveBrushData[0] = new THREE.Color(1,0,0);
+            }
             return true;
         };
         SolidColorBrush.PostPaint = function (event) {
@@ -466,19 +476,16 @@ function CreateBrushes() {
         
         FireBackground.PrePaint = function ()
         {
-
-            if(! ActiveBrushData[0] instanceof THREE.Color)
-                ActiveBrushData[0] = new THREE.Color(0,0,1);
-
-            if(! ActiveBrushData[1] instanceof THREE.Color)
-                ActiveBrushData[1] = new THREE.Color(1,0,0);
-
-            if(ActiveBrushData[2] == "")
-                 ActiveBrushData[2] = 6;
-            
-            if(ActiveBrushData[3] == "")
-                 ActiveBrushData[3] = 6;
-
+            if(!(ActiveBrushData[0] instanceof THREE.Color))
+            {
+                ActiveBrushData[0] = new THREE.Color(1,0,0);
+            }
+            if(!(ActiveBrushData[1] instanceof THREE.Color))
+            {
+                ActiveBrushData[1] = new THREE.Color(0,0,1);
+            }
+            ActiveBrushData[2] = 6;
+            ActiveBrushData[3] = 6;
             return true;
         };
         
@@ -559,6 +566,7 @@ function CreateBrushes() {
 
         PatternBrush.PrePaint = function ()
         {
+            ActiveBrushData[0] = 0;
             return true;
         };
 
@@ -570,12 +578,13 @@ function CreateBrushes() {
         {
             var progression = frame / (this.Duration);
 
-            var offset = Math.floor(LightMatrixWidth * progression ); //LightMatrixWidth * (frame / this.duration));
-
+            var xoffset = Math.floor(LightMatrixWidth * progression ); //LightMatrixWidth * (frame / this.duration));
+            var yoffset = Math.floor(LightMatrixHeight * progression );
             //var offset = 1;
 
             //var index = (j + parseInt(brushData[0])) % 39;
-            var blend = (frame % 30) / 30;
+            var xblend = (frame % 30) / 30;
+            var yblend = (frame % 30) / 30;
 
             var imageColors = getPatternData(parseInt(brushData[0]));
 
@@ -583,18 +592,21 @@ function CreateBrushes() {
             {
                 for (var j = 0; j < LightMatrixWidth; j++)
                 {
-                    var index1 = (j + offset-1) % 39;
-                    var index2 = (j + offset) % 39;
+                    var x1 = (j + xoffset + 38) % 39;
+                    var x2 = (j + xoffset) % 39;
+
+                    var y1 = i; //(i + xoffset-1) % 15;
+                    var y2 = i; //(i + yoffset) % 15;
 
                     //console.log(j);
-                    var colArray1 = imageColors[i][index1];
-                    var colArray2 = imageColors[i][index2];
+                    var colArray1 = imageColors[y1][x1];
+                    var colArray2 = imageColors[y2][x2];
 
                     var col1 = new THREE.Color(colArray1[0], colArray1[1], colArray1[2]);
                     var col2 = new THREE.Color(colArray2[0], colArray2[1], colArray2[2]);
 
 
-                    var col = RGBBlendColors(col1, col2, blend);
+                    var col = RGBBlendColors(col1, col2, xblend);
 
                     var lightIndex = LightMappingMatrix[i][j];
 
@@ -609,9 +621,11 @@ function CreateBrushes() {
         };
 
         var htmlUI = new HTMLUI();
-        htmlUI.Name = "Image";
-        htmlUI.AddUI(new htmlUI.Label("Pattern:"));
-        htmlUI.AddUI(new htmlUI.Slider(0, 2, 0, 0, 0));
+        htmlUI.Name = "Pattern";
+        var patternOption = {"Rainbow Twist":0, "Color Gradient":1, "Flame Peaks":2, "Rose":3};
+        htmlUI.AddUI(new htmlUI.OptionBox(patternOption, 0, "Pattern", 0));
+        //var scrollOption = {"None":0, "Horizontal":1, "Vertical":2};
+        //htmlUI.AddUI(new htmlUI.OptionBox(scrollOption, 0, "Scroll", 1));
         PatternBrush.HTMLUI = htmlUI;
         Brushes.push(PatternBrush);
     }

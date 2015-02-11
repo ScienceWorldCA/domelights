@@ -24,7 +24,7 @@ HTMLUI = function() {
     };
 
     //CheckBox UI
-    this.Checkbox = function(checked, dataIndex, label){
+    this.Checkbox = function(label, checked, dataIndex){
 
     	this.checked = checked;
         this.DataIndex = dataIndex;
@@ -37,7 +37,7 @@ HTMLUI = function() {
         		checked = " checked"; 
         	}
 
-            var html = ("<div class=\"row lineout-full\"><input type=\"checkbox\"" + checked + " oninput=\"ActiveBrushData['" + dataIndex + "'] = this.value;\" />" + label + "</div>\n");
+            var html = ("<div class=\"row lineout-full\"><input type=\"checkbox\"" + checked + " onchange=\"ActiveBrushData[" + dataIndex + "] = this.checked;\" />" + label + "</div>\n");
 
             return html;
         };
@@ -93,20 +93,32 @@ HTMLUI = function() {
     this.Gradient.Prototype = Object.create(this.BaseHTMLUIObject());
 
     //OptionBox UI
-    this.OptionBox = function(dataIndex, selected, options ){
+    this.OptionBox = function(options, selected, text, dataIndex){
 
     	this.options = options;
+    	this.text = text;
     	this.selected = selected;
         this.DataIndex = dataIndex;
 
         this.GenerateHTML = function(){
-        	console.log( "options: " + this.options.length );
 
-        	var html = "<div class=\"row lineout-full\"><select>\n";
-            for(var index = 0; index < this.options.length; index++) {
-            	html += "\t<option OnClick=\"ActiveBrushData[" + dataIndex + "] = " + this.options[index]['value'] + ";\">" + this.options[index]['name'] + "</option>\n";
+            var itemIndex = 0;
+            var selectionText = "";
+
+            var html = "<div class=\"row lineout-full\"><optionh4>" + this.text + "</optionh4>";
+        	html += "<select onchange=\"ActiveBrushData[" + dataIndex + "] = this.value;\">\n";
+            
+            for(key in this.options) 
+            {
+                if(itemIndex == selected)
+                    selectionText = "selected";
+                else
+                    selectionText = "";
+
+            	html += "\t<option value = \"" + this.options[key] + "\"" + selectionText + ">" + key + "</option>\n";
+                itemIndex++;
             }
-            console.log( this.options );
+            
             html += "</select></div>\n";
 
             return html;
@@ -148,7 +160,7 @@ HTMLUI = function() {
 
         this.GenerateHTML = function(){
 
-            var html = ("\t<input class=\"lineout-full\" type=\"range\" min=\"" + this.mMinValue + "\" max=\"" + this.mMaxValue + "\" value=\"" + this.mCurrentValue + "\" step=\"" + this.mStep + "\" oninput=\"ActiveBrushData['" + dataIndex + "'] = this.value;\">\n");
+            var html = ("\t<input class=\"slider\" type=\"range\" min=\"" + this.mMinValue + "\" max=\"" + this.mMaxValue + "\" value=\"" + this.mCurrentValue + "\" step=\"" + this.mStep + "\" oninput=\"ActiveBrushData[" + dataIndex + "] = this.value;\">\n");
 
             return html;
         };
@@ -162,6 +174,7 @@ HTMLUI = function() {
     this.Slider.Prototype = Object.create(this.BaseHTMLUIObject());
 
 
+    //AddUI Helper
     this.AddUI = function(uiItem)
     {
         self.UIProperties.push(uiItem);
@@ -171,8 +184,6 @@ HTMLUI = function() {
     //Render the UIProperties to the generatedHtml
     this.GeneratePropertyContents = function()
     {
-        console.log("Build UI");
-
         generatedHtml = '<div class="panel">\n';
         generatedHtml = '<div class="row"><h3 style="color: black;">' + this.Name + '</h3></div>\n';
 
@@ -183,8 +194,8 @@ HTMLUI = function() {
 
         generatedHtml += '<div class="row">&nbsp;</div>';
         generatedHtml += '<div class="row">';
-        generatedHtml += '<div class="box lineout-left green"><a class="brushselector" onclick="HTMLBrushManager.Undo();"><br /><br />Undo<br /></a></div>';
-        generatedHtml += '<div class="box lineout-right teal"><a class="brushselector" onclick="HTMLBrushManager.ApplyBrushes();"><br /><br />Apply<br /></a></div>';
+        generatedHtml += '<div class="undoapply box lineout-left green"><a class="brushselector" onclick="HTMLBrushManager.Undo();"><br /><br />Undo<br /></a></div>';
+        generatedHtml += '<div class="undoapply box lineout-right teal"><a class="brushselector" onclick="HTMLBrushManager.ApplyBrushes();"><br /><br />Apply<br /></a></div>';
         generatedHtml += "</div>\n";
 
         return generatedHtml;

@@ -4,8 +4,6 @@ function initPatterns()
     var img = new Image();
     img.src = PatternBrushesImage;
 
-    console.log("Creating Pattern Brush");
-
     //Create Temp Canvas
     var canvas = document.createElement('canvas')
 
@@ -19,7 +17,6 @@ function initPatterns()
 
     //Convert image to pattern array
     //var rawImage = ctx.getImageData(0, 0, img.width, img.height).data
-    console.log("Image Drawn to Canvas");
 
     var numberWide = img.width / 40;
     var numberHigh = img.height / 16;

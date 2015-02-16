@@ -630,6 +630,56 @@ function CreateBrushes() {
         Brushes.push(PatternBrush);
     }
 
+    var VideoPattenBrush = new Brush();           // INDEX: 14
+    {
+        VideoPattenBrush.Index = 14;
+        VideoPattenBrush.Duration = SequenceManager.SequenceLength;
+        VideoPattenBrush.IsBackground = true;
+
+        VideoPattenBrush.PrePaint = function ()
+        {
+            ActiveBrushData[0] = 0;
+            return true;
+        };
+
+        VideoPattenBrush.PostPaint = function (event)
+        {
+            event.StartTime = 0;
+        };
+        VideoPattenBrush.Render = function (frame, originLight, brushData)
+        {
+            var videoTime = frame / 40;
+
+            var videoCanvas = getVideoPatternData(0, videoTime);
+
+            for (var i=0; i < LightMatrixHeight; i++)
+            {
+                for (var j = 0; j < LightMatrixWidth; j++)
+                {
+                    var colArray = videoCanvas[i][j];
+
+                    var col = new THREE.Color(colArray[0], colArray[1], colArray[2]);
+
+                    var lightIndex = LightMappingMatrix[i][j];
+
+                    if(lightIndex != -1)
+                    {
+                        setLightColor(col, 1.0, lightIndex);
+                    }
+                }
+            }
+
+            return;
+        };
+
+        var htmlUI = new HTMLUI();
+        htmlUI.Name = "Video";
+        var patternOption = {"Rainbow Rain":0, "Rainbow Rain":1};
+        htmlUI.AddUI(new htmlUI.OptionBox(patternOption, 0, "Pattern", 0));
+        VideoPattenBrush.HTMLUI = htmlUI;
+        Brushes.push(VideoPattenBrush);
+    }
+
 
     // Helper Brush functions
     function fireValueCalc(updateFlameSource, brushData)

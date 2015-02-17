@@ -102,7 +102,7 @@ function initVideoPatters()
 
 }
 
-function getVideoPatternData(index, time)
+function getVideoPatternData(time)
 {
     //var canCtx = document.getElementById("acc").getContext('2d');
     

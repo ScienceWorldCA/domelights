@@ -59,12 +59,14 @@ if( ! window ) {
     var PatternBrushes = [];
 
     //Pattern video Brush Canvas
+    var videoPatterns = ['rainbow_rain.mp4', 'rainbow_wave.mp4', 'uv_meter.mp4'];
+    var videoPatternsRoot = 'https://dl.dropboxusercontent.com/u/15827855/';
+    
     var videoCtx = document.createElement('canvas').getContext('2d');
     var videoVideo = document.createElement('video');
     videoVideo.crossOrigin = "Anonymous";
-    //videoVideo.src = 'https://dl.dropboxusercontent.com/u/15827855/rainbow_rain.mp4';
-    videoVideo.src = 'https://dl.dropboxusercontent.com/u/15827855/rainbow_wave.mp4';
-    
+    videoVideo.src = videoPatternsRoot + videoPatterns[0];
+
     videoVideo.preload = "auto";
     videoVideo.loop = true;
 

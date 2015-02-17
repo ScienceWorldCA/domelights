@@ -648,9 +648,16 @@ function CreateBrushes() {
         };
         VideoPattenBrush.Render = function (frame, originLight, brushData)
         {
+            var index = brushData[0];
+            
+            if(videoPatternsRoot + videoPatterns[index] != videoVideo.src)
+            {
+                 videoVideo.src = videoPatternsRoot + videoPatterns[index];
+            }
+
             var videoTime = frame / 40;
 
-            var videoCanvas = getVideoPatternData(0, videoTime);
+            var videoCanvas = getVideoPatternData(videoTime);
 
             for (var i=0; i < LightMatrixHeight; i++)
             {
@@ -674,7 +681,7 @@ function CreateBrushes() {
 
         var htmlUI = new HTMLUI();
         htmlUI.Name = "Video";
-        var patternOption = {"Rainbow Rain":0, "Rainbow Rain":1};
+        var patternOption = {"Rainbow Rain":0, "Rainbow Wave":1, "UV Meter":2};
         htmlUI.AddUI(new htmlUI.OptionBox(patternOption, 0, "Pattern", 0));
         VideoPattenBrush.HTMLUI = htmlUI;
         Brushes.push(VideoPattenBrush);

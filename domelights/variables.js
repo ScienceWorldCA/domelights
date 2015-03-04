@@ -58,6 +58,18 @@ if( ! window ) {
     var PatternBrushesImage = './textures/patterns/grad.png';
     var PatternBrushes = [];
 
+    //Pattern video Brush Canvas
+    var videoPatterns = ['rainbow_rain.mp4', 'rainbow_wave.mp4', 'uv_meter.mp4'];
+    var videoPatternsRoot = 'https://dl.dropboxusercontent.com/u/15827855/';
+    
+    var videoCtx = document.createElement('canvas').getContext('2d');
+    var videoVideo = document.createElement('video');
+    videoVideo.crossOrigin = "Anonymous";
+    videoVideo.src = videoPatternsRoot + videoPatterns[0];
+
+    videoVideo.preload = "auto";
+    videoVideo.loop = true;
+
     //Used for Debug Purposes
     var manager = new THREE.LoadingManager();
     manager.onProgress = function ( item, loaded, total ) {

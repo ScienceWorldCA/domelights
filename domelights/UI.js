@@ -247,6 +247,7 @@ UI = function(projector, raycaster, camera, mouse)
         this.GroupID = groupID || 0;
         this.TabID = tabID || 0;
         var mVisible = true;
+        this.Time = 0;
 
         this.__defineGetter__("Visible", function(){
             return mVisible;
@@ -254,7 +255,7 @@ UI = function(projector, raycaster, camera, mouse)
 
         this.__defineSetter__("Visible", function(val){
             mVisible = val;
-            if(this.mesh1 != null){this.mesh1.visible = val;}
+            if(this.mesh != null){this.mesh.visible = val;}
             if(this.mesh2 != null){this.mesh2.visible = val;}
         });
 
@@ -279,9 +280,9 @@ UI = function(projector, raycaster, camera, mouse)
                 color:0x000000, shading: THREE.FlatShading
             });
 
-            this.mesh1 = new THREE.Mesh( new THREE.PlaneGeometry( mSize, mSize, 0, 0 ), this.material1 );
-            this.mesh1.position.set(  0,  0, 0 );
-            this.Transform.add(  this.mesh1 );
+            this.mesh = new THREE.Mesh( new THREE.PlaneGeometry( mSize, mSize, 0, 0 ), this.material1 );
+            this.mesh.position.set(  0,  0, 0 );
+            this.Transform.add(  this.mesh );
 
             this.mesh2 = new THREE.Mesh( new THREE.PlaneGeometry( mSize-1, mSize-1, 0, 0 ), this.material2 );
             this.mesh2.position.set(  0,  0, 0.5 );
@@ -434,12 +435,25 @@ UI = function(projector, raycaster, camera, mouse)
         this.TimeBlockSize = 8 || timeBlockSize;
         this.SequenceTime = null;
         this.SequenceLength = null;
+        this.SetSequenceTime = null;
 
+        this.onMouseDown = function(event, uiObject)
+        {
+            uiObject.mesh.scale.x = uiObject.mesh.scale.y = 1.15;
+        }
+        this.onMouseUp = function(event, uiObject)
+        {
+            uiObject.mesh.scale.x = uiObject.mesh.scale.y = 1;
+            this.parent.SetSequenceTime((uiObject.Time * (this.parent.SequenceLength() / this.parent.TimeSteps)) + 1);
+        }
+        this.onMouseMove = function(event, uiObject)
+        {
+            uiObject.mesh.scale.x = uiObject.mesh.scale.y = 1;
+        }
         //Update Timeline with
         this.onUIUpdate = function(event, uiObject)
         {
             var frameStep = this.TimeSteps / this.SequenceLength();
-
             var blockTime = this.SequenceTime() * frameStep;
 
             //console.log(blockTime);
@@ -485,6 +499,11 @@ UI = function(projector, raycaster, camera, mouse)
             {
                 //console.log("Index: " + x + " - " + (this.Position.x + ((x * this.TimeBlockSize) + 5)));
                 var blockButton = new UIObjectManager.TimeBlockButton('textures/UI/Play.png', new THREE.Vector2(this.Position.x + (x * (this.TimeBlockSize + 2) ), this.Position.y), this.TimeBlockSize);
+                blockButton.onMouseDown = this.onMouseDown;
+                blockButton.onMouseUp = this.onMouseUp;
+                blockButton.onMouseMove = this.onMouseMove;
+                blockButton.Time = x;
+                blockButton.parent = this;
                 this.TimeBlocks.push(blockButton);
             }
 

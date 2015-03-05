@@ -274,13 +274,13 @@ function buildInterface() {
     var blockTimeline = new UIObjectManager.BlockTimeline('textures/UI/smiley-face.png', new THREE.Vector2(-70, -100), new THREE.Vector2(8, 8));
     {
         function GetSequenceTime(){ return SequenceManager.GetSequenceTime();}
+        function SetSequenceTime(time){ SequenceManager.SetSequenceTime(time);}
         function GetSequenceLength(){ return SequenceManager.GetSequenceLength();}
 
-        //timeline.onMouseDown = ButtonDownClick;
-        //timeline.onMouseUp = SetForeground;
         //timeline.material.color.setRGB(1, 1, 1);
         blockTimeline.SequenceTime = GetSequenceTime;
         blockTimeline.SequenceLength = GetSequenceLength;
+        blockTimeline.SetSequenceTime = SetSequenceTime;
         blockTimeline.tag = 5;
         blockTimeline.name = "MainTimeline";
     }

@@ -680,7 +680,7 @@ function CreateBrushes() {
         };
 
         var htmlUI = new HTMLUI();
-        htmlUI.Name = "Video";
+        htmlUI.Name = "Animation";
         var patternOption = {"Rainbow Rain":0, "Rainbow Wave":1, "UV Meter":2};
         htmlUI.AddUI(new htmlUI.OptionBox(patternOption, 0, "Pattern", 0));
         VideoPattenBrush.HTMLUI = htmlUI;

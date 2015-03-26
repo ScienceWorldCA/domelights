@@ -220,12 +220,19 @@ UI = function(projector, raycaster, camera, mouse)
             this.Transform = new THREE.Object3D;
             scene.add(  this.Transform );
 
-            this.map = THREE.ImageUtils.loadTexture( texture );
-
-            this.material = new THREE.MeshBasicMaterial({
-                color:0xffffff, shading: THREE.FlatShading,
-                map:  this.map
-            });
+            if(texture != null) {
+                this.map = THREE.ImageUtils.loadTexture(texture);
+                this.material = new THREE.MeshBasicMaterial({
+                    color: 0xffffff, shading: THREE.FlatShading,
+                    map: this.map
+                });
+            }
+            else
+            {
+                this.material = new THREE.MeshBasicMaterial({
+                    color: 0xffffff, shading: THREE.FlatShading
+                });
+            }
 
             if(this.ShowLabel == true) {
                 this.Label = new self.Text(new THREE.Vector3(mPos.x, mPos.y - (mSize.y * 0.75), 2), "Button", "center");
@@ -365,69 +372,56 @@ UI = function(projector, raycaster, camera, mouse)
 
 
 
-    this.Timeline = function(texture, mPos, mSize, groupID, tabID){
+    this.Slider = function(texture, mPos, mSize, groupID, tabID)
+    {
         this.GroupID = groupID || 0;
         this.TabID = tabID || 0;
 
-        //Timeline Specific
+        //Slider Specific
         this.Size = new THREE.Vector2(mSize.x,mSize.y);
         this.Position = new THREE.Vector2(mPos.x,mPos.y);
-        this.TimeHandle = null;
+        this.SliderHandle = null;
         this.SequenceTime = null;
         this.SequenceLength = null;
 
-        //Update Timeline with
+        //Update Slider with
         this.onUIUpdate = function(event, uiObject)
         {
-            if(this.TimeHandle != null)
+            if(this.SliderHandle != null)
             {
                 var yPos = this.Position.y + (this.Size.y / 2);
 
                 var frameStep = this.Size.x / this.SequenceLength();
 
-                this.TimeHandle.mesh.position.set(this.Position.x + (frameStep *  this.SequenceTime()),  yPos, 1 );
+                this.SliderHandle.mesh.position.set(this.Position.x + (frameStep *  this.SequenceTime()),  yPos, 1 );
                 //this.mesh.position.set(  mPos.x,  mPos.y, 0 );
             }
         };
 
-        this.DrawTimelineLines = function()
-        {
-            var yPos = this.Position.y + (this.Size.y / 2);
-
-            self.DrawLine(
-                new THREE.Vector3(this.Position.x, yPos,0 ),
-                new THREE.Vector3(this.Position.x + this.Size.x, yPos,0)
-            );
-            self.DrawLine(
-                new THREE.Vector3(this.Position.x, this.Position.y + (this.Size.y * 0.25),0 ),
-                new THREE.Vector3(this.Position.x, this.Position.y + (this.Size.y * 0.75),0)
-            );
-            self.DrawLine(
-                new THREE.Vector3(this.Position.x + this.Size.x, this.Position.y + (this.Size.y * 0.25),0 ),
-                new THREE.Vector3(this.Position.x + this.Size.x, this.Position.y + (this.Size.y * 0.75),0)
-            );
-        };
-
         this.init = function()
         {
-            this.mesh = new THREE.Mesh( new THREE.PlaneGeometry( mSize.x, mSize.y, 0, 0 ), new THREE.MeshBasicMaterial({color:0x000000}));
+            this.mesh = new THREE.Mesh( new THREE.PlaneGeometry( mSize.x, mSize.y*2, 0, 0 ), new THREE.MeshBasicMaterial({color:0x000000}));
             this.mesh.position.set(  mPos.x + (mSize.x /2),  mPos.y + (mSize.y / 2), -0.5 );
             scene.add(  this.mesh );
-
-            this.DrawTimelineLines();
-            this.TimeHandle = new self.Button('textures/sprites/circle.png', new THREE.Vector2(0,0), new THREE.Vector2(10, 10));
+            
+             this.visualLineMesh = new THREE.Mesh( new THREE.PlaneGeometry( mSize.x, mSize.y/2, 0, 0 ), new THREE.MeshBasicMaterial({color:0xffffff}));
+             this.visualLineMesh.position.set(  mPos.x + (mSize.x /2),  mPos.y + (mSize.y /2) , 0 );
+             scene.add(  this.visualLineMesh );
+            
+            this.SliderHandle = new self.Button(null, new THREE.Vector2(0,0), new THREE.Vector2(3, 7));
+            this.SliderHandle.material.color =  new THREE.Color(0, 0.55, 0.737);
             self.AddUIObject(this);
             return this;
         };
         this.init();
     };
-    this.Timeline.Prototype = Object.create(this.BaseUIObject());
+    this.Slider.Prototype = Object.create(this.BaseUIObject());
 
     this.BlockTimeline = function(texture, mPos, mSize, groupID, tabID, timeSteps, timeBlockSize){
         this.GroupID = groupID || 0;
         this.TabID = tabID || 0;
 
-        //Timeline Specific
+        //Slider Specific
         this.Size = new THREE.Vector2(mSize.x,mSize.y);
         this.Position = new THREE.Vector2(mPos.x,mPos.y);
         this.TimeBlocks = [];
@@ -450,7 +444,7 @@ UI = function(projector, raycaster, camera, mouse)
         {
             uiObject.mesh.scale.x = uiObject.mesh.scale.y = 1;
         }
-        //Update Timeline with
+        //Update BlockTimeline with
         this.onUIUpdate = function(event, uiObject)
         {
             var frameStep = this.TimeSteps / this.SequenceLength();

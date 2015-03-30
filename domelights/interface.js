@@ -119,8 +119,10 @@ function buildInterface() {
     {
         function onDomeSpinnerHandleMouseDown(event, uiObject)
         {
+
+            FixedSpeedActive = false;
+
             this.mesh.scale.x = this.mesh.scale.y = 1.2;
-            SequenceManager.Play = false;
             uiObject.isMouseDown = true;
             uiObject.isMouseDownPosition = new THREE.Vector2(event.x, event.y);
         }
@@ -138,12 +140,29 @@ function buildInterface() {
 
         function onDomeSpinnerHandleMouseUp(event, uiObject)
         {
+            if(uiObject.isMouseDownPosition == null)
+                return;
+                
             this.mesh.scale.x = this.mesh.scale.y = 1;
+
+            var sx;
+
+            if(uiObject.Parent != null)
+                sx = uiObject.Parent.Size.x;
+            else
+                sx = uiObject.Size.x;
+
+            var percent = (event.x - uiObject.isMouseDownPosition.x) / sx;
+            targetRotation = (percent * (Math.PI * 2))/4;
+
+            //console.log(event.x - uiObject.isMouseDownPosition.x);
+            //targetRotation = 0.05;
+
             uiObject.isMouseDown = false;
             uiObject.isMouseDownPosition = null;
         }
 
-        function onDragTimeline(event, uiObject)
+        function onDragDomeSpinner(event, uiObject)
         {
             if(uiObject.isMouseDown == true)
             {
@@ -153,13 +172,15 @@ function buildInterface() {
             }
         }
 
-        function onTimelineMove(event, uiObject)
+        function onDomeSpinnerMove(event, uiObject)
         {
             if(uiObject.SliderHandle.isMouseDown == true)
             {
-                SequenceManager.Play = false;
-                var frameStep =  SequenceManager.SequenceLength / uiObject.Size.x;
-                SequenceManager.SetSequenceTime((event.intersection[0].point.x - uiObject.Position.x) * frameStep);
+                //var degreeStep = this.Size.x / (Math.PI * 2);
+                var percent = (event.intersection[0].point.x - uiObject.Position.x) / this.Size.x;
+                DomeGroup.rotation.y = percent * (Math.PI * 2);
+
+                uiObject.isMouseDownPosition = new THREE.Vector2(event.x, event.y);
             }
         }
 
@@ -168,6 +189,25 @@ function buildInterface() {
             uiObject.SliderHandle.isMouseDown = false;
             uiObject.SliderHandle.mesh.scale.x = uiObject.SliderHandle.mesh.scale.y = 1;
         }
+
+        function onSliderUIUpdate(event, uiObject)
+        {
+            if(!isMouseDown)
+            {
+                uiObject.SliderHandle.isMouseDown = false
+            }
+
+            if(this.SliderHandle != null)
+            {
+                var yPos = this.Position.y + (this.Size.y / 2);
+
+
+                var degreeStep = this.Size.x / (Math.PI * 2);
+                //console.log(DomeGroup.rotation.y);
+                this.SliderHandle.mesh.position.set(this.Position.x + (degreeStep *  DomeGroup.rotation.y ),  yPos, 1 );
+                //this.mesh.position.set(  mPos.x,  mPos.y, 0 );
+            }
+        };
 
         function GetSequenceTime(){ return SequenceManager.GetSequenceTime();}
         function GetSequenceLength(){ return SequenceManager.GetSequenceLength();}
@@ -181,12 +221,14 @@ function buildInterface() {
         domeSpinner.name = "MainTimeline";
 
         //Todo: Fix Dragging of domeSpinner
+        domeSpinner.SliderHandle.Parent = domeSpinner;
+        domeSpinner.onUIUpdate = onSliderUIUpdate;
         domeSpinner.SliderHandle.onMouseDown = onDomeSpinnerHandleMouseDown;
         domeSpinner.SliderHandle.onMouseUp = onDomeSpinnerHandleMouseUp;
         domeSpinner.SliderHandle.onMouseEnter = onDomeSpinnerHandleMouseEnter;
         domeSpinner.SliderHandle.onMouseExit = onDomeSpinnerHandleMouseExit;
-        //domeSpinner.SliderHandle.onMouseMove = onDragTimeline;
-        domeSpinner.onMouseMove = onTimelineMove;
+        //domeSpinner.SliderHandle.onMouseMove = onDragDomeSpinner;
+        domeSpinner.onMouseMove = onDomeSpinnerMove;
         domeSpinner.onMouseUp = onDomeSpinnerHandleMouseUp;
         domeSpinner.onMouseExit = onTimelineMouseExit;
     }
@@ -223,7 +265,7 @@ function buildInterface() {
             }
         }
 
-        var Pause = new UIObjectManager.Button('textures/UI/Pause.png', new THREE.Vector2(-5, -75), new THREE.Vector2(10, 10));
+        var Pause = new UIObjectManager.Button('textures/UI/Pause.png', new THREE.Vector2(5, -75), new THREE.Vector2(10, 10));
         Pause.onMouseDown = ButtonDownClick;
         Pause.onMouseUp = PlaySequence;
         Pause.onUIUpdate = PauseUpdateUI;
@@ -231,7 +273,7 @@ function buildInterface() {
         Pause.tag = false;
         Pause.name = "Pause";
 
-        var Play = new UIObjectManager.Button('textures/UI/Play.png', new THREE.Vector2(5, -75), new THREE.Vector2(10, 10));
+        var Play = new UIObjectManager.Button('textures/UI/Play.png', new THREE.Vector2(-5, -75), new THREE.Vector2(10, 10));
         Play.onMouseDown = ButtonDownClick;
         Play.onMouseUp = PlaySequence;
         Play.onUIUpdate = PlayUpdateUI;

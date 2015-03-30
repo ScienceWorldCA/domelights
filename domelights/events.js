@@ -56,7 +56,7 @@ function onDocumentMouseDown( event ) {
 
 	event.preventDefault();
 
-	//isMouseDown = true;
+	isMouseDown = true;
 // 	if (isMouseOverBar()) {
 // 		isMouseDownOverBar = true;
 //         FixedSpeedActive = false;
@@ -98,7 +98,7 @@ function onDocumentMouseUp( event ) {
 // 		//targetRotation = rotation;
 // 	}
 	//isMouseDownOverBar = false;
-	//isMouseDown = false;
+	isMouseDown = false;
 
     container.removeEventListener( 'mouseup', onDocumentMouseUp, false );
     container.removeEventListener( 'mouseout', onDocumentMouseOut, false );
@@ -109,7 +109,7 @@ function onDocumentMouseUp( event ) {
 function onDocumentMouseOut( event ) {
 
 	//isMouseDownOverBar = false;
-	//isMouseDown = false;
+	isMouseDown = false;
 
     container.removeEventListener( 'mouseup', onDocumentMouseUp, false );
     container.removeEventListener( 'mouseout', onDocumentMouseOut, false );

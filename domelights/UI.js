@@ -370,8 +370,6 @@ UI = function(projector, raycaster, camera, mouse)
     };
     this.Tab.Prototype = Object.create(this.BaseUIObject());
 
-
-
     this.Slider = function(texture, mPos, mSize, groupID, tabID)
     {
         this.GroupID = groupID || 0;
@@ -381,22 +379,22 @@ UI = function(projector, raycaster, camera, mouse)
         this.Size = new THREE.Vector2(mSize.x,mSize.y);
         this.Position = new THREE.Vector2(mPos.x,mPos.y);
         this.SliderHandle = null;
-        this.SequenceTime = null;
-        this.SequenceLength = null;
+        //this.SequenceTime = null;
+        //this.SequenceLength = null;
 
         //Update Slider with
-        this.onUIUpdate = function(event, uiObject)
-        {
-            if(this.SliderHandle != null)
-            {
-                var yPos = this.Position.y + (this.Size.y / 2);
-
-                var frameStep = this.Size.x / this.SequenceLength();
-
-                this.SliderHandle.mesh.position.set(this.Position.x + (frameStep *  this.SequenceTime()),  yPos, 1 );
-                //this.mesh.position.set(  mPos.x,  mPos.y, 0 );
-            }
-        };
+        //this.onUIUpdate = function(event, uiObject)
+        //{
+        //    if(this.SliderHandle != null)
+        //    {
+        //        var yPos = this.Position.y + (this.Size.y / 2);
+        //
+        //        var frameStep = this.Size.x / this.SequenceLength();
+        //
+        //        this.SliderHandle.mesh.position.set(this.Position.x + (frameStep *  this.SequenceTime()),  yPos, 1 );
+        //        //this.mesh.position.set(  mPos.x,  mPos.y, 0 );
+        //    }
+        //};
 
         this.init = function()
         {

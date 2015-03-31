@@ -6,12 +6,7 @@ function render() {
         checkDomeInteraction();
     }
 
-    // Update Dome rotation
-    if(FixedSpeedActive == true)
-       DomeGroup.rotation.y += targetRotation;
-    else
-        DomeGroup.rotation.y += ( targetRotation - DomeGroup.rotation.y ) * 0.02;
-
+    updateDomePosition();
 
     //Process Events and render them to the light array
     SequenceManager.Update();
@@ -68,4 +63,25 @@ function checkDomeInteraction() {
             }
         }
     }
+}
+
+function updateDomePosition()
+{
+    // Update Dome rotation
+    if(FixedSpeedActive == false)
+    {
+        targetRotation -= targetRotation * 0.05;
+
+        if( targetRotation > -0.0001 && targetRotation < 0.001)
+            targetRotation = 0;
+
+        if(targetRotation > 6)
+            targetRotation = 6;
+
+        if(targetRotation < -6)
+            targetRotation = -6;
+    }
+
+    DomeGroup.rotation.y += targetRotation;
+    DomeGroup.rotation.y = ((DomeGroup.rotation.y + (Math.PI * 2))% (Math.PI * 2));
 }

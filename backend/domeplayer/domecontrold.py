@@ -14,7 +14,8 @@ PLAYER_NAME = 'controller01'
 PLAYER_KEY = 'XPbZ65Fp0q0s'
 
 if platform.system() == "Windows":
-	PYTHON_PATH = "D:\Python27\Python.exe"
+	###PYTHON_PATH = "D:\Python27\Python.exe"
+	PYTHON_PATH = "C:\opt\Python27\Python.exe"
 else:
 	PYTHON_PATH = "/usr/bin/python"
 

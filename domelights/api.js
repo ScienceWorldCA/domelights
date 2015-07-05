@@ -54,7 +54,11 @@ function FrontEnd_API() {
 				function(data) {
 					console.log( data );
 					if( data.result ) {
-						$("#submitmessage").html( '<pre>' + data.message + '</pre>' );
+						if( typeof data.start_time != 'undefined' ) {
+							$("#submitmessage").html( '<pre>Your animation has been scheduled for:\n\n' + data.start_time + '\n\nYou will also receive an email containing this time.</pre>' );
+						} else {
+							$("#submitmessage").html( '<pre>' + data.message + '</pre>' );
+						}
 						$('#submitbutton').prop( 'disabled', true );
 						$('#submitbutton').html( 'Scheduled / Reload' ).removeClass("red").removeClass("blue").addClass("green");
 						$('#submitbutton').attr("onclick","resetCanvas()");

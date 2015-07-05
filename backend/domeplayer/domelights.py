@@ -9,7 +9,8 @@ import base64
 import platform
 
 if platform.system() == "Windows":
-	PYTHON_PATH = "D:\Python27\Python.exe"
+	###PYTHON_PATH = "D:\Python27\Python.exe"
+	PYTHON_PATH = "C:\opt\Python27\Python.exe"
 else:
 	PYTHON_PATH = "/usr/bin/python"
 

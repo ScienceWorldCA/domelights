@@ -62,7 +62,7 @@ class ColoreEngine {
 		$defaultRenderProperties = $this->_config['defaults']['render']['properties'];
 		
 		while( list( $propName, $propVal ) = each( $defaultRenderProperties ) ) {
-			$requestObject->setRenderProperties( $propName, $propVal );
+			$requestObject->setRenderProperty( $propName, $propVal );
 		}
 		
 		/**

@@ -24,8 +24,10 @@ class DomeController {
 
 	public function AuthenticateController( ColoreRequestHelper &$cro ) {
 		// Bail if authenticated
-		if( $cro->getSessionProperty( 'authenticated' ) )
+		if( $cro->getSessionProperty( 'authenticated' ) ) {
+			$cro->insertLogic( array( 'class' => __CLASS__, 'method' => 'UpdateController' ) );
 			return;
+		}
 
 		// Set default
 		$cro->setSessionProperty( 'authenticated', false );
@@ -78,6 +80,27 @@ class DomeController {
 
 		// Set render info
 		$cro->setRenderProperty( 'authenticated', true );
+		
+		// Update controller
+		$cro->insertLogic( array( 'class' => __CLASS__, 'method' => 'UpdateController' ) );
+	}
+	
+	public function UpdateController( ColoreRequest &$cro ) {
+		$cro->controller_info = $cro->getSessionProperty( 'controller_info' );
+		
+		// update query
+		$update_query = array(
+			'action' => 'update',
+			'table' => 'controllers',
+			'fields' => array(
+				'last_active' => date( "Y-m-d H:i:s" ),
+			),
+			'criteria' => array(
+				'id' => $cro->controller_info['id'],
+			),
+		);
+		
+		$res = $this->dbconn->mappedQuery( $update_query );
 	}
 
 	public function GetControllerState( ColoreRequestHelper &$cro ) {
@@ -114,7 +137,7 @@ class DomeController {
 
 		// Check the current schedule
 		$schedule_data = $this->GetSchedule();
-		
+
 		if( $schedule_data && is_array( $schedule_data ) && isset( $schedule_data['type'] ) ) {
 			$cro->setRenderProperty( 'mode', $schedule_data['type'] );
 			$cro->setRenderProperty( 'script_name', $schedule_data['options'] );
@@ -137,6 +160,7 @@ class DomeController {
 		$controller_info = $cro->getSessionProperty( 'controller_info' );
 
 		// TODO: Schedule
+		error_log( sprintf( "%s/%d: %s", __METHOD__, __LINE__, print_r( $this->GetScheduledShow(), true ) ) );
 
 		// Check for current event
 		$event_data = $this->GetEvent();
@@ -268,7 +292,7 @@ class DomeController {
 			return false;
 		}
 	}
-	
+
 	public function GetSchedule() {
 		error_log( sprintf( "%s: Checking...", __METHOD__ ) );
 		$query = strftime( "SELECT * FROM schedule WHERE day = %u AND '%T' BETWEEN TIMESTAMP( start ) AND TIMESTAMP( end ) ORDER BY day ASC, start ASC, end ASC LIMIT 1" );
@@ -284,9 +308,10 @@ class DomeController {
 		}
 	}
 
-	public function GetScheduledShow( ColoreRequestHelper &$cro ) {
-		$cro->setRenderProperty( 'hasNewShow', false );
+	public function GetScheduledShow() {
+// 		$cro->setRenderProperty( 'hasNewShow', false );
 		$scheduler = $this->GetSchedulerInstance();
+		return $scheduler->GetNextScheduleAnimation();
 	}
 
 	public function SetAnimationPlayed( ColoreRequestHelper &$cro ) {
@@ -303,6 +328,21 @@ class DomeController {
 				),
 				'criteria' => array(
 						'id' => $animation_id
+				),
+		);
+
+		// Do query
+		$res = $this->dbconn->mappedQuery( $query );
+
+		// Make query
+		$query = array(
+				'action' => 'update',
+				'table' => 'controllers',
+				'fields' => array(
+						'last_animation' => $animation_id,
+				),
+				'criteria' => array(
+						'id' => $cro->controller_info,
 				),
 		);
 

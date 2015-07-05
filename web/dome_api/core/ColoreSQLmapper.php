@@ -54,6 +54,38 @@ class ColoreSQLmapper {
 				// Done
 				break;
 			
+			// REPLACE
+			case "replace";
+				$sqlResult['statement'][0] = "REPLACE INTO";
+				$sqlResult['statement'][1] = $statementInfo['table'];
+				
+				// field names
+				$fieldNames = array();
+				$fieldReferences = array();
+
+				reset( $statementInfo['fields'] );
+				
+				// loop over fields and generate appropriate arrays
+				for( $i = 0 ; $i < count( $statementInfo['fields'] ) ; $i++ ) {
+					// Fetch the next field
+					list( $fieldKey, $fieldVal ) = each( $statementInfo['fields'] );
+					
+					// Generate the descriptor
+					$fieldDescriptor = sprintf( ":%s", $fieldKey );
+					
+					// Add the values to both the statement and arguments
+					$fieldNames[] = $fieldKey;
+					$fieldDescriptors[] = $fieldDescriptor;
+					$sqlResult['arguments'][$fieldDescriptor] = $fieldVal;
+				}
+				
+				$sqlResult['statement'][] = sprintf( "( %s )", join( ',', $fieldNames ) );
+				$sqlResult['statement'][] = "VALUES";
+				$sqlResult['statement'][] = sprintf( "( %s )", join( ',', $fieldDescriptors ) );
+
+				// Done
+				break;
+			
 			// UPDATE
 			case "update";
 				$sqlResult['statement'][] = "UPDATE";

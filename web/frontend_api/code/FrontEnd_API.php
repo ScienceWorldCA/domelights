@@ -81,7 +81,7 @@ class FrontEnd_API {
 		// Get input
 		$userrealname = $cro->getRequestProperty( 'userrealname' );
 		$useremail = $cro->getRequestProperty( 'useremail' );
-		
+
 		// Store user info
 		$query = array(
 				'action' => 'insert',
@@ -139,13 +139,13 @@ class FrontEnd_API {
 		$res = $this->dbconn->mappedQuery( $query );
 
 		$animationID_result = $this->GetAnimationIDByToken( $cro->animationToken );
-		
+
 		if( ! $animationID_result ) {
 			return false;
 		}
-		
+
 		$cro->animationID = $animationID_result['id'];
-			
+
 		$cro->setRenderProperty( 'result', true );
 	}
 
@@ -205,6 +205,7 @@ class FrontEnd_API {
 				$config['email']['headers'] // Headers
 		);
 		$cro->setRenderProperty( 'message', sprintf( "Your animation has been scheduled for:\n\n%s\n\nYou will also receive an email containing this time.", $cro->animationStartTime ) );
+		$cro->setRenderProperty( 'start_time', $cro->animationStartTime );
 		$cro->setRenderProperty( 'result', true );
 	}
 

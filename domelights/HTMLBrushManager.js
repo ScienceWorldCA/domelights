@@ -27,9 +27,13 @@ var HTMLBrushManager = function() {
 	}
 	
 	this.ApplyBrushes = function() {
-		SequenceManager.StopUndoGroup();
-		SequenceManager.ApplyCurrentData();
-		SequenceManager.StartUndoGroup();
+
+        if (Brushes[ActiveBrushID] != undefined && Brushes[ActiveBrushID].ApplyBrush() == false)
+        {
+            SequenceManager.StopUndoGroup();
+            SequenceManager.ApplyCurrentData();
+            SequenceManager.StartUndoGroup();
+        }
 	}
 	
 	this.Undo = function() {
@@ -59,7 +63,7 @@ var HTMLBrushManager = function() {
 	{
         //console.log("BrushID: " + id);
 
-		if( Brushes[id].HTMLUI.Name ) {
+		if(Brushes[id] != undefined && Brushes[id].HTMLUI.Name ) {
 			var brush_name = Brushes[id].HTMLUI.Name;
 			return brush_name.replace( " ", "<br />" );
 		}

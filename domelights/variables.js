@@ -33,6 +33,12 @@ if( ! window ) {
     var UIObjectManager;
     var SequenceManager;
     var Brushes = [];
+	var numBrushes = 15; // user defined length
+
+	for(var i = 0; i < numBrushes; i++) {
+		Brushes.push(undefined);
+	}
+	
     var ActiveBrushID = 1;
     var ActiveBrushData = [new THREE.Color(1, 1, 1), new THREE.Color(1, 0, 0)];
     
@@ -60,7 +66,7 @@ if( ! window ) {
 
     //Pattern video Brush Canvas
     var videoPatterns = ['rainbow_rain.mp4', 'rainbow_wave.mp4', 'uv_meter.mp4'];
-    var videoPatternsRoot = 'https://dl.dropboxusercontent.com/u/15827855/';
+    var videoPatternsRoot = 'https://www.dropbox.com/s/cuglseotlbymn9j/';
     
     var videoCtx = document.createElement('canvas').getContext('2d');
     var videoVideo = document.createElement('video');

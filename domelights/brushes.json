@@ -1,61 +1,89 @@
 [
 	{
 		"id": 0,
+		"constructor": "Create_WipeBrush(options)",
 		"class": "blue",
-		"icon": "icon-magic"
+		"icon": "icon-magic",
+		"options": 
+		{
+			"slots": [
+				{
+					"Type": "color"
+				},
+				{
+					"Type": "slider",
+					"Min": "1",
+					"Max": "20",
+					"Default": "5",
+					"Step": "1"
+				}
+		   ]
+		}
+	
 	},
 	{
 		"id": 1,
+		"constructor": "Create_ColorBrush(options)",
 		"class": "red",
 		"icon": "icon-magic"
 	},
 	{
 		"id": 11,
+		"constructor": "Create_SolidColorBrush(options)",
 		"class": "orange",
 		"icon": "icon-magic"
 	},
 	{
 		"id": 9,
+		"constructor": "Create_FireWorkBrush(options)",
 		"class": "light_blue",
 		"icon": "icon-resize-horizontal"
 	},
 	{
 		"id": 4,
+		"constructor": "Create_DomeFlashBrush(options)",
 		"class": "green",
 		"icon": "icon-certificate"
 	},
 	{
 		"id": 2,
+		"constructor": "Create_GradientBackgroundBrush(options)",
 		"class": "pink",
 		"icon": "icon-certificate"
 	},
 	{
 		"id": 5,
+		"constructor": "Create_HorizontalRingBrush(options)",
 		"class": "teal",
 		"icon": "icon-spinner"
 	},
 	{
 		"id": 6,
+		"constructor": "Create_VerticalRingBrush(options)",
 		"class": "blue",
 		"icon": "icon-barcode"
 	},
 	{
 		"id": 10,
+		"constructor": "Create_SequenceTwoColorCycle(options)",
 		"class": "red",
 		"icon": "icon-barcode"
 	},
     {
         "id": 12,
+		"constructor": "Create_FireBackground(options)",
         "class": "green",
         "icon": "icon-barcode"
     },
     {
         "id": 13,
+		"constructor": "Create_PatternBrush(options)",
         "class": "orange",
         "icon": "icon-barcode"
     },
     {
         "id": 14,
+		"constructor": "Create_VideoPattenBrush(options)",
         "class": "light_blue",
         "icon": "icon-barcode"
     }

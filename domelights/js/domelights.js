@@ -46,6 +46,10 @@ function buildBrushes() {
 	$.getJSON( "brushes.json", function( data ) {
 		$("#brushcontainer").empty();
 		$.each( data, function( idx, row ) {
+			//Build Brush with template settings
+			var options = row['options'];
+			eval(row['constructor']);
+			
 			var brushButton = "";
 			brushButton += '<div class="box ' + row['class'] + '">';
 			brushButton += '<a class="brushselector" href="#" name="brushoptions" onClick="HTMLBrushManager.SetActiveBrush( ' + row['id'] + ' );"><i class="icon-1x icon-magic" id="icon"></i><br />' + HTMLBrushManager.getHTMLBlockName( row['id'] ) + '</a>';

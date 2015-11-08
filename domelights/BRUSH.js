@@ -22,6 +22,12 @@ var Brush = function(){
         }
     };
 
+    //Override this function for custom application call
+    this.ApplyBrush = function(){return false;};
+
+    //Override this function for custom Save call
+    this.SaveFrame = function(){return false;};
+
     //INIT
     this.init = function(){};
     this.init();

@@ -51,14 +51,15 @@ HTMLUI = function() {
     this.Checkbox.Prototype = Object.create(this.BaseHTMLUIObject());
 
     //Color UI
-    this.Colors = function(dataIndex){
+    this.Colors = function(options, dataIndex){
 
-        this.DataIndex = dataIndex;
-
+		this.DataIndex = dataIndex;
+		this.PaletteIndex = options.slots[this.DataIndex].Palette;
+        
         this.GenerateHTML = function(){
 
-        	var html = ( '<div class="row lineout-full" id="colorselector' + dataIndex + '" dataIndex="' + dataIndex + '">' +
-        			'<script>buildColorSelector( "colorselector' + dataIndex + '" );</script>' +
+        	var html = ( '<div class="row lineout-full" id="colorselector' + this.DataIndex + '" dataIndex="' + this.DataIndex + '" paletteIndex="' + this.PaletteIndex + '">' +
+        			'<script>buildColorSelector( "colorselector' + this.DataIndex + '" );</script>' +
         			'</div>' );
 
             return html;
@@ -150,17 +151,27 @@ HTMLUI = function() {
     };
 
     //Slider UI
-    this.Slider = function(minValue, maxValue, step, currentValue, dataIndex){
+    this.Slider = function(val1, val2, val3, val5, val6){
 
-        this.DataIndex = dataIndex;
-        this.mMinValue = minValue;
-        this.mMaxValue = maxValue;
-        this.mStep = step;
-        this.mCurrentValue = currentValue;
-
+	if (arguments.length === 2) 
+	{
+		this.DataIndex = val2;
+        this.mMinValue = val1.slots[this.DataIndex].Min;
+        this.mMaxValue = val1.slots[this.DataIndex].Max;
+        this.mStep = val1.slots[this.DataIndex].Step;
+        this.mCurrentValue = val1.slots[this.DataIndex].Default;
+	}
+	else
+	{
+        this.DataIndex = val6;
+        this.mMinValue = val1;
+        this.mMaxValue = val2;
+        this.mStep = val3;
+        this.mCurrentValue = val5;
+	}
         this.GenerateHTML = function(){
 
-            var html = ("\t<input class=\"slider\" type=\"range\" min=\"" + this.mMinValue + "\" max=\"" + this.mMaxValue + "\" value=\"" + this.mCurrentValue + "\" step=\"" + this.mStep + "\" oninput=\"ActiveBrushData[" + dataIndex + "] = this.value;\">\n");
+            var html = ("\t<input class=\"slider\" type=\"range\" min=\"" + this.mMinValue + "\" max=\"" + this.mMaxValue + "\" value=\"" + this.mCurrentValue + "\" step=\"" + this.mStep + "\" oninput=\"ActiveBrushData[" + this.DataIndex + "] = this.value;\">\n");
 
             return html;
         };

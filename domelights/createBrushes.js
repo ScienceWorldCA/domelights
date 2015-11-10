@@ -53,10 +53,8 @@ function Create_WipeBrush(options)				// INDEX: 0
 	var htmlUI = new HTMLUI();
 	htmlUI.Name = "Wipe Color";
 	htmlUI.AddUI(new htmlUI.Label("Select a Wipe Colour"));
-	htmlUI.AddUI(new htmlUI.Colors(0));
-	var sliderSlot = 1;
-	var Ops = options.slots[sliderSlot];
-	htmlUI.AddUI(new htmlUI.Slider(Ops.Min, Ops.Max, Ops.Step, Ops.Default, 1));
+	htmlUI.AddUI(new htmlUI.Colors(options, 0));
+	htmlUI.AddUI(new htmlUI.Slider(options, 1));
 	WipeBrush.HTMLUI = htmlUI;
 
 	Brushes[WipeBrush.Index] = WipeBrush;
@@ -94,7 +92,7 @@ function Create_ColorBrush(options)				// INDEX: 1
 	var htmlUI = new HTMLUI();
 	htmlUI.Name = "Finger Paint";
 	htmlUI.AddUI(new htmlUI.Label("Brush Colour:"));
-	htmlUI.AddUI(new htmlUI.Colors(0));
+	htmlUI.AddUI(new htmlUI.Colors(options, 0));
 	// htmlUI.AddUI(new htmlUI.Label("Example Button:"));
 	// htmlUI.AddUI(new htmlUI.OptionBox(1, 0, [
 		// { "name": "Test", "value": "1"}
@@ -187,7 +185,7 @@ function Create_DomeFlashBrush(options)			// INDEX: 4
 	var htmlUI = new HTMLUI();
 	htmlUI.Name = "Flash Dome";
 	htmlUI.AddUI(new htmlUI.Label("Colour:"));
-	htmlUI.AddUI(new htmlUI.Colors(0));
+	htmlUI.AddUI(new htmlUI.Colors(options, 0));
 	DomeFlashBrush.HTMLUI = htmlUI;
 	Brushes[DomeFlashBrush.Index] = DomeFlashBrush;
 }
@@ -225,7 +223,7 @@ function Create_HorizontalRingBrush(options)		// INDEX: 5
 	var htmlUI = new HTMLUI();
 	htmlUI.Name = "Horizontal Rings";
 	htmlUI.AddUI(new htmlUI.Label("Foreground Colour:"));
-	htmlUI.AddUI(new htmlUI.Colors(0));
+	htmlUI.AddUI(new htmlUI.Colors(options, 0));
 	HorizontalRingBrush.HTMLUI = htmlUI;
 	Brushes[HorizontalRingBrush.Index] = HorizontalRingBrush;
 }
@@ -263,12 +261,12 @@ function Create_VerticalRingBrush(options)		// INDEX: 6
 	var htmlUI = new HTMLUI();
 	htmlUI.Name = "Vertical Rings";
 	htmlUI.AddUI(new htmlUI.Label("Foreground Colour:"));
-	htmlUI.AddUI(new htmlUI.Colors(0));
+	htmlUI.AddUI(new htmlUI.Colors(options, 0));
 	VerticalRingBrush.HTMLUI = htmlUI;
 	Brushes[VerticalRingBrush.Index] = VerticalRingBrush;
 }
 
-function Create_LaunchBrush(options)				// INDEX: 7
+function Create_LaunchBrush()				// INDEX: 7
 {
 	var LaunchBrush = new Brush();              
 
@@ -317,7 +315,7 @@ function Create_LaunchBrush(options)				// INDEX: 7
 	Brushes[LaunchBrush.Index] = LaunchBrush;
 }
 
-function Create_FireWorkBurstBrush(options)		// INDEX: 8
+function Create_FireWorkBurstBrush()		// INDEX: 8
 {
 	var FireWorkBurstBrush = new Brush();       
 
@@ -427,12 +425,16 @@ function Create_FireWorkBrush(options)			// INDEX: 9
 	var htmlUI = new HTMLUI();
 	htmlUI.Name = "Fireworks";
 	htmlUI.AddUI(new htmlUI.Label("Fireworks Colour:"));
-	htmlUI.AddUI(new htmlUI.Colors(0));
+	htmlUI.AddUI(new htmlUI.Colors(options, 0));
 	htmlUI.AddUI(new htmlUI.Label("Select explosion size:"));
-	htmlUI.AddUI(new htmlUI.Slider(1, 10, 1, 5, 1));
+	console.log("fireworks");
+	htmlUI.AddUI(new htmlUI.Slider(options, 1));
 	FireWorkBrush.HTMLUI = htmlUI;
 
 	Brushes[FireWorkBrush.Index] = FireWorkBrush;
+	
+	Create_LaunchBrush();
+	Create_FireWorkBurstBrush()
 }
 
 /* ------  Full Duration Brushes  ------------------------------ */
@@ -475,9 +477,9 @@ function Create_SequenceTwoColorCycle(options)	// INDEX: 10
 	var htmlUI = new HTMLUI();
 	htmlUI.Name = "Two Colour";
 	htmlUI.AddUI(new htmlUI.Label("Colour 1:"));
-	htmlUI.AddUI(new htmlUI.Colors(0));
+	htmlUI.AddUI(new htmlUI.Colors(options, 0));
 	htmlUI.AddUI(new htmlUI.Label("Colour 2:"));
-	htmlUI.AddUI(new htmlUI.Colors(1));
+	htmlUI.AddUI(new htmlUI.Colors(options, 1));
 	SequenceTwoColorCycle.HTMLUI = htmlUI;
 	Brushes[SequenceTwoColorCycle.Index] = SequenceTwoColorCycle;
 }
@@ -508,7 +510,7 @@ function Create_SolidColorBrush(options)			// INDEX: 11
 	var htmlUI = new HTMLUI();
 	htmlUI.Name = "Solid Color";
 	htmlUI.AddUI(new htmlUI.Label("Brush Colour:"));
-	htmlUI.AddUI(new htmlUI.Colors(0));
+	htmlUI.AddUI(new htmlUI.Colors(options, 0));
 
 	SolidColorBrush.HTMLUI = htmlUI;
 
@@ -592,17 +594,16 @@ function Create_FireBackground(options)			// INDEX: 12
 
 		return;
 	};
-
 	var htmlUI = new HTMLUI();
 	htmlUI.Name = "Fire";
 	htmlUI.AddUI(new htmlUI.Label("Colour 1:"));
-	htmlUI.AddUI(new htmlUI.Colors(0));
+	htmlUI.AddUI(new htmlUI.Colors(options, 0));
 	htmlUI.AddUI(new htmlUI.Label("Colour 2:"));
-	htmlUI.AddUI(new htmlUI.Colors(1));
+	htmlUI.AddUI(new htmlUI.Colors(options, 1));
 	htmlUI.AddUI(new htmlUI.Label("Select size:"));
-	htmlUI.AddUI(new htmlUI.Slider(1, 10, 1, 5, 2));
+	htmlUI.AddUI(new htmlUI.Slider(options, 2));
 	htmlUI.AddUI(new htmlUI.Label("Select speed:"));
-	htmlUI.AddUI(new htmlUI.Slider(1, 20, 0.1, 5, 3));
+	htmlUI.AddUI(new htmlUI.Slider(options, 3));
 	FireBackground.HTMLUI = htmlUI;
 	Brushes[FireBackground.Index] = FireBackground;
 }

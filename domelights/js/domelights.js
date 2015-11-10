@@ -71,11 +71,12 @@ function buildBrushes() {
 function buildColorSelector(div_id) {
 	var selector_element = "#" + div_id;
 	var dataIndex = $(selector_element).attr('dataIndex');
+	var paletteIndex = $(selector_element).attr('paletteIndex');
 	$(selector_element).html("<h4>Building...</h4>");
 	$.getJSON( "colors.json", function( data ) {
 		var colorblock = "colorblock_" + dataIndex;
 		$(selector_element).empty();
-		$.each( data, function( idx, row ) {
+		$.each( data[paletteIndex], function( idx, row ) {
 			$(selector_element).append( '<img class="colorblock ' + colorblock + ' ' + row['class'] + '" onclick="HTMLBrushManager.setColorByDataIndex(' + dataIndex + ',' + row['rgb'] + ');" src="images/shim.png" />' );
 		});
 

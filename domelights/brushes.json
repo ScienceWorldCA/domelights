@@ -8,7 +8,8 @@
 		{
 			"slots": [
 				{
-					"Type": "color"
+					"Type": "color",
+					"Palette" : "0"
 				},
 				{
 					"Type": "slider",
@@ -25,25 +26,68 @@
 		"id": 1,
 		"constructor": "Create_ColorBrush(options)",
 		"class": "red",
-		"icon": "icon-magic"
+		"icon": "icon-magic",
+		"options": 
+		{
+			"slots": [
+				{
+					"Type": "color",
+					"Palette" : "2"
+				}
+		   ]
+		}
 	},
 	{
 		"id": 11,
 		"constructor": "Create_SolidColorBrush(options)",
 		"class": "orange",
-		"icon": "icon-magic"
+		"icon": "icon-magic",
+		"options": 
+		{
+			"slots": [
+				{
+					"Type": "color",
+					"Palette" : "0"
+				}
+		   ]
+		}
 	},
 	{
 		"id": 9,
 		"constructor": "Create_FireWorkBrush(options)",
 		"class": "light_blue",
-		"icon": "icon-resize-horizontal"
+		"icon": "icon-resize-horizontal",
+		"options": 
+		{
+			"slots": [
+					{
+						"Type": "color",
+						"Palette" : "0"
+					},
+					{
+						"Type": "slider",
+						"Min": "1",
+						"Max": "10",
+						"Default": "5",
+						"Step": "1"
+					}
+			   ]
+		}
 	},
 	{
 		"id": 4,
 		"constructor": "Create_DomeFlashBrush(options)",
 		"class": "green",
-		"icon": "icon-certificate"
+		"icon": "icon-certificate",
+		"options": 
+		{
+			"slots": [
+				{
+					"Type": "color",
+					"Palette" : "0"
+				}
+		   ]
+		}
 	},
 	{
 		"id": 2,
@@ -55,25 +99,83 @@
 		"id": 5,
 		"constructor": "Create_HorizontalRingBrush(options)",
 		"class": "teal",
-		"icon": "icon-spinner"
+		"icon": "icon-spinner",
+		"options": 
+		{
+			"slots": [
+				{
+					"Type": "color",
+					"Palette" : "0"
+				}
+		   ]
+		}
 	},
 	{
 		"id": 6,
 		"constructor": "Create_VerticalRingBrush(options)",
 		"class": "blue",
-		"icon": "icon-barcode"
+		"icon": "icon-barcode",
+		"options": 
+		{
+			"slots": [
+				{
+					"Type": "color",
+					"Palette" : "0"
+				}
+		   ]
+		}
 	},
 	{
 		"id": 10,
 		"constructor": "Create_SequenceTwoColorCycle(options)",
 		"class": "red",
-		"icon": "icon-barcode"
+		"icon": "icon-barcode",
+		"options": 
+		{
+			"slots": [
+				{
+					"Type": "color",
+					"Palette" : "0"
+				},
+				{
+					"Type": "color",
+					"Palette" : "0"
+				}
+		   ]
+		}
 	},
     {
         "id": 12,
 		"constructor": "Create_FireBackground(options)",
         "class": "green",
-        "icon": "icon-barcode"
+        "icon": "icon-barcode",
+		"options": 
+		{
+			"slots": [
+					{
+						"Type": "color",
+						"Palette" : "1"
+					},
+					{
+						"Type": "color",
+						"Palette" : "1"
+					},
+					{
+						"Type": "slider",
+						"Min": "1",
+						"Max": "10",
+						"Default": "1",
+						"Step": "5"
+					},
+					{
+						"Type": "slider",
+						"Min": "1",
+						"Max": "20",
+						"Default": "0.1",
+						"Step": "5"
+					}
+			   ]
+		}
     },
     {
         "id": 13,

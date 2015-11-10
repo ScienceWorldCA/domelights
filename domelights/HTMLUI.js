@@ -151,24 +151,14 @@ HTMLUI = function() {
     };
 
     //Slider UI
-    this.Slider = function(val1, val2, val3, val5, val6){
+    this.Slider = function(options, dataIndex, val3, val5, val6){
 
-	if (arguments.length === 2) 
-	{
-		this.DataIndex = val2;
-        this.mMinValue = val1.slots[this.DataIndex].Min;
-        this.mMaxValue = val1.slots[this.DataIndex].Max;
-        this.mStep = val1.slots[this.DataIndex].Step;
-        this.mCurrentValue = val1.slots[this.DataIndex].Default;
-	}
-	else
-	{
-        this.DataIndex = val6;
-        this.mMinValue = val1;
-        this.mMaxValue = val2;
-        this.mStep = val3;
-        this.mCurrentValue = val5;
-	}
+		this.DataIndex = dataIndex;
+		this.mMinValue = options.slots[this.DataIndex].Min;
+		this.mMaxValue = options.slots[this.DataIndex].Max;
+		this.mStep = options.slots[this.DataIndex].Step;
+		this.mCurrentValue = options.slots[this.DataIndex].Default;
+
         this.GenerateHTML = function(){
 
             var html = ("\t<input class=\"slider\" type=\"range\" min=\"" + this.mMinValue + "\" max=\"" + this.mMaxValue + "\" value=\"" + this.mCurrentValue + "\" step=\"" + this.mStep + "\" oninput=\"ActiveBrushData[" + this.DataIndex + "] = this.value;\">\n");

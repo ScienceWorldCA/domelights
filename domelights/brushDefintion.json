@@ -82,11 +82,11 @@
 	},
 	{
 		"id": 7,
-		"constructor": "",
+		"constructor": ""
 	},
 	{
 		"id": 8,
-		"constructor": "",
+		"constructor": ""
 	},
 	{
 		"id": 9,
@@ -168,10 +168,10 @@
     },
     {
         "id": 13,
-		"constructor": "Create_PatternBrush(options)",
+		"constructor": "Create_PatternBrush(options)"
     },
     {
         "id": 14,
-		"constructor": "Create_VideoPattenBrush(options)",
+		"constructor": "Create_VideoPattenBrush(options)"
     }
 ]

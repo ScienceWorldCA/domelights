@@ -66,7 +66,7 @@ if( ! window ) {
 
     //Pattern video Brush Canvas
     var videoPatterns = ['rainbow_rain.mp4', 'rainbow_wave.mp4', 'uv_meter.mp4'];
-    var videoPatternsRoot = 'https://www.dropbox.com/s/cuglseotlbymn9j/';
+    var videoPatternsRoot = 'http://domelights.netheadz.nl/';
     
     var videoCtx = document.createElement('canvas').getContext('2d');
     var videoVideo = document.createElement('video');

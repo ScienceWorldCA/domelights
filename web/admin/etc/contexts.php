@@ -2,19 +2,19 @@
 
 $config['contexts'] = array();
 
-$config['contexts']['ping'] = array(
-	'properties' => array(
-	),
-	'logic' => array(
-		array( 'class' => 'Ping', 'method' => 'Reply' ),
-	),
-	'render' => array(
-		'engine' => 'Render_JSON',
-		'path' => '',
+$config['contexts']['Ping'] = array(
 		'properties' => array(
-			'message' => 'Default context render property.',
 		),
-	),
+		'logic' => array(
+				array( 'class' => 'Ping', 'method' => 'Reply' ),
+		),
+		'render' => array(
+				'engine' => 'Render_JSON',
+				'path' => '',
+				'properties' => array(
+						'message' => 'Alive',
+				),
+		),
 );
 
 $config['contexts']['default'] = array(
@@ -26,8 +26,8 @@ $config['contexts']['default'] = array(
 		'engine' => 'Render_Simple',
 		'path' => 'default.php',
 		'properties' => array(
-			'page_title' => 'Example',
-			'place_holder_message' => 'Welcome to the Colore example page!',
+			'page_title' => 'Dome Lights',
+			'place_holder_message' => 'Nothing here!',
 		),
 	),
 );

@@ -3,7 +3,7 @@ function DoStoreAnimation() {
 		location.reload();
 		resetCanvas();
 	} else {
-		$('#submitmessage').html("<img src='images/ajax-loader.gif' />").removeClass("success").removeClass("warning");
+		$('#submitmessage').html("<img src='assets/images/ajax-loader.gif' />").removeClass("success").removeClass("warning");
 		$("#submitbutton").val("Trying...").addClass("red").removeClass("blue");
 		
 		api.DoStoreAnimation();
@@ -43,7 +43,7 @@ function closePopupMessage() {
 
 function buildBrushes() {
 	$("#brushcontainer").html("Loading...");
-	$.getJSON( "brushes.json", function( data ) {
+	$.getJSON( "assets/brushes.json", function( data ) {
 		$("#brushcontainer").empty();
 		$.each( data, function( idx, row ) {
 			//Build Brush with template settings
@@ -73,11 +73,11 @@ function buildColorSelector(div_id) {
 	var dataIndex = $(selector_element).attr('dataIndex');
 	var paletteIndex = $(selector_element).attr('paletteIndex');
 	$(selector_element).html("<h4>Building...</h4>");
-	$.getJSON( "colors.json", function( data ) {
+	$.getJSON( "assets/colors.json", function( data ) {
 		var colorblock = "colorblock_" + dataIndex;
 		$(selector_element).empty();
 		$.each( data[paletteIndex], function( idx, row ) {
-			$(selector_element).append( '<img class="colorblock ' + colorblock + ' ' + row['class'] + '" onclick="HTMLBrushManager.setColorByDataIndex(' + dataIndex + ',' + row['rgb'] + ');" src="images/shim.png" />' );
+			$(selector_element).append( '<img class="colorblock ' + colorblock + ' ' + row['class'] + '" onclick="HTMLBrushManager.setColorByDataIndex(' + dataIndex + ',' + row['rgb'] + ');" src="assets/images/shim.png" />' );
 		});
 
 		$("." + colorblock).click( function() {

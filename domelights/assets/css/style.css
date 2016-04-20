@@ -6,17 +6,16 @@
 /*---------------------------------
 	OVERRIDES
 -----------------------------------*/
-h1,h2,h3,h4,h5,h6 {
+h1, h2, h3, h4, h5, h6 {
 	font-family: 'Abel', sans-serif;
 	font-weight: normal;
 }
 
-thead th,tbody th {
+thead th, tbody th {
 	font-family: 'Abel', sans-serif;
 }
 
-button,a.btn,input[type="submit"],input[type="reset"],input[type="button"]
-	{
+button, a.btn, input[type="submit"], input[type="reset"], input[type="button"] {
 	font-family: 'Abel', sans-serif;
 }
 
@@ -55,12 +54,12 @@ i {
 
 #icon {
 	padding: 10px 0px;
-    width: 55px;
+	width: 55px;
 }
 
 .icon-dome {
 	width: 55px;
-    margin-bottom: 10px;
+	margin-bottom: 10px;
 }
 
 .panel_wrapper {

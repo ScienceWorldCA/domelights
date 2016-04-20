@@ -1,0 +1,177 @@
+[
+	{
+		"id": 0,
+		"constructor": "Create_WipeBrush(options)",
+		"options": 
+		{
+			"slots": [
+				{
+					"Type": "color",
+					"Palette" : "0"
+				},
+				{
+					"Type": "slider",
+					"Min": "1",
+					"Max": "20",
+					"Default": "5",
+					"Step": "1"
+				}
+		   ]
+		}
+	
+	},
+	{
+		"id": 1,
+		"constructor": "Create_ColorBrush(options)",
+		"options": 
+		{
+			"slots": [
+				{
+					"Type": "color",
+					"Palette" : "0"
+				}
+		   ]
+		}
+	},
+	{
+		"id": 2,
+		"constructor": "Create_GradientBackgroundBrush(options)"
+	},
+	{
+		"id": 3,
+		"constructor": "Create_VerticalRainbowWipeBrush(options)"
+	},
+	{
+		"id": 4,
+		"constructor": "Create_DomeFlashBrush(options)",
+		"options": 
+		{
+			"slots": [
+				{
+					"Type": "color",
+					"Palette" : "0"
+				}
+		   ]
+		}
+	},
+	{
+		"id": 5,
+		"constructor": "Create_HorizontalRingBrush(options)",
+		"options": 
+		{
+			"slots": [
+				{
+					"Type": "color",
+					"Palette" : "0"
+				}
+		   ]
+		}
+	},
+	{
+		"id": 6,
+		"constructor": "Create_VerticalRingBrush(options)",
+		"options": 
+		{
+			"slots": [
+				{
+					"Type": "color",
+					"Palette" : "0"
+				}
+		   ]
+		}
+	},
+	{
+		"id": 7,
+		"constructor": ""
+	},
+	{
+		"id": 8,
+		"constructor": ""
+	},
+	{
+		"id": 9,
+		"constructor": "Create_FireWorkBrush(options)",
+		"options": 
+		{
+			"slots": [
+					{
+						"Type": "color",
+						"Palette" : "0"
+					},
+					{
+						"Type": "slider",
+						"Min": "1",
+						"Max": "10",
+						"Default": "5",
+						"Step": "1"
+					}
+			   ]
+		}
+	},
+	{
+		"id": 10,
+		"constructor": "Create_SequenceTwoColorCycle(options)",
+		"options": 
+		{
+			"slots": [
+				{
+					"Type": "color",
+					"Palette" : "0"
+				},
+				{
+					"Type": "color",
+					"Palette" : "0"
+				}
+		   ]
+		}
+	},
+    {
+		"id": 11,
+		"constructor": "Create_SolidColorBrush(options)",
+		"options": 
+		{
+			"slots": [
+				{
+					"Type": "color",
+					"Palette" : "0"
+				}
+		   ]
+		}
+	},
+	{
+        "id": 12,
+		"constructor": "Create_FireBackground(options)",
+		"slots": [
+				{
+					"Type": "color",
+					"Palette" : "1"
+				},
+				{
+					"Type": "color",
+					"Palette" : "1"
+				},
+				{
+					"Type": "slider",
+					"Min": "1",
+					"Max": "10",
+					"Default": "1",
+					"Step": "5"
+				},
+				{
+					"Type": "slider",
+					"Min": "1",
+					"Max": "20",
+					"Default": "0.1",
+					"Step": "5"
+				}
+		   ]
+    },
+    {
+        "id": 13,
+		"constructor": "Create_PatternBrush(options)"
+    },
+    {
+        "id": 14,
+		"constructor": "Create_VideoPattenBrush(options)"
+    }
+]

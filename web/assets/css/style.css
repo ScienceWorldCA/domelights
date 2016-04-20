@@ -1,0 +1,111 @@
+/*---------------------------------
+	IMPORTS
+-----------------------------------*/
+@import url(http://fonts.googleapis.com/css?family=Abel);
+
+/*---------------------------------
+	OVERRIDES
+-----------------------------------*/
+h1, h2, h3, h4, h5, h6 {
+	font-family: 'Abel', sans-serif;
+	font-weight: normal;
+}
+
+thead th, tbody th {
+	font-family: 'Abel', sans-serif;
+}
+
+button, a.btn, input[type="submit"], input[type="reset"], input[type="button"] {
+	font-family: 'Abel', sans-serif;
+}
+
+/*---------------------------------
+	LAYOUT
+-----------------------------------*/
+html {
+	height: 100%;
+}
+
+body {
+	margin: 0;
+	height: 100%;
+	padding: 0 0 0 0;
+	background-color: #000;;
+	font: normal 0.9em/150% 'Abel', sans-serif;
+}
+
+div.topic {
+	display: none;
+}
+
+i {
+	color: #fff;
+}
+
+.dome {
+	position: absolute;
+	top: 120px;
+	right: 700px;
+}
+
+.controls_wrapper {
+	border-left: solid 2px #0082c8;
+}
+
+#icon {
+	padding: 10px 0px;
+	width: 55px;
+}
+
+.icon-dome {
+	width: 55px;
+	margin-bottom: 10px;
+}
+
+.panel_wrapper {
+	background-color: #fff;
+}
+
+.panel {
+	padding: 0px;
+}
+
+.row {
+	
+}
+
+.white {
+	background-color: #fff;
+}
+
+.blue {
+	background-color: #0082c8;
+}
+
+.red {
+	background-color: #ee3a43;
+}
+
+.orange {
+	background-color: #f9a451;
+}
+
+.light_blue {
+	background-color: #00bce4;
+}
+
+.green {
+	background-color: #1fb25a;
+}
+
+.pink {
+	background-color: #ec519d;
+}
+
+.dark_blue {
+	background-color: #083a81;
+}
+
+.teal {
+	background-color: #009590;
+}

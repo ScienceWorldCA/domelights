@@ -1,6 +1,18 @@
 <?php
 
 class ColoreApachePHPRequestHelper extends ColoreRequest implements ColoreRequestHelper {
+	
+	protected $request_properties = array();
+	
+	public function __construct() {
+		$raw_post_data = file_get_contents( 'php://input' );
+		$raw_post_array = explode( '&', $raw_post_data );
+		foreach( $raw_post_array as $keyval ) {
+			$keyval = explode ( '=', $keyval );
+			if( count($keyval) == 2 )
+				$this->request_properties[$keyval[0]] = urldecode( $keyval[1] );
+		}
+	}
 
 	public function getContext() {
 		$baseURL = dirname( $_SERVER['SCRIPT_NAME'] );
@@ -8,15 +20,17 @@ class ColoreApachePHPRequestHelper extends ColoreRequest implements ColoreReques
 		if( isset( $_SERVER['PATH_INFO'] ) && ! empty( $_SERVER['PATH_INFO'] ) ) {
 			$context = $_SERVER['PATH_INFO'];
 		} elseif( isset( $_SERVER['REDIRECT_URL'] ) && ! empty( $_SERVER['REDIRECT_URL'] ) ) {
-			$context = str_replace( $baseURL, '', $_SERVER['REDIRECT_URL'] );
+			$context = substr( $_SERVER['REDIRECT_URL'], strlen( $baseURL ) );
 		} else {
-			$context = str_replace( $baseURL, '', $_SERVER['REQUEST_URI'] );
+			$context = substr( $_SERVER['REQUEST_URI'], strlen( $baseURL ) );
 		}
-
+		
 		$context = addslashes( $context );
 		
 		if( substr( $context, 0, 1 ) == '/' )
 			$context = substr( $context, 1 );
+		
+		@error_log( sprintf( "%s: Context: [%s]", __METHOD__, $context ) );
 
 		return $context;
 	}

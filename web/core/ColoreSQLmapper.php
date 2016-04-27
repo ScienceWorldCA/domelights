@@ -8,8 +8,8 @@ class ColoreSQLmapper {
 		if( ! is_array( $statementInfo ) || ! isset( $statementInfo['action'] ) || ! isset( $statementInfo['table'] ) )
 			return null;
 		
-		// Check for required fields on select, update and insert.
-		if( preg_match( '/(select|update|insert)/', $statementInfo['action'] ) && ( ! is_array( $statementInfo['fields'] ) || count( $statementInfo['fields'] ) == 0 ) )
+		// Check for required fields on select, update, replace and insert.
+		if( preg_match( '/(select|update|replace|insert)/', $statementInfo['action'] ) && ( ! is_array( $statementInfo['fields'] ) || count( $statementInfo['fields'] ) == 0 ) )
 			return null;
 		
 		// Initialize statement variable
@@ -53,8 +53,7 @@ class ColoreSQLmapper {
 
 				// Done
 				break;
-			
-			
+
 			// REPLACE
 			case "replace";
 				$sqlResult['statement'][0] = "REPLACE INTO";

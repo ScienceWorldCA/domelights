@@ -1,24 +1,26 @@
 {
-  "name": "Domelights Admin",
-  "homepage": "https://github.com/ScienceWorldCA/domelights",
-  "authors": [
-    "TyIsI <tycho.eggen@gmail.com>"
-  ],
-  "description": "",
-  "main": "",
-  "license": "GPL",
-  "private": true,
-  "ignore": [
-    "**/.*",
-    "node_modules",
-    "bower_components",
-    "test",
-    "tests"
-  ],
-  "dependencies": {
-    "angular": "angularjs#^1.5.5",
-    "jquery": "^2.2.3",
-    "mustache.js": "mustache#^2.2.1",
-    "bootstrap": "^3.3.6"
-  }
+	"name": "Domelights Admin",
+	"homepage": "https://github.com/ScienceWorldCA/domelights",
+	"authors": [
+		"TyIsI <tycho.eggen@gmail.com>"
+	],
+	"description": "",
+	"main": "",
+	"license": "GPL",
+	"private": true,
+	"ignore": [
+		"**/.*",
+		"node_modules",
+		"bower_components",
+		"test",
+		"tests"
+	],
+	"dependencies": {
+		"jquery": "latest",
+		"jquery-ui": "latest",
+		"bootstrap": "latest",
+		"angular": "latest",
+		"backbone": "latest",
+		"mustache.js": "latest"
+	}
 }

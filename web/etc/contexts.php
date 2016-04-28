@@ -120,10 +120,10 @@ $config['contexts']['admin/'] = array(
 	),
 	'render' => array(
 		'engine' => 'Render_Simple',
-		'path' => 'default.php',
+		'path' => 'admin.php',
 		'properties' => array(
 			'page_title' => 'Dome Lights',
-			'place_holder_message' => 'Admin!',
+			'place_holder_message' => 'Welcome',
 		),
 	),
 );

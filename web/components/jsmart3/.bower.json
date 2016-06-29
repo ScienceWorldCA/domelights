@@ -1,0 +1,14 @@
+{
+  "name": "jsmart3",
+  "homepage": "https://github.com/miroshnikov/jsmart",
+  "_release": "1787b93e03",
+  "_resolution": {
+    "type": "branch",
+    "branch": "master",
+    "commit": "1787b93e0333f87a7d6a4c3d1c8cd48693044eb3"
+  },
+  "_source": "https://github.com/miroshnikov/jsmart.git",
+  "_target": "*",
+  "_originalSource": "jsmart3",
+  "_direct": true
+}

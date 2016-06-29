@@ -1,5 +1,7 @@
 <?php
 
+@session_start();
+
 class ColoreApachePHPRequestHelper extends ColoreRequest implements ColoreRequestHelper {
 	
 	protected $request_properties = array();
@@ -124,6 +126,14 @@ class ColoreApachePHPRequestHelper extends ColoreRequest implements ColoreReques
 	 */
 	public function setSessionProperty( $sessionProperty, $sessionValue ) {
 		$_SESSION[$sessionProperty] = $sessionValue;
+	}
+	
+	/**
+	 * Sets a session lifetime.
+	 * @param integer $sessionLifetime
+	 */
+	public function setSessionLifetime( $sessionLifetime = 1800 ) {
+		session_set_cookie_params( $sessionLifetime );
 	}
 	
 	/**

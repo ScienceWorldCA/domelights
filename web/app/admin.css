@@ -2,10 +2,14 @@
 
 @CHARSET "ISO-8859-1";
 
-body {
+html, body, .container, .container-fluid {
+	height: 100%;
+}
+
+body.signin {
 	padding-top: 40px;
 	padding-bottom: 40px;
-	background-color: #eee;
+	background-color: #ECF0F1;
 }
 
 .form-signin {
@@ -49,5 +53,80 @@ body {
 }
 
 #loginscreen {
+	display: block;
+}
+
+#mainscreen {
+	display: block;
+}
+
+.header {
+	background-color: #007ac9;
+	padding-top: 5px;
+	padding-bottom: 5px;
+	color: white;
+}
+
+.spacious {
+	margin-top: 5px;
+	margin-bottom: 5px;
+}
+
+UL.nav LI:hover {
+	background-color: #0046ad;
+}
+
+#menucontainer {
+	/* background-color: #0046ad; */
+	background-color: #007ac9;
+	color: #ffffff !important;
+}
+
+.nav > li > a {
+	color: #ffffff !important;
+}
+
+.nav > li > a:hover {
+	color: #007ac9 !important;
+}
+
+#contentcontainer {
+	background-color: #ECF0F1;
+}
+
+.newgreen {
+	background-color: #A5D867;
+}
+
+.red {
+	background-color: #E74C3C;
+}
+
+.purple {
+	background-color: #6459C4;
+}
+
+.orange {
+	background-color: #FF6E00;
+}
+
+.blue {
+	background-color: #3498db;
+}
+
+.green {
+	background-color: #2ecc71;
+}
+
+.mustard {
+	background-color: #f1c40f;
+}
+
+.error_message {
+	border: red 1px solid;
+	border-radius: 5px;
+}
+
+.menuListUsers {
 	display: none;
 }

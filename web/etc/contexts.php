@@ -128,7 +128,7 @@ $config['contexts']['admin/'] = array(
 	),
 );
 
-$config['contexts']['admin/api/login'] = array(
+$config['contexts']['admin/api/session/login'] = array(
 	'properties' => array(
 	),
 	'logic' => array(
@@ -144,7 +144,7 @@ $config['contexts']['admin/api/login'] = array(
 	),
 );
 
-$config['contexts']['admin/api/checkauthenticated'] = array(
+$config['contexts']['admin/api/session/authenticated'] = array(
 	'properties' => array(
 	),
 	'logic' => array(
@@ -159,7 +159,7 @@ $config['contexts']['admin/api/checkauthenticated'] = array(
 	),
 );
 
-$config['contexts']['admin/api/logout'] = array(
+$config['contexts']['admin/api/session/logout'] = array(
 	'properties' => array(
 	),
 	'logic' => array(
@@ -175,7 +175,7 @@ $config['contexts']['admin/api/logout'] = array(
 	),
 );
 
-$config['contexts']['admin/api/getuserinfo'] = array(
+$config['contexts']['admin/api/session/info'] = array(
 	'properties' => array(
 	),
 	'logic' => array(
@@ -287,7 +287,39 @@ $config['contexts']['admin/api/controllers/list'] = array(
 	),
 );
 
-$config['contexts']['admin/api/getcontrollermodes'] = array(
+$config['contexts']['admin/api/controllers/view'] = array(
+	'properties' => array(
+	),
+	'logic' => array(
+			array( 'class' => 'Admin_API', 'method' => 'RequireAuthenticated' ),
+			array( 'class' => 'Admin_API', 'method' => 'GetControllerDetails' ),
+	),
+	'render' => array(
+		'engine' => 'Render_JSON',
+		'path' => '',
+		'properties' => array(
+			'result' => 'ERROR',
+		),
+	),
+);
+
+$config['contexts']['admin/api/controllers/update'] = array(
+	'properties' => array(
+	),
+	'logic' => array(
+			array( 'class' => 'Admin_API', 'method' => 'RequireAuthenticated' ),
+			array( 'class' => 'Admin_API', 'method' => 'UpdateControllerDetails' ),
+	),
+	'render' => array(
+		'engine' => 'Render_JSON',
+		'path' => '',
+		'properties' => array(
+			'result' => 'ERROR',
+		),
+	),
+);
+
+$config['contexts']['admin/api/controllers/modes/list'] = array(
 	'properties' => array(
 	),
 	'logic' => array(
@@ -299,10 +331,26 @@ $config['contexts']['admin/api/getcontrollermodes'] = array(
 		'properties' => array(
 			'result' => 'OK',
 			'modes' => array(
-					0 => "Black Out",
-					1 => "Animation Playback",
-					2 => "Scripted",
+					array( 'id' => 0, 'description' => "Black Out" ),
+					array( 'id' => 1, 'description' => "Animation Playback" ),
+					array( 'id' => 2, 'description' => "Scripted" ),
 			),
+		),
+	),
+);
+
+$config['contexts']['admin/api/controllers/scripts/list'] = array(
+	'properties' => array(
+	),
+	'logic' => array(
+			array( 'class' => 'Admin_API', 'method' => 'RequireAuthenticated' ),
+	),
+	'render' => array(
+		'engine' => 'Render_JSON',
+		'path' => '',
+		'properties' => array(
+			'result' => 'OK',
+			'scripts' => $config['scripts'],
 		),
 	),
 );

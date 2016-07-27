@@ -3,13 +3,14 @@ function ColoreStateMachine() {
 	this.context = "";
 	this.contexts = [];
 	this.settings = [];
+	this.context_info = [];
 	
 	this.init = function() {
 		$(document).ready(function() {
-			$(window).on('hashchange', function() {
-				self.run();
-			});
-			self.run();
+//			$(window).on('hashchange', function() {
+//				self.service();
+//			});
+			self.service();
 		});
 	}
 	
@@ -27,24 +28,44 @@ function ColoreStateMachine() {
 		
 		return hash;
 	}
+	
+	this.getContext = function() {
+		var context = this.getHash();
+		
+		if( context == false )
+			return context;
+		
+		var args = context.indexOf( '?' );
+		
+		if( args )
+			context = context.substr( 0, ( args - 1 ) );
+		
+		return context;
+	}
 
 	this.addContext = function( context, handler ) {
 		this.contexts[context] = handler;
 	}
 
-	this.loadContext = function( context ) {
+	this.loadContext = function( context, args ) {
 		if( this.contexts[context] !== undefined ) {
 			console.log( "ColoreStateMachine.loadContext: Loading '" + context + "'" );
-			this.context = context;
-			this.contexts[context]();
+			this.contextName = context;
+			var res = this.contexts[context]( args );
+			if( res == false ) {
+				return false;
+			} else {
+				location.hash = context;
+			}
 		} else {
 			console.log( "ColoreStateMachine.loadContext: Missing context '" + context + "'" );
 			alert( "Invalid action!" );
+			this.loadContext( this.settings['default'] );
 		}
 	}
 	
-	this.getContext = function() {
-		return this.context;
+	this.getContextName = function() {
+		return this.contextName;
 	}
 	
 	this.setDefaultContext = function( context ) {
@@ -53,7 +74,7 @@ function ColoreStateMachine() {
 	}
 	
 	this.go = function( context ) {
-		location.hash = context;
+		this.dispatch( context );
 	}
 	
 	this.home = function() {
@@ -69,25 +90,34 @@ function ColoreStateMachine() {
 	} 
 	
 	this.loadFragment = function( fragmentFile ) {
-		if( $("#ColoreFragment").attr( 'template' ) == fragmentFile )
-			return false;
-		
 		console.log( "ColoreStateMachine.loadFragment -> " + fragmentFile );
 		$("#ColoreFragment").load( fragmentFile ).attr( 'template', fragmentFile );
 	} 
 	
-	this.run = function() {
-		var hash = this.getHash();
+	this.service = function() {
+		var context = this.getContext();
 		
-		console.log( "ColoreStateMachine.run: Detecting context: [" + hash + "]" );
-		
-		if( hash != false ) {
-			this.loadContext( hash );
-		} else if( this.context == "" ) {
-			this.go( this.settings['default'] );
-		}
+		console.log( "ColoreStateMachine.service: Detecting context: [" + context + "]" );
 
+		this.dispatch( context );
+	}
+	
+	this.dispatch = function( context, args ) {
+		
+		if( context == "" || context == false ) {
+			this.dispatch( this.settings['default'] );
+		} else if( context !== undefined ) {
+			this.loadContext( context, args );
+		} 
+		
 	}
 	
 	this.init();
+}
+
+function ColoreRequest() {
+	
+	this.setRequestProperty = function( requestPropertyName, requestPropertyValue ) {
+		this.request_properties[requestPropertyName] = requestPropertyValue;
+	}
 }

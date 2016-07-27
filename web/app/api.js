@@ -14,10 +14,7 @@ function Admin_API() {
 	}
 
 	// Define api_call method
-	this.api_call = function( remote_method, params, handler ) {
-		// Map the remote_method to the correct uri
-		uri = '/admin/api/' + remote_method;
-
+	this.api_call = function( uri, params, handler ) {
 		// Do a post, serialize the params for the call
 		$.post( uri, $.param( params, true ), handler );
 	}
@@ -37,66 +34,72 @@ function Admin_API() {
 		console.log( "checkAuthenticated: " + self.authenticated );
 		var params = {};
 		self.api_call(
-				'checkauthenticated',
+				'/admin/api/session/authenticated',
 				params,
 				function(data) {
 					if( data.authenticated == false ) {
 						self.authenticated = false;
-						myApp.go( '/login' );
+						myApp.dispatch( '/login' );
 					} else if( data.authenticated == true ) {
 						self.authenticated = true;
+						console.log( myApp.getContextName() );
+						if( '/login' == myApp.getContextName() ) {
+							myApp.dispatch( '/home' );
+						}
 					}
 					console.log( "Authenticated: " + api.authenticated );
 				}
 		);
-		return self.authenticated;
 	}
 	
 	this.updateUserInfo = function() {
-		var params = {};
-		self.api_call(
-				'getuserinfo',
-				{},
-				function(data) {
-					console.log( data );
-					if( data.result == 'OK' ) {
-						self.user_info = data.user_info;
-						$("#userName").html(api.user_info.name);
+		if( $("#userName").html() == '' ) {
+			var params = {};
+			self.api_call(
+					'/admin/api/session/info',
+					{},
+					function(data) {
+						console.log( data );
+						if( data.result == 'OK' ) {
+							self.user_info = data.user_info;
+							$("#userName").html(api.user_info.name);
+						}
 					}
-				}
-		);
+			);
+		}
 	}
 
-	this.doLogin = function() {
-		// Verify input
-		if( $("#inputEmail").val() == '') {
+	this.doLogin = function( args ) {
+		if( args.username == '') {
 			$("#login_message").html( "Missing user name!" ).addClass('error_message');
 			$('#login_button').html( 'Retry' ).addClass("red").removeClass("blue").removeClass("green");
 			return false;
-		} else if( ! self.validateEmail( $("#inputEmail").val() ) ) {
+		} else if( ! self.validateEmail( args.username ) ) {
 			$("#login_message").html( "Invalid email address!" ).addClass("error_message");
 			$('#login_button').html( 'Retry' ).addClass("red").removeClass("blue").removeClass("green");
 			return false;
-		} else if( $("#inputPassword").val() == '') {
+		} else if( args.password == '') {
 			$("#login_message").html( "Missing password!" );
 			$('#login_button').html( 'Retry' ).addClass("red").removeClass("blue").removeClass("green");
 			return false;
 		} else {
 			var params = {};
-			params['username'] = $("#inputEmail").val();
-			params['password'] = $("#inputPassword").val();
-			params['remember'] = $("#inputRemember").is(':checked');
+			params['username'] = args.username;
+			params['password'] = args.password;
+			params['remember'] = args.remember;
 	
 			api.api_call(
-				'login',
+				'/admin/api/session/login',
 				params,
 				function(data) {
 					if( data.result == 'OK' ) {
 						api.authenticated = true;
+						this.authenticated = true;
 						console.log( "Authenticated: " + api.authenticated );
-						myApp.go( '/main' );
+						myApp.dispatch( '/home' );
 						$("#login_message").html("").removeClass("error_message");
 					} else {
+						this.authenticated = false;
 						$("#login_message").html( data.message ).addClass("error_message");;
 						$('#login_button').html( 'Retry' ).addClass("red").removeClass("blue").removeClass("green");
 					}
@@ -108,13 +111,14 @@ function Admin_API() {
 	this.doLogout = function() {
 		var params = {};
 		self.api_call(
-				'logout',
+				'/admin/api/session/logout',
 				params,
 				function(data) {
 					console.log( data );
 					if( data.result == 'OK' ) {
 						self.user_info = {};
 						self.authenticated = false;
+						myApp.dispatch( '/login' );
 					} else {
 						alert( "Failed to log you out!\nERROR: " + data.message );
 					}
@@ -125,7 +129,7 @@ function Admin_API() {
 	this.getControllerModes = function() {
 		var params = {};
 		self.api_call(
-				'getcontrollermodes',
+				'/admin/api/controllers/modes/list',
 				params,
 				function(data) {
 					console.log( data );
@@ -139,7 +143,7 @@ function Admin_API() {
 	this.getControllers = function() {
 		var params = {};
 		self.api_call(
-				'getcontrollers',
+				'/admin/api/controllers/list',
 				params,
 				function(data) {
 					console.log( data );
@@ -150,10 +154,54 @@ function Admin_API() {
 		);
 	}
 	
+	this.fillControllerModes = function( elementID ) {
+		var params = {};
+
+		api.api_call(
+			'/admin/api/controllers/modes/list',
+			params,
+			function( data ) {
+				var listItems= "";
+				$.each( data['modes'], function( idx, mode ) {
+					if( $( elementID ).data( 'id' ) == mode.id ) {
+						listItems+= "<option selected value='" + mode.id + "'>" + mode.description + "</option>";
+					} else {
+						listItems+= "<option value='" + mode.id + "'>" + mode.description + "</option>";
+					}
+				});
+				$( elementID ).html( listItems );
+			}
+		);
+		
+
+	}
+	
+	this.fillControllerScripts = function( elementID ) {
+		var params = {};
+		
+		api.api_call(
+				'/admin/api/controllers/scripts/list',
+				params,
+				function( data ) {
+					var listItems= "";
+					$.each( data['scripts'], function( idx, script ) {
+						if( $( elementID ).data( 'id' ) == script ) {
+							listItems+= "<option selected>" + script + "</option>";
+						} else {
+							listItems+= "<option>" + script + "</option>";
+						}
+					});
+					$( elementID ).html( listItems );
+				}
+		);
+		
+		
+	}
+	
 	this.loadControllersTable = function() {
 		var params = {};
 		self.api_call(
-				'controllers/list',
+				'/admin/api/controllers/list',
 				params,
 				function(data) {
 					console.log( data );
@@ -171,10 +219,77 @@ function Admin_API() {
 		);
 	}
 	
+	this.loadControllerView = function( args ) {
+		console.log( "loadControllerView:" );
+		console.log( args );
+		var params = args;
+		params['id'] = args.id;
+		self.api_call(
+				'/admin/api/controllers/view',
+				params,
+				function(data) {
+					console.log( data );
+					if( data.result == 'OK' ) {
+						self.controllers = data.controllers;
+						$.get( "/app/admin/fragments/controllers-view.tpl", function( template ) {
+							var tpl = new jSmart( template );
+							var rendered = tpl.fetch( data );
+							$("#ColoreFragment").html( rendered );
+						} );
+					}
+				}
+		);
+	}
+	
+	this.loadControllerEdit = function( args ) {
+		console.log( "loadControllerEdit:" );
+		console.log( args );
+		var params = {};
+		params['id'] = args['id'];
+		self.api_call(
+				'/admin/api/controllers/view',
+				params,
+				function(data) {
+					console.log( data );
+					if( data.result == 'OK' ) {
+						self.controllers = data.controllers;
+						$.get( "/app/admin/fragments/controllers-edit.tpl", function( template ) {
+							var tpl = new jSmart( template );
+							var rendered = tpl.fetch( data );
+							$("#ColoreFragment").html( rendered );
+						} );
+					}
+				}
+		);
+	}
+	
+	this.updateController = function( args ) {
+		console.log( "updateController:" );
+		console.log( args );
+		var params = args;
+		self.api_call(
+				'/admin/api/controllers/update',
+				params,
+				function(data) {
+					console.log( data );
+					if( data.result == 'OK' ) {
+						self.controllers = data.controllers;
+						$.get( "/app/admin/fragments/controllers-edit.tpl", function( template ) {
+							var tpl = new jSmart( template );
+							var rendered = tpl.fetch( data );
+							$("#ColoreFragment").html( rendered );
+						} );
+					} else if( data.result == 'ERROR' && data.authenticated == false ) {
+						myApp.dispatch( '/login' );
+					}
+				}
+		);
+	}
+	
 	this.loadUsersTable = function() {
 		var params = {};
 		self.api_call(
-				'users/list',
+				'/admin/api/users/list',
 				params,
 				function(data) {
 					console.log( data );
@@ -193,7 +308,7 @@ function Admin_API() {
 	this.loadAdminsTable = function() {
 		var params = {};
 		self.api_call(
-				'admins/list',
+				'/admin/api/admins/list',
 				params,
 				function(data) {
 					console.log( data );
@@ -211,7 +326,7 @@ function Admin_API() {
 	this.loadAnimationsTable = function() {
 		var params = {};
 		self.api_call(
-				'animations/list',
+				'/admin/api/animations/list',
 				params,
 				function(data) {
 					console.log( data );
@@ -229,7 +344,7 @@ function Admin_API() {
 	this.loadEventsTable = function() {
 		var params = {};
 		self.api_call(
-				'events/list',
+				'/admin/api/events/list',
 				params,
 				function(data) {
 					console.log( data );
@@ -248,7 +363,7 @@ function Admin_API() {
 	this.loadSchedulesTable = function() {
 		var params = {};
 		self.api_call(
-				'schedules/list',
+				'/admin/api/schedules/list',
 				params,
 				function(data) {
 					console.log( data );

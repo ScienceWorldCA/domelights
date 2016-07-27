@@ -13596,3 +13596,8 @@ margin-top
 		display: none;
 	}
 }
+
+.spacious {
+	margin-top: 5px;
+	margin-bottom: 5px;
+}

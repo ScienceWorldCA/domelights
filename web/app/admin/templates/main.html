@@ -2,21 +2,21 @@
 	<header class='row header'>
 		<div class='col-md-3'><img src='/assets/images/SWatTWOS_286+368-logo_new.png' /></div>
 		<div class='col-md-7'><h1>Dome Lights</h1></div>
-		<div class='col-md-1'><div id='usercontrol'><span id='userName'>User</span></div></div>
-		<div class='col-md-1'><button id='logout_button' type='button' class='btn btn-sm'>Logout</button></div>
+		<div class='col-md-1'><div id='usercontrol'><span id='userName'></span></div></div>
+		<div class='col-md-1'><button id='logout_button' type='button' colore-context='/logout' class='btn btn-sm'>Logout</button></div>
 	</header>
 	<div class='row'><div class='col-md-12'>&nbsp;</div></div>
 	<div class='row'>
 		<div id='menucontainer' class='col-md-2 sidebar'>
 			<ul id='menulist' class='nav nav-sidebar'>
-				<li><a href='#/main'>Home</a></li>
-				<li><a href='#/animations'>Animations</a></li>
-				<li><a href='#/controllers'>Controllers</a></li>
-				<li><a href='#/events'>Events</a></li>
-				<li><a href='#/schedules'>Schedules</a></li>
-				<li><a href='#/admins'>Admins</a></li>
-				<li><a href='#/users'>Users</a></li>
-				<li><a href='#/logout'>Logout</a></li>
+				<li><a colore-context='/home'>Home</a></li>
+				<li><a colore-context='/animations'>Animations</a></li>
+				<li><a colore-context='/controllers'>Controllers</a></li>
+				<li><a colore-context='/events'>Events</a></li>
+				<li><a colore-context='/schedules'>Schedules</a></li>
+				<li><a colore-context='/admins'>Admins</a></li>
+				<li><a colore-context='/users'>Users</a></li>
+				<li><a colore-context='/logout'>Logout</a></li>
 			</ul>
 		</div>
 		<div id='ColoreFragment' class='col-md-10'>Main Things</div>
@@ -25,9 +25,11 @@
 <script type="text/javascript">
 $(document).ready(function() {
 	$("#userName").html(api.user_info.name);
-	$("#logout_button").on( 'click', function() {
-		myApp.go( '/logout' );
-	});
 	myApp.loadFragment("/app/admin/fragments/main.html");
+	$('[colore-context]').on('click', function(event) {
+		var context = $(this).attr( 'colore-context' );
+		var args = $(this).data();
+		myApp.dispatch( context, args );
+	});
 });
 </script>

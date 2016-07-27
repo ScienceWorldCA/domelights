@@ -21,5 +21,6 @@
 <script src="/app/api.js"></script>
 <script src="/app/colore.js"></script>
 <script src="/app/admin.js"></script>
+<script type="text/javascript" src="/app/listeners.js"></script>
 </body>
 </html>

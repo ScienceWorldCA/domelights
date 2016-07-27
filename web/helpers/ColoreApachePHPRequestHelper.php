@@ -134,6 +134,7 @@ class ColoreApachePHPRequestHelper extends ColoreRequest implements ColoreReques
 	 */
 	public function setSessionLifetime( $sessionLifetime = 1800 ) {
 		session_set_cookie_params( $sessionLifetime );
+		session_regenerate_id( true ); 
 	}
 	
 	/**

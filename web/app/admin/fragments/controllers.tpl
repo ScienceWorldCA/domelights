@@ -1,4 +1,5 @@
-<table class="table table-striped">
+<div class='row spacious'><div class='col-md-12 col-lg-12'><button class='btn btn-default pull-right' colore-context='/controllers/new'>New</button></div></div>
+<div class='row spacious'><div class='col-md-12 col-lg-12'><table class="table table-striped table-hover">
 <tr>
 	<th>ID</th>
 	<th>Name</th>
@@ -10,7 +11,7 @@
 	<th>Comment</th>
 </tr>
 {foreach $controllers as $controller}
-<tr>
+<tr colore-context='/controllers/view' data-id="{$controller.id}">
 	<td>{$controller.id}</td>
 	<td>{$controller.name}</td>
 	<td>{$controller.mode}</td>
@@ -24,3 +25,5 @@
 No controllers!
 {/foreach}
 </table>
+</div></div>
+<script type="text/javascript" src="/app/listeners.js"></script>

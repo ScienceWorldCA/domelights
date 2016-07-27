@@ -52,8 +52,9 @@ class Admin_API extends BaseClass {
 		
 		$cro->setSessionProperty( 'user_info', $admin_result );
 		
-		if( isset( $request_properties['remember'] ) && is_string( $request_properties['remember'] ) && ( $request_properties['remember'] == "true" ) )
-			$cro->setSessionLifetime( 86400 );
+		if( isset( $request_properties['remember'] ) && is_string( $request_properties['remember'] ) && ( $request_properties['remember'] == "true" ) ) {
+			$cro->setSessionLifetime( 604800 );
+		}
 		
 		$cro->setSessionProperty( 'authenticated', true );
 		$cro->setRenderProperty( 'result', 'OK' );
@@ -88,6 +89,7 @@ class Admin_API extends BaseClass {
 		
 		if( ! $authenticated ) {
 			$cro->setRenderProperty( 'result', 'ERROR' );
+			$cro->setRenderProperty( 'authenticated', false );
 			$cro->setRenderProperty( 'message', 'Not authenticated' );
 			return false;
 		}
@@ -126,6 +128,60 @@ class Admin_API extends BaseClass {
 		
 		$cro->setRenderProperty( 'result', 'OK' );
 		$cro->setRenderProperty( 'controllers', $controllers_result );
+	}
+
+	public function GetControllerDetails( ColoreRequest &$cro ) {
+		$request_properties = $cro->getRequestProperties();
+		
+		// Make the query
+		$controllers_query = array(
+				'action' => 'select',
+				'table' => 'controllers',
+				'fields' => array(
+						'*' => true,
+				),
+				'criteria' => array(
+						'id' => $request_properties['id'],
+				),
+		);
+		
+		// Do the query
+		$controllers_result = $this->dbconn->mappedQuery( $controllers_query );
+		
+		// Check the query
+		if( ! $controllers_result || ! is_array( $controllers_result ) )
+			return false;
+		
+		$cro->setRenderProperty( 'result', 'OK' );
+		$cro->setRenderProperty( 'controller', $controllers_result );
+	}
+
+	public function UpdateControllerDetails( ColoreRequest &$cro ) {
+		$request_properties = $cro->getRequestProperties();
+		
+		// Make the query
+		$controllers_query = array(
+				'action' => 'update',
+				'table' => 'controllers',
+				'fields' => array(
+				),
+				'criteria' => array(
+						'id' => $request_properties['id'],
+				),
+		);
+		
+		// Fill in the fields with all the other info
+		$controllers_query['fields'] = $request_properties;
+		unset( $controllers_query['fields']['id'] );
+		
+		// Do the query
+		$controllers_result = $this->dbconn->mappedQuery( $controllers_query );
+		
+		// Check the query
+		if( ! $controllers_result || ! is_array( $controllers_result ) )
+			return false;
+
+		$cro->appendLogic( array( 'class' => __CLASS__, 'method' => 'GetControllerDetails' ) );
 	}
 
 	public function GetAnimations( ColoreRequest &$cro ) {

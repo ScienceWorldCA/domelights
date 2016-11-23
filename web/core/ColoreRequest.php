@@ -246,6 +246,14 @@ class ColoreRequest {
 	 * @return mixed Logic element
 	 */
 	public function getNextLogic() {
+		// If we have a non-empty preempt_logic list, merge it into the logic list
+		if( isset( $this->_context['preempt_logic'] ) && count( $this->_context['preempt_logic'] ) ) {
+			while( count( $this->_context['preempt_logic'] ) ) {
+				array_unshift( $this->_context['logic'], array_pop( $this->_context['preempt_logic'] ) );
+			}
+		}
+		
+		// Return the next logic call from the stack
 		if( count( $this->_context['logic'] ) > 0 )
 			return array_shift( $this->_context['logic'] );
 		return false;
@@ -264,8 +272,13 @@ class ColoreRequest {
 	 * @param array Logic
 	 */
 	public function insertLogic( array $logic ) {
+		// Check for preempt list
+		if( ! isset( $this->_context['preempt_logic'] ) || ! is_array( $this->_context['preempt_logic'] ) )
+			$this->_context['preempt_logic'] = array();
+		
+		// Add logic to preempt list
 		if( isset( $logic['class'] ) && isset( $logic['method'] ) )
-			array_unshift( $this->_context['logic'], $logic );
+			array_push( $this->_context['preempt_logic'], $logic );
 	}
 
 	/**

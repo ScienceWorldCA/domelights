@@ -185,7 +185,7 @@
     },
     {
         "id": 14,
-		"constructor": "Create_VideoPattenBrush(options)",
+		"constructor": "Create_VideoPatternBrush(options)",
         "class": "light_blue",
         "icon": "icon-barcode"
     }

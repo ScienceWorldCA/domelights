@@ -21,7 +21,7 @@ function CreateBrushes()
 	Create_SolidColorBrush(config);
 	Create_FireBackground(config);
 	Create_PatternBrush(config);
-	Create_VideoPattenBrush(config);
+	Create_VideoPatternBrush(config);
 	*/
 }
 
@@ -682,25 +682,25 @@ function Create_PatternBrush(options)			// INDEX: 13
 	Brushes[PatternBrush.Index] = PatternBrush;
 }
 
-function Create_VideoPattenBrush(options)		// INDEX: 14
+function Create_VideoPatternBrush(options)		// INDEX: 14
 {
-	var VideoPattenBrush = new Brush();
+	var VideoPatternBrush = new Brush();
 
-	VideoPattenBrush.Index = 14;
-	VideoPattenBrush.Duration = SequenceManager.SequenceLength;
-	VideoPattenBrush.IsBackground = true;
+	VideoPatternBrush.Index = 14;
+	VideoPatternBrush.Duration = SequenceManager.SequenceLength;
+	VideoPatternBrush.IsBackground = true;
 
-	VideoPattenBrush.PrePaint = function ()
+	VideoPatternBrush.PrePaint = function ()
 	{
 		ActiveBrushData[0] = 0;
 		return true;
 	};
 
-	VideoPattenBrush.PostPaint = function (event)
+	VideoPatternBrush.PostPaint = function (event)
 	{
 		event.StartTime = 0;
 	};
-	VideoPattenBrush.Render = function (frame, originLight, brushData)
+	VideoPatternBrush.Render = function (frame, originLight, brushData)
 	{
 		var index = brushData[0];
 		
@@ -737,8 +737,8 @@ function Create_VideoPattenBrush(options)		// INDEX: 14
 	htmlUI.Name = "Animation";
 	var patternOption = {"Rainbow Rain":0, "Rainbow Wave":1, "UV Meter":2};
 	htmlUI.AddUI(new htmlUI.OptionBox(patternOption, 0, "Pattern", 0));
-	VideoPattenBrush.HTMLUI = htmlUI;
-	Brushes[VideoPattenBrush.Index] = VideoPattenBrush;
+	VideoPatternBrush.HTMLUI = htmlUI;
+	Brushes[VideoPatternBrush.Index] = VideoPatternBrush;
 }
 
 

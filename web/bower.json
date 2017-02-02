@@ -23,6 +23,9 @@
     "backbone": "latest",
     "mustache.js": "latest",
     "jquery-hashchange": "*",
-    "angular-ui-router": "ui-router#^0.2.18"
+    "angular-ui-router": "ui-router#^0.2.18",
+    "jsencrypt": "^2.3.0",
+    "tweetnacl-util": "^0.13.5",
+    "fast-sha256": "^1.0.0"
   }
 }

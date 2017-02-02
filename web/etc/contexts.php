@@ -117,6 +117,7 @@ $config['contexts']['admin/'] = array(
 	'properties' => array(
 	),
 	'logic' => array(
+			array( 'class' => 'Admin', 'method' => 'RequireAuthenticated' ),
 	),
 	'render' => array(
 		'engine' => 'Render_Simple',
@@ -132,7 +133,7 @@ $config['contexts']['admin/api/session/login'] = array(
 	'properties' => array(
 	),
 	'logic' => array(
-			array( 'class' => 'Admin_API', 'method' => 'Login' ),
+			array( 'class' => 'Admin', 'method' => 'Login' ),
 	),
 	'render' => array(
 		'engine' => 'Render_JSON',
@@ -148,7 +149,7 @@ $config['contexts']['admin/api/session/authenticated'] = array(
 	'properties' => array(
 	),
 	'logic' => array(
-			array( 'class' => 'Admin_API', 'method' => 'CheckAuthenticated' ),
+			array( 'class' => 'Admin', 'method' => 'CheckAuthenticated' ),
 	),
 	'render' => array(
 		'engine' => 'Render_JSON',
@@ -163,8 +164,8 @@ $config['contexts']['admin/api/session/logout'] = array(
 	'properties' => array(
 	),
 	'logic' => array(
-			array( 'class' => 'Admin_API', 'method' => 'RequireAuthenticated' ),
-			array( 'class' => 'Admin_API', 'method' => 'Logout' ),
+			array( 'class' => 'Admin', 'method' => 'RequireAuthenticated' ),
+			array( 'class' => 'Admin', 'method' => 'Logout' ),
 	),
 	'render' => array(
 		'engine' => 'Render_JSON',
@@ -179,8 +180,8 @@ $config['contexts']['admin/api/session/info'] = array(
 	'properties' => array(
 	),
 	'logic' => array(
-			array( 'class' => 'Admin_API', 'method' => 'RequireAuthenticated' ),
-			array( 'class' => 'Admin_API', 'method' => 'GetUserInfo' ),
+			array( 'class' => 'Admin', 'method' => 'RequireAuthenticated' ),
+			array( 'class' => 'Admin', 'method' => 'GetUserInfo' ),
 	),
 	'render' => array(
 		'engine' => 'Render_JSON',
@@ -195,8 +196,24 @@ $config['contexts']['admin/api/admins/list'] = array(
 	'properties' => array(
 	),
 	'logic' => array(
-			array( 'class' => 'Admin_API', 'method' => 'RequireAuthenticated' ),
-			array( 'class' => 'Admin_API', 'method' => 'GetAdmins' ),
+			array( 'class' => 'Admin', 'method' => 'RequireAuthenticated' ),
+			array( 'class' => 'Admin', 'method' => 'GetAdmins' ),
+	),
+	'render' => array(
+		'engine' => 'Render_JSON',
+		'path' => '',
+		'properties' => array(
+			'result' => 'ERROR',
+		),
+	),
+);
+
+$config['contexts']['admin/api/admins/view'] = array(
+	'properties' => array(
+	),
+	'logic' => array(
+			array( 'class' => 'Admin', 'method' => 'RequireAuthenticated' ),
+			array( 'class' => 'Admin', 'method' => 'GetAdmin' ),
 	),
 	'render' => array(
 		'engine' => 'Render_JSON',
@@ -211,8 +228,8 @@ $config['contexts']['admin/api/animations/list'] = array(
 	'properties' => array(
 	),
 	'logic' => array(
-			array( 'class' => 'Admin_API', 'method' => 'RequireAuthenticated' ),
-			array( 'class' => 'Admin_API', 'method' => 'GetAnimations' ),
+			array( 'class' => 'Admin', 'method' => 'RequireAuthenticated' ),
+			array( 'class' => 'Admin', 'method' => 'GetAnimations' ),
 	),
 	'render' => array(
 		'engine' => 'Render_JSON',
@@ -227,8 +244,8 @@ $config['contexts']['admin/api/events/list'] = array(
 	'properties' => array(
 	),
 	'logic' => array(
-			array( 'class' => 'Admin_API', 'method' => 'RequireAuthenticated' ),
-			array( 'class' => 'Admin_API', 'method' => 'GetEvents' ),
+			array( 'class' => 'Admin', 'method' => 'RequireAuthenticated' ),
+			array( 'class' => 'Admin', 'method' => 'GetEvents' ),
 	),
 	'render' => array(
 		'engine' => 'Render_JSON',
@@ -243,8 +260,8 @@ $config['contexts']['admin/api/schedules/list'] = array(
 	'properties' => array(
 	),
 	'logic' => array(
-			array( 'class' => 'Admin_API', 'method' => 'RequireAuthenticated' ),
-			array( 'class' => 'Admin_API', 'method' => 'GetSchedules' ),
+			array( 'class' => 'Admin', 'method' => 'RequireAuthenticated' ),
+			array( 'class' => 'Admin', 'method' => 'GetSchedules' ),
 	),
 	'render' => array(
 		'engine' => 'Render_JSON',
@@ -259,8 +276,8 @@ $config['contexts']['admin/api/users/list'] = array(
 	'properties' => array(
 	),
 	'logic' => array(
-			array( 'class' => 'Admin_API', 'method' => 'RequireAuthenticated' ),
-			array( 'class' => 'Admin_API', 'method' => 'GetUsers' ),
+			array( 'class' => 'Admin', 'method' => 'RequireAuthenticated' ),
+			array( 'class' => 'Admin', 'method' => 'GetUsers' ),
 	),
 	'render' => array(
 		'engine' => 'Render_JSON',
@@ -275,8 +292,8 @@ $config['contexts']['admin/api/controllers/list'] = array(
 	'properties' => array(
 	),
 	'logic' => array(
-			array( 'class' => 'Admin_API', 'method' => 'RequireAuthenticated' ),
-			array( 'class' => 'Admin_API', 'method' => 'GetControllers' ),
+			array( 'class' => 'Admin', 'method' => 'RequireAuthenticated' ),
+			array( 'class' => 'Admin', 'method' => 'GetControllers' ),
 	),
 	'render' => array(
 		'engine' => 'Render_JSON',
@@ -291,8 +308,8 @@ $config['contexts']['admin/api/controllers/view'] = array(
 	'properties' => array(
 	),
 	'logic' => array(
-			array( 'class' => 'Admin_API', 'method' => 'RequireAuthenticated' ),
-			array( 'class' => 'Admin_API', 'method' => 'GetControllerDetails' ),
+			array( 'class' => 'Admin', 'method' => 'RequireAuthenticated' ),
+			array( 'class' => 'Admin', 'method' => 'GetController' ),
 	),
 	'render' => array(
 		'engine' => 'Render_JSON',
@@ -307,8 +324,40 @@ $config['contexts']['admin/api/controllers/update'] = array(
 	'properties' => array(
 	),
 	'logic' => array(
-			array( 'class' => 'Admin_API', 'method' => 'RequireAuthenticated' ),
-			array( 'class' => 'Admin_API', 'method' => 'UpdateControllerDetails' ),
+			array( 'class' => 'Admin', 'method' => 'RequireAuthenticated' ),
+			array( 'class' => 'Admin', 'method' => 'UpdateController' ),
+	),
+	'render' => array(
+		'engine' => 'Render_JSON',
+		'path' => '',
+		'properties' => array(
+			'result' => 'ERROR',
+		),
+	),
+);
+
+$config['contexts']['admin/api/controllers/create'] = array(
+	'properties' => array(
+	),
+	'logic' => array(
+			array( 'class' => 'Admin', 'method' => 'RequireAuthenticated' ),
+			array( 'class' => 'Admin', 'method' => 'CreateController' ),
+	),
+	'render' => array(
+		'engine' => 'Render_JSON',
+		'path' => '',
+		'properties' => array(
+			'result' => 'ERROR',
+		),
+	),
+);
+
+$config['contexts']['admin/api/controllers/delete'] = array(
+	'properties' => array(
+	),
+	'logic' => array(
+			array( 'class' => 'Admin', 'method' => 'RequireAuthenticated' ),
+			array( 'class' => 'Admin', 'method' => 'DeleteController' ),
 	),
 	'render' => array(
 		'engine' => 'Render_JSON',
@@ -323,7 +372,7 @@ $config['contexts']['admin/api/controllers/modes/list'] = array(
 	'properties' => array(
 	),
 	'logic' => array(
-			array( 'class' => 'Admin_API', 'method' => 'RequireAuthenticated' ),
+			array( 'class' => 'Admin', 'method' => 'RequireAuthenticated' ),
 	),
 	'render' => array(
 		'engine' => 'Render_JSON',
@@ -343,7 +392,7 @@ $config['contexts']['admin/api/controllers/scripts/list'] = array(
 	'properties' => array(
 	),
 	'logic' => array(
-			array( 'class' => 'Admin_API', 'method' => 'RequireAuthenticated' ),
+			array( 'class' => 'Admin', 'method' => 'RequireAuthenticated' ),
 	),
 	'render' => array(
 		'engine' => 'Render_JSON',
@@ -351,6 +400,21 @@ $config['contexts']['admin/api/controllers/scripts/list'] = array(
 		'properties' => array(
 			'result' => 'OK',
 			'scripts' => $config['scripts'],
+		),
+	),
+);
+
+$config['contexts']['admin/api/getnonce'] = array(
+	'properties' => array(
+	),
+	'logic' => array(
+			array( 'class' => 'Admin', 'method' => 'GetNonce' ),
+	),
+	'render' => array(
+		'engine' => 'Render_JSON',
+		'path' => '',
+		'properties' => array(
+			'result' => 'OK',
 		),
 	),
 );

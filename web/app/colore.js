@@ -56,10 +56,13 @@ function ColoreStateMachine() {
 				return false;
 			} else {
 				location.hash = context;
+				$("[colore-context").removeClass( 'active' );
+				$("[colore-context='" + context + "']").addClass( 'active' );
 			}
 		} else {
 			console.log( "ColoreStateMachine.loadContext: Missing context '" + context + "'" );
 			alert( "Invalid action!" );
+			return false;
 			this.loadContext( this.settings['default'] );
 		}
 	}

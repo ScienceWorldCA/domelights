@@ -85,7 +85,8 @@ function Admin_API() {
 		} else {
 			var params = {};
 			params['username'] = args.username;
-			params['password'] = args.password;
+			params['password'] = nacl.util.encodeBase64( sha256.pbkdf2( args.username + ":" + args.password, nacl.util.encodeBase64( sha256.hash( args.username ) ), 10000, 512 ) );
+			console.log( "Password: " + params['password'] );
 			params['remember'] = args.remember;
 	
 			api.api_call(
@@ -286,6 +287,47 @@ function Admin_API() {
 		);
 	}
 	
+	this.createController = function( args ) {
+		console.log( "createController:" );
+		console.log( args );
+		var params = args;
+		self.api_call(
+				'/admin/api/controllers/create',
+				params,
+				function(data) {
+					console.log( data );
+					if( data.result == 'OK' ) {
+						self.controllers = data.controllers;
+						$.get( "/app/admin/fragments/controllers-view.tpl", function( template ) {
+							var tpl = new jSmart( template );
+							var rendered = tpl.fetch( data );
+							$("#ColoreFragment").html( rendered );
+						} );
+					} else if( data.result == 'ERROR' && data.authenticated == false ) {
+						myApp.dispatch( '/login' );
+					}
+				}
+		);
+	}
+	
+	this.deleteController = function( args ) {
+		console.log( "deleteController:" );
+		console.log( args );
+		var params = args;
+		self.api_call(
+				'/admin/api/controllers/delete',
+				params,
+				function(data) {
+					console.log( data );
+					if( data.result == 'OK' ) {
+						myApp.dispatch( '/controllers' );
+					} else if( data.result == 'ERROR' && data.authenticated == false ) {
+						myApp.dispatch( '/login' );
+					}
+				}
+		);
+	}
+	
 	this.loadUsersTable = function() {
 		var params = {};
 		self.api_call(
@@ -314,6 +356,24 @@ function Admin_API() {
 					console.log( data );
 					if( data.result == 'OK' ) {
 						$.get( "/app/admin/fragments/admins.tpl", function( template ) {
+							var tpl = new jSmart( template );
+							var rendered = tpl.fetch( data );
+							$("#ColoreFragment").html( rendered );
+						} );
+					}
+				}
+		);
+	}
+	
+	this.loadAdminsView = function() {
+		var params = {};
+		self.api_call(
+				'/admin/api/admins/view',
+				params,
+				function(data) {
+					console.log( data );
+					if( data.result == 'OK' ) {
+						$.get( "/app/admin/fragments/admins-view.tpl", function( template ) {
 							var tpl = new jSmart( template );
 							var rendered = tpl.fetch( data );
 							$("#ColoreFragment").html( rendered );
@@ -368,7 +428,6 @@ function Admin_API() {
 				function(data) {
 					console.log( data );
 					if( data.result == 'OK' ) {
-						self.controllers = data.controllers;
 						$.get( "/app/admin/fragments/schedules.tpl", function( template ) {
 							var tpl = new jSmart( template );
 							var rendered = tpl.fetch( data );
@@ -377,6 +436,11 @@ function Admin_API() {
 					}
 				}
 		);
+	}
+	
+	this.getNonce = function() {
+		var params = {};
+		self.api_call( '/admin/api/getnonce', params, function(data) { self.nonce = data.nonce; } );
 	}
 	
 	this.init();

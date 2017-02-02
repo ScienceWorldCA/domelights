@@ -1,6 +1,11 @@
 <?php
 
 class ColoreSQLmapper {
+	
+	protected static $literals = array(
+			'UTC_TIMESTAMP()',
+			'UTC_TIMESTAMP() + INTERVAL 1 DAY',
+	);
 
 	static public function generateSQL( $statementInfo ) {
 		
@@ -37,14 +42,19 @@ class ColoreSQLmapper {
 				for( $i = 0 ; $i < count( $statementInfo['fields'] ) ; $i++ ) {
 					// Fetch the next field
 					list( $fieldKey, $fieldVal ) = each( $statementInfo['fields'] );
-					
-					// Generate the descriptor
-					$fieldDescriptor = sprintf( ":%s", $fieldKey );
-					
-					// Add the values to both the statement and arguments
+
 					$fieldNames[] = $fieldKey;
-					$fieldDescriptors[] = $fieldDescriptor;
-					$sqlResult['arguments'][$fieldDescriptor] = $fieldVal;
+					
+					// If the field value is a literal, then we generate the argument literally
+					// Else prepare the statement and add the value to the arguments
+					if( in_array( $fieldVal, self::$literals ) ) {
+						$fieldDescriptors[] = $fieldVal;
+					} else {
+						// Generate the descriptor
+						$fieldDescriptor = sprintf( ":%s", $fieldKey );
+						$fieldDescriptors[] = $fieldDescriptor;
+						$sqlResult['arguments'][$fieldDescriptor] = $fieldVal;
+					}
 				}
 				
 				$sqlResult['statement'][] = sprintf( "( %s )", join( ',', $fieldNames ) );
@@ -70,13 +80,19 @@ class ColoreSQLmapper {
 					// Fetch the next field
 					list( $fieldKey, $fieldVal ) = each( $statementInfo['fields'] );
 					
-					// Generate the descriptor
-					$fieldDescriptor = sprintf( ":%s", $fieldKey );
-					
 					// Add the values to both the statement and arguments
 					$fieldNames[] = $fieldKey;
-					$fieldDescriptors[] = $fieldDescriptor;
-					$sqlResult['arguments'][$fieldDescriptor] = $fieldVal;
+
+					// If the field value is a literal, then we generate the argument literally
+					// Else prepare the statement and add the value to the arguments
+					if( in_array( $fieldVal, self::$literals ) ) {
+						$fieldDescriptors[] = $fieldVal;
+					} else {
+						// Generate the descriptor
+						$fieldDescriptor = sprintf( ":%s", $fieldKey );
+						$fieldDescriptors[] = $fieldDescriptor;
+						$sqlResult['arguments'][$fieldDescriptor] = $fieldVal;
+					}
 				}
 				
 				$sqlResult['statement'][] = sprintf( "( %s )", join( ',', $fieldNames ) );
@@ -99,12 +115,18 @@ class ColoreSQLmapper {
 					// Fetch the next field
 					list( $fieldKey, $fieldVal ) = each( $statementInfo['fields'] );
 					
-					// Generate the descriptor
-					$fieldDescriptor = sprintf( ":%s", $fieldKey );
-					
-					// Add the values to both the statement and arguments
-					$sqlResult['statement'][] .= sprintf( "%s = %s", $fieldKey, $fieldDescriptor );
-					$sqlResult['arguments'][$fieldDescriptor] = $fieldVal;
+					// If the field value is a literal, then we generate the argument literally
+					// Else prepare the statement and add the value to the arguments
+					if( in_array( $fieldVal, self::$literals ) ) {
+						$sqlResult['statement'][] .= sprintf( "%s = %s", $fieldKey, $fieldVal );
+					} else {
+						// Generate the descriptor
+						$fieldDescriptor = sprintf( ":%s", $fieldKey );
+						
+						// Add the values to both the statement and arguments
+						$sqlResult['statement'][] .= sprintf( "%s = %s", $fieldKey, $fieldDescriptor );
+						$sqlResult['arguments'][$fieldDescriptor] = $fieldVal;
+					}
 				}
 				
 				// If criteria has been set, then add it

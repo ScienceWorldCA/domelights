@@ -4,6 +4,7 @@ myApp.addContext( '/login', function() {
 	if( api.isAuthenticated() ) {
 		myApp.dispatch( '/home' );
 	}
+	api.getNonce();
 	myApp.loadTemplate("/app/admin/templates/login.html");
 });
 
@@ -32,6 +33,13 @@ myApp.addContext( '/admins', function( args ) {
 	api.checkAuthenticated();
 	api.updateUserInfo();
 	api.loadAdminsTable();
+});
+
+myApp.addContext( '/admins/view', function( args ) {
+	myApp.loadTemplate("/app/admin/templates/main.html");
+	api.checkAuthenticated();
+	api.updateUserInfo();
+	api.loadAdminsView( args );
 });
 
 myApp.addContext( '/animations', function( args ) {
@@ -65,7 +73,15 @@ myApp.addContext( '/controllers/edit', function( args ) {
 	api.loadControllerEdit( args );
 });
 
+myApp.addContext( '/controllers/update', function( args ) {
+	myApp.loadTemplate("/app/admin/templates/main.html");
+	api.checkAuthenticated();
+	api.updateController( args );
+	return false;
+});
+
 myApp.addContext( '/controllers/new', function( args ) {
+	api.checkAuthenticated();
 	myApp.loadTemplate("/app/admin/templates/main.html");
 	var data = {};
 	$.get( "/app/admin/fragments/controllers-new.tpl", function( template ) {
@@ -75,10 +91,13 @@ myApp.addContext( '/controllers/new', function( args ) {
 	} );
 });
 
-myApp.addContext( '/controllers/update', function( args ) {
-	myApp.loadTemplate("/app/admin/templates/main.html");
-	api.checkAuthenticated();
-	api.updateController( args );
+myApp.addContext( '/controllers/create', function( args ) {
+	api.createController( args );
+	return false;
+});
+
+myApp.addContext( '/controllers/delete', function( args ) {
+	api.deleteController( args );
 	return false;
 });
 

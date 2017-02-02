@@ -1,0 +1,21 @@
+{
+  "name": "jsencrypt",
+  "version": "2.3.0",
+  "main": "bin/jsencrypt.js",
+  "description": "A Javascript library to perform OpenSSL RSA Encryption, Decryption, and Key Generation.",
+  "license": "MIT",
+  "ignore": [],
+  "dependencies": {},
+  "devDependencies": {},
+  "homepage": "https://github.com/travist/jsencrypt",
+  "_release": "2.3.0",
+  "_resolution": {
+    "type": "version",
+    "tag": "v2.3.0",
+    "commit": "ca57a58fb6409699eacc5b6872140943f3c1f0aa"
+  },
+  "_source": "https://github.com/travist/jsencrypt.git",
+  "_target": "^2.3.0",
+  "_originalSource": "jsencrypt",
+  "_direct": true
+}

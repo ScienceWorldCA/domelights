@@ -2,7 +2,7 @@
 
 require_once( "BaseClass.php" );
 
-class Admin_API extends BaseClass {
+class Admin extends BaseClass {
 
 	public function Login( ColoreRequest &$cro ) {
 		// Get request_properties
@@ -130,7 +130,7 @@ class Admin_API extends BaseClass {
 		$cro->setRenderProperty( 'controllers', $controllers_result );
 	}
 
-	public function GetControllerDetails( ColoreRequest &$cro ) {
+	public function GetController( ColoreRequest &$cro ) {
 		$request_properties = $cro->getRequestProperties();
 		
 		// Make the query
@@ -156,7 +156,7 @@ class Admin_API extends BaseClass {
 		$cro->setRenderProperty( 'controller', $controllers_result );
 	}
 
-	public function UpdateControllerDetails( ColoreRequest &$cro ) {
+	public function UpdateController( ColoreRequest &$cro ) {
 		$request_properties = $cro->getRequestProperties();
 		
 		// Make the query
@@ -178,12 +178,84 @@ class Admin_API extends BaseClass {
 		$controllers_result = $this->dbconn->mappedQuery( $controllers_query );
 		
 		// Check the query
-		if( ! $controllers_result || ! is_array( $controllers_result ) )
+		if( ! $controllers_result )
 			return false;
+		
+		$cro->setRenderProperty( 'result', 'OK' );
 
-		$cro->appendLogic( array( 'class' => __CLASS__, 'method' => 'GetControllerDetails' ) );
+		$cro->appendLogic( array( 'class' => __CLASS__, 'method' => 'GetController' ) );
 	}
 
+	public function CreateController( ColoreRequest &$cro ) {
+		$request_properties = $cro->getRequestProperties();
+		
+		// Make the query
+		$controllers_query = array(
+				'action' => 'insert',
+				'table' => 'controllers',
+				'fields' => array(
+				),
+				'criteria' => array(
+				),
+		);
+		
+		// Fill in the fields with all the other info
+		$controllers_query['fields'] = $request_properties;
+		
+		// Do the query
+		$controllers_result = $this->dbconn->mappedQuery( $controllers_query );
+		
+		// Check the query
+		if( ! $controllers_result )
+			return false;
+
+		// Get the controller ID
+		$controllers_query = array(
+			'action' => 'select',
+			'table' => 'controllers',
+			'fields' => array(
+				'*' => true,
+			),
+			'criteria' => array(
+					'name' => $request_properties['name'],
+			),
+		);
+		
+		// Do the query
+		$controllers_result = $this->dbconn->mappedQuery( $controllers_query );
+		
+		// Check the query
+		if( ! $controllers_result || ! is_array( $controllers_result ) )
+			return false;
+		
+		$cro->setRenderProperty( 'result', 'OK' );
+		$cro->setRenderProperty( 'controller', $controllers_result );
+	}
+
+	public function DeleteController( ColoreRequest &$cro ) {
+		$request_properties = $cro->getRequestProperties();
+	
+		// Make the query
+		$controllers_query = array(
+				'action' => 'delete',
+				'table' => 'controllers',
+				'fields' => array(
+				),
+				'criteria' => array(
+						'id' => $request_properties['id'],
+				),
+		);
+	
+		// Do the query
+		$controllers_result = $this->dbconn->mappedQuery( $controllers_query );
+	
+		// Check the query
+		if( ! $controllers_result )
+			return false;
+	
+		$cro->setRenderProperty( 'result', 'OK' );
+	}
+	
 	public function GetAnimations( ColoreRequest &$cro ) {
 		// Make the query
 		$animations_query = array(
@@ -279,6 +351,37 @@ class Admin_API extends BaseClass {
 		$cro->setRenderProperty( 'admins', $admins_result );
 	}
 
+	public function GetAdmin( ColoreRequest &$cro ) {
+		$request_properties = $cro->getRequestProperties();
+		
+		// Make the query
+		$admins_query = array(
+				'action' => 'select',
+				'table' => 'admins',
+				'fields' => array(
+						'id' => true,
+						'email' => true,
+						'name' => true,
+				),
+				'criteria' => array(
+						'id' => $request_properties['id'],
+				),
+		);
+		
+		// Do the query
+		$admins_result = $this->dbconn->mappedQuery( $admins_query );
+		
+		// Check the query
+		if( ! $admins_result )
+			return false;
+		
+		if( isset( $admins_result['id'] ) )
+			$admins_result = array( $admins_result );
+		
+		$cro->setRenderProperty( 'result', 'OK' );
+		$cro->setRenderProperty( 'admin', $admins_result );
+	}
+
 	public function GetUsers( ColoreRequest &$cro ) {
 		// Make the query
 		$users_query = array(
@@ -298,6 +401,13 @@ class Admin_API extends BaseClass {
 		
 		$cro->setRenderProperty( 'result', 'OK' );
 		$cro->setRenderProperty( 'users', $users_result );
+	}
+	
+	public function GetNonce( ColoreRequest &$cro ) {
+		$nonce = uniqid();
+		
+		$cro->setSessionProperty( 'nonce', $nonce );
+		$cro->setRenderProperty( 'nonce', $nonce );
 	}
 
 }

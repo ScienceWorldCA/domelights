@@ -78,13 +78,13 @@ UL.nav LI:hover {
 
 #menucontainer {
 	/* background-color: #0046ad; */
-	background-color: #007ac9;
+	/* background-color: #007ac9; */
 	color: #ffffff !important;
 }
 
-.nav > li > a {
+/* .nav > li > a {
 	color: #ffffff !important;
-}
+} */
 
 .nav > li > a:hover {
 	color: #007ac9 !important;
@@ -129,4 +129,15 @@ UL.nav LI:hover {
 
 .menuListUsers {
 	display: none;
+}
+
+.grid > .grid-row > DIV {
+	height: 15px;
+	width: 15px;
+	background-color: white;
+	margin: 1px;
+}
+
+.grid > .grid-row > DIV.active {
+	background-color: black;
 }

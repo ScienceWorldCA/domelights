@@ -12,3 +12,5 @@ node_modules/*
 .idea/.name
 config_local.php
 __source_assets/Video/TestPattern.aep Logs/AE 2-15-2015 10-12-08 PM.txt
+.buildpath
+.settings

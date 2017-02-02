@@ -8,7 +8,7 @@
 <tr> <td>Comment</td> <td> <input colore-bind data-parent='#add_button' data-name='comment' name='comment' class='form-control' type='text'/> </td> </tr>
 </table>
 </div></div>
-<div class='row spacious'><div class='col-md-12 col-lg-12'><button class='btn btn-default pull-right' id='update_button' colore-context='/controllers/create'>Create</button></div></div>
+<div class='row spacious'><div class='col-md-12 col-lg-12'><button class='btn btn-default pull-right' id='add_button' colore-context='/controllers/create'>Create</button></div></div>
 <script type="text/javascript" src="/app/listeners.js"></script>
 <script type="text/javascript">
 $( document ).ready( function() {

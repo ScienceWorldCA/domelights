@@ -14,6 +14,8 @@
 <script src='/components/jsmart3/smart.js'></script>
 <script src='/components/mustache.js/mustache.js'></script>
 <script src='/components/underscore/underscore.js'></script>
+<script src='/components/fast-sha256/sha256.js'></script>
+<script src='/components/tweetnacl-util/nacl-util.js'></script>
 <link rel="stylesheet" href="/app/admin.css">
 </head>
 <body>

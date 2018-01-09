@@ -9,9 +9,9 @@
 		"multer": "0.x",
 		"ejs": "0.8.5",
 		"ejs-locals": "1.0.2",
-		"three": "",
-		"jsdom": "",
-		"xmlhttprequest": ""
+		"three": "*",
+		"jsdom": "*",
+		"xmlhttprequest": "*"
 	},
 	"main": "main.js"
 }
